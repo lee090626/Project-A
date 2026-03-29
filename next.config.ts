@@ -1,21 +1,17 @@
 import type { NextConfig } from 'next';
 
 const isExport = process.env.IS_EXPORT === 'true';
-const isCloudflare = !isExport;
-
-console.log(`[NextConfig] Build Mode: ${isExport ? 'EXPORT' : 'STANDALONE'} (isExport: ${isExport})`);
-
-const basePath = process.env.BASE_PATH || '';
 
 const nextConfig: NextConfig = {
   // Cloudflare OpenNext requires 'standalone'
   // GitHub Pages / Itch.io requires 'export'
-  output: isCloudflare ? 'standalone' : 'export',
+  output: isExport ? 'export' : 'standalone',
   
   // GitHub Pages: use /drilling-rpg
   // Itch.io / Cloudflare: must use empty or relative paths
-  basePath: isCloudflare ? '' : basePath,
-  assetPrefix: isCloudflare ? '' : (basePath ? `${basePath}/` : './'),
+  basePath: isExport ? (process.env.BASE_PATH || '') : '',
+  assetPrefix: isExport ? (process.env.BASE_PATH ? `${process.env.BASE_PATH}/` : './') : '',
+  
   trailingSlash: true,
   images: {
     unoptimized: true,
