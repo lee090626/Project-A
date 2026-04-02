@@ -113,7 +113,11 @@ function handleTileDestruction(world: GameWorld, x: number, y: number, type: any
     if (!player.stats.discoveredMinerals.includes(type)) player.stats.discoveredMinerals.push(type);
 
     // 숙련도 처리
-    const equipmentState = player.stats.equipmentStates[player.stats.equippedDrillId] || createInitialEquipmentState(player.stats.equippedDrillId);
+    let equipmentState = player.stats.equipmentStates[player.stats.equippedDrillId];
+    if (!equipmentState) {
+      equipmentState = createInitialEquipmentState(player.stats.equippedDrillId);
+      player.stats.equipmentStates[player.stats.equippedDrillId] = equipmentState;
+    }
     equipmentState.exp += 10;
     const nextExp = getNextLevelExp(equipmentState.level);
     if (equipmentState.exp >= nextExp) {

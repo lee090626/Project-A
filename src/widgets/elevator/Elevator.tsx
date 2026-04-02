@@ -9,18 +9,36 @@ interface ElevatorProps {
 
 const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose }) => {
   return (
-      <div className="bg-[#1a1a1b] w-full max-w-2xl max-h-[90vh] rounded-2xl md:rounded-3xl border border-zinc-800 relative flex flex-col p-6 md:p-10 shadow-2xl text-[#d1d5db]">
-        <div className="flex justify-between items-center mb-6 md:mb-8 shrink-0">
-          <h2 className="text-xl md:text-2xl font-black text-[#eab308] tracking-tighter flex items-center gap-2 md:gap-3">
-            <span>🛗</span> Elevator
-          </h2>
+    <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">🛗</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-500 leading-none">
+                Elevator
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Vertical Transport</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+              {stats.goldCoins.toLocaleString()}
+              <span className="text-amber-500 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
+            </span>
+          </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-[#eab308] text-black hover:brightness-110 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all active:scale-90 shadow-xl"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
         </div>
+      </div>
         <div className="space-y-3 md:space-y-4 overflow-y-auto pr-2 pb-2 custom-scrollbar">
           <button
             onClick={() => onSelectCheckpoint(0)}

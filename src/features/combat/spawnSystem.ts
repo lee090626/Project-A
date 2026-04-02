@@ -27,10 +27,15 @@ export const spawnSystem = (world: GameWorld) => {
       const initialMonster = tileMap.getInitialMonster(x, y);
       
       if (initialMonster) {
-        // 이미 해당 ID의 엔티티가 존재하지 않는지 최종 확인 (중복 방지)
-        const exists = entities.some(e => e.id === initialMonster.id);
-        if (!exists) {
-          entities.push(initialMonster);
+        // 이미 처치된 몬스터라면 시드에서 나와도 소환 안 함 (오토스폰 방지)
+        const isKilled = player.stats.killedMonsterIds?.includes(initialMonster.id);
+
+        if (!isKilled) {
+          // 이미 해당 ID의 엔티티가 존재하지 않는지 최종 확인 (중복 방지)
+          const exists = entities.some(e => e.id === initialMonster.id);
+          if (!exists) {
+            entities.push(initialMonster);
+          }
         }
       }
       

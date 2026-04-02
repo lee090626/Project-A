@@ -21,38 +21,47 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
 
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-10 gap-4 md:gap-6">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-[#a855f7]">
-            Books
-          </h2>
-          <div className="text-[9px] md:text-[10px] text-zinc-600 font-bold tracking-widest mt-0.5 md:mt-1 uppercase">
-            Discovery Records
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">📖</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-purple-400 leading-none">
+                Books
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Discovery Archive</span>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto justify-between">
-          <div className="flex gap-1.5 md:gap-2 p-1 bg-[#252526] rounded-xl border border-zinc-800 flex-1 md:flex-none">
+          <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto">
             <button
               onClick={() => { setActiveTab('minerals'); setSelectedId(null); }}
-              className={`flex-1 md:flex-none px-4 md:px-8 py-1.5 md:py-2 rounded-[10px] text-xs md:text-[16px] xl:text-[20px] font-black tracking-widest transition-all uppercase ${activeTab === 'minerals' ? 'bg-[#a855f7] text-white shadow-lg shadow-[#a855f7]/20' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'minerals' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Minerals
             </button>
             <button
               onClick={() => { setActiveTab('bosses'); setSelectedId(null); }}
-              className={`flex-1 md:flex-none px-4 md:px-8 py-1.5 md:py-2 rounded-[10px] text-xs md:text-[16px] xl:text-[20px] font-black tracking-widest transition-all uppercase ${activeTab === 'bosses' ? 'bg-[#a855f7] text-white shadow-lg shadow-[#a855f7]/20' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'bosses' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Bosses
             </button>
           </div>
+        </div>
 
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+              {stats.goldCoins.toLocaleString()}
+              <span className="text-purple-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
+            </span>
+          </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-[#a855f7] text-white hover:brightness-110 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-purple-400 hover:text-black hover:border-purple-400 transition-all active:scale-90 shadow-xl"
           >
-            <span className="text-lg md:text-xl font-black">✕</span>
+            <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
         </div>
       </div>
@@ -72,7 +81,7 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                     onClick={() => setSelectedId(m.key)}
                     className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden ${
                       isSelected
-                        ? 'bg-[#252526] border-[#a855f7] shadow-2xl scale-[1.02]'
+                        ? 'bg-[#252526] border-purple-400 shadow-2xl scale-[1.02]'
                         : !isDiscovered
                           ? 'bg-[#1a1a1b] border-zinc-900 opacity-40'
                           : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'

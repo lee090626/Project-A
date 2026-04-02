@@ -1,5 +1,6 @@
 import { GameWorld } from '../../entities/world/model';
 import { TILE_SIZE } from '../../shared/config/constants';
+import { MONSTERS, MonsterDefinition } from '../../shared/config/monsterData';
 
 /**
  * 플레이어와 몬스터 간의 전투(대미지 처리, 사망 등)를 담당하는 시스템입니다.
@@ -79,14 +80,48 @@ export const combatSystem = (world: GameWorld, deltaTime: number) => {
 
           // 몬스터 사망 처리
           if (entity.stats.hp <= 0) {
-             // 보상 골드 지급 (임시)
-             const gold = entity.type === 'boss' ? 5000 : 50;
-             player.stats.goldCoins += gold;
+             // 보상 골드 지급 (동적 계산: Base + MaxHP 비례 * 등급 배수 * 보스 배수)
+             let multiplier = 1;
+             
+             // 1. 일반 등급(Rarity)에 따른 기본 배수 산정
+             // (향후 몬스터나 보스 데이터에 rarity가 들어갈 것을 대비한 이름/ID 조회)
+             const mobDef = MONSTERS.find(m => m.name === entity.name);
+             if (mobDef && mobDef.rarity) {
+               switch (mobDef.rarity) {
+                 case 'Uncommon': multiplier = 2; break;
+                 case 'Rare': multiplier = 3; break;
+                 case 'Epic': multiplier = 5; break;
+                 case 'Radiant': multiplier = 7; break;
+                 case 'Legendary': multiplier = 10; break;
+                 case 'Mythic': multiplier = 15; break;
+                 case 'Ancient': multiplier = 20; break;
+               }
+             }
+
+             // 2. 보스 중복 태그 (Boss Modifier)
+             // 보스라면 위에서 구한 등급 배수에 추가로 5배를 곱함
+             // (예: 기본 보스 = 1 * 5 = 5배 / 에픽 보스 = 5 * 5 = 25배)
+             if (entity.type === 'boss') {
+               multiplier *= 5; 
+             }
+             
+             // 기본 골드 10 + (최대 체력의 10% * 최종 배수)
+             const baseGold = 10;
+             const hpBonus = Math.floor((entity.stats.maxHp || 100) * 0.1);
+             const totalGold = Math.floor(baseGold + (hpBonus * multiplier));
+             
+             // 영구 처치 목록에 등록하여 다시 해당 좌표에 가도 부활하지 않게 방지 (시드 고정)
+             if (!player.stats.killedMonsterIds) player.stats.killedMonsterIds = [];
+             if (!player.stats.killedMonsterIds.includes(entity.id)) {
+               player.stats.killedMonsterIds.push(entity.id);
+             }
+             
+             player.stats.goldCoins += totalGold;
              
              floatingTexts.push({
                x: entity.x * TILE_SIZE,
                y: (entity.y - 1) * TILE_SIZE,
-               text: `+${gold} G`,
+               text: `+${totalGold} G`,
                color: '#fde047',
                life: 1.5,
              });

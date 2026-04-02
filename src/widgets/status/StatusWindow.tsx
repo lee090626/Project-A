@@ -5,6 +5,7 @@ import { PlayerStats } from '../../shared/types/game';
 import { DRILLS } from '../../shared/config/drillData';
 import { getNextLevelExp, getMasteryMultiplier, getUnlockedSlotCount, createInitialEquipmentState } from '../../shared/lib/masteryUtils';
 import { getTotalRuneStat } from '../../shared/lib/runeUtils';
+import { SKILL_RUNES } from '../../shared/config/skillRuneData';
 
 interface StatusWindowProps {
   stats: PlayerStats;
@@ -30,23 +31,32 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
 
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-10 gap-4">
-        <h2 className="text-3xl md:text-4xl font-black tracking-tighter text-[#eab308]">
-          Status
-        </h2>
-        <div className="flex items-center justify-between w-full md:w-auto gap-4 md:gap-6">
-          <div className="flex items-center gap-2 md:gap-4 bg-[#252526] px-4 py-1.5 md:px-6 md:py-2 rounded-xl border border-zinc-800">
-            <span className="text-base md:text-xl font-black text-white tabular-nums">
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">👤</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-emerald-400 leading-none">
+                Status
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">System Profile</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-[#eab308] text-sm md:text-xl ml-1 md:ml-2">G</span>
+              <span className="text-emerald-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl bg-[#eab308] text-black hover:brightness-110 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-emerald-400 hover:text-black hover:border-emerald-400 transition-all active:scale-90 shadow-xl"
           >
-            <span className="text-lg md:text-xl font-black">✕</span>
+            <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
         </div>
       </div>
@@ -225,10 +235,24 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
                       >
                         {isUnlocked ? (
                           slottedRuneId ? (
-                            <div className="relative">
-                              <span className="text-sm md:text-base">⚙️</span>
-                              <span className="absolute -top-1 -right-1 text-[8px] bg-zinc-950 rounded-full w-3 h-3 flex items-center justify-center opacity-0 group-hover/rune:opacity-100 transition-opacity">✕</span>
-                            </div>
+                            (() => {
+                              const runeItem = stats.inventoryRunes.find(r => r.id === slottedRuneId);
+                              const runeConfig = runeItem ? SKILL_RUNES[runeItem.runeId] : null;
+                              return (
+                                <div className="relative flex items-center justify-center">
+                                  {runeConfig?.image ? (
+                                    <img 
+                                      src={typeof runeConfig.image === 'string' ? runeConfig.image : runeConfig.image.src || runeConfig.image} 
+                                      alt={runeConfig.name} 
+                                      className="w-5 h-5 md:w-6 md:h-6 object-contain" 
+                                    />
+                                  ) : (
+                                    <span className="text-sm md:text-base">⚙️</span>
+                                  )}
+                                  <span className="absolute -top-1 -right-1 text-[8px] bg-zinc-950 rounded-full w-3 h-3 flex items-center justify-center opacity-0 group-hover/rune:opacity-100 transition-opacity">✕</span>
+                                </div>
+                              );
+                            })()
                           ) : <span className="text-[8px] md:text-[10px] opacity-20">EMPTY</span>
                         ) : (
                           <span className="text-xs md:text-[14px]">🔒</span>

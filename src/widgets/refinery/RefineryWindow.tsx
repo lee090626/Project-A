@@ -29,40 +29,53 @@ export default function RefineryWindow({ stats, onClose, onStartSmelting, onColl
   const maxSlots = stats.refinerySlots + extraSlots;
 
   return (
-    <div className="flex flex-col w-full h-full bg-zinc-950 rounded-2xl md:rounded-[40px] border border-zinc-900 shadow-2xl font-sans overflow-hidden animate-in fade-in zoom-in duration-300">
-      
-      {/* 헤더 바 */}
-      <div className="flex-none p-4 md:p-8 pb-4 md:pb-6 flex flex-col md:flex-row justify-between items-start md:items-center border-b border-zinc-900 bg-zinc-950/50 gap-4">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-8 w-full md:w-auto">
-          <div>
-            <h2 className="text-2xl md:text-4xl font-black text-white tracking-tighter mix-blend-screen">REFINERY</h2>
-            <p className="text-zinc-500 font-bold tracking-widest text-[10px] md:text-xs mt-1 md:mt-2 uppercase">Smelt raw minerals into materials</p>
+    <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">⚗️</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-sky-400 leading-none">
+                Refinery
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Materials Processor</span>
+            </div>
           </div>
           
           {/* 드론 보너스 표시 */}
           {equippedDrone && (equippedDrone.smeltSpeedMult || equippedDrone.smeltSlotBonus) && (
-            <div className="flex items-center gap-3 md:gap-4 bg-amber-400/10 border border-amber-400/20 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl shadow-lg w-full sm:w-auto">
+            <div className="flex items-center gap-3 md:gap-4 bg-zinc-950 border border-zinc-800 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl shadow-inner w-full sm:w-auto">
               <div className="text-xl md:text-2xl">{equippedDrone.icon}</div>
               <div className="flex flex-col">
-                <span className="text-amber-400 text-[8px] md:text-[10px] font-black tracking-widest uppercase">Drone Active</span>
-                <div className="flex gap-3 md:gap-4">
+                <span className="text-sky-400 text-[8px] md:text-[9px] font-black tracking-widest uppercase">Drone Link</span>
+                <div className="flex gap-2.5 md:gap-3">
                    {equippedDrone.smeltSpeedMult && (
-                     <span className="text-white font-black text-xs md:text-sm">+{Math.round((1 - equippedDrone.smeltSpeedMult) * 100)}% Speed</span>
+                     <span className="text-white font-black text-[10px] md:text-xs">+{Math.round((1 - equippedDrone.smeltSpeedMult) * 100)}% SPD</span>
                    )}
                    {equippedDrone.smeltSlotBonus && (
-                     <span className="text-white font-black text-xs md:text-sm">+{equippedDrone.smeltSlotBonus} Slots</span>
+                     <span className="text-white font-black text-[10px] md:text-xs">+{equippedDrone.smeltSlotBonus} SLT</span>
                    )}
                 </div>
               </div>
             </div>
           )}
         </div>
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 md:relative md:top-0 md:right-0 w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 flex items-center justify-center transition-colors shadow-inner font-black cursor-pointer z-50 text-lg md:text-xl"
-        >
-          ✕
-        </button>
+
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+              {stats.goldCoins.toLocaleString()}
+              <span className="text-sky-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-sky-400 hover:text-black hover:border-sky-400 transition-all active:scale-90 shadow-xl"
+          >
+            <span className="text-lg md:text-xl font-bold">✕</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">

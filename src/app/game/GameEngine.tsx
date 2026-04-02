@@ -158,6 +158,7 @@ export default function GameEngine() {
       if (!saved.stats.refinerySlots) saved.stats.refinerySlots = 1;
       if (!saved.stats.equippedDroneId) saved.stats.equippedDroneId = null;
       if (saved.stats.moveSpeed === undefined) saved.stats.moveSpeed = 100;
+      if (!saved.stats.killedMonsterIds) saved.stats.killedMonsterIds = [];
 
       world.player.stats = saved.stats;
       world.player.pos = saved.position;

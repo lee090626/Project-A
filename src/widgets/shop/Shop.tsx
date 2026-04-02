@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { PlayerStats, Drill } from '../../shared/types/game';
 import { MINERALS } from '../../shared/config/mineralData';
 import { DRILLS } from '../../shared/config/drillData';
+import AttackRuneImg from '../../shared/assets/rune/AttackRune.png';
 
 /**
  * 상점 컴포넌트의 Props 인터페이스입니다.
@@ -66,14 +67,20 @@ export default function Shop({
       {/* 헤더 섹션 - Bento 스타일의 플로팅 헤더 */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
         <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
-          <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-400 leading-none">
-            Shop
-          </h2>
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">💰</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-400 leading-none">
+                Shop
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Global Market</span>
+            </div>
+          </div>
           
           <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('minerals')}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-[16px] font-black tracking-wider transition-all ${
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-wider transition-all ${
                 activeTab === 'minerals'
                   ? 'bg-zinc-800 text-amber-400 shadow-lg border border-zinc-700'
                   : 'text-zinc-500 hover:text-zinc-300'
@@ -83,27 +90,27 @@ export default function Shop({
             </button>
             <button 
                 onClick={() => setActiveTab('runes')}
-                className={`py-3 md:py-4 px-6 md:px-8 rounded-full font-black text-sm md:text-[18px] transition-all tracking-widest ${
+                className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-wider transition-all ${
                   activeTab === 'runes' 
-                    ? 'bg-amber-400 text-black shadow-[0_10px_20px_rgba(251,191,36,0.3)]' 
-                    : 'bg-zinc-900 border-2 border-zinc-800 text-zinc-500 hover:text-white'
+                    ? 'bg-zinc-800 text-amber-400 shadow-lg border border-zinc-700' 
+                    : 'text-zinc-500 hover:text-zinc-300'
                 }`}
               >
-                MODULES
+                Modules
               </button>
           </div>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
-            <span className="text-base md:text-xl font-black text-white tabular-nums tracking-tighter">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-amber-400 text-sm md:text-xl ml-2">Gold</span>
+              <span className="text-amber-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all active:scale-90"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all active:scale-90 shadow-xl"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -224,7 +231,13 @@ export default function Shop({
                     <div className="absolute top-2 md:top-4 left-4 md:left-6 py-0.5 md:py-1 px-3 md:px-4 bg-amber-400/10 border border-amber-400/20 rounded-full">
                       <span className="text-amber-400 text-[10px] md:text-[12px] font-black tracking-widest">WORLD {tierIndex} TIER</span>
                     </div>
-                    <div className="w-16 h-16 md:w-20 md:h-20 bg-zinc-950 rounded-2xl md:rounded-3xl flex items-center justify-center text-3xl md:text-4xl mb-4 md:mb-6 shadow-inner border border-zinc-800 mt-6 md:mt-6">⚙️</div>
+                    <div className="w-16 h-16 md:w-20 md:h-20 bg-zinc-950 rounded-2xl md:rounded-3xl flex items-center justify-center mb-4 md:mb-6 shadow-inner border border-zinc-800 mt-6 md:mt-6 overflow-hidden p-2">
+                       <img 
+                         src={typeof AttackRuneImg === 'string' ? AttackRuneImg : (AttackRuneImg as any).src} 
+                         alt="Extractor" 
+                         className="w-full h-full object-contain" 
+                       />
+                    </div>
                     <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter mb-1 md:mb-2">Tier {tierIndex} Extractor</h3>
                     <p className="text-zinc-500 text-[10px] md:text-[11px] mb-4 md:mb-6 font-bold tracking-wider opacity-60">Extracts core energy modules for World {tierIndex}.</p>
                     

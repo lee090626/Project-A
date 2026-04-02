@@ -1,5 +1,12 @@
 import { SkillRune } from '../types/game';
 
+import AttackRuneImg from '../assets/rune/AttackRune.png';
+import MiningSpeedRuneImg from '../assets/rune/MiningSpeedRune.png';
+import MoveSpeedRuneImg from '../assets/rune/MoveSpeedRune.png';
+import LuckRuneImg from '../assets/rune/LuckRune.png';
+import CritRateRuneImg from '../assets/rune/CritRateRune.png';
+import CritDmgRuneImg from '../assets/rune/CritDmgRune.png';
+
 /**
  * 룬(Rune) 시스템의 기반 명세를 정의합니다.
  * 여기에 정의된 값들은 레벨(Rare, Epic...)에 따라 runeUtils.ts의 배수가 적용되어 최종 성능이 결정됩니다.
@@ -12,7 +19,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 배수 연산용 베이스 수치
-    powerBonus: 10 
+    powerBonus: 10,
+    image: AttackRuneImg
   },
   'speed_rune': {
     id: 'speed_rune',
@@ -21,7 +29,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 베이스 수치 (0.05 = 5%)
-    speedMult: 0.05 
+    speedMult: 0.05,
+    image: MiningSpeedRuneImg
   },
   'move_speed_rune': {
     id: 'move_speed_rune',
@@ -30,7 +39,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 베이스 수치 (0.05 = 5%)
-    effectValue: 0.05 
+    effectValue: 0.05,
+    image: MoveSpeedRuneImg
   },
   'luck_rune': {
     id: 'luck_rune',
@@ -39,7 +49,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 행운 확률 베이스 수치 (0.05 = 5%)
-    effectValue: 0.05 
+    effectValue: 0.05,
+    image: LuckRuneImg
   },
   'crit_rate_rune': {
     id: 'crit_rate_rune',
@@ -48,7 +59,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 치확 보너스 베이스 수치 (0.05 = 5%)
-    effectChance: 0.05 
+    effectChance: 0.05,
+    image: CritRateRuneImg
   },
   'crit_dmg_rune': {
     id: 'crit_dmg_rune',
@@ -57,6 +69,7 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
     effectType: 'passive',
     rarity: 'Common',
     // 치피 보너스 추가 배수 베이스 수치 (0.2 = 20%)
-    effectValue: 0.2 
+    effectValue: 0.2,
+    image: CritDmgRuneImg
   }
 };

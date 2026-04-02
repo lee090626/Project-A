@@ -191,6 +191,8 @@ export interface SkillRune {
   effectChance?: number;
   /** 특수 효과 수치 */
   effectValue?: number;
+  /** 스킬룬 이미지 (StaticImageData 또는 HTMLImageElement) */
+  image?: any;
 }
 
 /**
@@ -265,6 +267,9 @@ export interface PlayerStats {
   
   /** 해금된 연구(스킬트리) ID 목록 */
   unlockedResearchIds: string[];
+
+  /** 시드 기반으로 생성된 몬스터 중 처치된 몹 ID 목록 (영구 사망, 오토스폰방지) */
+  killedMonsterIds?: string[];
 }
 
 /**

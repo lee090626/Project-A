@@ -3,10 +3,12 @@ import { GameWorld } from '../../../entities/world/model';
 import { saveManager, SaveData } from '../../../shared/lib/saveManager';
 import { CraftRequirements, CraftResult, Rarity } from '../../../shared/types/game';
 import { SKILL_RUNES } from '../../../shared/config/skillRuneData';
+import { DRILLS } from '../../../shared/config/drillData';
 import { REFINERY_RECIPES } from '../../../shared/config/refineryData';
 import { RESEARCH_NODES } from '../../../shared/config/researchData';
 import { getResearchBonuses } from '../../../shared/lib/researchUtils';
 import { getDroneData } from '../../../shared/config/droneData';
+import { createInitialEquipmentState } from '../../../shared/lib/masteryUtils';
 
 /**
  * 게임의 핵심 액션(업그레이드, 제작, 판매 등)을 처리하는 커스텀 훅입니다.
@@ -59,6 +61,11 @@ export const useGameActions = (worldRef: React.MutableRefObject<GameWorld>, upda
       if (!player.stats.ownedDrillIds) player.stats.ownedDrillIds = [];
       if (!player.stats.ownedDrillIds.includes(res.drillId)) {
         player.stats.ownedDrillIds.push(res.drillId);
+        
+        // 드릴 초기 장비 상태 생성
+        if (!player.stats.equipmentStates[res.drillId]) {
+          player.stats.equipmentStates[res.drillId] = createInitialEquipmentState(res.drillId);
+        }
       }
     }
     if (res.droneId) {
@@ -212,24 +219,43 @@ export const useGameActions = (worldRef: React.MutableRefObject<GameWorld>, upda
   const handleEquipRune = useCallback((runeInstanceId: string, slotIndex: number) => {
     const { player } = worldRef.current;
     const drillId = player.stats.equippedDrillId;
-    const state = player.stats.equipmentStates[drillId];
+    const drillConfig = DRILLS[drillId];
     
-    if (state) {
-      // 룬 슬롯 배열이 없거나 짧을 경우 초기화 (호환성 유지)
-      if (!state.slottedRunes) state.slottedRunes = [];
-      
-      if (slotIndex < state.slottedRunes.length) {
-        state.slottedRunes[slotIndex] = runeInstanceId;
-        updateUi();
+    // 상태가 없으면 생성하여 초기화 진행
+    if (!player.stats.equipmentStates[drillId]) {
+      player.stats.equipmentStates[drillId] = createInitialEquipmentState(drillId);
+    }
+    
+    const state = player.stats.equipmentStates[drillId];
+    const maxSlots = drillConfig?.maxSkillSlots || 0;
+    
+    // 슬롯 배열이 없거나 드릴의 최대 슬롯 수보다 작으면 확장/초기화
+    if (!state.slottedRunes || state.slottedRunes.length < maxSlots) {
+      const newSlottedRunes = new Array(maxSlots).fill(null);
+      // 기존에 장착된 룬이 있다면 보존
+      if (state.slottedRunes) {
+        state.slottedRunes.forEach((r, i) => {
+          if (i < maxSlots) newSlottedRunes[i] = r;
+        });
       }
+      state.slottedRunes = newSlottedRunes;
+    }
+    
+    if (slotIndex < state.slottedRunes.length) {
+      state.slottedRunes[slotIndex] = runeInstanceId;
+      updateUi();
     }
   }, [worldRef, updateUi]);
 
   /** 드릴 슬롯에서 스킬룬 해제 */
   const handleUnequipRune = useCallback((drillId: string, slotIndex: number) => {
     const { player } = worldRef.current;
+    
+    // 상태가 없으면 해제할 것도 없으므로 조기 종료
+    if (!player.stats.equipmentStates[drillId]) return;
+    
     const state = player.stats.equipmentStates[drillId];
-    if (state && state.slottedRunes && slotIndex < state.slottedRunes.length) {
+    if (state.slottedRunes && slotIndex < state.slottedRunes.length) {
       state.slottedRunes[slotIndex] = null;
       updateUi();
     }

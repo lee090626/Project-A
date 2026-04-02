@@ -87,17 +87,30 @@ export default function Crafting({ stats, onCraft, onClose }: CraftingProps) {
 
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 md:mb-8 px-4 py-3 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4">
-        <div>
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-rose-500 tracking-tighter mix-blend-screen">
-            BlackSmith Forge
-          </h2>
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">⚒️</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-rose-500 leading-none">
+                Forge
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Heavy Forge</span>
+            </div>
+          </div>
         </div>
-        
-        <div className="flex items-center gap-4 md:gap-6">
+
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+              {stats.goldCoins.toLocaleString()}
+              <span className="text-rose-500 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
+            </span>
+          </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all active:scale-90"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all active:scale-90 shadow-xl"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -118,7 +131,7 @@ export default function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                   onClick={() => setActiveTab('drill')}
                   className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg text-xs md:text-[14px] font-black tracking-widest transition-all ${
                     activeTab === 'drill'
-                      ? 'bg-amber-400 text-black shadow-md'
+                      ? 'bg-rose-500 text-white shadow-md'
                       : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                 >
@@ -128,7 +141,7 @@ export default function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                   onClick={() => setActiveTab('drone')}
                   className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg text-xs md:text-[14px] font-black tracking-widest transition-all ${
                     activeTab === 'drone'
-                      ? 'bg-amber-400 text-black shadow-md'
+                      ? 'bg-rose-500 text-white shadow-md'
                       : 'text-zinc-500 hover:text-zinc-300'
                   }`}
                 >

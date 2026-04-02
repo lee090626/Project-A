@@ -24,6 +24,7 @@ import { DRONES } from '../../shared/config/droneData';
 import { MINERALS } from '../../shared/config/mineralData';
 
 import { SKILL_RUNES } from '../../shared/config/skillRuneData';
+import AttackRuneImg from '../../shared/assets/rune/AttackRune.png';
 
 /**
  * 플레이어의 소지품(재료, 장비, 스킬젬)을 관리하고 장착할 수 있는 인벤토리 컴포넌트입니다.
@@ -70,39 +71,53 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
 
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 gap-4 md:gap-6">
-        <h2 className="text-2xl md:text-4xl font-black tracking-tighter text-[#eab308]">
-          Inventory
-        </h2>
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">📦</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-cyan-400 leading-none">
+                Inventory
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Supply Storage</span>
+            </div>
+          </div>
 
-        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto">
-          <div className="flex flex-1 md:flex-none gap-1 p-1 bg-[#252526] rounded-xl border border-zinc-800">
+          <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('ingredients')}
-              className={`flex-1 md:px-6 lg:px-8 py-1.5 md:py-2 rounded-[10px] text-[9px] md:text-[10px] font-black tracking-widest transition-all ${activeTab === 'ingredients' ? 'bg-[#eab308] text-black shadow-lg shadow-[#eab308]/20' : 'text-zinc-400 hover:text-zinc-200'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'ingredients' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              Ingredients
+              Items
             </button>
             <button
               onClick={() => setActiveTab('equipment')}
-              className={`flex-1 md:px-6 lg:px-8 py-1.5 md:py-2 rounded-[10px] text-[9px] md:text-[10px] font-black tracking-widest transition-all ${activeTab === 'equipment' ? 'bg-[#eab308] text-black shadow-lg shadow-[#eab308]/20' : 'text-zinc-400 hover:text-zinc-200'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'equipment' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              Equipment
+              Gear
             </button>
             <button
               onClick={() => setActiveTab('skillrunes')}
-              className={`flex-1 md:px-6 lg:px-8 py-1.5 md:py-2 rounded-[10px] text-[9px] md:text-[10px] font-black tracking-widest transition-all ${activeTab === 'skillrunes' ? 'bg-[#eab308] text-black shadow-lg shadow-[#eab308]/20' : 'text-zinc-400 hover:text-zinc-200'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'skillrunes' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              Skill Runes
+              Runes
             </button>
           </div>
+        </div>
 
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+              {stats.goldCoins.toLocaleString()}
+              <span className="text-cyan-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
+            </span>
+          </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl bg-[#eab308] text-black hover:brightness-110 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all active:scale-90 shadow-xl"
           >
-            <span className="text-lg md:text-xl font-black">✕</span>
+            <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
         </div>
       </div>
@@ -406,8 +421,16 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                       onClick={() => setSelectedRuneId(rune.id === selectedRuneId ? null : rune.id)}
                       className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden ${rarityColors[rune.rarity] || 'bg-zinc-900 border-zinc-700 text-zinc-500'} hover:-translate-y-1 ${selectedRuneId === rune.id ? 'ring-2 ring-[#eab308] scale-[1.02]' : ''}`}
                     >
-                      <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                        ⚙️
+                      <div className="w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-3 group-hover:scale-110 transition-transform flex items-center justify-center">
+                        {SKILL_RUNES[rune.runeId]?.image ? (
+                          <img 
+                            src={typeof SKILL_RUNES[rune.runeId].image === 'string' ? SKILL_RUNES[rune.runeId].image : SKILL_RUNES[rune.runeId].image.src || SKILL_RUNES[rune.runeId].image} 
+                            alt={SKILL_RUNES[rune.runeId].name} 
+                            className="w-full h-full object-contain drop-shadow-lg" 
+                          />
+                        ) : (
+                          "⚙️"
+                        )}
                       </div>
                       <div className="flex flex-col items-center gap-1 w-full text-center">
                         <div className="text-[9px] font-black tracking-widest px-2 py-0.5 rounded-full bg-black/40 border border-white/5">
@@ -437,8 +460,16 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                     </span>
                   </div>
 
-                  <div className="w-32 h-32 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center text-7xl mx-auto mb-8">
-                    ⚙️
+                  <div className="w-32 h-32 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center mx-auto mb-8 overflow-hidden p-4">
+                    {selectedRuneConfig.image ? (
+                      <img 
+                        src={typeof selectedRuneConfig.image === 'string' ? selectedRuneConfig.image : selectedRuneConfig.image.src || selectedRuneConfig.image} 
+                        alt={selectedRuneConfig.name} 
+                        className="w-full h-full object-contain drop-shadow-2xl" 
+                      />
+                    ) : (
+                      <span className="text-7xl">⚙️</span>
+                    )}
                   </div>
 
                   <h3 className="text-2xl font-black text-white text-center mb-4 tracking-tighter">
@@ -466,7 +497,7 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                 </div>
               ) : (
                 <div className="h-full flex flex-col items-center justify-center text-center opacity-10">
-                  <div className="text-5xl mb-6">⚙️</div>
+                  <img src={typeof AttackRuneImg === 'string' ? AttackRuneImg : (AttackRuneImg as any).src} alt="Rune Placeholder" className="w-24 h-24 mb-6 grayscale" />
                   <p className="text-xs font-bold text-zinc-500 tracking-widest">
                     Select a Module
                   </p>
@@ -507,7 +538,15 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                     {isUnlocked ? (
                       currentRuneItem ? (
                         <div className="flex flex-col items-center">
-                          <span className="text-2xl mb-1 flex items-center justify-center">⚙️</span>
+                          {SKILL_RUNES[currentRuneItem.runeId]?.image ? (
+                            <img 
+                              src={typeof SKILL_RUNES[currentRuneItem.runeId].image === 'string' ? SKILL_RUNES[currentRuneItem.runeId].image : SKILL_RUNES[currentRuneItem.runeId].image.src || SKILL_RUNES[currentRuneItem.runeId].image} 
+                              alt={SKILL_RUNES[currentRuneItem.runeId].name} 
+                              className="w-10 h-10 md:w-12 md:h-12 object-contain mb-1" 
+                            />
+                          ) : (
+                            <span className="text-2xl mb-1 flex items-center justify-center">⚙️</span>
+                          )}
                           <span className="text-[8px] font-bold text-zinc-400">Lv.{currentRuneItem.rarity.charAt(0)}</span>
                           <div className="absolute inset-0 bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity">
                             <span className="text-[10px] font-black text-[#eab308] tracking-widest">REPLACE</span>

@@ -113,22 +113,29 @@ export default function Settings({
   );
 
   return (
-    <div className="flex flex-col h-full text-[#d1d5db] font-sans bg-[#121213] border border-zinc-800 rounded-3xl relative overflow-hidden">
-      {/* 헤더 섹션 */}
-      <div className="flex justify-between items-center px-10 py-8 border-b border-zinc-800/50 bg-zinc-900/30">
-        <div className="flex flex-col">
-          <h2 className="text-3xl font-black tracking-tight text-[#eab308]">
-            Settings
-          </h2>
-          <div className="h-1 w-8 bg-[#eab308] mt-1 rounded-full" />
+    <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
+      {/* HEADER SECTION - Bento Style Floating Header */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl md:text-3xl">⚙️</span>
+            <div className="flex flex-col">
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-zinc-400 leading-none">
+                Settings
+              </h2>
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">System Configuration</span>
+            </div>
+          </div>
         </div>
-        
-        <button
-          onClick={onClose}
-          className="group/close w-10 h-10 flex items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:border-zinc-600 transition-all duration-200 active:scale-90"
-        >
-          <span className="text-lg font-bold">✕</span>
-        </button>
+
+        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
+          <button
+            onClick={onClose}
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-100 hover:text-black hover:border-zinc-100 transition-all active:scale-90 shadow-xl"
+          >
+            <span className="text-lg md:text-xl font-bold">✕</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar px-10 py-10 flex items-center justify-center">

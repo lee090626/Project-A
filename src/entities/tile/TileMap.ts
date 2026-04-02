@@ -87,6 +87,12 @@ export class TileMap {
     }
 
     const config = getDimensionConfig(this.dimension);
+    
+    // 몬스터가 생성될 위치라면 타일을 비워둠 (몬스터가 광물을 대체)
+    if (this.getInitialMonster(x, y)) {
+      return { type: 'empty', health: 0, maxHealth: 0 };
+    }
+
     let type: TileType = 'dirt';
     
     // 차원별 광물 분포 규칙 적용 (노이즈 기반 군집화)
@@ -118,11 +124,11 @@ export class TileMap {
     const bossCenterY = targetHeight - 1;
     const bossCenterX = 15;
 
-    // 보스 코어 영역 (3x3 또는 지정된 범위)
+    // 보스 영역 배치 로직 (몬스터가 광물을 대체하므로 빈 공간으로 처리)
     if (Math.abs(x - bossCenterX) <= 2 && Math.abs(y - bossCenterY) <= 2) {
-      type = 'boss_core';
+      return { type: 'empty', health: 0, maxHealth: 0 };
     } 
-    // 몬스터 네스트 등 특수 타일 배치
+    // 몬스터 네스트 등 특수 구조물
     else if (
       config.hasMonsterNest &&
       y === bossCenterY &&
