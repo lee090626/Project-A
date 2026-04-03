@@ -43,3 +43,6 @@ yarn-error.log*
 
 # wrangler
 .wrangler/
+
+# generate_save.js
+generate_save.js
