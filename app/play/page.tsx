@@ -10,24 +10,38 @@ export default function Play() {
   return (
     <main className="fixed inset-0 bg-black overflow-hidden select-none">
       {/* 
-          Background Content for SEO & AdSense: 
-          This is behind the canvas, so it's invisible to the player once the game loads,
-          but visible to search engine crawlers and AdSense preview bots.
+          High-Visibility SEO Layer for AdSense & Crawlers:
+          자바스크립트가 실행되기 전, 서버에서 바로 내려주는 텍스트들입니다.
+          애드센스 봇이 "내용 없음"으로 판단하는 것을 방지합니다.
       */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 space-y-4">
-        <h1 className="text-3xl font-bold text-zinc-400">Drilling RPG - Game in Progress</h1>
-        <p className="text-zinc-600 max-w-lg">
-          You are currently in the deep abyss exploration zone. 
-          The mining engine is initializing your drill, loading neural network drones, 
-          and preparing the mineral-rich world for extraction. 
-        </p>
-        <div className="text-xs text-zinc-800">
-          Keywords: Mining Action RPG, Resource Management, Boss Battles, Upgradeable Drills.
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 space-y-8 z-0">
+        <div className="space-y-4">
+          <h1 className="text-4xl md:text-7xl font-black text-white/20 tracking-tighter uppercase">
+            Drilling RPG
+          </h1>
+          <h2 className="text-xl md:text-2xl font-bold text-zinc-600 max-w-2xl mx-auto">
+            The Ultimate Browser-Based Deep Abyss Mining Exploration Action Role-Playing Game
+          </h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl text-zinc-700">
+          <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+            <h3 className="font-bold text-zinc-500 mb-2">Deep Exploration</h3>
+            <p className="text-sm">Explore infinite underground worlds filled with rare minerals like Diamonds, Rubies, and Uranium.</p>
+          </div>
+          <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+            <h3 className="font-bold text-zinc-500 mb-2">Epic Battles</h3>
+            <p className="text-sm">Defeat giant dimensional bosses using powerful specialized drills and AI pet drones.</p>
+          </div>
+          <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+            <h3 className="font-bold text-zinc-500 mb-2">Infinite Growth</h3>
+            <p className="text-sm">Upgrade your drilling stats, research new technologies, and collect ancient artifacts.</p>
+          </div>
         </div>
       </div>
 
-      {/* Actual Game Engine */}
-      <div className="relative z-10 w-full h-full">
+      {/* Actual Game Engine (Canvas will cover the text above) */}
+      <div className="relative z-10 w-full h-full bg-transparent">
         <GameEngine />
       </div>
     </main>

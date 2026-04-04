@@ -250,7 +250,7 @@ export default function GameEngine() {
   const { ui, player } = world;
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-black">
+    <div className="fixed inset-0 overflow-hidden bg-transparent">
       <canvas
         ref={canvasRef}
         width={windowSize.width}
