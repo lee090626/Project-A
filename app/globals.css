@@ -31,8 +31,22 @@ body {
    게임 화면이 강제로 숨겨지는(display: none !important) 현상을 방지합니다.
 */
 #drilling-game-root {
+  position: relative;
+  z-index: 99999;
+  width: 100%;
+  height: 100%;
   visibility: visible !important;
   opacity: 1 !important;
+}
+
+/* 플랫폼에서 생성하는 에러 핸들러 및 오버레이 차단 */
+as-exception-handler,
+.as-exception-handler,
+#default-acx-overlay-container .pane.modal {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
 }
 
 #drilling-game-root canvas {
