@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import { PlayerStats, Position } from '../../shared/types/game';
+import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 
 interface ElevatorProps {
   stats: PlayerStats;
@@ -25,15 +27,17 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+          <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <div className="w-6 h-6 md:w-8 md:h-8 relative">
+               <Image src={GoldIconImg} alt="Gold" fill className="object-contain" />
+            </div>
             <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-amber-500 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-amber-400 hover:text-black hover:border-amber-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -42,7 +46,7 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
         <div className="space-y-3 md:space-y-4 overflow-y-auto pr-2 pb-2 custom-scrollbar">
           <button
             onClick={() => onSelectCheckpoint(0)}
-            className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg"
+            className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
           >
             <div className="flex flex-col items-start">
               <span className="text-[#eab308] text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1 group-hover:brightness-125">
@@ -62,7 +66,7 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
             <button
               key={depth}
               onClick={() => onSelectCheckpoint(depth)}
-              className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-400 hover:text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg"
+              className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-400 hover:text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
             >
               <div className="flex flex-col items-start">
                 <span className="text-zinc-600 text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1 uppercase">

@@ -51,19 +51,18 @@ export const DIMENSIONS: DimensionConfig[] = [
     ],
     minerals: [
       // 1. 특수/희귀 광물 (누적 확률 기반)
-      // 스케일(scale)이 작을수록 더 촘촘하고 분산된 작은 덩어리로 나옵니다.
-      { type: 'obsidian', threshold: 0.005, minDepth: 1350, peakDepth: 1480, range: 120, scale: 5 },
-      { type: 'uranium', threshold: 0.015, minDepth: 1200, peakDepth: 1350, range: 150, scale: 6 },
-      { type: 'sapphire', threshold: 0.03, minDepth: 1050, peakDepth: 1200, range: 150, scale: 6 },
-      { type: 'diamond', threshold: 0.05, minDepth: 450, peakDepth: 650, range: 200, scale: 8 },
-      { type: 'ruby', threshold: 0.07, minDepth: 850, peakDepth: 1050, range: 200, scale: 7 },
-      { type: 'emerald', threshold: 0.09, minDepth: 650, peakDepth: 850, range: 200, scale: 7 },
-      { type: 'gold', threshold: 0.12, minDepth: 300, peakDepth: 500, range: 200, scale: 8 },
+      // 5x5 섹터 모델에서 3% 밀도를 유지하기 위해 가중치를 미세 조정합니다.
+      { type: 'obsidian', threshold: 0.01, minDepth: 1350, peakDepth: 1480, range: 120, scale: 5 },
+      { type: 'uranium', threshold: 0.02, minDepth: 1200, peakDepth: 1350, range: 150, scale: 6 },
+      { type: 'sapphire', threshold: 0.04, minDepth: 1050, peakDepth: 1200, range: 150, scale: 6 },
+      { type: 'diamond', threshold: 0.06, minDepth: 450, peakDepth: 650, range: 200, scale: 8 },
+      { type: 'ruby', threshold: 0.08, minDepth: 850, peakDepth: 1050, range: 200, scale: 7 },
+      { type: 'emerald', threshold: 0.10, minDepth: 650, peakDepth: 850, range: 200, scale: 7 },
+      { type: 'gold', threshold: 0.14, minDepth: 300, peakDepth: 500, range: 200, scale: 8 },
       
       // 2. 일반 광물
-      // 스케일(scale)이 클수록 거대하고 듬직한 광맥을 형성합니다.
-      { type: 'iron', threshold: 0.18, minDepth: 120, peakDepth: 280, range: 150, scale: 8 },
-      { type: 'coal', threshold: 0.28, minDepth: 30, peakDepth: 120, range: 100, scale: 8 },
+      { type: 'iron', threshold: 0.20, minDepth: 120, peakDepth: 280, range: 150, scale: 8 },
+      { type: 'coal', threshold: 0.30, minDepth: 30, peakDepth: 120, range: 100, scale: 8 },
       { type: 'stone', threshold: 0.40, scale: 12 },
     ]
   }

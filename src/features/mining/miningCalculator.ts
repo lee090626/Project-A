@@ -30,14 +30,14 @@ export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string
   const masteryMult = getMasteryMultiplier(equipmentState.level);
   
   // 3. 룬 보너스 및 치명타 계산
-  const runeAttackBonus = getTotalRuneStat(stats, 'attack');
+  const runeAttackBonus = getTotalRuneStat(stats, 'power');
   const critRate = getTotalRuneStat(stats, 'critRate');
   const critDamage = getTotalRuneStat(stats, 'critDmg');
 
   const drillPower = currentDrill.basePower;
   const masteryBonus = Math.round(drillPower * (masteryMult - 1));
   
-  let totalPower = stats.attackPower + drillPower + masteryBonus + Math.floor(runeAttackBonus);
+  let totalPower = stats.power + drillPower + masteryBonus + Math.floor(runeAttackBonus) + researchBonuses.power;
   
   let isCrit = false;
   if (Math.random() < critRate) {

@@ -6,7 +6,7 @@ import { RESEARCH_NODES } from '../config/researchData';
  */
 export const getResearchBonuses = (stats: PlayerStats) => {
   const bonuses = {
-    attackPower: 0,
+    power: 0,
     miningSpeed: 0, // 기본 0 (연사 속도 감소 비율)
     moveSpeed: 1,   // 기본 1 (배수)
     luck: 1,        // 기본 1 (배수)
@@ -20,8 +20,8 @@ export const getResearchBonuses = (stats: PlayerStats) => {
     if (!node) return;
 
     switch (node.effect.type) {
-      case 'attackPower':
-        bonuses.attackPower += node.effect.value;
+      case 'power':
+        bonuses.power += node.effect.value;
         break;
       case 'miningSpeed':
         bonuses.miningSpeed += node.effect.value;

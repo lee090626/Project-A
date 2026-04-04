@@ -54,8 +54,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
   },
   'crit_rate_rune': {
     id: 'crit_rate_rune',
-    name: 'Crit Rate Rune',
-    description: 'Increases Critical Hit Chance',
+    name: 'Acuity Rune',
+    description: 'Sharpens perception to pierce weak points, increasing Critical Hit Chance',
     effectType: 'passive',
     rarity: 'Common',
     // 치확 보너스 베이스 수치 (0.05 = 5%)
@@ -64,8 +64,8 @@ export const SKILL_RUNES: Record<string, SkillRune> = {
   },
   'crit_dmg_rune': {
     id: 'crit_dmg_rune',
-    name: 'Crit DMG Rune',
-    description: 'Increases Critical Hit Damage Multiplier',
+    name: 'Severity Rune',
+    description: 'Hones the blade\'s edge to cut deeper, increasing Critical Hit Damage',
     effectType: 'passive',
     rarity: 'Common',
     // 치피 보너스 추가 배수 베이스 수치 (0.2 = 20%)

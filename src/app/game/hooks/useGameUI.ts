@@ -18,7 +18,8 @@ export const useGameUI = (worldRef: React.MutableRefObject<GameWorld>, updateUi:
     ui.isStatusOpen = 
     ui.isEncyclopediaOpen = 
     ui.isLaboratoryOpen = 
-    ui.isRefineryOpen = false;
+    ui.isRefineryOpen = 
+    ui.isGuideOpen = false;
     updateUi();
   }, [worldRef, updateUi]);
 
@@ -60,7 +61,8 @@ export const useGameUI = (worldRef: React.MutableRefObject<GameWorld>, updateUi:
            ui.isStatusOpen || 
            ui.isEncyclopediaOpen ||
            ui.isLaboratoryOpen ||
-           ui.isRefineryOpen;
+           ui.isRefineryOpen ||
+           ui.isGuideOpen;
   }, [worldRef]);
 
   return {

@@ -7,29 +7,25 @@ import { MINERALS } from '../../shared/config/mineralData';
 import { DRILLS } from '../../shared/config/drillData';
 import AttackRuneImg from '../../shared/assets/rune/AttackRune.png';
 import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
+import { SKILL_RUNES } from '../../shared/config/skillRuneData';
+import SkillRuneIcon from '../../shared/ui/SkillRuneIcon';
 
 /**
  * 상점 컴포넌트의 Props 인터페이스입니다.
  */
 interface ShopProps {
-  /** 플레이어 통계 데이터 */
   stats: PlayerStats;
-  /** 장비 업그레이드 실행 콜백 */
   onUpgrade: (type: string, requirements: any) => void;
-  /** 자원 판매 실행 콜백 */
   onSell: (resource: string, amount: number, price: number) => void;
-  /** 스킬룬 추출 실행 콜백 */
-  onExtractRune: (tier: number) => void;
-  /** 스킬룬 합성 실행 콜백 */
+  onExtractRune: (tier: number) => { rune: any, isCrit: boolean } | null | void;
   onSynthesizeRunes: () => void;
-  /** 상점 창 닫기 콜백 */
   onClose: () => void;
 }
 
 /**
  * 플레이어가 자원을 판매하고 장비를 업그레이드하거나 스킬젬을 관리할 수 있는 상점(Forge) 컴포넌트입니다.
  */
-export default function Shop({
+function Shop({
   stats,
   onUpgrade,
   onSell,
@@ -39,6 +35,49 @@ export default function Shop({
 }: ShopProps) {
   const [activeTab, setActiveTab] = useState<'minerals' | 'runes'>('minerals');
   const [sellAmounts, setSellAmounts] = useState<Record<string, number>>({});
+  
+  // 가챠 연출용 상태
+  const [gachaState, setGachaState] = useState<'idle' | 'drawing' | 'result'>('idle');
+  const [gachaResult, setGachaResult] = useState<{ rune: any, isCrit: boolean } | null>(null);
+  const [rouletteItems, setRouletteItems] = useState<{runeId: string, rarity: string}[]>([]);
+  const [startRouletteAnim, setStartRouletteAnim] = useState(false);
+
+  const performExtraction = (tierIndex: number) => {
+    const result = onExtractRune(tierIndex);
+    if (!result) return;
+    
+    // 룰렛 더미 데이터 생성
+    const availableRunes = Object.values(SKILL_RUNES);
+    const rarities = ['Common', 'Uncommon', 'Rare', 'Epic', 'Radiant', 'Legendary', 'Mythic'];
+    
+    const items = [];
+    for(let i = 0; i < 60; i++) {
+       if (i === 50) {
+          // 인덱스 50번에 당첨 룬 확정 삽입
+          items.push({ runeId: result.rune.runeId, rarity: result.rune.rarity });
+       } else {
+          // 무작위 더미
+          const rRune = availableRunes[Math.floor(Math.random() * availableRunes.length)];
+          const rRarity = rarities[Math.floor(Math.random() * 3)]; // 하위 등급 위주
+          items.push({ runeId: rRune.id, rarity: rRarity });
+       }
+    }
+    
+    setRouletteItems(items);
+    setGachaResult(result as any);
+    setGachaState('drawing');
+    setStartRouletteAnim(false);
+    
+    // DOM 마운트 후 트랜지션 트리거 (3.5초 정지)
+    setTimeout(() => {
+      setStartRouletteAnim(true);
+    }, 50);
+    
+    setTimeout(() => {
+      setGachaState('result');
+      setStartRouletteAnim(false);
+    }, 5500); 
+  };
   
   /** 광물별 판매 가격 매핑 */
   const resourcePrices = MINERALS.reduce((acc, mineral) => {
@@ -141,12 +180,6 @@ export default function Shop({
             /* 광물 판매 섹션 */
             <section className="relative z-10">
               <div className="flex items-center gap-4 mb-8 border-b border-zinc-800 pb-4">
-                <h3 className="text-xl md:text-2xl font-black text-white tracking-widest uppercase">
-                  Market Board
-                </h3>
-                <div className="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full">
-                  <span className="text-amber-500 text-[10px] font-black tracking-widest uppercase italic">Live Prices</span>
-                </div>
               </div>
               
               <div className="grid grid-cols-1 gap-4 pb-12">
@@ -292,13 +325,8 @@ export default function Shop({
                     <p className="text-zinc-500 text-xs md:text-sm mb-6 md:mb-8 font-bold tracking-tight max-w-[240px] opacity-80">Extraction of core energy modules from the {tierIndex === 0 ? 'Earth' : `Dimension ${tierIndex}`}.</p>
                     
                     {/* 확률표 */}
-                    <div className="grid grid-cols-4 gap-2 w-full mb-8 bg-black/40 p-5 rounded-3xl border border-white/5 shadow-inner">
+                    <div className="grid grid-cols-2 gap-2 w-full mb-8 bg-black/40 p-5 rounded-3xl border border-white/5 shadow-inner">
                       {[
-                        { name: 'Mythic', prob: '<1%', color: 'text-red-500', bg: 'bg-red-500/10' },
-                        { name: 'Legendary', prob: '?', color: 'text-amber-400', bg: 'bg-amber-400/10' },
-                        { name: 'Radiant', prob: '?', color: 'text-rose-400', bg: 'bg-rose-400/10' },
-                        { name: 'Epic', prob: '?', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-                        { name: 'Rare', prob: '?', color: 'text-blue-400', bg: 'bg-blue-400/10' },
                         { name: 'Uncommon', prob: '5%', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
                         { name: 'Common', prob: '95%', color: 'text-zinc-400', bg: 'bg-zinc-400/10' },
                       ].map((item) => (
@@ -320,7 +348,7 @@ export default function Shop({
                     </div>
                     
                     <button 
-                      onClick={() => onExtractRune(tierIndex)} 
+                      onClick={() => performExtraction(tierIndex)} 
                       className="w-full py-5 bg-linear-to-br from-amber-400 to-amber-600 text-black rounded-2xl md:rounded-3xl font-black text-lg tracking-[0.2em] uppercase transition-all shadow-[0_12px_24px_rgba(217,119,6,0.3)] active:scale-95 focus:outline-none focus:ring-4 focus:ring-amber-500/40 hover:brightness-110 active:translate-y-1"
                     >
                       Extract
@@ -388,6 +416,98 @@ export default function Shop({
           )}
         </div>
       </div>
+
+      {/* 가챠 오버레이 연출 */}
+      {gachaState !== 'idle' && (
+        <div 
+          className="absolute inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md transition-opacity duration-500"
+          onClick={() => {
+            if (gachaState === 'result') {
+              setGachaState('idle');
+              setGachaResult(null);
+            }
+          }}
+        >
+          {gachaState === 'drawing' && (
+            <div className="flex flex-col items-center w-full max-w-5xl px-0 md:px-8 overflow-hidden relative">
+              <p className="mb-10 md:mb-16 text-amber-500 font-black tracking-[0.4em] uppercase text-xl md:text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] animate-pulse">
+                Extracting Sequence...
+              </p>
+              
+              <div className="relative w-full h-[180px] md:h-[240px] flex items-center bg-black/60 rounded-3xl md:rounded-[3rem] border-y-2 border-white/10 overflow-hidden shadow-[inset_0_0_80px_rgba(0,0,0,1)]">
+                <div 
+                  className="flex items-center h-full gap-4 will-change-transform"
+                  style={{
+                    paddingLeft: 'calc(50% - 75px)', // Item 150px / 2 = 75px
+                    transform: startRouletteAnim ? `translateX(-8300px)` : 'translateX(0)', // 50 * (150px + 16px) = 8300px
+                    transition: startRouletteAnim ? 'transform 5s cubic-bezier(0.1, 0.95, 0.2, 1)' : 'none'
+                  }}
+                >
+                  {rouletteItems.map((item, idx) => (
+                    <div key={idx} className={`shrink-0 w-[150px] h-[150px] transition-all duration-300 ${startRouletteAnim ? 'opacity-50 scale-90 blur-[2px]' : 'opacity-100 scale-100'} ${idx === 50 && startRouletteAnim ? 'opacity-100! scale-110! blur-0!' : ''}`}>
+                      <SkillRuneIcon runeId={item.runeId} rarity={item.rarity as any} size="w-full h-full" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* 하이라이트 박스 (정중앙) */}
+                <div className="absolute left-1/2 -translate-x-1/2 w-[160px] h-[180px] rounded-4xl border-4 border-amber-500 shadow-[0_0_40px_rgba(245,158,11,0.5),inset_0_0_30px_rgba(245,158,11,0.2)] z-20 pointer-events-none flex flex-col justify-between items-center py-2 bg-amber-500/5 backdrop-blur-[1px]">
+                   <div className="w-0 h-0 border-l-10 border-r-10 border-t-10 border-l-transparent border-r-transparent border-t-amber-500 drop-shadow-md brightness-150" />
+                   <div className="w-0 h-0 border-l-10 border-r-10 border-b-10 border-l-transparent border-r-transparent border-b-amber-500 drop-shadow-md brightness-150" />
+                </div>
+                 
+                 {/* 그라데이션 가림막 (양 옆) */}
+                 <div className="absolute inset-y-0 left-0 w-1/4 bg-linear-to-r from-black via-black/90 to-transparent z-10 pointer-events-none" />
+                 <div className="absolute inset-y-0 right-0 w-1/4 bg-linear-to-l from-black via-black/90 to-transparent z-10 pointer-events-none" />
+              </div>
+            </div>
+          )}
+          
+          {gachaState === 'result' && gachaResult && (
+            <div className="flex flex-col items-center animate-in zoom-in-[0.8] duration-500 ease-out relative">
+              {/* 빛 터지는 효과 배경 */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-linear-to-tr from-transparent via-amber-500/10 to-transparent animate-[spin_10s_linear_infinite] pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/20 blur-[120px] rounded-full pointer-events-none" />
+              
+              {gachaResult.isCrit ? (
+                 <div className="mb-10 text-rose-400 font-black text-3xl md:text-5xl tracking-[0.3em] uppercase drop-shadow-[0_0_20px_rgba(244,63,94,0.8)] animate-bounce text-center leading-tight">
+                   Critical<br className="md:hidden" /> Success!
+                 </div>
+              ) : (
+                 <div className="mb-10 text-amber-400 font-black text-2xl md:text-4xl tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]">
+                   Acquired
+                 </div>
+              )}
+
+              <div className="relative z-10 w-48 h-48 md:w-72 md:h-72 shadow-2xl rounded-[3rem] overflow-hidden hover:scale-105 transition-transform duration-500 ring-4 ring-white/10 group cursor-pointer">
+                <SkillRuneIcon 
+                  runeId={gachaResult.rune.runeId} 
+                  rarity={gachaResult.rune.rarity} 
+                  size="w-full h-full"
+                />
+              </div>
+              
+              <div className="mt-12 flex flex-col items-center gap-3 relative z-10">
+                <span className={`px-6 py-2 rounded-full text-xs md:text-sm font-black tracking-widest uppercase border backdrop-blur-md shadow-xl ${rarityColors[gachaResult.rune.rarity] || 'text-white border-white'}`}>
+                  {gachaResult.rune.rarity} Class
+                </span>
+                <span className="text-4xl md:text-5xl font-black text-white px-8 text-center drop-shadow-2xl mt-4">
+                  {SKILL_RUNES[gachaResult.rune.runeId]?.name || 'Unknown Energy'}
+                </span>
+              </div>
+              
+              <div className="mt-20 text-zinc-500 font-bold tracking-[0.5em] uppercase text-xs md:text-sm animate-pulse cursor-pointer">
+                - Tap anywhere to continue -
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }
+
+export default React.memo(Shop, (prev, next) => {
+  return prev.stats === next.stats;
+});

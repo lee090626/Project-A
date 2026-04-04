@@ -4,38 +4,34 @@ import React, { useState, useMemo } from 'react';
 import { PlayerStats, TileType } from '../../shared/types/game';
 import { DRILLS } from '../../shared/config/drillData';
 import { getNextLevelExp, getUnlockedSlotCount, createInitialEquipmentState } from '../../shared/lib/masteryUtils';
+import { DRONES } from '../../shared/config/droneData';
+import { MINERALS } from '../../shared/config/mineralData';
+import Image from 'next/image';
+import { SKILL_RUNES } from '../../shared/config/skillRuneData';
+import AttackRuneImg from '../../shared/assets/rune/AttackRune.png';
+import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 
 /**
  * 인벤토리 컴포넌트의 Props 인터페이스입니다.
  */
 interface InventoryProps {
-  /** 플레이어 통계 데이터 */
   stats: PlayerStats;
-  /** 인벤토리 창 닫기 콜백 */
   onClose: () => void;
-  /** 장비 장착 변경 콜백 (선택 사항) */
   onEquip?: (id: string, type: 'drill' | 'drone') => void;
-  /** 스킬룬 장착 실행 콜백 (선택 사항) */
   onEquipRune?: (runeInstanceId: string, slotIndex: number) => void;
 }
-
-import { DRONES } from '../../shared/config/droneData';
-
-import { MINERALS } from '../../shared/config/mineralData';
-
-import { SKILL_RUNES } from '../../shared/config/skillRuneData';
-import AttackRuneImg from '../../shared/assets/rune/AttackRune.png';
 
 /**
  * 플레이어의 소지품(재료, 장비, 스킬젬)을 관리하고 장착할 수 있는 인벤토리 컴포넌트입니다.
  */
-export default function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
+function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
   // 상태 관리: 선택된 광물 키, 선택된 룬 ID, 현재 활성화된 탭
   const [selectedKey, setSelectedKey] = useState<TileType | null>(null);
   const [selectedRuneId, setSelectedRuneId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'ingredients' | 'equipment' | 'skillrunes'>(
     'ingredients',
   );
+  const [isEquippingRune, setIsEquippingRune] = useState(false);
 
   /** 현재 선택된 룬 정보 계산 */
   const selectedRuneInstance = useMemo(
@@ -69,6 +65,19 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
   const equipmentState = stats.equipmentStates[stats.equippedDrillId] || createInitialEquipmentState(stats.equippedDrillId);
   const unlockedSlots = getUnlockedSlotCount(equipmentState.level, equippedDrill.maxSkillSlots);
 
+  /** 모든 드릴에 현재 장착 중인 룬 인스턴스 ID 목록 */
+  const equippedRuneIds = new Set<string>();
+  Object.values(stats.equipmentStates).forEach((eqState: any) => {
+    if (eqState?.slottedRunes) {
+      eqState.slottedRunes.forEach((id: string | null) => {
+        if (id) equippedRuneIds.add(id);
+      });
+    }
+  });
+
+  /** 장착되지 않은 룬만 필터 (인벤토리 표시용) */
+  const availableRunes = (stats.inventoryRunes || []).filter(r => !equippedRuneIds.has(r.id));
+
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
       {/* HEADER SECTION - Bento Style Floating Header */}
@@ -80,26 +89,25 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-cyan-400 leading-none">
                 Inventory
               </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">Supply Storage</span>
             </div>
           </div>
 
           <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto">
             <button
               onClick={() => setActiveTab('ingredients')}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'ingredients' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${activeTab === 'ingredients' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Items
             </button>
             <button
               onClick={() => setActiveTab('equipment')}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'equipment' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${activeTab === 'equipment' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              Gear
+              Equiment
             </button>
             <button
               onClick={() => setActiveTab('skillrunes')}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'skillrunes' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${activeTab === 'skillrunes' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Runes
             </button>
@@ -107,15 +115,17 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+          <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <div className="w-6 h-6 md:w-8 md:h-8 relative">
+               <Image src={GoldIconImg} alt="Gold" fill className="object-contain" />
+            </div>
             <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-cyan-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -136,7 +146,7 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                     <button
                       key={m.key}
                       onClick={() => setSelectedKey(m.key as any)}
-                      className={`relative aspect-square rounded-xl md:rounded-2xl border transition-all flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden ${
+                      className={`relative aspect-square rounded-xl md:rounded-2xl border transition-all flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${
                         isSelected
                           ? 'bg-[#252526] shadow-2xl scale-[1.02]'
                           : hasNone
@@ -148,20 +158,20 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                       {isSelected && (
                          <div className="absolute inset-0 opacity-10" style={{ backgroundColor: m.color }} />
                       )}
-                      <div className="w-8 h-8 md:w-10 md:h-10 mb-1.5 md:mb-3 group-hover:scale-110 transition-transform flex items-center justify-center text-2xl md:text-4xl">
+                      <div className="w-14 h-14 md:w-18 md:h-18 mb-2 md:mb-4 group-hover:scale-105 transition-transform flex items-center justify-center text-3xl md:text-5xl">
                         {m.image ? (
                           <img src={typeof m.image === 'string' ? m.image : m.image.src || m.image} alt={m.name} className="w-full h-full object-contain drop-shadow-md" />
                         ) : (
                           m.icon
                         )}
                       </div>
-                      <div className="flex flex-col items-center gap-1">
+                      <div className="flex flex-col items-center gap-1.5">
                         <div
-                          className={`text-[11px] font-black tabular-nums ${isSelected ? 'text-white' : 'text-zinc-400'}`}
+                          className={`text-sm md:text-base font-black tabular-nums ${isSelected ? 'text-white' : 'text-zinc-400'}`}
                         >
                           x{count.toLocaleString()}
                         </div>
-                        <div className="text-[8px] text-zinc-600 font-bold tracking-widest">
+                        <div className="text-[10px] md:text-xs text-zinc-600 font-bold tracking-widest">
                           {m.name}
                         </div>
                       </div>
@@ -174,38 +184,40 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
             <div className="w-full lg:w-[320px] xl:w-[380px] shrink-0 h-auto lg:h-full flex flex-col bg-[#252526] rounded-2xl md:rounded-4xl p-4 md:p-6 lg:p-8 border border-zinc-800 relative shadow-2xl overflow-y-auto custom-scrollbar min-h-0">
               {selectedMineral ? (
                 <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4 duration-300">
-                  <div className="flex justify-start mb-6">
-                    <span className="text-[9px] font-black px-3 py-1.5 rounded-lg border tracking-widest" style={{ 
+                  <div className="flex justify-start mb-8">
+                    <span className="text-xs font-black px-4 py-2 rounded-lg border tracking-widest uppercase" style={{ 
                       backgroundColor: `${selectedMineral.color}20`,
                       borderColor: selectedMineral.color,
                       color: selectedMineral.color
                     }}>
-                      {selectedMineral.rarity}
+                      Mineral
                     </span>
                   </div>
 
-                  <div className="w-24 h-24 md:w-32 md:h-32 bg-zinc-950 rounded-2xl md:rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center text-5xl md:text-7xl mx-auto mb-4 md:mb-8 overflow-hidden">
+                  <div className="w-40 h-40 md:w-56 md:h-56 bg-zinc-950 rounded-3xl md:rounded-4xl shadow-inner border border-zinc-800 flex items-center justify-center text-7xl md:text-9xl mx-auto mb-6 md:mb-10 overflow-hidden">
                     {selectedMineral.image ? (
-                      <img src={typeof selectedMineral.image === 'string' ? selectedMineral.image : selectedMineral.image.src || selectedMineral.image} alt={selectedMineral.name} className="w-16 h-16 md:w-24 md:h-24 object-contain drop-shadow-xl" />
+                      <img src={typeof selectedMineral.image === 'string' ? selectedMineral.image : selectedMineral.image.src || selectedMineral.image} alt={selectedMineral.name} className="w-24 h-24 md:w-40 md:h-40 object-contain drop-shadow-xl" />
                     ) : (
                       selectedMineral.icon
                     )}
                   </div>
 
-                  <h3 className="text-xl md:text-3xl font-black text-white text-center mb-2 md:mb-4 tracking-tighter">
+                  <h3 className="text-3xl md:text-5xl font-black text-white text-center mb-4 md:mb-6 tracking-tighter">
                     {selectedMineral.name}
                   </h3>
-                  <p className="text-[10px] md:text-xs text-zinc-500 text-center leading-relaxed mb-4 md:mb-8 px-4">
+                  <p className="text-sm md:text-base text-zinc-400 text-center leading-relaxed mb-6 md:mb-12 px-4 italic">
                     {selectedMineral.description}
                   </p>
 
                   <div className="mt-auto space-y-4">
-                    <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800">
-                      <div className="text-[9px] text-zinc-600 font-black mb-1 tracking-widest text-center">
-                        Quantity
+                    <div className="bg-zinc-950 p-8 rounded-3xl border border-zinc-900">
+                      <div className="text-xs text-zinc-500 font-black mb-4 tracking-widest text-center uppercase">
+                        Stock Quantity
                       </div>
-                      <div className="text-4xl font-black text-[#eab308] text-center tabular-nums">
-                        {(stats.inventory as any)[selectedMineral.key] || 0}
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="text-6xl md:text-8xl font-black text-[#eab308] text-center tabular-nums">
+                          {(stats.inventory as any)[selectedMineral.key] || 0}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -238,7 +250,7 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                     }`}
                   >
                     <div className="flex items-center gap-6 mb-8 text-left">
-                      <div className="w-20 h-20 bg-zinc-950 rounded-2xl flex items-center justify-center text-5xl border border-zinc-900 shadow-inner overflow-hidden">
+                      <div className="w-28 h-28 md:w-36 md:h-36 bg-zinc-950 rounded-3xl flex items-center justify-center text-6xl border border-zinc-900 shadow-inner overflow-hidden">
                         {drill.image ? (
                           <img
                             src={typeof drill.image === 'string' ? drill.image : drill.image.src || drill.image}
@@ -251,11 +263,11 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                       </div>
                       <div>
                         <div
-                          className={`text-[9px] font-bold mb-1 tracking-widest ${isEquipped ? 'text-[#eab308]' : 'text-zinc-600'}`}
+                          className={`text-xs font-bold mb-2 tracking-widest ${isEquipped ? 'text-[#eab308]' : 'text-zinc-600'}`}
                         >
                           {isEquipped ? 'Equipped' : 'Storage'} • {drill.equipmentType}
                         </div>
-                        <h4 className="text-2xl font-black text-white tracking-tighter">
+                        <h4 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
                           {drill.name}
                         </h4>
                       </div>
@@ -269,12 +281,12 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                           ].map(([l, v]) => (
                             <div
                               key={l as string}
-                              className="bg-zinc-950 p-3 rounded-xl text-center border border-zinc-900 shadow-inner"
+                              className="bg-zinc-950 p-4 rounded-2xl text-center border border-zinc-900 shadow-inner"
                             >
-                              <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">
+                              <div className="text-[10px] md:text-xs text-zinc-500 font-bold mb-1 tracking-widest">
                                 {l}
                               </div>
-                              <div className="text-xs font-black text-white">
+                              <div className="text-sm md:text-lg font-black text-white">
                                 {v}
                               </div>
                             </div>
@@ -291,40 +303,40 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
 
                             return (
                               <>
-                                <div className="space-y-1.5">
-                                  <div className="flex justify-between items-end">
-                                    <span className="text-[8px] text-zinc-500 font-bold tracking-widest">Mastery Lv.{equipmentState.level}</span>
-                                    <span className="text-[8px] text-zinc-600 font-bold tabular-nums">{Math.floor(expPercent)}%</span>
+                                  <div className="space-y-2">
+                                    <div className="flex justify-between items-end">
+                                      <span className="text-xs text-zinc-400 font-bold tracking-widest">Mastery Lv.{equipmentState.level}</span>
+                                      <span className="text-xs text-zinc-500 font-bold tabular-nums">{Math.floor(expPercent)}%</span>
+                                    </div>
+                                    <div className="h-1.5 bg-zinc-950 rounded-full overflow-hidden border border-zinc-900">
+                                      <div 
+                                        className="h-full bg-[#eab308] rounded-full transition-all duration-500"
+                                        style={{ width: `${expPercent}%` }}
+                                      />
+                                    </div>
                                   </div>
-                                  <div className="h-1 bg-zinc-950 rounded-full overflow-hidden border border-zinc-900">
-                                    <div 
-                                      className="h-full bg-[#eab308] rounded-full transition-all duration-500"
-                                      style={{ width: `${expPercent}%` }}
-                                    />
-                                  </div>
-                                </div>
 
-                                <div className="flex justify-between items-center bg-zinc-950/50 p-2.5 rounded-xl border border-zinc-900/50">
-                                  <span className="text-[8px] text-zinc-500 font-bold tracking-widest">Rune Slots</span>
-                                  <div className="flex gap-1">
-                                    {Array.from({ length: drill.maxSkillSlots || 0 }).map((_, i) => {
-                                      const isUnlocked = i < unlockedSlots;
-                                      const hasRune = (equipmentState.slottedRunes || [])[i];
-                                      return (
-                                        <div 
-                                          key={i} 
-                                          className={`w-5 h-5 rounded-lg border flex items-center justify-center text-[10px] ${
-                                            isUnlocked 
-                                              ? hasRune ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-zinc-900 border-zinc-800 text-transparent'
-                                              : 'bg-zinc-950 border-zinc-900 text-zinc-800 opacity-40'
-                                          }`}
-                                        >
-                                          {isUnlocked ? (hasRune ? '⚙️' : '') : '🔒'}
-                                        </div>
-                                      );
-                                    })}
+                                  <div className="flex justify-between items-center bg-zinc-950/50 p-4 rounded-2xl border border-zinc-900/50">
+                                    <span className="text-xs text-zinc-400 font-bold tracking-widest">Rune Slots</span>
+                                    <div className="flex gap-2">
+                                      {Array.from({ length: drill.maxSkillSlots || 0 }).map((_, i) => {
+                                        const isUnlocked = i < unlockedSlots;
+                                        const hasRune = (equipmentState.slottedRunes || [])[i];
+                                        return (
+                                          <div 
+                                            key={i} 
+                                            className={`w-8 h-8 rounded-xl border flex items-center justify-center text-sm ${
+                                              isUnlocked 
+                                                ? hasRune ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-zinc-900 border-zinc-800 text-transparent'
+                                                : 'bg-zinc-950 border-zinc-900 text-zinc-800 opacity-40'
+                                            }`}
+                                          >
+                                            {isUnlocked ? (hasRune ? '⚙️' : '') : '🔒'}
+                                          </div>
+                                        );
+                                      })}
                                     {!(drill.maxSkillSlots) && (
-                                      <span className="text-[8px] text-zinc-700 italic">NONE</span>
+                                      <span className="text-sm text-zinc-700 italic">NONE</span>
                                     )}
                                   </div>
                                 </div>
@@ -335,12 +347,12 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
 
                     <div className="mt-auto">
                       {!isEquipped && (
-                        <button
-                          onClick={() => onEquip?.(drillId, 'drill')}
-                          className="w-full py-4 bg-zinc-100 text-zinc-950 hover:bg-white text-center font-black text-[10px] tracking-widest rounded-xl shadow-xl active:scale-95 transition-all"
-                        >
-                          Equip
-                        </button>
+                          <button
+                            onClick={() => onEquip?.(drillId, 'drill')}
+                            className="w-full py-6 bg-zinc-100 text-zinc-950 hover:bg-white text-center font-black text-lg tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                          >
+                            Equip
+                          </button>
                       )}
                     </div>
                   </div>
@@ -368,41 +380,41 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                       </div>
                       <div>
                         <div
-                          className={`text-[9px] font-bold mb-1 tracking-widest ${isEquipped ? 'text-[#eab308]' : 'text-zinc-600'}`}
+                          className={`text-xs font-bold mb-2 tracking-widest ${isEquipped ? 'text-[#eab308]' : 'text-zinc-600'}`}
                         >
                           {isEquipped ? 'Equipped' : 'Storage'} • DRONE
                         </div>
-                        <h4 className="text-2xl font-black text-white tracking-tighter">
+                        <h4 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
                           {drone.name}
                         </h4>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-                      <div className="bg-zinc-950 p-3 rounded-xl text-center border border-zinc-900 shadow-inner">
-                        <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">MINERIAL ASSIST</div>
-                        <div className="text-xs font-black text-white">{drone.basePower}</div>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                      <div className="bg-zinc-950 p-4 rounded-xl text-center border border-zinc-900 shadow-inner">
+                        <div className="text-[10px] md:text-xs text-zinc-500 font-bold mb-1 tracking-widest uppercase">Mineral Assist</div>
+                        <div className="text-sm md:text-xl font-black text-white">{drone.basePower}</div>
                       </div>
-                      <div className="bg-zinc-950 p-3 rounded-xl text-center border border-zinc-900 shadow-inner">
-                        <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">SPEED</div>
-                        <div className="text-xs font-black text-white">{drone.cooldownMs}ms</div>
+                      <div className="bg-zinc-950 p-4 rounded-xl text-center border border-zinc-900 shadow-inner">
+                        <div className="text-[10px] md:text-xs text-zinc-500 font-bold mb-1 tracking-widest uppercase">SPEED</div>
+                        <div className="text-sm md:text-xl font-black text-white">{drone.cooldownMs}ms</div>
                       </div>
                       {drone.specialEffect && (
-                         <div className="bg-zinc-950 p-3 rounded-xl text-center border border-zinc-900 shadow-inner">
-                           <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">EFFECT</div>
-                           <div className="text-xs font-black text-emerald-400 capitalize">{drone.specialEffect}</div>
+                         <div className="bg-zinc-950 p-4 rounded-xl text-center border border-zinc-900 shadow-inner">
+                           <div className="text-[10px] md:text-xs text-zinc-500 font-bold mb-1 tracking-widest uppercase">EFFECT</div>
+                           <div className="text-sm md:text-xl font-black text-emerald-400 capitalize">{drone.specialEffect}</div>
                          </div>
                       )}
                     </div>
 
                     <div className="mt-auto">
                       {!isEquipped && (
-                        <button
-                          onClick={() => onEquip?.(droneId, 'drone')}
-                          className="w-full py-4 bg-zinc-100 text-zinc-950 hover:bg-white text-center font-black text-[10px] tracking-widest rounded-xl shadow-xl active:scale-95 transition-all"
-                        >
-                          Equip
-                        </button>
+                          <button
+                            onClick={() => onEquip?.(droneId, 'drone')}
+                            className="w-full py-6 bg-zinc-100 text-zinc-950 hover:bg-white text-center font-black text-lg tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                          >
+                            Equip
+                          </button>
                       )}
                     </div>
                   </div>
@@ -414,14 +426,17 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
           <>
             <div className="flex-1 overflow-y-auto pr-0 md:pr-4 custom-scrollbar">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4 pb-10">
-                {stats.inventoryRunes && stats.inventoryRunes.length > 0 ? (
-                  stats.inventoryRunes.map((rune) => (
+                {availableRunes.length > 0 ? (
+                  availableRunes.map((rune) => (
                     <button
                       key={rune.id}
-                      onClick={() => setSelectedRuneId(rune.id === selectedRuneId ? null : rune.id)}
-                      className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden ${rarityColors[rune.rarity] || 'bg-zinc-900 border-zinc-700 text-zinc-500'} hover:-translate-y-1 ${selectedRuneId === rune.id ? 'ring-2 ring-[#eab308] scale-[1.02]' : ''}`}
+                      onClick={() => {
+                        setSelectedRuneId(rune.id === selectedRuneId ? null : rune.id);
+                        setIsEquippingRune(false);
+                      }}
+                      className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group ${rarityColors[rune.rarity] || 'bg-zinc-900 border-zinc-700 text-zinc-500'} focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${selectedRuneId === rune.id ? 'ring-2 ring-[#eab308] scale-[1.02]' : ''}`}
                     >
-                      <div className="w-10 h-10 md:w-16 md:h-16 mb-2 md:mb-3 group-hover:scale-110 transition-transform flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-28 md:h-28 mb-3 md:mb-5 transition-transform flex items-center justify-center">
                         {SKILL_RUNES[rune.runeId]?.image ? (
                           <img 
                             src={typeof SKILL_RUNES[rune.runeId].image === 'string' ? SKILL_RUNES[rune.runeId].image : SKILL_RUNES[rune.runeId].image.src || SKILL_RUNES[rune.runeId].image} 
@@ -432,11 +447,11 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                           "⚙️"
                         )}
                       </div>
-                      <div className="flex flex-col items-center gap-1 w-full text-center">
-                        <div className="text-[9px] font-black tracking-widest px-2 py-0.5 rounded-full bg-black/40 border border-white/5">
+                      <div className="flex flex-col items-center gap-1.5 w-full text-center">
+                        <div className="text-[10px] md:text-xs font-black tracking-widest px-3 py-1 rounded-full bg-black/40 border border-white/5">
                           {rune.rarity}
                         </div>
-                        <div className="text-[10px] font-black text-white mt-1 truncate w-full px-1">
+                        <div className="text-xs md:text-base font-black text-white mt-1 truncate w-full px-2">
                           {SKILL_RUNES[rune.runeId]?.name || 'Unknown'}
                         </div>
                       </div>
@@ -454,13 +469,10 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
             <div className="w-full lg:w-[320px] xl:w-[380px] shrink-0 h-auto lg:h-full flex flex-col bg-[#252526] rounded-2xl md:rounded-4xl p-4 md:p-6 lg:p-8 border border-zinc-800 relative shadow-2xl overflow-y-auto custom-scrollbar min-h-0">
               {selectedRuneConfig && selectedRuneInstance ? (
                 <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4 duration-300">
-                  <div className="flex justify-start mb-6">
-                    <span className="text-[9px] font-black px-3 py-1.5 rounded-lg border tracking-widest bg-zinc-950 border-zinc-800 text-zinc-400">
-                      {selectedRuneInstance.rarity} MODULE
-                    </span>
+                  <div className="flex justify-start mb-8">
                   </div>
 
-                  <div className="w-32 h-32 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center mx-auto mb-8 overflow-hidden p-4">
+                  <div className="w-44 h-44 md:w-64 md:h-64 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center mx-auto mb-10 p-4">
                     {selectedRuneConfig.image ? (
                       <img 
                         src={typeof selectedRuneConfig.image === 'string' ? selectedRuneConfig.image : selectedRuneConfig.image.src || selectedRuneConfig.image} 
@@ -468,38 +480,37 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                         className="w-full h-full object-contain drop-shadow-2xl" 
                       />
                     ) : (
-                      <span className="text-7xl">⚙️</span>
+                      <span className="text-8xl md:text-9xl">⚙️</span>
                     )}
                   </div>
 
-                  <h3 className="text-2xl font-black text-white text-center mb-4 tracking-tighter">
+                  <h3 className="text-4xl md:text-5xl font-black text-white text-center mb-6 tracking-tighter">
                     {selectedRuneConfig.name}
                   </h3>
-                  <p className="text-sm text-zinc-400 text-center leading-relaxed mb-8 px-4 font-medium">
-                    {selectedRuneConfig.description}
-                  </p>
 
                   <div className="mt-auto space-y-4">
-                    <div className="bg-zinc-950 p-6 rounded-2xl border border-zinc-800">
-                       <div className="text-[10px] text-zinc-600 font-black mb-3 tracking-widest text-center uppercase">Module Status</div>
-                       <div className="space-y-3">
-                         <div className="flex justify-between items-center text-[10px] font-bold">
-                           <span className="text-zinc-500">TYPE</span>
-                           <span className="text-blue-400 uppercase">{selectedRuneConfig.effectType}</span>
-                         </div>
-                         <div className="flex justify-between items-center text-[10px] font-bold">
-                           <span className="text-zinc-500">RARITY</span>
-                           <span className="text-amber-400 uppercase">{selectedRuneInstance.rarity}</span>
+                    <div className="bg-zinc-950 p-8 rounded-3xl border border-zinc-800">
+                       <div className="space-y-4">
+                         <div className="flex justify-between items-center text-xs md:text-sm font-bold">
+                           <span className="text-zinc-500">Type</span>
+                           <span className="text-blue-400 tracking-widest">{selectedRuneConfig.effectType}</span>
                          </div>
                        </div>
                     </div>
+
+                    <button
+                      onClick={() => setIsEquippingRune(true)}
+                      className="w-full py-6 bg-cyan-400 text-black hover:bg-cyan-300 text-center font-black text-sm md:text-base tracking-widest rounded-2xl shadow-xl active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+                    >
+                      Equip Rune
+                    </button>
                   </div>
                 </div>
               ) : (
                 <div className="h-full flex flex-col items-center justify-center text-center opacity-10">
                   <img src={typeof AttackRuneImg === 'string' ? AttackRuneImg : (AttackRuneImg as any).src} alt="Rune Placeholder" className="w-24 h-24 mb-6 grayscale" />
                   <p className="text-xs font-bold text-zinc-500 tracking-widest">
-                    Select a Module
+                    Select a Rune
                   </p>
                 </div>
               )}
@@ -509,11 +520,11 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
       </div>
 
       {/* SLOT SELECTION OVERLAY */}
-      {selectedRuneId && selectedRuneConfig && (
+      {isEquippingRune && selectedRuneId && selectedRuneConfig && (
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md pointer-events-auto animate-in fade-in duration-300">
           <div className="bg-[#1a1a1b] border-2 border-[#eab308] rounded-2xl md:rounded-4xl p-6 md:p-10 max-w-lg w-full shadow-2xl">
-            <h3 className="text-2xl font-black text-white mb-2 tracking-tighter text-center">Module Integration</h3>
-            <p className="text-zinc-500 text-xs text-center mb-8 font-medium italic">Select target socket for {selectedRuneConfig.name}</p>
+            <h3 className="text-2xl font-black text-white mb-2 tracking-tighter text-center">Equip Rune</h3>
+            <p className="text-zinc-500 text-xs text-center mb-8 font-medium">Select target socket for {selectedRuneConfig.name}</p>
             
             <div className="flex justify-center gap-4 mb-10">
               {Array.from({ length: equippedDrill.maxSkillSlots || 0 }).map((_, i) => {
@@ -528,10 +539,11 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
                     onClick={() => {
                       onEquipRune?.(selectedRuneId, i);
                       setSelectedRuneId(null);
+                      setIsEquippingRune(false);
                     }}
-                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex items-center justify-center transition-all group ${
+                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-2xl border-2 flex items-center justify-center transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#eab308]/50 ${
                       isUnlocked
-                        ? 'bg-zinc-900 border-zinc-700 hover:border-[#eab308] hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:-translate-y-1'
+                        ? 'bg-zinc-900 border-zinc-700 hover:border-[#eab308] hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]'
                         : 'bg-zinc-950 border-zinc-900 opacity-50 cursor-not-allowed'
                     }`}
                   >
@@ -566,8 +578,8 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
             </div>
             
             <button
-              onClick={() => setSelectedRuneId(null)}
-              className="w-full py-4 bg-zinc-800 text-white rounded-xl font-bold tracking-widest hover:bg-zinc-700 transition-colors"
+              onClick={() => setIsEquippingRune(false)}
+              className="w-full py-4 bg-zinc-800 text-white rounded-xl font-bold tracking-widest hover:bg-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
             >
               CANCEL
             </button>
@@ -577,3 +589,7 @@ export default function Inventory({ stats, onClose, onEquip, onEquipRune }: Inve
     </div>
   );
 }
+
+export default React.memo(Inventory, (prev, next) => {
+  return prev.stats === next.stats;
+});

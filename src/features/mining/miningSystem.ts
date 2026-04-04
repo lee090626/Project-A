@@ -99,12 +99,12 @@ function handleTileDestruction(world: GameWorld, x: number, y: number, type: any
 
     for (let i = 0; i < dropCount; i++) {
         world.droppedItems.push({
-          id: Math.random().toString(36).substring(2, 9),
+          id: `item_${Date.now()}_${Math.random()}`,
           type,
           x: x * TILE_SIZE + TILE_SIZE / 2,
-          y: y * TILE_SIZE + TILE_SIZE / 2,
-          vx: (Math.random() - 0.5) * 6,
-          vy: -4 - Math.random() * 3,
+          y: y * TILE_SIZE - 5, // 타일 상단에서 살짝 위로 생성하여 끼임 방지
+          vx: (Math.random() - 0.5) * 8,
+          vy: -6 - Math.random() * 4,
           life: 0
         });
     }

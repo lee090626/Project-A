@@ -32,9 +32,6 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <link rel="preload" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/Player.png`} as="image" />
-        <link rel="preload" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/NewTileset.png`} as="image" />
-        <link rel="preload" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/BaseTileset.png`} as="image" />
         <script 
           async 
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8319588891960553" 

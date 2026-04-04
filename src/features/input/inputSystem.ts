@@ -48,8 +48,10 @@ export const inputSystem = (world: GameWorld) => {
     world.intent.moveX = 0;
   }
 
-  // 3. 상호작용 의도 (스페이스바)
+  // 3. 상호작용 의도 (스페이스바) 및 유물 사용 (Q)
   if (keys[' '] || keys['Spacebar']) {
     world.intent.action = 'interact';
+  } else if (keys['q']) {
+    world.intent.action = 'artifact';
   }
 };

@@ -72,10 +72,21 @@ export interface Skill {
 }
 
 /**
+ * 유물의 기본 데이터를 정의합니다.
+ */
+export interface Artifact {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  cooldownMs: number;
+}
+
+/**
  * 연구(스킬트리) 효과의 종류와 수치를 정의합니다.
  */
 export interface ResearchEffect {
-  type: 'attackPower' | 'miningSpeed' | 'moveSpeed' | 'luck' | 'maxHp' | 'defense' | 'goldBonus';
+  type: 'power' | 'miningSpeed' | 'moveSpeed' | 'luck' | 'maxHp' | 'defense' | 'goldBonus';
   value: number;
 }
 
@@ -232,8 +243,12 @@ export interface PlayerStats {
   /** 탐험 정보 */
   /** 지금까지 도달한 최대 깊이 */
   maxDepthReached: number;
-  /** 획득한 고대 유물 목록 */
+  /** 보유 중인 유물 아이디 목록 */
   artifacts: string[];
+  /** 현재 장착 중인 유물 ID */
+  equippedArtifactId: string | null;
+  /** 유물별 마지막 사용 타임스탬프 (쿨타임 관리) */
+  artifactCooldowns: { [artifactId: string]: number };
 
   /** 전투 및 기본 스탯 */
   /** 현재 체력 */
@@ -241,7 +256,7 @@ export interface PlayerStats {
   /** 최대 체력 */
   maxHp: number;
   /** 기본 채굴 위력 (장비 위력과 합산됨) */
-  attackPower: number;
+  power: number;
   /** 캐릭터 기본 이동 속도 (기본 100) */
   moveSpeed: number;
 
@@ -328,17 +343,21 @@ export type InteractionType = Entity['interactionType'];
  */
 export interface GameAssets {
   /** 플레이어 이미지 */
-  player: HTMLImageElement | null;
+  player: HTMLImageElement | ImageBitmap | null;
   /** 타일셋 이미지 */
-  tileset: HTMLImageElement | null;
+  tileset: HTMLImageElement | ImageBitmap | null;
   /** 베이스 캠프 타일셋 이미지 */
-  baseTileset: HTMLImageElement | null;
+  baseTileset: HTMLImageElement | ImageBitmap | null;
   /** 보스 몬스터 이미지 */
-  boss: HTMLImageElement | null;
-  /** 추가 엔티티 이미지 맵 */
-  entities: { [path: string]: HTMLImageElement };
-  /** 아이템 및 자원 이미지 맵 */
-  resources: { [type: string]: HTMLImageElement };
+  boss: HTMLImageElement | ImageBitmap | null;
+  /** 추가 엔티티 이미지 맵 (ImageBitmap 대응) */
+  entities: { [path: string]: HTMLImageElement | ImageBitmap };
+  /** 아이템 및 자원 이미지 맵 (ImageBitmap 대응) */
+  resources: { [type: string]: HTMLImageElement | ImageBitmap };
+  /** 광물 타일 전용 비트맵 맵 (워커용) */
+  tileBitmaps?: { [key: string]: ImageBitmap };
+  /** 아이템 아이콘 전용 비트맵 맵 (워커용) */
+  itemBitmaps?: { [key: string]: ImageBitmap };
 }
 
 /**
@@ -347,11 +366,12 @@ export interface GameAssets {
 export interface Particle {
   x: number;
   y: number;
-  vx: number; // x축 속도
-  vy: number; // y축 속도
-  life: number; // 남은 수명 (0~1)
+  vx: number;
+  vy: number;
+  life: number;
   color: string;
   size: number;
+  active: boolean; // 풀링을 위한 활성화 상태
 }
 
 /**
@@ -362,8 +382,9 @@ export interface FloatingText {
   y: number;
   text: string;
   color: string;
-  startY?: number; // 생성 당시의 초기 Y 위치
-  life: number; // 남은 수명 (0~1)
+  startY?: number;
+  life: number;
+  active: boolean; // 풀링을 위한 활성화 상태
 }
 
 /**

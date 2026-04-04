@@ -19,28 +19,34 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
   }
 
   // 1. 파티클(파편) 업데이트
-  for (let i = particles.length - 1; i >= 0; i--) {
+  for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
-    p.x += p.vx;
-    p.y += p.vy;
-    p.vy += 0.2; // 중력 가속도 적용
-    p.life -= 0.02 * (deltaTime / 16.6); // 프레임 레이트에 따른 수명 소모 조절
+    if (!p.active) continue;
+
+    const dtFactor = deltaTime / 16.6;
+    p.x += p.vx * dtFactor;
+    p.y += p.vy * dtFactor;
+    p.vy += 0.2 * dtFactor; // 중력 가속도 적용
+    p.life -= 0.02 * dtFactor; // 프레임 레이트에 따른 수명 소모 조절
     
-    // 수명이 다한 파티클 제거
+    // 수명이 다한 파티클 비활성화 (풀반환)
     if (p.life <= 0) {
-      particles.splice(i, 1);
+      p.active = false;
     }
   }
 
   // 2. 플로팅 텍스트(데미지 표시 등) 업데이트
-  for (let i = floatingTexts.length - 1; i >= 0; i--) {
+  for (let i = 0; i < floatingTexts.length; i++) {
     const ft = floatingTexts[i];
-    ft.y -= 1 * (deltaTime / 16.6); // 서서히 위로 떠오름
-    ft.life -= 0.01 * (deltaTime / 16.6); // 서서히 투명해지며 소멸
+    if (!ft.active) continue;
 
-    // 수명이 다한 텍스트 제거
+    const dtFactor = deltaTime / 16.6;
+    ft.y -= 1 * dtFactor; // 서서히 위로 떠오름
+    ft.life -= 0.01 * dtFactor; // 서서히 투명해지며 소멸
+
+    // 수명이 다한 텍스트 비활성화 (풀반환)
     if (ft.life <= 0) {
-      floatingTexts.splice(i, 1);
+      ft.active = false;
     }
   }
 

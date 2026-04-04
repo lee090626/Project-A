@@ -1,16 +1,16 @@
-'use client';
-
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { PlayerStats } from '../../shared/types/game';
 import { MINERALS } from '../../shared/config/mineralData';
 import { BOSSES } from '../../shared/config/bossData';
+import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 
 interface EncyclopediaProps {
   stats: PlayerStats;
   onClose: () => void;
 }
 
-export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
+function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
   const [activeTab, setActiveTab] = useState<'minerals' | 'bosses'>('minerals');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -37,13 +37,13 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
           <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto">
             <button
               onClick={() => { setActiveTab('minerals'); setSelectedId(null); }}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'minerals' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${activeTab === 'minerals' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Minerals
             </button>
             <button
               onClick={() => { setActiveTab('bosses'); setSelectedId(null); }}
-              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all ${activeTab === 'bosses' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
+              className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${activeTab === 'bosses' ? 'bg-zinc-800 text-purple-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
               Bosses
             </button>
@@ -51,15 +51,17 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+          <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <div className="w-6 h-6 md:w-8 md:h-8 relative">
+               <Image src={GoldIconImg} alt="Gold" fill className="object-contain" />
+            </div>
             <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-purple-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-purple-400 hover:text-black hover:border-purple-400 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-purple-400 hover:text-black hover:border-purple-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -79,7 +81,7 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                   <button
                     key={m.key}
                     onClick={() => setSelectedId(m.key)}
-                    className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden ${
+                    className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${
                       isSelected
                         ? 'bg-[#252526] border-purple-400 shadow-2xl scale-[1.02]'
                         : !isDiscovered
@@ -87,7 +89,7 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                           : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'
                     }`}
                   >
-                    <div className={`w-20 h-20 flex items-center justify-center text-6xl mb-4 transition-all ${!isDiscovered ? 'filter blur-md grayscale opacity-50' : 'group-hover:scale-110'}`}>
+                    <div className={`w-20 h-20 flex items-center justify-center text-6xl mb-4 transition-all ${!isDiscovered ? 'filter blur-md grayscale opacity-50' : ''}`}>
                       {isDiscovered ? (m.image ? <img src={typeof m.image === 'string' ? m.image : m.image.src || m.image} alt={m.name} className="w-full h-full object-contain drop-shadow-lg" /> : m.icon) : '?'}
                     </div>
                     <div className="text-[20px] text-zinc-500 font-bold tracking-widest">
@@ -110,7 +112,7 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                   <button
                     key={b.id}
                     onClick={() => setSelectedId(b.id)}
-                    className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden ${
+                    className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${
                       isSelected
                         ? 'bg-[#252526] border-[#a855f7] shadow-2xl scale-[1.02]'
                         : !isEncountered
@@ -118,7 +120,7 @@ export default function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                           : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'
                     }`}
                   >
-                    <div className={`w-20 h-20 flex items-center justify-center text-6xl mb-4 transition-all ${!isEncountered ? 'filter blur-md grayscale opacity-50' : 'group-hover:scale-110'}`}>
+                    <div className={`w-20 h-20 flex items-center justify-center text-6xl mb-4 transition-all ${!isEncountered ? 'filter blur-md grayscale opacity-50' : ''}`}>
                       {isEncountered ? b.icon : '💀'}
                     </div>
                     <div className="text-[10px] text-zinc-500 font-bold tracking-widest">
@@ -180,12 +182,12 @@ function DetailContent({ id, tab, stats }: { id: string, tab: 'minerals' | 'boss
     return (
       <div className="animate-in fade-in slide-in-from-right-4 duration-300">
         <div className="flex justify-between items-start mb-8">
-          <span className={`text-[9px] font-black px-3 py-1.5 rounded-lg border tracking-widest`} style={{ 
+          <span className="text-[10px] font-black px-3 py-1.5 rounded-lg border tracking-widest uppercase" style={{ 
             backgroundColor: isDiscovered ? `${mineral.color}20` : '#18181b',
             borderColor: isDiscovered ? mineral.color : '#27272a',
             color: isDiscovered ? mineral.color : '#52525b'
           }}>
-            {isDiscovered ? mineral.rarity : 'Unknown Rarity'}
+            {isDiscovered ? 'Mineral' : 'Unknown'}
           </span>
           <span className="text-[9px] font-black text-zinc-600 tracking-widest">
             ID: {id.toUpperCase()}
@@ -208,7 +210,13 @@ function DetailContent({ id, tab, stats }: { id: string, tab: 'minerals' | 'boss
 
         <div className="grid grid-cols-2 gap-3 mb-6">
           <StatBox label="Min Depth" value={isDiscovered ? `${mineral.minDepth}m` : '???'} color="#94a3b8" />
-          <StatBox label="Base Value" value={isDiscovered ? `${mineral.basePrice}G` : '???'} color="#fbbf24" />
+          <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 text-center flex flex-col items-center justify-center">
+            <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest uppercase">Base Value</div>
+            <div className="flex items-center gap-1.5">
+               <span className="text-sm font-black text-amber-500">{isDiscovered ? mineral.basePrice.toLocaleString() : '???'}</span>
+               {isDiscovered && <Image src={GoldIconImg} alt="Gold" width={14} height={14} />}
+            </div>
+          </div>
         </div>
 
         <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800 leading-relaxed text-xs text-zinc-400 text-center italic">
@@ -282,3 +290,7 @@ function StatBox({ label, value, color }: { label: string, value: string, color:
     </div>
   );
 }
+
+export default React.memo(Encyclopedia, (prev, next) => {
+  return prev.stats === next.stats;
+});

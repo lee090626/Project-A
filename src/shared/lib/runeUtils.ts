@@ -54,7 +54,7 @@ export function getRuneMultiplier(runeId: string, rarity: Rarity): number {
  */
 export function getTotalRuneStat(
   stats: PlayerStats, 
-  statType: 'attack' | 'miningSpeed' | 'moveSpeed' | 'luck' | 'critRate' | 'critDmg'
+  statType: 'power' | 'miningSpeed' | 'moveSpeed' | 'luck' | 'critRate' | 'critDmg'
 ): number {
   let total = 0;
   
@@ -80,7 +80,7 @@ export function getTotalRuneStat(
     const multiplier = getRuneMultiplier(baseRuneInfo.id, runeItem.rarity as Rarity);
 
     switch(statType) {
-      case 'attack':
+      case 'power':
         if (baseRuneInfo.id === 'attack_rune' && baseRuneInfo.powerBonus) {
           total += baseRuneInfo.powerBonus * multiplier;
         }

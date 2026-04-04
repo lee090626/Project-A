@@ -3,6 +3,7 @@ import Image, { StaticImageData } from 'next/image';
 import { PlayerStats } from '@/src/shared/types/game';
 import { getDimensionConfig } from '../../../shared/config/dimensionData';
 import { getDrillData } from '../../../shared/config/drillData';
+import { ARTIFACT_DATA } from '../../../shared/config/artifactData';
 
 // 실무형 에셋 관리: 직접 임포트 방식 적용
 import StatusIconImg from '@/src/shared/assets/ui/icons/StatusIcon.png';
@@ -14,7 +15,8 @@ import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 interface NavItem {
   label: string;
   key: string;
-  src: StaticImageData;
+  src?: StaticImageData;
+  icon?: string;
   onClick?: () => void;
   color: string;
 }
@@ -27,19 +29,21 @@ interface HudProps {
   onOpenEncyclopedia?: () => void;
   onOpenElevator?: () => void;
   onOpenSettings?: () => void;
+  onOpenGuide?: () => void;
 }
 
 /**
  * 게임 메인 화면의 오버레이 UI(체력, 깊이, 퀵 메뉴 등)를 표시하는 컴포넌트입니다.
  */
-const Hud: React.FC<HudProps> = ({ 
+const Hud: React.FC<HudProps> = React.memo(({ 
   stats, 
   pos,
   onOpenStatus, 
   onOpenInventory, 
   onOpenEncyclopedia, 
   onOpenElevator,
-  onOpenSettings 
+  onOpenSettings,
+  onOpenGuide
 }) => {
   const hpPercent = Math.max(0, (stats.hp / stats.maxHp) * 100);
   const config = getDimensionConfig(stats.dimension);
@@ -50,7 +54,8 @@ const Hud: React.FC<HudProps> = ({
     { label: 'Inventory', key: 'I', src: InventoryIconImg, onClick: onOpenInventory, color: '#f59e0b' },
     { label: 'Book', key: 'B', src: BookIconImg, onClick: onOpenEncyclopedia, color: '#a855f7' },
     { label: 'Setting', key: 'S', src: SettingsIconImg, onClick: onOpenSettings, color: '#94a3b8' },
-  ], [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenElevator, onOpenSettings]);
+    { label: 'Guide', key: 'H', icon: '❓', onClick: onOpenGuide, color: '#22d3ee' },
+  ], [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenSettings, onOpenGuide]);
 
   const equippedDrill = getDrillData(stats.equippedDrillId);
 
@@ -62,7 +67,7 @@ const Hud: React.FC<HudProps> = ({
         
         {/* 상단 좌측: 생존 상태 (HP) */}
         <div className="flex flex-col gap-1 md:gap-2 w-32 md:w-48 lg:w-72 mt-1">
-          <div className="relative h-4 md:h-6 lg:h-8 bg-black/60 backdrop-blur-xl rounded-full p-px md:p-[2px] border border-white/10 shadow-inner overflow-hidden">
+          <div className="relative h-4 md:h-6 lg:h-8 bg-black/60 backdrop-blur-xl rounded-full p-px md:p-[2px] border shadow-inner overflow-hidden">
             <div 
               className={`h-full rounded-full transition-all duration-500 ease-out shadow-[0_0_10px_rgba(16,185,129,0.3)] ${
                 hpPercent > 50 ? 'bg-linear-to-r from-emerald-600 to-emerald-400' : 
@@ -97,20 +102,61 @@ const Hud: React.FC<HudProps> = ({
       <div className="flex justify-between items-end w-full">
         
         {/* 하단 좌측: 현재 장착 장비 정보 */}
-        <div className="hidden md:flex bg-zinc-900/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-xl md:rounded-2xl items-center gap-3 md:gap-4 shadow-xl z-10 opacity-70 hover:opacity-100 transition-opacity">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-zinc-800 rounded-lg md:rounded-xl flex items-center justify-center border border-white/10 relative">
-                {equippedDrill?.image ? (
-                    <Image src={equippedDrill.image} alt="Drill" fill className="object-contain p-1" />
-                ) : (
-                    <div className="w-5 h-5 md:w-6 md:h-6 bg-white/10 rounded-full" />
-                )}
+        <div className="flex gap-4 items-end">
+          <div className="hidden md:flex bg-zinc-900/60 backdrop-blur-md border border-white/5 p-3 md:p-4 rounded-xl md:rounded-2xl items-center gap-3 md:gap-4 shadow-xl z-10 opacity-70 hover:opacity-100 transition-opacity">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-zinc-800 rounded-lg md:rounded-xl flex items-center justify-center border border-white/10 relative">
+                  {equippedDrill?.image ? (
+                      <Image src={equippedDrill.image} alt="Drill" fill className="object-contain p-1" />
+                  ) : (
+                      <div className="w-5 h-5 md:w-6 md:h-6 bg-white/10 rounded-full" />
+                  )}
+              </div>
+              <div className="flex flex-col">
+                  <span className="text-white font-bold text-xs md:text-base lg:text-lg leading-tight">{equippedDrill?.name || 'Standard Drill'}</span>
+                  <div className="font-mono text-[10px] md:text-sm lg:text-[18px] font-bold text-white/50">
+                    X: {Math.floor(pos.x)} Y: {Math.floor(pos.y)}
+                  </div>
+              </div>
+          </div>
+
+          {/* 하단 좌측: 현재 장착 유물 (Artifact) */}
+          {stats.equippedArtifactId && (
+            <div className="hidden md:flex bg-zinc-900/60 backdrop-blur-md border border-purple-500/30 p-3 md:p-4 rounded-xl md:rounded-2xl items-center gap-3 md:gap-4 shadow-xl z-10 opacity-90 pointer-events-auto">
+              <div className="w-10 h-10 md:w-12 md:h-12 bg-zinc-800 rounded-lg md:rounded-xl flex items-center justify-center border border-purple-500/20 relative overflow-hidden group">
+                {(() => {
+                  const config = ARTIFACT_DATA[stats.equippedArtifactId!];
+                  if (!config) return null;
+                  const lastUsed = stats.artifactCooldowns[stats.equippedArtifactId!] || 0;
+                  const elapsed = Date.now() - lastUsed;
+                  const progress = Math.min(100, (elapsed / config.cooldownMs) * 100);
+                  const isReady = progress >= 100;
+
+                  return (
+                    <>
+                      <span className={`text-2xl md:text-3xl transition-transform ${isReady ? 'group-hover:scale-125' : 'grayscale'}`}>
+                        {config.icon}
+                      </span>
+                      {!isReady && (
+                        <div 
+                          className="absolute bottom-0 left-0 w-full bg-purple-600/40 transition-all duration-300"
+                          style={{ height: `${100 - progress}%` }}
+                        >
+                          <div className="absolute top-0 left-0 w-full h-px bg-purple-400 animate-pulse" />
+                        </div>
+                      )}
+                      <div className="absolute top-0 right-0 bg-purple-600 text-white text-[8px] font-black px-1 rounded-bl shadow-sm">Q</div>
+                    </>
+                  );
+                })()}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-purple-400 font-bold text-[10px] md:text-xs tracking-tighter uppercase leading-tight">Artifact Active</span>
+                <span className="text-white font-black text-xs md:text-base leading-tight">
+                  {ARTIFACT_DATA[stats.equippedArtifactId!]?.name}
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-                <span className="text-white font-bold text-xs md:text-base lg:text-lg leading-tight">{equippedDrill?.name || 'Standard Drill'}</span>
-                <div className="font-mono text-[10px] md:text-sm lg:text-[18px] font-bold text-white/50">
-                  X: {Math.floor(pos.x)} Y: {Math.floor(pos.y)}
-                </div>
-            </div>
+          )}
         </div>
 
         {/* 하단 중앙: 퀵 액세스 네비게이션 메뉴 (정중앙 절대 위치) */}
@@ -119,30 +165,31 @@ const Hud: React.FC<HudProps> = ({
                 <button
                     key={item.label}
                     onClick={item.onClick}
-                    className="group relative flex flex-col items-center gap-1 md:gap-2"
+                    className="group relative flex flex-col items-center gap-1 md:gap-2 focus:outline-none focus:ring-4 focus:ring-white/70 rounded-2xl md:rounded-3xl p-1 shadow-2xl transition-all"
                 >
                     <div className="absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 px-2 py-1 md:px-3 md:py-1.5 bg-zinc-900/95 text-white text-[10px] md:text-xs font-black rounded-md md:rounded-lg opacity-0 md:group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap border border-white/20 shadow-2xl backdrop-blur-md">
                         {item.label}
                     </div>
                     <div 
-                        className="w-10 h-10 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-zinc-900/90 backdrop-blur-3xl border border-white/20 rounded-lg md:rounded-2xl lg:rounded-3xl flex items-center justify-center transition-all duration-300 md:group-hover:-translate-y-3 group-hover:border-white/50 group-hover:bg-zinc-800/95 active:scale-90 relative overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.7)]"
-                        style={{ 
-                            boxShadow: `0 15px 45px -12px rgba(0,0,0,0.6), 0 0 20px -5px rgba(255,255,255,0.05)`,
-                        }}
+                        className="w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20 bg-zinc-900/90 backdrop-blur-3xl border border-white/20 rounded-lg md:rounded-2xl lg:rounded-3xl flex items-center justify-center transition-all duration-300 group-hover:border-white/50 group-hover:bg-zinc-800/95 active:scale-90 relative overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.7)]"
                     >
                         <div 
-                            className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+                            className="absolute inset-0 opacity-0 transition-opacity duration-300"
                             style={{ backgroundColor: item.color }}
                         />
                         
-                        <div className="relative w-6 h-6 md:w-10 md:h-10 lg:w-14 lg:h-14 z-10 transition-all duration-300 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
-                            <Image 
-                                src={item.src} 
-                                alt={item.label} 
-                                fill 
-                                className="object-contain" 
-                                priority={item.label === 'Status'}
-                            />
+                        <div className="relative w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20 z-10 transition-all duration-300 flex items-center justify-center">
+                            {item.src ? (
+                                <Image 
+                                    src={item.src} 
+                                    alt={item.label} 
+                                    fill 
+                                    className="object-contain" 
+                                    priority={item.label === 'Status'}
+                                />
+                            ) : (
+                                <span className="text-3xl md:text-4xl lg:text-5xl drop-shadow-lg">{item.icon}</span>
+                            )}
                         </div>
                     </div>
                 </button>
@@ -157,6 +204,6 @@ const Hud: React.FC<HudProps> = ({
 
     </div>
   );
-};
+});
 
-export default React.memo(Hud);
+export default Hud;

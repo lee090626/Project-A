@@ -5,6 +5,11 @@ import CoalIcon from '../assets/minerals/CoalIcon.png';
 import IronIcon from '../assets/minerals/IronIcon.png';
 import GoldIcon from '../assets/minerals/GoldIcon.png';
 import DiamondIcon from '../assets/minerals/DiamondIcon.png';
+import EmeraldIcon from '../assets/minerals/EmeraldIcon.png';
+import RubyIcon from '../assets/minerals/RubyIcon.png';
+import SapphireIcon from '../assets/minerals/SapphireIcon.png';
+import UraniumIcon from '../assets/minerals/UraniumIcon.png';
+import ObsidianIcon from '../assets/minerals/ObsidianIcon.png';
 
 // 추출된 타일 이미지들 임포트
 import DirtTile from '../assets/tiles/dirt.png';
@@ -30,7 +35,6 @@ export interface MineralDefinition {
   key: TileType;
   name: string;
   icon: string;
-  rarity: Rarity;
   description: string;
   color: string;
   minDepth: number;
@@ -48,7 +52,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'dirt',
     name: 'Dirt',
     icon: '🟤',
-    rarity: 'Common',
     description: 'The most common surface soil. Has minimal value.',
     color: '#94a3b8',
     minDepth: 0,
@@ -62,7 +65,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'stone',
     name: 'Stone',
     icon: '🪨',
-    rarity: 'Common',
     description: 'Hardened rock. Used as basic construction material.',
     color: '#94a3b8',
     minDepth: 0,
@@ -76,7 +78,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'coal',
     name: 'Coal',
     icon: '⬛',
-    rarity: 'Uncommon',
     description: 'Carbon-rich mineral. Useful as fuel or early funding source.',
     color: '#4ade80',
     minDepth: 20,
@@ -90,7 +91,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'iron',
     name: 'Iron',
     icon: '🥈',
-    rarity: 'Uncommon',
     description: 'Dense industrial metal. Serves as the base for various equipment.',
     color: '#4ade80',
     minDepth: 100,
@@ -104,7 +104,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'gold',
     name: 'Gold',
     icon: '🟡',
-    rarity: 'Rare',
     description: 'Highly conductive precious metal. Traded at high prices in the shop.',
     color: '#60a5fa',
     minDepth: 300,
@@ -115,10 +114,22 @@ export const MINERALS: MineralDefinition[] = [
     tileImage: GoldTile,
   },
   {
+    key: 'diamond',
+    name: 'Diamond',
+    icon: '💎',
+    description: 'Pure carbon crystals. Extremely hard and disperses light in multiple directions.',
+    color: '#ec4899',
+    minDepth: 450,
+    basePrice: 300,
+    baseHealth: 1000,
+    defense: 150,
+    tileImage: DiamondTile,
+    image: DiamondIcon, 
+  },
+  {
     key: 'emerald',
     name: 'Emerald',
     icon: '🟩',
-    rarity: 'Epic',
     description: 'Transparent green gem used in precision optical equipment.',
     color: '#a855f7',
     minDepth: 650,
@@ -126,12 +137,12 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 1500,
     defense: 200,
     tileImage: EmeraldTile,
+    image: EmeraldIcon,
   },
   {
     key: 'ruby',
     name: 'Ruby',
     icon: '🟥',
-    rarity: 'Epic',
     description: 'Heat-resistant red gem. Used in laser equipment and more.',
     color: '#a855f7',
     minDepth: 850,
@@ -139,12 +150,12 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 2000,
     defense: 300,
     tileImage: RubyTile,
+    image: RubyIcon,
   },
   {
     key: 'sapphire',
     name: 'Sapphire',
     icon: '🟦',
-    rarity: 'Radiant',
     description: 'Extremely hard blue gem. Emits a brilliant light and is the core of high-performance sensor arrays.',
     color: '#ec4899',
     minDepth: 1050,
@@ -154,23 +165,9 @@ export const MINERALS: MineralDefinition[] = [
     tileImage: SapphireTile,
   },
   {
-    key: 'diamond',
-    name: 'Diamond',
-    icon: '💎',
-    rarity: 'Radiant',
-    description: 'Pure carbon crystals. Extremely hard and disperses light in multiple directions.',
-    color: '#ec4899',
-    minDepth: 450,
-    basePrice: 300,
-    baseHealth: 1000,
-    defense: 150,
-    tileImage: DiamondTile,
-  },
-  {
     key: 'uranium',
     name: 'Uranium',
     icon: '☢️',
-    rarity: 'Legendary',
     description: 'Unstable but high-energy radioactive element.',
     color: '#f59e0b',
     minDepth: 1200,
@@ -183,7 +180,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'obsidian',
     name: 'Obsidian',
     icon: '🌑',
-    rarity: 'Mythic',
     description: 'Volcanic glass with atomic-level sharpness. Carries mythical legends.',
     color: '#ef4444',
     minDepth: 1350,
@@ -196,7 +192,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'iron_ingot',
     name: 'Iron Ingot',
     icon: '🪚',
-    rarity: 'Rare',
     description: 'Smelted iron bar. Essential for advanced crafting.',
     color: '#94a3b8',
     minDepth: -1,
@@ -208,7 +203,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'gold_ingot',
     name: 'Gold Ingot',
     icon: '🏅',
-    rarity: 'Epic',
     description: 'Refined gold bar. Very valuable and conductive.',
     color: '#fbbf24',
     minDepth: -1,
@@ -220,7 +214,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'polished_diamond',
     name: 'Polished Diamond',
     icon: '💠',
-    rarity: 'Legendary',
     description: 'Perfectly cut diamond. Focuses intense energy.',
     color: '#ec4899',
     minDepth: -1,
@@ -233,7 +226,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'wall' as any,
     name: 'Wall',
     icon: '🧱',
-    rarity: 'Common',
     description: 'Unbreakable border wall.',
     color: '#1a1a1b',
     minDepth: -2,
@@ -246,7 +238,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'lava' as any,
     name: 'Lava',
     icon: '🔥',
-    rarity: 'Common',
     description: 'Dangerous liquid fire.',
     color: '#f97316',
     minDepth: -2,
@@ -259,7 +250,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'portal' as any,
     name: 'Portal',
     icon: '🌀',
-    rarity: 'Rare',
     description: 'Relic of an ancient civilization.',
     color: '#a855f7',
     minDepth: -2,
@@ -272,7 +262,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'dungeon_bricks' as any,
     name: 'Dungeon Bricks',
     icon: '🧱',
-    rarity: 'Common',
     description: 'Ancient bricks.',
     color: '#374151',
     minDepth: -2,
@@ -285,7 +274,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'monster_nest' as any,
     name: 'Monster Nest',
     icon: '🥚',
-    rarity: 'Uncommon',
     description: 'A nest of monsters.',
     color: '#b91c1c',
     minDepth: -2,
@@ -298,7 +286,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'boss_core' as any,
     name: 'Boss Core',
     icon: '🟣',
-    rarity: 'Epic',
     description: 'The core of a boss.',
     color: '#064e3b',
     minDepth: -2,
@@ -311,7 +298,6 @@ export const MINERALS: MineralDefinition[] = [
     key: 'boss_skin' as any,
     name: 'Boss Skin',
     icon: '🟢',
-    rarity: 'Epic',
     description: 'The skin of a boss.',
     color: '#064e3b',
     minDepth: -2,

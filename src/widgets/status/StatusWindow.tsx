@@ -1,19 +1,21 @@
-'use client';
-
 import React from 'react';
+import Image from 'next/image';
 import { PlayerStats } from '../../shared/types/game';
+import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 import { DRILLS } from '../../shared/config/drillData';
 import { getNextLevelExp, getMasteryMultiplier, getUnlockedSlotCount, createInitialEquipmentState } from '../../shared/lib/masteryUtils';
 import { getTotalRuneStat } from '../../shared/lib/runeUtils';
 import { SKILL_RUNES } from '../../shared/config/skillRuneData';
+import { ARTIFACT_DATA } from '../../shared/config/artifactData';
 
 interface StatusWindowProps {
   stats: PlayerStats;
   onClose: () => void;
   onUnequipRune?: (drillId: string, slotIndex: number) => void;
+  onEquipArtifact?: (id: string) => void;
 }
 
-export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWindowProps) {
+function StatusWindow({ stats, onClose, onUnequipRune, onEquipArtifact }: StatusWindowProps) {
   const equippedDrill = DRILLS[stats.equippedDrillId] || DRILLS['rusty_drill'];
   
   const equipmentState = stats.equipmentStates[stats.equippedDrillId] || createInitialEquipmentState(stats.equippedDrillId);
@@ -25,9 +27,9 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
   const masteryBonus = Math.round(baseAttack * (masteryMult - 1));
   
   // Rune Bonuses
-  const runePowerBonus = Math.floor(getTotalRuneStat(stats, 'attack'));
+  const runePowerBonus = Math.floor(getTotalRuneStat(stats, 'power'));
 
-  const totalPower = stats.attackPower + baseAttack + masteryBonus + runePowerBonus;
+  const totalPower = stats.power + baseAttack + masteryBonus + runePowerBonus;
 
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
@@ -40,21 +42,22 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-emerald-400 leading-none">
                 Status
               </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">System Profile</span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+          <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <div className="w-6 h-6 md:w-8 md:h-8 relative">
+               <Image src={GoldIconImg} alt="Gold" fill className="object-contain" />
+            </div>
             <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-emerald-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
             </span>
           </div>
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-emerald-400 hover:text-black hover:border-emerald-400 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-emerald-400 hover:text-black hover:border-emerald-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -64,19 +67,19 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-y-auto pr-2 custom-scrollbar pb-6">
         {/* COLUMN 1: BASE METRICS */}
         <div className="space-y-4">
-          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 uppercase">
+          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
             Attributes
           </h3>
 
           {[
-            { label: 'Attack', value: totalPower },
+            { label: 'Power', value: totalPower },
             { label: 'Max HP', value: stats.maxHp },
           ].map((stat, i) => (
             <div
               key={i}
               className="bg-[#252526] p-4 md:p-5 rounded-xl md:rounded-2xl border border-zinc-800 flex justify-between items-center group hover:border-[#eab308]/50 transition-colors"
             >
-              <div className="text-[10px] md:text-[11px] font-bold text-white tracking-tight uppercase">
+              <div className="text-[10px] md:text-[11px] font-bold text-white tracking-tight">
                 {stat.label}
               </div>
               <div className="text-xl md:text-2xl font-black text-[#eab308] tabular-nums">
@@ -88,7 +91,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
 
         {/* COLUMN 2: PLAYER DETAILS */}
         <div className="space-y-6">
-          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 uppercase">
+          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
             Player Status
           </h3>
 
@@ -113,26 +116,56 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
             </div>
           </div>
 
-          <div className="bg-[#252526] p-4 md:p-6 rounded-xl md:rounded-2xl border border-zinc-800">
-            <h4 className="text-[10px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
-              Artifacts
+          <div className="bg-[#252526] p-4 md:p-6 rounded-xl md:rounded-2xl border border-zinc-800 flex-1 flex flex-col min-h-0">
+            <h4 className="text-[10px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 flex justify-between items-center">
+              <span>Unlocked Artifacts</span>
+              <span className="text-purple-500">{stats.artifacts.length}</span>
             </h4>
-            <div className="space-y-2 max-h-[150px] md:max-h-[180px] overflow-y-auto custom-scrollbar pr-2">
+            <div className="space-y-3 overflow-y-auto custom-scrollbar pr-2 flex-1">
               {stats.artifacts.length > 0 ? (
-                stats.artifacts.map((art, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-zinc-900/50 p-3 rounded-xl border border-zinc-800 flex justify-between items-center"
-                  >
-                    <span className="text-xs font-bold text-zinc-300 tracking-tight">
-                      {art}
-                    </span>
-                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_#10b981]" />
-                  </div>
-                ))
+                stats.artifacts.map((artifactId, idx) => {
+                  const info = ARTIFACT_DATA[artifactId];
+                  const isEquipped = stats.equippedArtifactId === artifactId;
+                  
+                  return (
+                    <div
+                      key={idx}
+                      className={`p-3 rounded-xl border transition-all ${
+                        isEquipped 
+                        ? 'bg-purple-900/20 border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.1)]' 
+                        : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-2xl">{info?.icon || '❓'}</span>
+                        <div className="flex flex-col flex-1">
+                          <span className="text-xs font-black text-white tracking-tight">
+                            {info?.name || artifactId}
+                          </span>
+                          <span className="text-[9px] text-zinc-500 font-medium leading-tight">
+                            {info?.description}
+                          </span>
+                        </div>
+                        {isEquipped ? (
+                          <span className="text-[9px] bg-purple-600 text-white font-black px-2 py-1 rounded">EQUIPPED</span>
+                        ) : (
+                          <button 
+                            onClick={() => onEquipArtifact?.(artifactId)}
+                            className="text-[9px] bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold px-3 py-1 rounded border border-zinc-700 transition-colors"
+                          >
+                            EQUIP
+                          </button>
+                        )}
+                      </div>
+                      <div className="text-[8px] text-zinc-600 font-bold tracking-widest">
+                        Cooldown: {info ? info.cooldownMs / 1000 : 0}s
+                      </div>
+                    </div>
+                  );
+                })
               ) : (
                 <div className="text-center py-10 opacity-20 text-[10px] font-bold tracking-widest">
-                  Empty
+                  Not Discovered
                 </div>
               )}
             </div>
@@ -141,12 +174,12 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
 
         {/* COLUMN 3: EQUIPPED HARDWARE */}
         <div className="space-y-6">
-          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 uppercase">
-            Equipped Gear
+          <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
+            Equipment
           </h3>
 
           <div className="bg-[#252526] p-4 md:p-8 rounded-2xl md:rounded-4xl border border-zinc-800 shadow-2xl flex flex-col items-center text-center relative group overflow-hidden">
-            <div className="w-20 h-20 md:w-24 md:h-24 bg-zinc-900 rounded-2xl md:rounded-3xl flex items-center justify-center text-4xl md:text-6xl mb-4 md:mb-6 border border-zinc-800 shadow-inner group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-zinc-900 rounded-2xl md:rounded-3xl flex items-center justify-center text-4xl md:text-6xl mb-4 md:mb-6 border border-zinc-800 shadow-inner transition-transform duration-500 overflow-hidden">
               {equippedDrill.image ? (
                 <img
                   src={typeof equippedDrill.image === 'string' ? equippedDrill.image : (equippedDrill.image as any).src || equippedDrill.image}
@@ -165,7 +198,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
             <div className="grid grid-cols-2 gap-4 w-full mt-4 border-t border-zinc-800 pt-6">
               <div className="text-center">
                 <div className="text-[9px] text-zinc-500 font-bold mb-1">
-                  Attack
+                  Power
                 </div>
                 <div className="text-xl font-black text-white flex items-center gap-2 justify-center">
                   {equippedDrill.basePower}
@@ -191,7 +224,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
             <div className="w-full mt-4 md:mt-6 space-y-4 border-t border-zinc-800/50 pt-4 md:pt-6">
               <div className="text-left space-y-1.5 md:space-y-2">
                 <div className="flex justify-between items-end">
-                  <div className="text-[9px] text-zinc-500 font-bold tracking-widest uppercase">
+                  <div className="text-[9px] text-zinc-500 font-bold tracking-widest">
                     Mastery Level
                   </div>
                   <div className="text-xs md:text-sm font-black text-[#eab308]">
@@ -210,7 +243,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
               </div>
 
               <div className="text-left">
-                <div className="text-[9px] text-zinc-500 font-bold mb-2 tracking-widest flex justify-between items-center uppercase">
+                <div className="text-[9px] text-zinc-500 font-bold mb-2 tracking-widest flex justify-between items-center">
                   <span>Skill Rune Slots</span>
                   <span className="text-zinc-600 font-black">{getUnlockedSlotCount(equipmentState.level, equippedDrill.maxSkillSlots)} / {equippedDrill.maxSkillSlots || 0}</span>
                 </div>
@@ -224,7 +257,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
                         key={i} 
                         disabled={!isUnlocked || !slottedRuneId}
                         onClick={() => isUnlocked && slottedRuneId && onUnequipRune?.(stats.equippedDrillId, i)}
-                        className={`w-7 h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl border flex items-center justify-center transition-all ${
+                        className={`w-7 h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl border flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 ${
                           isUnlocked 
                             ? slottedRuneId 
                               ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.1)] hover:bg-emerald-500/20 active:scale-90 group/rune' 
@@ -272,3 +305,7 @@ export default function StatusWindow({ stats, onClose, onUnequipRune }: StatusWi
     </div>
   );
 }
+
+export default React.memo(StatusWindow, (prev, next) => {
+  return prev.stats === next.stats;
+});

@@ -1,6 +1,7 @@
 import { GameWorld } from '../../entities/world/model';
 import { TILE_SIZE } from '../../shared/config/constants';
-import { MONSTERS, MonsterDefinition } from '../../shared/config/monsterData';
+import { MONSTERS } from '../../shared/config/monsterData';
+import { calculateMiningDamage } from '../mining/miningCalculator';
 
 /**
  * 플레이어와 몬스터 간의 전투(대미지 처리, 사망 등)를 담당하는 시스템입니다.
@@ -60,18 +61,17 @@ export const combatSystem = (world: GameWorld, deltaTime: number) => {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < 1.5) {
-        // 채굴 위력의 일부 혹은 전체를 몬스터 대미지로 전환
-        const attackCooldown = 200; // 공격 주기
-        const attackPower = player.stats.attackPower || 10;
+        // 채굴 데이터(속도, 파워) 가져오기
+        const { finalDamage, attackInterval } = calculateMiningDamage(player.stats, entity.type as any);
         
-        // 드릴 쿨다운은 별도 관리되지만 여기서는 단순화하여 처리
-        if (!player.lastAttackTime || now - player.lastAttackTime > attackCooldown) {
-          entity.stats.hp -= attackPower;
+        // 드릴 쿨다운 동기화
+        if (!player.lastAttackTime || now - player.lastAttackTime > attackInterval) {
+          entity.stats.hp -= finalDamage;
           
           floatingTexts.push({
             x: entity.x * TILE_SIZE,
             y: (entity.y - 0.5) * TILE_SIZE,
-            text: `${attackPower}`,
+            text: `${finalDamage}`,
             color: '#fbbf24', // 노란색
             life: 1.0,
           });

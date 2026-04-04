@@ -9,13 +9,17 @@ export const handleBossDefeat = (world: GameWorld, x: number, y: number) => {
   const { player, tileMap } = world;
   const artifactName = `${world.player.stats.dimension} Dimension Core`;
   
-  // 유물 최초 획득 시 보너스 스탯 부여
-  if (!player.stats.artifacts.includes(artifactName)) {
-    player.stats.artifacts.push(artifactName);
-    player.stats.attackPower += (world.player.stats.dimension + 1) * 10;
-    player.stats.maxHp += (world.player.stats.dimension + 1) * 30;
-    player.stats.hp = player.stats.maxHp; // 체력 완전 회복
-    createFloatingText(world, x * TILE_SIZE, y * TILE_SIZE - 40, `Artifact Acquired: ${artifactName}`, '#a855f7');
+  // 유물 최초 획득 시 액티브 유물 잠금 해제
+  const artifactId = `dimension_${world.player.stats.dimension}_core`;
+  if (!player.stats.artifacts.includes(artifactId)) {
+    player.stats.artifacts.push(artifactId);
+    
+    // 무엇도 장착되어 있지 않다면 즉시 장착
+    if (!player.stats.equippedArtifactId) {
+      player.stats.equippedArtifactId = artifactId;
+    }
+    
+    createFloatingText(world, x * TILE_SIZE, y * TILE_SIZE - 40, `Artifact Unlocked: ${artifactId}`, '#a855f7');
   }
 
   // 보스 전용 유니크 룬 지급

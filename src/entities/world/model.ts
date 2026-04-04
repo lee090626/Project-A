@@ -1,6 +1,7 @@
 import { TileMap } from '../tile/TileMap';
 import { Player } from '../player/model';
 import { Entity, GameAssets, Particle, FloatingText, DroppedItem, InteractionType } from '../../shared/types/game';
+import { ObjectPool } from '../../shared/lib/effectPool';
 
 /**
  * 게임의 모든 상태를 포함하는 최상위 월드 객체 인터페이스입니다.
@@ -12,9 +13,13 @@ export interface GameWorld {
   player: Player;
   /** 월드 내에 존재하는 모든 엔티티(NPC 등) 리스트 */
   entities: Entity[];
-  /** 활성화된 시각적 파티클 리스트 */
+  /** 활성화된 시각적 파티클 리스트 (풀링 적용) */
+  particlePool: ObjectPool<Particle>;
+  /** 파티클 접근용 래퍼 (하위 호환성) */
   particles: Particle[];
-  /** 화면에 표시 중인 플로팅 텍스트 리스트 */
+  /** 화면에 표시 중인 플로팅 텍스트 리스트 (풀링 적용) */
+  floatingTextPool: ObjectPool<FloatingText>;
+  /** 텍스트 접근용 래퍼 (하위 호환성) */
   floatingTexts: FloatingText[];
   /** 드랍된 아이템 리스트 */
   droppedItems: DroppedItem[];
@@ -39,7 +44,7 @@ export interface GameWorld {
   intent: {
     moveX: number;
     moveY: number;
-    action: 'none' | 'interact';
+    action: 'none' | 'interact' | 'artifact';
     /** 현재 채굴 조준 중인 타일의 좌표 */
     miningTarget: { x: number, y: number } | null;
   };
@@ -64,6 +69,7 @@ export interface GameWorld {
     isEncyclopediaOpen: boolean;
     isRefineryOpen: boolean;
     isLaboratoryOpen: boolean;
+    isGuideOpen: boolean;
     isMobile: boolean; // 모바일 모드 활성 여부
   };
   /** 모바일 가상 조이스틱 입력 상태 */
@@ -86,22 +92,24 @@ export interface GameWorld {
  */
 export const createInitialWorld = (seed: number): GameWorld => {
   const tileMap = new TileMap(seed, 0);
-  return {
+  const result: GameWorld = {
     tileMap,
     player: {
       stats: {
         depth: 0,
         equippedDrillId: 'rusty_drill',
         ownedDrillIds: ['rusty_drill'],
-        equippedDroneId: null, // 시작 시 드론 없음
+        equippedDroneId: null,
         ownedDroneIds: [],
-        activeSmeltingJobs: [], // 진행 중인 제련 작업 없음
-        refinerySlots: 1,       // 기본 슬롯 1개
+        activeSmeltingJobs: [],
+        refinerySlots: 1,
         maxDepthReached: 0,
         artifacts: [],
+        equippedArtifactId: null,
+        artifactCooldowns: {},
         hp: 200,
         maxHp: 200,
-        attackPower: 10,
+        power: 10,
         moveSpeed: 100,
         inventory: {
           dirt: 0, stone: 0, coal: 0, iron: 0, gold: 0, diamond: 0,
@@ -125,10 +133,16 @@ export const createInitialWorld = (seed: number): GameWorld => {
       lastAttackTime: 0,
     },
     entities: [],
+    particlePool: new ObjectPool<Particle>(() => ({
+      x: 0, y: 0, vx: 0, vy: 0, life: 0, color: '#fff', size: 2, active: false
+    }), 1000),
     particles: [],
+    floatingTextPool: new ObjectPool<FloatingText>(() => ({
+      x: 0, y: 0, text: '', color: '#fff', life: 0, active: false
+    }), 100),
     floatingTexts: [],
     droppedItems: [],
-    activeDrone: null, // 처음엔 소환된 드론 없음
+    activeDrone: null,
     keys: {},
     baseLayout: null,
     assets: {
@@ -164,6 +178,7 @@ export const createInitialWorld = (seed: number): GameWorld => {
       isEncyclopediaOpen: false,
       isRefineryOpen: false,
       isLaboratoryOpen: false,
+      isGuideOpen: false,
       isMobile: false,
     },
     mobileJoystick: {
@@ -174,4 +189,9 @@ export const createInitialWorld = (seed: number): GameWorld => {
     shake: 0,
     spawnedCoords: new Set(),
   };
+
+  result.particles = result.particlePool.getPool();
+  result.floatingTexts = result.floatingTextPool.getPool();
+  
+  return result;
 };

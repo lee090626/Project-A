@@ -55,10 +55,23 @@ export const physicsSystem = (world: GameWorld, now: number) => {
       if (dx !== 0 || dy !== 0) {
         const targetX = Math.round(player.pos.x + dx);
         const targetY = Math.round(player.pos.y + dy);
+        
+        // --- 몬스터 충돌 체크 ---
+        const monsterAtTarget = world.entities.find(e => 
+          (e.type === 'monster' || e.type === 'boss') && 
+          e.stats && e.stats.hp > 0 &&
+          Math.round(e.x) === targetX && Math.round(e.y) === targetY
+        );
+
         const tile = tileMap.getTile(targetX, targetY);
 
+        if (monsterAtTarget) {
+          // 몬스터가 있으면 블록처럼 막고 채굴(공격) 모드 전환
+          drilling = true;
+          intent.miningTarget = { x: targetX, y: targetY };
+        } 
         // 이동 대상이 비어있거나 포탈인 경우 이동 허용
-        if (tile && (tile.type === 'empty' || tile.type === 'portal')) {
+        else if (tile && (tile.type === 'empty' || tile.type === 'portal')) {
           player.pos.x = targetX;
           player.pos.y = targetY;
           moved = true;

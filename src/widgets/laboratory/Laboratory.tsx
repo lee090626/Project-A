@@ -1,9 +1,9 @@
-'use client';
-
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 import { PlayerStats, ResearchNode } from '../../shared/types/game';
 import { RESEARCH_NODES } from '../../shared/config/researchData';
 import { calculateNodePositions } from '../../shared/lib/researchUtils';
+import GoldIconImg from '@/src/shared/assets/ui/icons/MoneyIcon.png';
 
 interface LaboratoryProps {
   stats: PlayerStats;
@@ -85,15 +85,17 @@ export default function Laboratory({ stats, onUnlockResearch, onClose }: Laborat
           </div>
 
           <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-            <div className="flex items-center justify-center gap-2 md:gap-3 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+            <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+              <div className="w-6 h-6 md:w-8 md:h-8 relative">
+                 <Image src={GoldIconImg} alt="Gold" fill className="object-contain" />
+              </div>
               <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
                 {stats.goldCoins.toLocaleString()}
-                <span className="text-fuchsia-400 text-[10px] md:text-sm ml-1.5 md:ml-2 uppercase tracking-widest font-black opacity-80">Gold</span>
               </span>
             </div>
             <button
               onClick={onClose}
-              className="w-10 h-10 md:w-16 md:h-16 shrink-0 flex items-center justify-center rounded-xl md:rounded-3xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-fuchsia-400 hover:text-black hover:border-fuchsia-400 transition-all active:scale-90 shadow-xl"
+              className="w-10 h-10 md:w-16 md:h-16 shrink-0 flex items-center justify-center rounded-xl md:rounded-3xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-fuchsia-400 hover:text-black hover:border-fuchsia-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/50"
             >
               <span className="text-lg md:text-2xl font-bold">✕</span>
             </button>
@@ -143,12 +145,13 @@ export default function Laboratory({ stats, onUnlockResearch, onClose }: Laborat
                     e.stopPropagation();
                     setSelectedNode(node);
                   }}
-                  className={`absolute -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-2xl flex items-center justify-center border-2 md:border-4 transition-all duration-300 cursor-pointer z-10
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-24 md:h-24 rounded-2xl flex items-center justify-center border-2 md:border-4 transition-all duration-300 cursor-pointer z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50
                     ${isUnlocked ? 'bg-amber-400 border-amber-300 shadow-[0_0_30px_rgba(251,191,36,0.3)] text-black' : 
                       canUnlock ? 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-amber-400/50 hover:bg-zinc-800' : 
                       'bg-zinc-950 border-zinc-900 text-zinc-700 opacity-40 grayscale'}
-                    ${isSelected ? 'scale-125 border-white! z-20!' : 'hover:scale-110'}
+                    ${isSelected ? 'scale-125 border-white! z-20!' : ''}
                   `}
+                  tabIndex={canUnlock ? 0 : -1}
                   style={{ left: node.position.x, top: node.position.y }}
                 >
                   <span className="text-2xl md:text-4xl">{node.icon}</span>
@@ -188,11 +191,14 @@ export default function Laboratory({ stats, onUnlockResearch, onClose }: Laborat
                    const owned = res === 'goldCoins' ? stats.goldCoins : (stats.inventory as any)[res] || 0;
                    const met = owned >= (amount as number);
                    return (
-                     <div key={res} className="flex justify-between items-center">
-                        <span className="capitalize text-zinc-500 font-bold text-xs md:text-sm">{res}</span>
-                        <span className={`font-black tabular-nums text-xs md:text-base ${met ? 'text-zinc-300' : 'text-rose-500'}`}>
-                          {owned.toLocaleString()} / {amount.toLocaleString()}
-                        </span>
+                     <div key={res} className="flex justify-between items-center group/cost">
+                        <span className="capitalize text-zinc-500 font-bold text-xs md:text-sm group-hover/cost:text-fuchsia-400 transition-colors">{res === 'goldCoins' ? 'Gold' : res}</span>
+                        <div className="flex items-center gap-2">
+                           <span className={`font-black tabular-nums text-xs md:text-base ${met ? 'text-zinc-300' : 'text-rose-500'}`}>
+                             {owned.toLocaleString()} / {amount.toLocaleString()}
+                           </span>
+                           {res === 'goldCoins' && <Image src={GoldIconImg} alt="Gold" width={16} height={16} />}
+                        </div>
                      </div>
                    );
                  })}
@@ -200,9 +206,9 @@ export default function Laboratory({ stats, onUnlockResearch, onClose }: Laborat
 
               {!stats.unlockedResearchIds.includes(selectedNode.id) && (
                 <button 
-                  onClick={() => onUnlockResearch(selectedNode.id)}
-                  disabled={!selectedNode.dependencies.every(d => stats.unlockedResearchIds.includes(d))}
-                  className="w-full py-4 md:py-5 bg-amber-400 hover:bg-amber-300 disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed text-black rounded-xl md:rounded-2xl font-black text-xs md:text-base tracking-widest transition-all shadow-xl active:scale-95"
+                   onClick={() => onUnlockResearch(selectedNode.id)}
+                   disabled={!selectedNode.dependencies.every(d => stats.unlockedResearchIds.includes(d))}
+                   className="w-full py-4 md:py-5 bg-amber-400 hover:bg-amber-300 disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed text-black rounded-xl md:rounded-2xl font-black text-xs md:text-base tracking-widest transition-all shadow-xl active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
                 >
                   Initiate Research
                 </button>

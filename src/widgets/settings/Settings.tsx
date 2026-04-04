@@ -85,7 +85,9 @@ export default function Settings({
   }) => (
     <div
       onClick={onToggle}
-      className={`flex justify-between items-center p-6 rounded-xl border transition-all duration-300 cursor-pointer group/toggle relative
+      onKeyDown={(e) => e.key === 'Enter' && onToggle()}
+      tabIndex={0}
+      className={`flex justify-between items-center p-6 rounded-xl border transition-all duration-300 cursor-pointer group/toggle relative focus:outline-none focus:ring-2 focus:ring-amber-400/50
         ${active 
           ? 'bg-[#eab308]/10 border-[#eab308]/40' 
           : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'}`}
@@ -131,7 +133,7 @@ export default function Settings({
         <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
           <button
             onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-100 hover:text-black hover:border-zinc-100 transition-all active:scale-90 shadow-xl"
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-100 hover:text-black hover:border-zinc-100 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
           >
             <span className="text-lg md:text-xl font-bold">✕</span>
           </button>
@@ -190,13 +192,13 @@ export default function Settings({
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={onExport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📤</span> Export Save
                   </button>
                   <button
                     onClick={onImport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📥</span> Import Save
                   </button>
@@ -217,7 +219,7 @@ export default function Settings({
                       if (confirm('Regenerate world? You will be moved to the surface. Progress will be saved.'))
                         onRegenerateWorld();
                     }}
-                    className="w-full h-12 rounded-xl bg-emerald-600/20 border border-emerald-600/40 text-emerald-500 text-[10px] font-bold tracking-[0.2em] hover:bg-emerald-600 hover:text-white transition-all active:scale-[0.98]"
+                    className="w-full h-12 rounded-xl bg-emerald-600/20 border border-emerald-600/40 text-emerald-500 text-[10px] font-bold tracking-[0.2em] hover:bg-emerald-600 hover:text-white transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
                   >
                     Regenerate Map
                   </button>
@@ -238,7 +240,7 @@ export default function Settings({
                       if (confirm('Delete all progress? This action cannot be undone.'))
                         onReset();
                     }}
-                    className="w-full h-12 rounded-xl bg-rose-600/20 border border-rose-600/40 text-rose-500 text-[10px] font-bold tracking-[0.2em] hover:bg-rose-600 hover:text-white transition-all active:scale-[0.98]"
+                    className="w-full h-12 rounded-xl bg-rose-600/20 border border-rose-600/40 text-rose-500 text-[10px] font-bold tracking-[0.2em] hover:bg-rose-600 hover:text-white transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50"
                   >
                     Reset Data
                   </button>

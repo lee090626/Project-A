@@ -6,27 +6,28 @@ import { TILE_SIZE } from '../config/constants';
  */
 export const createParticles = (world: GameWorld, x: number, y: number, color: string, count: number = 8) => {
   for (let i = 0; i < count; i++) {
-    world.particles.push({
-      x: x + TILE_SIZE / 2,
-      y: y + TILE_SIZE / 2,
-      vx: (Math.random() - 0.5) * 10,
-      vy: (Math.random() - 0.5) * 10 - 2,
-      life: 1.0,
-      color: color,
-      size: Math.random() * 4 + 2,
-    });
+    const p = world.particlePool.get();
+    if (p) {
+      p.x = x + TILE_SIZE / 2;
+      p.y = y + TILE_SIZE / 2;
+      p.vx = (Math.random() - 0.5) * 10;
+      p.vy = (Math.random() - 0.5) * 10 - 2;
+      p.life = 1.0;
+      p.color = color;
+      p.size = Math.random() * 4 + 2;
+      p.active = true;
+    }
   }
 };
 
-/**
- * 화면에 일시적으로 표시될 플로팅 텍스트(대미지, 골드 획득 등)를 생성합니다.
- */
 export const createFloatingText = (world: GameWorld, x: number, y: number, text: string, color: string, life: number = 1.0) => {
-  world.floatingTexts.push({
-    x: x + TILE_SIZE / 2,
-    y: y,
-    text: text,
-    color: color,
-    life: life,
-  });
+  const ft = world.floatingTextPool.get();
+  if (ft) {
+    ft.x = x + TILE_SIZE / 2;
+    ft.y = y;
+    ft.text = text;
+    ft.color = color;
+    ft.life = life;
+    ft.active = true;
+  }
 };
