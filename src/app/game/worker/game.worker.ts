@@ -45,6 +45,7 @@ class GameEngineInstance {
 
   /** 월드 상태 초기화 (세이브 데이터 포함) */
   init(payload: any) {
+    console.log('[Worker] Initializing world...');
     const seed = payload.seed || 12345;
     // 기존 에셋 정보는 보존하면서 월드 재생성
     const currentAssets = this.world.assets;
@@ -62,6 +63,7 @@ class GameEngineInstance {
       this.world.player.pos = position;
       this.world.player.visualPos = { ...position };
       this.world.tileMap.deserialize(tileMap, stats.mapSeed, stats.dimension);
+      console.log('[Worker] Save data loaded.');
     }
 
     if (payload.offscreen) {
@@ -73,6 +75,7 @@ class GameEngineInstance {
       this.lastLoopTime = performance.now();
       this.startLoop();
       // 엔진이 준비되었음을 알림
+      console.log('[Worker] Loop started. Sending ENGINE_READY.');
       self.postMessage({ type: 'ENGINE_READY' });
     }
   }
@@ -80,6 +83,7 @@ class GameEngineInstance {
   /** 에셋 데이터 업데이트 (ImageBitmap 전송) */
   updateAssets(payload: any) {
     if (!this.world) return;
+    console.log('[Worker] Updating assets...');
     const { bitmaps, entityBitmaps, tileBitmaps, itemBitmaps, layout, entities } = payload;
     
     this.world.assets.player = bitmaps.player;

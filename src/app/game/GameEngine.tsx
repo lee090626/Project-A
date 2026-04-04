@@ -58,6 +58,12 @@ export default function GameEngine() {
   const [uiVersion, setUiVersion] = useState(0); 
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isEngineReady, setIsEngineReady] = useState(false);
+  const isReadyRef = useRef(false);
+
+  // isEngineReady 상태와 Ref를 동기화하여 타임아웃에서 참조 가능하게 함
+  useEffect(() => {
+    isReadyRef.current = isEngineReady;
+  }, [isEngineReady]);
 
   const updateUi = useCallback(() => {
     setUiVersion(v => v + 1);
@@ -160,7 +166,8 @@ export default function GameEngine() {
       const { type, payload } = e.data;
       if (type === 'SYNC' && payload) {
         // 데이터가 들어오면 엔진이 준비된 것으로 간주 (백업 로직)
-        if (!isEngineReady) {
+        if (!isReadyRef.current) {
+          console.log('[Main] Received FIRST SYNC. Setting engine ready.');
           setIsEngineReady(true);
         }
         
@@ -192,12 +199,21 @@ export default function GameEngine() {
     };
 
     const saved = saveManager.load();
+    console.log('[Main] Sending INIT to worker...');
     worker.postMessage({ 
       type: 'INIT', 
       payload: { seed: saved?.stats.mapSeed || 12345, saveData: saved } 
     });
 
     loadAssetsAndTransfer();
+
+    // 5초 타임아웃: 엔진이 응답하지 않으면 강제로 로딩 화면 해제
+    const timeoutId = setTimeout(() => {
+      if (!isReadyRef.current) {
+        console.warn('[Main] Engine initialization timeout (5s). Forcing start...');
+        setIsEngineReady(true);
+      }
+    }, 5000);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
@@ -237,6 +253,7 @@ export default function GameEngine() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
     };
   }, [loadAssetsAndTransfer, sendToWorker]);
 
