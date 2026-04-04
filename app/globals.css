@@ -26,6 +26,22 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* 
+   애드센스 미리보기나 광고 차단기 등에 의해 
+   게임 화면이 강제로 숨겨지는(display: none !important) 현상을 방지합니다.
+*/
+#drilling-game-root, 
+#drilling-game-root div {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+#drilling-game-root canvas {
+  display: block !important;
+  visibility: visible !important;
+}
+
 @keyframes modalFadeIn {
   from {
     opacity: 0;
