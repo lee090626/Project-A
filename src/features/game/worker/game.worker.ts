@@ -19,6 +19,7 @@ class GameEngineInstance {
   layers: {
     stage: PIXI.Container;
     tileLayer: PIXI.Container;
+    staticLayer: PIXI.Container;
     entityLayer: PIXI.Container;
     effectLayer: PIXI.Container;
     uiLayer: PIXI.Container;
@@ -62,12 +63,14 @@ class GameEngineInstance {
 
     const stage = new PIXI.Container();
     const tileLayer = new PIXI.Container();
+    const staticLayer = new PIXI.Container();
     const entityLayer = new PIXI.Container();
     const effectLayer = new PIXI.Container();
     const lightLayer = new PIXI.Container();
     const uiLayer = new PIXI.Container();
 
     stage.addChild(tileLayer);
+    stage.addChild(staticLayer);
     stage.addChild(entityLayer);
     stage.addChild(effectLayer);
     stage.addChild(lightLayer);
@@ -78,7 +81,7 @@ class GameEngineInstance {
     this.lightingFilter = new LightingFilter();
     stage.filters = [this.lightingFilter];
 
-    this.layers = { stage, tileLayer, entityLayer, effectLayer, lightLayer, uiLayer };
+    this.layers = { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer };
 
     // 루프에 의존성 갱신
     if (this.gameLoop) {
@@ -153,7 +156,7 @@ class GameEngineInstance {
         PIXI.Assets.cache.set(`./${name}`, texture);
 
         this.textures[name] = texture;
-        const cleanName = name.replace('.png', '');
+        const cleanName = name.replace(/\.(png|webp)$/, '');
         this.textures[`tile_${cleanName}`] = texture;
 
         if (name.endsWith('Icon.png')) {

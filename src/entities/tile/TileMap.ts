@@ -176,17 +176,6 @@ export class TileMap {
   getInitialMonster(x: number, y: number): Entity | null {
     if (y < BASE_DEPTH + 10) return null;
     const config = getDimensionConfig(this.dimension);
-    if (y === config.bossHeight - 3 && x === 14) {
-      const bossDef = BOSSES[0];
-      return {
-        id: `boss_${this.dimension}_${bossDef.id}`,
-        type: 'boss', name: bossDef.name, x, y,
-        width: 3, height: 3,
-        interactionType: 'none',
-        stats: { hp: bossDef.stats.hp, maxHp: bossDef.stats.hp, attack: bossDef.stats.attack, speed: 0.01, defense: 100 },
-        state: 'idle',
-      };
-    }
 
     const available = config.monsters.filter(m => y >= m.minDepth && (!m.maxDepth || y <= m.maxDepth));
     if (available.length === 0) return null;
@@ -200,7 +189,7 @@ export class TileMap {
           id: `mob_${x}_${y}_${mob.id}`,
           type: 'monster', name: mob.name, x, y,
           interactionType: 'none',
-          imagePath: mob.icon,
+          imagePath: mob.imagePath,
           stats: { hp: mob.stats.hp, maxHp: mob.stats.hp, attack: mob.stats.attack, speed: mob.stats.speed, defense: mob.stats.defense },
           state: 'idle',
         };

@@ -68,11 +68,11 @@ export const useGameActions = (
     updateUi();
   }, [sendToWorker, updateUi]);
 
-  /** 가챠(Rune Extraction) 시스템: 랜 스킬룬 획득 */
-  const handleExtractRune = useCallback((tier: number) => {
+  /** 가챠(Summon) 시스템: 랜 스킬룬 획득 */
+  const handleSummonRune = useCallback((tier: number, count: number = 1) => {
     sendToWorker('ACTION', {
-      action: 'extractRune',
-      data: { tier }
+      action: 'summonRune',
+      data: { tier, count }
     });
     updateUi();
   }, [sendToWorker, updateUi]);
@@ -176,7 +176,7 @@ export const useGameActions = (
     handleUpgrade,
     handleCraft,
     handleSell,
-    handleExtractRune,
+    handleSummonRune,
     handleSynthesizeRunes,
     handleEquipDrill,
     handleEquipDrone,

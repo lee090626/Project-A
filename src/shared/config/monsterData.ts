@@ -3,10 +3,11 @@ import { Rarity } from '../types/game';
 export interface MonsterDefinition {
   id: string;
   name: string;
-  icon: string;
+  imagePath: string;
   minDepth: number;
   maxDepth: number;
   rarity: Rarity;
+  mechanic?: 'critical_only'; // 특수 기믹
   stats: {
     hp: number;
     attack: number;
@@ -18,64 +19,65 @@ export interface MonsterDefinition {
 
 export const MONSTERS: MonsterDefinition[] = [
   {
-    id: 'cave_slime',
-    name: 'Cave Slime',
-    icon: '🦠',
-    minDepth: 50,
+    id: 'pebble_golem',
+    name: '꼬마 바위 골렘',
+    imagePath: 'pebble_golem.png',
+    minDepth: 0,
     maxDepth: 500,
     rarity: 'Common',
     stats: {
-      hp: 30000,
-      attack: 0,
-      speed: 0.02,
-      defense: 0,
+      hp: 120,
+      attack: 10,
+      speed: 0,
+      defense: 20,
     },
     spawnWeight: 0.1,
   },
   {
-    id: 'rock_crawler',
-    name: 'Rock Crawler',
-    icon: '🦂',
-    minDepth: 300,
-    maxDepth: 1000,
-    rarity: 'Common',
+    id: 'thief_mole',
+    name: '도둑 두더지',
+    imagePath: 'thief_mole.png',
+    minDepth: 100,
+    maxDepth: 600,
+    rarity: 'Uncommon',
     stats: {
       hp: 80,
-      attack: 25,
-      speed: 0.03,
+      attack: 5,
+      speed: 0,
       defense: 5,
-    },
-    spawnWeight: 0.08,
-  },
-  {
-    id: 'void_bat',
-    name: 'Void Bat',
-    icon: '🦇',
-    minDepth: 800,
-    maxDepth: 2000,
-    rarity: 'Common',
-    stats: {
-      hp: 250,
-      attack: 40,
-      speed: 0.05,
-      defense: 0,
     },
     spawnWeight: 0.05,
   },
   {
-    id: 'ancient_shard',
-    name: 'Ancient Shard',
-    icon: '💎',
-    minDepth: 1200,
-    maxDepth: 3000,
-    rarity: 'Common',
+    id: 'iron_scale_tortoise',
+    name: '강철비늘 거북',
+    imagePath: 'iron_scale_tortoise.png',
+    minDepth: 200,
+    maxDepth: 700,
+    rarity: 'Rare',
+    mechanic: 'critical_only',
     stats: {
-      hp: 2500,
-      attack: 100,
-      speed: 0.01,
+      hp: 200,
+      attack: 15,
+      speed: 0,
+      defense: 100,
+    },
+    spawnWeight: 0.03,
+  },
+  {
+    id: 'oros_face',
+    name: '태고의 바위 오로스',
+    imagePath: 'oros_face.png',
+    minDepth: 480,
+    maxDepth: 550,
+    rarity: 'Legendary',
+    stats: {
+      hp: 1500, // 첫 보스다운 체력
+      attack: 25,
+      speed: 0,
       defense: 50,
     },
-    spawnWeight: 0.02,
+    spawnWeight: 0, // 수동 스폰되므로 0 설정
   },
 ];
 

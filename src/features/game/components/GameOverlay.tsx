@@ -38,7 +38,7 @@ export default function GameOverlay({
 
   const { toggleModal, handleClose } = uiActions;
   const {
-    handleUpgrade, handleCraft, handleSell, handleExtractRune, handleSynthesizeRunes,
+    handleUpgrade, handleCraft, handleSell, handleSummonRune, handleSynthesizeRunes,
     handleEquipDrill, handleEquipDrone, handleEquipRune, handleUnequipRune,
     handleSelectCheckpoint, handleResetGame, handleRegenerateWorld, handleExportSave,
     handleImportSave, handleStartSmelting, handleCollectSmelting, handleUnlockResearch,
@@ -74,7 +74,7 @@ export default function GameOverlay({
         />
       )}
 
-      {ui.isShopOpen && <Overlay key="shop" onClose={() => handleClose('isShopOpen')}><Shop stats={currentStats} onClose={() => handleClose('isShopOpen')} onUpgrade={handleUpgrade} onSell={handleSell} onExtractRune={handleExtractRune} onSynthesizeRunes={handleSynthesizeRunes} /></Overlay>}
+      {ui.isShopOpen && <Overlay key="shop" onClose={() => handleClose('isShopOpen')}><Shop stats={currentStats} onClose={() => handleClose('isShopOpen')} onUpgrade={handleUpgrade} onSell={handleSell} onSummonRune={handleSummonRune} onSynthesizeRunes={handleSynthesizeRunes} /></Overlay>}
       {ui.isStatusOpen && <Overlay key="status" onClose={() => handleClose('isStatusOpen')}><StatusWindow stats={currentStats} onClose={() => handleClose('isStatusOpen')} onUnequipRune={handleUnequipRune} onEquipArtifact={handleEquipArtifact} /></Overlay>}
       {ui.isInventoryOpen && <Overlay key="inventory" onClose={() => handleClose('isInventoryOpen')}><Inventory stats={currentStats} onClose={() => handleClose('isInventoryOpen')} onEquip={(id, type) => { if (type === 'drill') handleEquipDrill(id); else handleEquipDrone(id); }} onEquipRune={handleEquipRune} /></Overlay>}
       {ui.isCraftingOpen && <Overlay key="crafting" onClose={() => handleClose('isCraftingOpen')}><Crafting stats={currentStats} onClose={() => handleClose('isCraftingOpen')} onCraft={handleCraft} /></Overlay>}

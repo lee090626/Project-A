@@ -44,10 +44,9 @@ export const DIMENSIONS: DimensionConfig[] = [
     bossHeight: 1500, 
     hasMonsterNest: true,
     monsters: [
-      { monsterId: 'cave_slime', chance: 0.02, weight: 1, minDepth: 50, maxDepth: 500 },
-      { monsterId: 'rock_crawler', chance: 0.03, weight: 1, minDepth: 300, maxDepth: 1000 },
-      { monsterId: 'void_bat', chance: 0.04, weight: 1, minDepth: 800, maxDepth: 2000 },
-      { monsterId: 'ancient_shard', chance: 0.01, weight: 1, minDepth: 1200, maxDepth: 3000 },
+      { monsterId: 'pebble_golem', chance: 0.05, weight: 1, minDepth: 10, maxDepth: 500 },
+      { monsterId: 'thief_mole', chance: 0.02, weight: 1, minDepth: 100, maxDepth: 600 },
+      { monsterId: 'iron_scale_tortoise', chance: 0.015, weight: 1, minDepth: 200, maxDepth: 700 },
     ],
     minerals: [
       // 1. 특수/희귀 광물 (누적 확률 기반)

@@ -285,6 +285,28 @@ export interface PlayerStats {
 
   /** 시드 기반으로 생성된 몬스터 중 처치된 몹 ID 목록 (영구 사망, 오토스폰방지) */
   killedMonsterIds?: string[];
+
+  /** [상태 이상] 현재 적용 중인 상태 효과 목록 */
+  activeEffects?: ActiveEffect[];
+}
+
+/**
+ * 상태 이상의 종류를 정의합니다.
+ */
+export type StatusType = 'STUN' | 'SLOW' | 'BURN' | 'FREEZE' | 'POISON' | 'BUFF_POWER' | 'BUFF_SPEED';
+
+/**
+ * 활성화된 캐릭터 상태 효과 정보입니다.
+ */
+export interface ActiveEffect {
+  /** 효과 종류 */
+  type: StatusType;
+  /** 효과 종료 시간 (Date.now() 기준 타임스탬프) */
+  endTime: number;
+  /** 효과의 강도나 수치 (옵션) */
+  value?: number;
+  /** 시각적 효과 부여 여부 (옵션) */
+  vfxId?: string;
 }
 
 /**
@@ -380,6 +402,8 @@ export interface Particle {
 export interface FloatingText {
   x: number;
   y: number;
+  vx?: number; // 가로 속도
+  vy?: number; // 세로 속도
   text: string;
   color: string;
   startY?: number;
