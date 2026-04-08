@@ -9,11 +9,7 @@ import sharp from 'sharp';
  * 각 카테고리별 PNG 파일들을 재귀적으로 찾아 포함합니다.
  */
 const ASSET_SOURCES = [
-  'src/shared/assets/tiles/**/*.png',
-  'src/shared/assets/drills/**/*.png',
-  'src/shared/assets/minerals/**/*.png',
-  'src/shared/assets/rune/**/*.png',
-  'src/shared/assets/world/**/*.png'
+  'src/shared/assets/**/*.{png,webp}'
 ];
 
 /** 결과물이 저장될 디렉토리 및 파일명의 기본 베이스입니다. */
@@ -43,11 +39,14 @@ async function generateAtlas() {
     for (const pattern of ASSET_SOURCES) {
       const paths = await glob(pattern);
       for (const p of paths) {
-        const content = await fs.readFile(p);
         /**
-         * 파일의 전체 경로 대신 파일명(basename)만 키값으로 사용합니다.
-         * 이렇게 하면 게임 코드 내에서 'Player.png'와 같이 파일명만으로 접근이 가능해집니다.
+         * free-tex-packer-core가 webp를 직접 읽지 못하는 문제를 해결하기 위해
+         * sharp를 사용하여 모든 입력을 PNG 버퍼로 변환하여 전달합니다.
          */
+        const content = await sharp(p)
+          .toFormat('png')
+          .toBuffer();
+
         const name = path.basename(p); 
         filesToPack.push({ path: name, contents: content });
       }

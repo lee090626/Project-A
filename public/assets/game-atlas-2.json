@@ -1,6 +1,6 @@
 {
   "frames": {
-    "Refinery.png": {
+    "OrosFace.png": {
       "frame": {
         "x": 3,
         "y": 3,
@@ -48,20 +48,20 @@
         "y": 0.5
       }
     },
-    "GoldDrill.png": {
+    "DiamondDrill.png": {
       "frame": {
         "x": 885,
         "y": 1033,
-        "w": 449,
-        "h": 928
+        "w": 470,
+        "h": 971
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 368,
-        "y": 48,
-        "w": 449,
-        "h": 928
+        "y": 5,
+        "w": 470,
+        "h": 971
       },
       "sourceSize": {
         "w": 1078,
@@ -74,7 +74,7 @@
     },
     "CoalIcon.png": {
       "frame": {
-        "x": 1340,
+        "x": 1361,
         "y": 1033,
         "w": 683,
         "h": 853
@@ -96,9 +96,57 @@
         "y": 0.5
       }
     },
+    "stone.png": {
+      "frame": {
+        "x": 1361,
+        "y": 1892,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "uranium.png": {
+      "frame": {
+        "x": 1495,
+        "y": 1892,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "wall.png": {
       "frame": {
-        "x": 1340,
+        "x": 1629,
         "y": 1892,
         "w": 128,
         "h": 128
@@ -122,7 +170,7 @@
     },
     "iron.png": {
       "frame": {
-        "x": 1474,
+        "x": 1763,
         "y": 1892,
         "w": 128,
         "h": 127
@@ -144,20 +192,20 @@
         "y": 0.5
       }
     },
-    "StoneDrill.png": {
+    "EmeralDrill.png": {
       "frame": {
         "x": 1033,
         "y": 3,
-        "w": 413,
-        "h": 926
+        "w": 472,
+        "h": 930
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 369,
-        "y": 25,
-        "w": 413,
-        "h": 926
+        "x": 334,
+        "y": 33,
+        "w": 472,
+        "h": 930
       },
       "sourceSize": {
         "w": 1078,
@@ -168,20 +216,44 @@
         "y": 0.5
       }
     },
-    "DiamondIcon.png": {
+    "GoldIcon.png": {
       "frame": {
-        "x": 1452,
+        "x": 1511,
         "y": 3,
-        "w": 584,
-        "h": 742
+        "w": 529,
+        "h": 529
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 220,
-        "y": 141,
-        "w": 584,
-        "h": 742
+        "x": 256,
+        "y": 247,
+        "w": 529,
+        "h": 529
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Mechanic.png": {
+      "frame": {
+        "x": 1511,
+        "y": 538,
+        "w": 512,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 256,
+        "y": 303,
+        "w": 512,
+        "h": 418
       },
       "sourceSize": {
         "w": 1024,
@@ -199,7 +271,7 @@
     "image": "game-atlas-2.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2039,
+      "w": 2047,
       "h": 2028
     },
     "scale": 1

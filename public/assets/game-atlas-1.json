@@ -96,9 +96,33 @@
         "y": 0.5
       }
     },
-    "irontest.png": {
+    "SteelScaleTurtle.png": {
       "frame": {
         "x": 1033,
+        "y": 1863,
+        "w": 308,
+        "h": 176
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 102,
+        "y": 168,
+        "w": 308,
+        "h": 176
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "irontest.png": {
+      "frame": {
+        "x": 1347,
         "y": 1863,
         "w": 128,
         "h": 128
@@ -122,7 +146,7 @@
     },
     "obsidian.png": {
       "frame": {
-        "x": 1167,
+        "x": 1481,
         "y": 1863,
         "w": 128,
         "h": 128
@@ -146,7 +170,7 @@
     },
     "portal.png": {
       "frame": {
-        "x": 1301,
+        "x": 1615,
         "y": 1863,
         "w": 128,
         "h": 128
@@ -170,7 +194,7 @@
     },
     "ruby.png": {
       "frame": {
-        "x": 1435,
+        "x": 1749,
         "y": 1863,
         "w": 128,
         "h": 128
@@ -194,55 +218,7 @@
     },
     "sapphire.png": {
       "frame": {
-        "x": 1569,
-        "y": 1863,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "stone.png": {
-      "frame": {
-        "x": 1703,
-        "y": 1863,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "uranium.png": {
-      "frame": {
-        "x": 1837,
+        "x": 1883,
         "y": 1863,
         "w": 128,
         "h": 128
@@ -272,7 +248,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2044,
-      "h": 1994
+      "h": 2042
     },
     "scale": 1
   }

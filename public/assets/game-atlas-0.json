@@ -24,6 +24,30 @@
         "y": 0.5
       }
     },
+    "MoneyIcon.webp": {
+      "frame": {
+        "x": 1087,
+        "y": 3,
+        "w": 935,
+        "h": 927
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 56,
+        "y": 60,
+        "w": 935,
+        "h": 927
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "CritDmgRune.png": {
       "frame": {
         "x": 3,
@@ -234,54 +258,6 @@
       "sourceSize": {
         "w": 128,
         "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "DiamondDrill.png": {
-      "frame": {
-        "x": 1087,
-        "y": 3,
-        "w": 470,
-        "h": 971
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 368,
-        "y": 5,
-        "w": 470,
-        "h": 971
-      },
-      "sourceSize": {
-        "w": 1078,
-        "h": 976
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "EmeralDrill.png": {
-      "frame": {
-        "x": 1563,
-        "y": 3,
-        "w": 472,
-        "h": 930
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 334,
-        "y": 33,
-        "w": 472,
-        "h": 930
-      },
-      "sourceSize": {
-        "w": 1078,
-        "h": 976
       },
       "pivot": {
         "x": 0.5,
