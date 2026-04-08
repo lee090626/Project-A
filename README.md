@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drilling RPG 🛠️💎
 
-## Getting Started
+**Drilling RPG**는 웹 브라우저에서 즐길 수 있는 고성능 탑다운 채굴 액션 서바이벌 게임입니다. 끝없는 심연을 탐험하며 자원을 채집하고, 장비를 강화하며, 강력한 보스들에 맞서 생존하세요.
 
-First, run the development server:
+이 프로젝트는 최신 웹 기술과 게임 개발 기법을 결합하여, 브라우저 환경에서도 끊김 없는 144Hz 렌더링과 복잡한 물리 계산을 구현한 **기술 집약적 오픈 소스 게임 엔진**의 쇼케이스이기도 합니다.
 
+---
+
+## ⚡ 주요 특징 (Key Features)
+
+- **무한한 심연 탐험**: 절차적 생성(Procedural Generation)을 통해 매번 새로운 지형과 자원을 탐험합니다.
+- **고성능 하이브리드 엔진**: FSD 아키텍처와 ECS 패턴을 결합하여 수천 개의 엔티티를 동시에 처리합니다.
+- **웹 워커(Web Worker) 기반 멀티스레딩**: 게임 로직과 물리 계산을 워커 스레드로 분리하여 UI 지연(Jank)을 완벽히 제거했습니다.
+- **심화된 성장 시스템**: 드릴, 드론, 유물 강화 및 스킬 룬 조합을 통한 독창적인 빌드 구축이 가능합니다.
+- **부드러운 시각 경험**: PixiJS v8과 트리플 버퍼링(Triple Buffering)을 활용한 초고주사율 렌더링을 지원합니다.
+
+---
+
+## 🛠️ 기술 스택 (Tech Stack)
+
+### **Core**
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Styling**: Tailwind CSS 4
+
+### **Game Engine**
+- **Rendering**: [PixiJS v8](https://pixijs.com/) (with OffscreenCanvas)
+- **Architecture**: FSD (Feature-Sliced Design) + ECS (Entity Component System)
+- **Concurrency**: Web Workers (Multi-threading)
+- **Optimization**: SoA (Structure of Arrays), Triple Buffering, Zero-copy Transferables
+
+---
+
+## 🏗️ 아키텍처 요약 (Architecture Overview)
+
+이 프로젝트는 **하이브리드 아키텍처**를 채택하여 관리 효율성과 성능이라는 두 마리 토끼를 잡았습니다.
+
+1.  **UI 레이어 (Main Thread)**: React와 Next.js를 사용하여 HUD, 메뉴, 인벤토리 등 복잡한 UI를 구성합니다.
+2.  **게임 루프 (Worker Thread)**: 실제 게임의 로직과 물리, 렌더링 엔진은 Web Worker 내부에서 독립적으로 실행됩니다.
+3.  **동기화 브리지**: 트리플 버퍼링 기술을 통해 메인 스레드와 워커 스레드 간의 데이터를 지연 없이 주고받으며 보간(Interpolation)을 처리합니다.
+
+상세한 내용은 [Architecture Documentation](docs/ARCHITECTURE.md)를 참조하세요.
+
+---
+
+## 🚀 시작하기 (Getting Started)
+
+### **기본 실행**
 ```bash
+# 의존성 설치
+npm install
+
+# 에셋 최적화 (최초 실행 시 필수)
+npm run optimize:atlas
+
+# 개발 서버 실행
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+서버가 실행되면 [http://localhost:3000](http://localhost:3000)에서 게임을 즐기실 수 있습니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📚 문서 (Documentation)
 
-## Learn More
+프로젝트의 심층적인 구조와 개발 가이드는 `docs/` 디렉토리에서 확인할 수 있습니다.
 
-To learn more about Next.js, take a look at the following resources:
+- [📖 용어 사전 (Glossary)](docs/GLOSSARY.md)
+- [🏛️ 시스템 아키텍처 (Architecture)](docs/ARCHITECTURE.md)
+- [⚙️ 게임 엔진 로직 (Engine)](docs/ENGINE.md)
+- [💾 ECS 데이터 명세 (Data Layout)](docs/ECS_DATA_LAYOUT.md)
+- [👷 개발자 가이드 (Development)](docs/DEVELOPMENT.md)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 라이선스 (License)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+이 프로젝트는 MIT 라이선스를 따릅니다.

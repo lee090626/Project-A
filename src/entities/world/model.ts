@@ -2,6 +2,8 @@ import { TileMap } from '../tile/TileMap';
 import { Player } from '../player/model';
 import { Entity, GameAssets, Particle, FloatingText, DroppedItem, InteractionType } from '@/shared/types/game';
 import { ObjectPool } from '@/shared/lib/effectPool';
+import { EntityManager } from '@/features/game/lib/EntityManager';
+import { SpatialHash } from '@/features/game/lib/SpatialHash';
 
 /**
  * 게임의 모든 상태를 포함하는 최상위 월드 객체 인터페이스입니다.
@@ -11,8 +13,10 @@ export interface GameWorld {
   tileMap: TileMap;
   /** 플레이어 캐릭터 상태 데이터 */
   player: Player;
-  /** 월드 내에 존재하는 모든 엔티티(NPC 등) 리스트 */
-  entities: Entity[];
+  /** 월드 내에 존재하는 모든 엔티티(NPC 등) SoA 관리 객체 */
+  entities: EntityManager;
+  /** 기존 JSON 기반의 정적 NPC 및 상호작용 오브젝트 (상점, 제련소 등) */
+  staticEntities: Entity[];
   /** 활성화된 시각적 파티클 리스트 (풀링 적용) */
   particlePool: ObjectPool<Particle>;
   /** 파티클 접근용 래퍼 (하위 호환성) */
@@ -80,6 +84,8 @@ export interface GameWorld {
   };
   /** 현재 화면 흔들림 강도 (0: 흔들림 없음) */
   shake: number;
+  /** 엔티티 충돌 최적화를 위한 공간 분할 그리드 */
+  spatialHash: SpatialHash;
   /** 이미 몬스터 생성이 확인된 타일 좌표 세트 ("x,y") */
   spawnedCoords: Set<string>;
 }
@@ -132,7 +138,8 @@ export const createInitialWorld = (seed: number): GameWorld => {
       lastHitTime: 0,
       lastAttackTime: 0,
     },
-    entities: [],
+    entities: new EntityManager(5000),
+    staticEntities: [],
     particlePool: new ObjectPool<Particle>(() => ({
       x: 0, y: 0, vx: 0, vy: 0, life: 0, color: '#fff', size: 2, active: false
     }), 1000),
@@ -187,6 +194,7 @@ export const createInitialWorld = (seed: number): GameWorld => {
       active: false,
     },
     shake: 0,
+    spatialHash: new SpatialHash(120),
     spawnedCoords: new Set(),
   };
 

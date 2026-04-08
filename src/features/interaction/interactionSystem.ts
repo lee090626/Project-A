@@ -13,7 +13,7 @@ export const interactionSystem = (world: GameWorld) => {
   const INTERACTION_DISTANCE = 1.5;
   let nearbyEntity = null;
 
-  for (const entity of entities) {
+  for (const entity of world.staticEntities) {
     const entW = entity.width || 1;
     const entH = entity.height || 1;
     

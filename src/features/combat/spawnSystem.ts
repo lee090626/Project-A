@@ -31,10 +31,28 @@ export const spawnSystem = (world: GameWorld) => {
         const isKilled = player.stats.killedMonsterIds?.includes(initialMonster.id);
 
         if (!isKilled) {
-          // 이미 해당 ID의 엔티티가 존재하지 않는지 최종 확인 (중복 방지)
-          const exists = entities.some(e => e.id === initialMonster.id);
-          if (!exists) {
-            entities.push(initialMonster);
+          // 이미 해당 ID의 엔티티가 존재하지 않는지 최종 확인 (중복 방지 - $O(1)$ Hash Lookup)
+          if (!entities.hasId(initialMonster.id)) {
+            // MonsterDefinition 인덱스 찾기 (최적화: 미리 맵핑 테이블을 만드는 게 좋지만 일단 findIndex 사용)
+            const MONSTERS = require('@/shared/config/monsterData').MONSTERS;
+            const defIdx = MONSTERS.findIndex((m: any) => m.id === initialMonster.id);
+
+            entities.create(
+                1, // type: monster
+                initialMonster.x * TILE_SIZE, 
+                initialMonster.y * TILE_SIZE, 
+                initialMonster.id,
+                defIdx !== -1 ? defIdx : 0
+            );
+            
+            // 추가 스탯 설정 (SoA 직접 접근)
+            const idx = entities.soa.count - 1;
+            entities.soa.hp[idx] = initialMonster.stats?.hp || 100;
+            entities.soa.maxHp[idx] = initialMonster.stats?.maxHp || 100;
+            entities.soa.attack[idx] = initialMonster.stats?.attack || 5;
+            entities.soa.speed[idx] = initialMonster.stats?.speed || 50;
+            entities.soa.width[idx] = initialMonster.width || 60;
+            entities.soa.height[idx] = initialMonster.height || 60;
           }
         }
       }
@@ -45,16 +63,15 @@ export const spawnSystem = (world: GameWorld) => {
   }
 
   // 최적화: 플레이어와 너무 멀어진 몬스터 제거 및 좌표 추적 데이터 정리
-  if (entities.length > 50 || spawnedCoords.size > 1000) {
-    // 1. 엔티티 제거
-    for (let i = entities.length - 1; i >= 0; i--) {
-      const e = entities[i];
-      if (e.type !== 'monster') continue;
+  if (entities.soa.count > 50 || spawnedCoords.size > 1000) {
+    // 1. 엔티티 제거 ($O(1)$ Swap-and-Pop)
+    for (let i = entities.soa.count - 1; i >= 0; i--) {
+      if (entities.soa.type[i] !== 1) continue; // 1: monster
       
-      const dx = player.pos.x - e.x;
-      const dy = player.pos.y - e.y;
+      const dx = player.pos.x - entities.soa.x[i];
+      const dy = player.pos.y - entities.soa.y[i];
       if (Math.abs(dx) > 40 || Math.abs(dy) > 30) {
-        entities.splice(i, 1);
+        entities.destroy(i);
       }
     }
 

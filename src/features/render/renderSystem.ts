@@ -23,7 +23,8 @@ export const renderSystem = (
     uiLayer: PIXI.Container;
   }, 
   now: number,
-  textures: { [key: string]: PIXI.Texture }
+  textures: { [key: string]: PIXI.Texture },
+  lightingFilter: any | null = null
 ) => {
   const { player, tileMap, entities, assets, shake } = world;
   const { stage, tileLayer, entityLayer, effectLayer, lightLayer, uiLayer } = layers;
@@ -104,8 +105,8 @@ export const renderSystem = (
   updateMiningTarget(world, layers);
   updateParticlesAndTexts(world, layers);
 
-  // 5. 동적 조명 효과 (Radial Light Mask)
-  updateLighting(world, layers, app, now);
+  // 5. 동적 조명 효과 (LightingFilter GPU 처리)
+  updateLighting(world, layers, app, now, lightingFilter);
 };
 
 /**
@@ -265,48 +266,45 @@ function updateDroppedItems(world: GameWorld, layers: any, textures: any) {
 }
 
 /**
- * 플레이어 주변을 밝게 비추는 동적 조명 시스템
+ * [PixiJS v8] GPU 기반의 고성능 동적 조명 시스템
  */
-function updateLighting(world: GameWorld, layers: any, app: PIXI.Application, now: number) {
-  const { lightLayer } = layers;
-  const { player } = world;
-  
-  // 조명 레이어가 비어있다면 초기화
-  if (lightLayer.children.length === 0) {
-    const maskOverlay = new PIXI.Graphics();
-    maskOverlay.name = 'maskOverlay';
-    lightLayer.addChild(maskOverlay);
-    // 멀티플라이 블렌드 모드로 주변을 어둡게 만듦
-    lightLayer.blendMode = 'multiply';
-  }
+function updateLighting(world: GameWorld, layers: any, app: PIXI.Application, now: number, lightingFilter: any) {
+  if (!lightingFilter) return;
 
-  const maskOverlay = lightLayer.getChildByName('maskOverlay') as PIXI.Graphics;
-  if (maskOverlay) {
-    maskOverlay.clear();
-    
-    // 전체 화면을 어둡게 채움 (깊이에 따라 더 어두워짐)
-    // 0~500m 까지는 0.4~0.85로 점진적으로 어두워짐, 1000m 이상은 거의 칠흑
-    const depthFactor = Math.min(1.0, player.stats.depth / 800);
-    const darkness = 0.4 + (depthFactor * 0.55);
-    
-    maskOverlay
-      .rect(
-        (player.visualPos.x - 40) * TILE_SIZE, 
-        (player.visualPos.y - 40) * TILE_SIZE, 
-        80 * TILE_SIZE, 
-        80 * TILE_SIZE
-      )
-      .fill({ color: 0x010103, alpha: darkness }); // 완전한 검정보다 약간 푸른빛 도는 칠흑색
-    
-    // 플레이어 주변을 도려냄 (원형 조명)
-    // 펄빅한 느낌을 위해 흔들림 효과 약간 추가
-    const flicker = Math.sin(now / 150) * 2;
-    maskOverlay
-      .circle(
-        player.visualPos.x * TILE_SIZE + TILE_SIZE / 2, 
-        player.visualPos.y * TILE_SIZE + TILE_SIZE / 2, 
-        TILE_SIZE * 5.5 + flicker
-      )
-      .cut();
-  }
+  const { player, droppedItems } = world;
+  const TILE_SIZE = 60; // TODO: 상수 연동
+
+  // 조광 계산을 위한 광원 데이터 수집 (Max 16)
+  const lights: number[] = [];
+  
+  // 1. 플레이어 조명
+  const flicker = Math.sin(now / 150) * 3;
+  lights.push(
+    player.visualPos.x * TILE_SIZE + TILE_SIZE / 2, 
+    player.visualPos.y * TILE_SIZE + TILE_SIZE / 2, 
+    TILE_SIZE * 5.5 + flicker, 
+    1.0 // Intensity
+  );
+
+  // 2. 주변 환경 광원 (드랍된 아이템 등 - 예: 용암 파편)
+  droppedItems.forEach(item => {
+    if (lights.length < 64 && (item.type === 'iron' || item.type === 'gold')) { // TEMP: 예시 광원
+        lights.push(item.x, item.y, TILE_SIZE * 2, 0.5);
+    }
+  });
+
+  // 어둠 농도 계산 (깊이에 따라 깊어짐)
+  const depthFactor = Math.min(1.0, player.stats.depth / 800);
+  const darkness = 0.45 + (depthFactor * 0.5);
+
+  // 필터 유니폼 업데이트
+  lightingFilter.updateUniforms(
+    darkness,
+    layers.stage.scale.x,
+    player.visualPos.x * TILE_SIZE + TILE_SIZE / 2,
+    player.visualPos.y * TILE_SIZE + TILE_SIZE / 2,
+    app.screen.width,
+    app.screen.height,
+    lights
+  );
 }

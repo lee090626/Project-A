@@ -61,25 +61,36 @@ export const physicsSystem = (world: GameWorld, now: number) => {
         const targetX = Math.round(player.pos.x + dx);
         const targetY = Math.round(player.pos.y + dy);
         
-        // --- 몬스터 충돌 체크 (AABB 방식) ---
-        const monsterAtTarget = world.entities.find(e => {
-          if ((e.type !== 'monster' && e.type !== 'boss') || !e.stats || e.stats.hp <= 0) return false;
+        // --- 몬스터 충돌 체크 (SpatialHash 최적화) ---
+        const nearbyEntities = world.spatialHash.query(
+          targetX * TILE_SIZE + TILE_SIZE / 2, 
+          targetY * TILE_SIZE + TILE_SIZE / 2, 
+          TILE_SIZE * 0.5
+        );
+        
+        const monsterAtTarget = nearbyEntities.find(idx => {
+          if (world.entities.soa.type[idx] !== 1 && world.entities.soa.type[idx] !== 2) return false;
+          if (world.entities.soa.hp[idx] <= 0) return false;
           
-          const w = e.width || 1;
-          const h = e.height || 1;
+          const ex = world.entities.soa.x[idx];
+          const ey = world.entities.soa.y[idx];
+          const ew = world.entities.soa.width[idx] || TILE_SIZE;
+          const eh = world.entities.soa.height[idx] || TILE_SIZE;
           
-          // targetX, targetY가 엔티티의 점유 범위 내에 있는지 확인
+          const px = targetX * TILE_SIZE;
+          const py = targetY * TILE_SIZE;
+          
           return (
-            targetX >= e.x && 
-            targetX < e.x + w && 
-            targetY >= e.y && 
-            targetY < e.y + h
+            px < ex + ew && 
+            px + TILE_SIZE > ex && 
+            py < ey + eh && 
+            py + TILE_SIZE > ey
           );
         });
 
         const tile = tileMap.getTile(targetX, targetY);
 
-        if (monsterAtTarget) {
+        if (monsterAtTarget !== undefined) {
           // 몬스터가 있으면 블록처럼 막고 채굴(공격) 모드 전환
           drilling = true;
           intent.miningTarget = { x: targetX, y: targetY };

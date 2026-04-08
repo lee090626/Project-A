@@ -23,6 +23,7 @@ import GuideWindow from '@/widgets/guide/GuideWindow';
 import { useGameUI } from './hooks/useGameUI';
 import { useGameActions } from './hooks/useGameActions';
 import MobileController from '@/features/input/ui/MobileController';
+import { useGameStore } from '@/shared/lib/store';
 
 const SHORTCUTS: Record<string, keyof GameWorld['ui']> = {
   'i': 'isInventoryOpen',
@@ -60,10 +61,17 @@ export default function GameEngine() {
   const [isEngineReady, setIsEngineReady] = useState(false);
   const isReadyRef = useRef(false);
 
-  // isEngineReady 상태와 Ref를 동기화하여 타임아웃에서 참조 가능하게 함
-  useEffect(() => {
-    isReadyRef.current = isEngineReady;
-  }, [isEngineReady]);
+  // Zustand 스토어 상태 구독
+  const stats = useGameStore((state) => state.stats);
+
+  // 트리플 버퍼링 및 보간(Lerp) 관련 Ref
+  const snapshots = useRef<{ time: number, data: Float32Array }[]>([]);
+  const interpolatedState = useRef({
+    x: 15, y: 8, camX: 15, camY: 8, shake: 0, hp: 0
+  });
+
+  // 고유 스냅샷 임계값 (텔레포트 감지)
+  const TELEPORT_THRESHOLD = 5; // 5타일 이상 차이 나면 Snap
 
   const updateUi = useCallback(() => {
     setUiVersion(v => v + 1);
@@ -146,20 +154,28 @@ export default function GameEngine() {
 
     const worker = globalWorker;
     worker.onmessage = (e) => {
-      const { type, payload } = e.data;
-      if (type === 'SYNC' && payload) {
-        // 데이터가 들어오면 엔진이 준비된 것으로 간주 (백업 로직)
+      const { type, payload, buffer } = e.data;
+      
+      if (type === 'RENDER_SYNC' && buffer) {
+        const view = new Float32Array(buffer);
+        const timestamp = view[1];
+        
+        // 스냅샷 리스트 관리 (최신 2개 유지)
+        snapshots.current.push({ time: timestamp, data: view });
+        if (snapshots.current.length > 2) {
+          const old = snapshots.current.shift();
+          // 사용이 끝난 버퍼를 워커로 반환 (트리플 버퍼링 핵심)
+          if (old) {
+            worker.postMessage({ type: 'RETURN_BUFFER', payload: { buffer: old.data.buffer } }, [old.data.buffer]);
+          }
+        }
+
         if (!isReadyRef.current) {
-          console.log('[Main] Received FIRST SYNC. Setting engine ready.');
           setIsEngineReady(true);
         }
-        
-        // 기존 속성별 동기화 방식으로 복구
-        worldRef.current.player.stats = payload.stats;
-        worldRef.current.player.pos = payload.pos;
-        worldRef.current.player.visualPos = payload.visualPos;
-        worldRef.current.shake = payload.shake;
-        setSyncData(payload);
+      } else if (type === 'SYNC_UI' && payload) {
+        // Zustand 스토어 업데이트 (Throttled 수신)
+        useGameStore.getState().updateStats(payload.stats);
       } else if (type === 'ENGINE_READY') {
         setIsEngineReady(true);
         console.log('[Main] Engine is ready to render!');
@@ -212,6 +228,10 @@ export default function GameEngine() {
         } else handleOpen(target);
         return;
       }
+      if (key === 'p') {
+        sendToWorker('ACTION', { action: 'STRESS_TEST' });
+        return;
+      }
       if (isAnyModalOpen()) return;
       sendToWorker('INPUT', { keys: { [key]: true } });
     };
@@ -227,15 +247,60 @@ export default function GameEngine() {
       sendToWorker('RESIZE', { width, height });
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    window.addEventListener('resize', handleResize);
     handleResize();
+
+    // 메인 스레드 보간 루프 (RAF)
+    let rafId: number;
+    const renderLoop = () => {
+      const now = performance.now();
+      const snaps = snapshots.current;
+
+      if (snaps.length >= 2) {
+        const s0 = snaps[0];
+        const s1 = snaps[1];
+        
+        // 보간 계수(alpha) 계산
+        const renderTime = now - 50; // 약 50ms (3틱) 지연 보간으로 부드러움 극대화
+        let alpha = (renderTime - s0.time) / (s1.time - s0.time);
+        alpha = Math.max(0, Math.min(1, alpha));
+
+        const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+        // Header: [count, time, camX, camY, shake, playerX, playerY, hp, ...]
+        const p0 = s0.data;
+        const p1 = s1.data;
+
+        // 텔레포트 감지 (거리 임계값)
+        const dist = Math.sqrt(Math.pow(p1[2] - p0[2], 2) + Math.pow(p1[3] - p0[3], 2));
+        const finalAlpha = dist > TELEPORT_THRESHOLD ? 1 : alpha;
+
+        interpolatedState.current = {
+          x: lerp(p0[2], p1[2], finalAlpha),
+          y: lerp(p0[3], p1[3], finalAlpha),
+          camX: lerp(p0[2], p1[2], finalAlpha), // 카메라 좌표와 동기화
+          camY: lerp(p0[3], p1[3], finalAlpha),
+          shake: lerp(p0[4], p1[4], finalAlpha),
+          hp: lerp(p0[5], p1[5], finalAlpha)
+        };
+        
+        // UI 연동을 위한 Legacy Ref 업데이트 (필요시)
+        worldRef.current.player.visualPos.x = interpolatedState.current.x;
+        worldRef.current.player.visualPos.y = interpolatedState.current.y;
+        worldRef.current.shake = interpolatedState.current.shake;
+        
+        // UI 강제 리렌더링 (저주사율 데이터는 Zustand가, 고주사율 위치는 uiVersion이 트리거)
+        updateUi();
+      }
+
+      rafId = requestAnimationFrame(renderLoop);
+    };
+    rafId = requestAnimationFrame(renderLoop);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(rafId);
       clearTimeout(timeoutId);
     };
   }, [loadAssetsAndTransfer, sendToWorker]);
@@ -270,8 +335,8 @@ export default function GameEngine() {
       <div className="absolute inset-0 z-20 pointer-events-none">
         <div className="pointer-events-auto w-full h-full">
           <Hud 
-            stats={player.stats} 
-            pos={player.pos}
+            stats={stats || player.stats} 
+            pos={{ x: interpolatedState.current.x, y: interpolatedState.current.y }}
             onOpenStatus={() => toggleModal('isStatusOpen')}
             onOpenInventory={() => toggleModal('isInventoryOpen')}
             onOpenEncyclopedia={() => toggleModal('isEncyclopediaOpen')} 
@@ -297,22 +362,22 @@ export default function GameEngine() {
       </div>
 
       {/* Modals ... */}
-      {ui.isShopOpen && <Overlay key="shop" onClose={() => handleClose('isShopOpen')}><Shop stats={{ ...worldRef.current.player.stats }} onClose={() => handleClose('isShopOpen')} onUpgrade={handleUpgrade} onSell={handleSell} onExtractRune={handleExtractRune} onSynthesizeRunes={handleSynthesizeRunes} /></Overlay>}
-      {ui.isStatusOpen && <Overlay key="status" onClose={() => handleClose('isStatusOpen')}><StatusWindow stats={player.stats} onClose={() => handleClose('isStatusOpen')} onUnequipRune={handleUnequipRune} onEquipArtifact={handleEquipArtifact} /></Overlay>}
-      {ui.isInventoryOpen && <Overlay key="inventory" onClose={() => handleClose('isInventoryOpen')}><Inventory stats={player.stats} onClose={() => handleClose('isInventoryOpen')} onEquip={(id, type) => { if (type === 'drill') handleEquipDrill(id); else handleEquipDrone(id); }} onEquipRune={handleEquipRune} /></Overlay>}
-      {ui.isCraftingOpen && <Overlay key="crafting" onClose={() => handleClose('isCraftingOpen')}><Crafting stats={player.stats} onClose={() => handleClose('isCraftingOpen')} onCraft={handleCraft} /></Overlay>}
-      {ui.isElevatorOpen && <Overlay key="elevator" onClose={() => handleClose('isElevatorOpen')}><Elevator stats={player.stats} onClose={() => handleClose('isElevatorOpen')} onSelectCheckpoint={handleSelectCheckpoint} /></Overlay>}
-      {ui.isEncyclopediaOpen && <Overlay key="encyclopedia" onClose={() => handleClose('isEncyclopediaOpen')}><Encyclopedia stats={player.stats} onClose={() => handleClose('isEncyclopediaOpen')} /></Overlay>}
-      {ui.isRefineryOpen && <Overlay key="refinery" onClose={() => handleClose('isRefineryOpen')}><RefineryWindow stats={player.stats} onClose={() => handleClose('isRefineryOpen')} onStartSmelting={handleStartSmelting} onCollectSmelting={handleCollectSmelting} /></Overlay>}
+      {ui.isShopOpen && <Overlay key="shop" onClose={() => handleClose('isShopOpen')}><Shop stats={stats || worldRef.current.player.stats} onClose={() => handleClose('isShopOpen')} onUpgrade={handleUpgrade} onSell={handleSell} onExtractRune={handleExtractRune} onSynthesizeRunes={handleSynthesizeRunes} /></Overlay>}
+      {ui.isStatusOpen && <Overlay key="status" onClose={() => handleClose('isStatusOpen')}><StatusWindow stats={stats || player.stats} onClose={() => handleClose('isStatusOpen')} onUnequipRune={handleUnequipRune} onEquipArtifact={handleEquipArtifact} /></Overlay>}
+      {ui.isInventoryOpen && <Overlay key="inventory" onClose={() => handleClose('isInventoryOpen')}><Inventory stats={stats || player.stats} onClose={() => handleClose('isInventoryOpen')} onEquip={(id, type) => { if (type === 'drill') handleEquipDrill(id); else handleEquipDrone(id); }} onEquipRune={handleEquipRune} /></Overlay>}
+      {ui.isCraftingOpen && <Overlay key="crafting" onClose={() => handleClose('isCraftingOpen')}><Crafting stats={stats || player.stats} onClose={() => handleClose('isCraftingOpen')} onCraft={handleCraft} /></Overlay>}
+      {ui.isElevatorOpen && <Overlay key="elevator" onClose={() => handleClose('isElevatorOpen')}><Elevator stats={stats || player.stats} onClose={() => handleClose('isElevatorOpen')} onSelectCheckpoint={handleSelectCheckpoint} /></Overlay>}
+      {ui.isEncyclopediaOpen && <Overlay key="encyclopedia" onClose={() => handleClose('isEncyclopediaOpen')}><Encyclopedia stats={stats || player.stats} onClose={() => handleClose('isEncyclopediaOpen')} /></Overlay>}
+      {ui.isRefineryOpen && <Overlay key="refinery" onClose={() => handleClose('isRefineryOpen')}><RefineryWindow stats={stats || player.stats} onClose={() => handleClose('isRefineryOpen')} onStartSmelting={handleStartSmelting} onCollectSmelting={handleCollectSmelting} /></Overlay>}
       {ui.isSettingsOpen && <Overlay key="settings" onClose={() => handleClose('isSettingsOpen')}><Settings onClose={() => handleClose('isSettingsOpen')} onReset={handleResetGame} onRegenerateWorld={handleRegenerateWorld} onExport={handleExportSave} onImport={() => {
         const code = prompt('Enter save code:');
         if (code) handleImportSave(code);
       }} /></Overlay>}
-      {world.ui.isLaboratoryOpen && <Overlay key="laboratory" onClose={() => handleClose('isLaboratoryOpen')}><Laboratory stats={player.stats} onUnlockResearch={handleUnlockResearch} onClose={() => handleClose('isLaboratoryOpen')} /></Overlay>}
+      {world.ui.isLaboratoryOpen && <Overlay key="laboratory" onClose={() => handleClose('isLaboratoryOpen')}><Laboratory stats={stats || player.stats} onUnlockResearch={handleUnlockResearch} onClose={() => handleClose('isLaboratoryOpen')} /></Overlay>}
       {world.ui.isGuideOpen && <Overlay key="guide" onClose={() => handleClose('isGuideOpen')}><GuideWindow onClose={() => handleClose('isGuideOpen')} /></Overlay>}
       
       {/* Death Overlay */}
-      {player.stats.hp <= 0 && (
+      {(stats?.hp || player.stats.hp) <= 0 && (
         <div className="absolute inset-0 z-100 flex flex-col items-center justify-center bg-red-950/60 backdrop-blur-xl animate-in fade-in duration-700">
            <div className="text-center space-y-8 p-12 bg-zinc-950/80 border-2 border-red-500/50 rounded-3xl shadow-2xl shadow-red-900/40 max-w-md w-full">
               <div className="space-y-2">
@@ -326,7 +391,7 @@ export default function GameEngine() {
               
               <div className="py-4">
                 <div className="text-4xl font-mono text-zinc-500">
-                  DEPTH: <span className="text-white">{player.stats.depth}m</span>
+                  DEPTH: <span className="text-white">{(stats?.depth || player.stats.depth)}m</span>
                 </div>
               </div>
 
@@ -339,6 +404,11 @@ export default function GameEngine() {
            </div>
         </div>
       )}
+      {/* Debug Info (Phase 5) */}
+      <div className="fixed bottom-4 right-4 bg-black/80 text-white p-2 rounded text-xs font-mono z-100 border border-white/20 select-none pointer-events-all">
+        <div>Visible Entities: {snapshots.current[0]?.data[0] || 0}</div>
+        <div className="text-zinc-400 mt-1">Press [P] for 5,000 Monsters</div>
+      </div>
     </div>
   );
 }

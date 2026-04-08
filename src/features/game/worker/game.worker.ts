@@ -17,6 +17,8 @@ import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 import { TileMap } from '@/entities/tile/TileMap';
 import { Rarity } from '@/shared/types/game';
 import * as PIXI from 'pixi.js';
+import { LightingFilter } from '@/features/render/LightingFilter';
+import { TILE_SIZE } from '@/shared/config/constants';
 
 // PixiJS v8 Web Worker 지원을 위한 어댑터 설정 (ReferenceError: document is not defined 방지)
 PIXI.DOMAdapter.set(PIXI.WebWorkerAdapter);
@@ -42,14 +44,34 @@ class GameEngineInstance {
   // 에셋 텍스처 캐시
   textures: { [key: string]: PIXI.Texture } = {};
   
+  // 조명 필터
+  lightingFilter: LightingFilter | null = null;
+  
   private isRunning: boolean = false;
   private lastLoopTime: number = 0;
-  lastSyncTime: number = 0;
-  lastSaveTime: number = 0;
-  syncInterval: number = 50; // 20Hz
+  
+  // 패킷 동기화 관련
+  private lastSyncTime: number = 0;
+  private lastUiSyncTime: number = 0;
+  private uiSyncInterval: number = 200; // UI 데이터는 5Hz (200ms)로 전송
+  
+  // 트리플 버퍼링 관리
+  private readonly MAX_ENTITIES = 5000;
+  private readonly ENTITY_STRIDE = 8; // [id, x, y, rot, sprite, state, type, anim]
+  private readonly HEADER_SIZE = 16;  // [count, time, camX, camY, shake, playerX, playerY, hp, ...]
+  private readonly BUFFER_SIZE = (16 + 5000 * 8) * 4;
+  
+  private bufferPool: ArrayBuffer[] = [];
+  
+  private lastSaveTime: number = 0;
+  syncInterval: number = 16.66; // 60Hz Target
 
   constructor() {
     this.world = createInitialWorld(12345);
+    // 트리플 버퍼링을 위한 초기 버퍼 생성
+    for (let i = 0; i < 3; i++) {
+      this.bufferPool.push(new ArrayBuffer(this.BUFFER_SIZE));
+    }
   }
 
   /** 새로운 캔버스 제어권을 할당받음 및 Pixi 초기화 */
@@ -88,7 +110,16 @@ class GameEngineInstance {
 
     this.pixiApp.stage.addChild(stage);
     
+    // 조명 필터 초기화 및 적용
+    this.lightingFilter = new LightingFilter();
+    stage.filters = [this.lightingFilter];
+
     this.layers = { stage, tileLayer, entityLayer, effectLayer, lightLayer, uiLayer };
+  }
+
+  /** 메인 스레드로부터 버퍼 소유권을 다시 받음 */
+  returnBuffer(buffer: ArrayBuffer) {
+    this.bufferPool.push(buffer);
   }
 
   /** 월드 상태 초기화 (세이브 데이터 포함) */
@@ -97,12 +128,14 @@ class GameEngineInstance {
     const seed = payload.seed || 12345;
     const currentAssets = this.world.assets;
     const currentLayout = this.world.baseLayout;
-    const currentEntities = this.world.entities;
+    const currentStaticEntities = this.world.staticEntities;
 
+    // 새 월드 생성 (EntityManager, SpatialHash 모두 새로 초기화)
     this.world = createInitialWorld(seed);
     this.world.assets = currentAssets;
     this.world.baseLayout = currentLayout;
-    this.world.entities = currentEntities;
+    this.world.staticEntities = currentStaticEntities;
+    // NOTE: world.entities는 createInitialWorld()에서 생성된 새 EntityManager를 그대로 사용합니다.
 
     if (payload.saveData) {
       const { stats, position, tileMap } = payload.saveData;
@@ -133,7 +166,9 @@ class GameEngineInstance {
     const { atlasData, layout, entities } = payload;
     
     this.world.baseLayout = layout;
-    this.world.entities = entities;
+    this.world.staticEntities = entities; // 상점, 제련소 등 정적 NPC 데이터 저장
+    // NOTE: payload.entities는 정적 JSON 정의 데이터이며 EntityManager가 아닙니다.
+    // world.entities는 createInitialWorld()에서 이미 EntityManager로 초기화되어 있으므로 덮어쓰지 않습니다.
 
     // Pixi 텍스처로 변환 및 캐싱
     for (const atlas of atlasData) {
@@ -213,6 +248,18 @@ class GameEngineInstance {
       this.lastLoopTime = now;
 
       try {
+        // 0. 공간 분할 그리드 업데이트 (최적화의 핵심)
+        this.world.spatialHash.clear();
+        for (let i = 0; i < this.world.entities.soa.count; i++) {
+          this.world.spatialHash.insert(
+            i, 
+            this.world.entities.soa.x[i], 
+            this.world.entities.soa.y[i],
+            this.world.entities.soa.width[i],
+            this.world.entities.soa.height[i]
+          );
+        }
+
         // 1. 게임 로직
         inputSystem(this.world);
         physicsSystem(this.world, now);
@@ -220,27 +267,72 @@ class GameEngineInstance {
         interactionSystem(this.world);
         refinerySystem(this.world, now);
         spawnSystem(this.world);
-        monsterAiSystem(this.world);
+        monsterAiSystem(this.world, now);
         combatSystem(this.world, deltaTime, now);
         effectSystem(this.world, deltaTime);
 
         // 2. 렌더링 (Pixi 엔진 활용)
         if (this.pixiApp && this.layers) {
-           renderSystem(this.world, this.pixiApp, this.layers, now, this.textures);
+           renderSystem(this.world, this.pixiApp, this.layers, now, this.textures, this.lightingFilter);
         }
 
-        // 3. UI 동기화 (20Hz)
-        if (now - this.lastSyncTime > this.syncInterval) {
-          this.lastSyncTime = now;
+        // 3. UI 동기화 (5Hz - 200ms)
+        if (now - this.lastUiSyncTime > this.uiSyncInterval) {
+          this.lastUiSyncTime = now;
           self.postMessage({
-            type: 'SYNC',
+            type: 'SYNC_UI',
             payload: {
-              stats: this.world.player.stats,
-              pos: this.world.player.pos,
-              visualPos: this.world.player.visualPos,
-              shake: this.world.shake,
+                stats: this.world.player.stats,
             }
           });
+        }
+
+        // 4. 렌더링 동기화 (트리플 버퍼링 / 60Hz / Viewport Culling)
+        if (now - this.lastSyncTime > this.syncInterval && this.bufferPool.length > 0) {
+          this.lastSyncTime = now;
+          const buffer = this.bufferPool.shift()!;
+          const view = new Float32Array(buffer);
+          
+          // 4-1. Viewport Culling (SpatialHash 사용)
+          // 화면 크기보다 넉넉하게 1200px(20타일) 반경 탐색
+          const visibleIndices = this.world.spatialHash.query(
+            this.world.player.visualPos.x * TILE_SIZE,
+            this.world.player.visualPos.y * TILE_SIZE,
+            1200
+          );
+
+          // Header (Offset 0-15)
+          const HEADER_SIZE = 16;
+          view[0] = visibleIndices.length; // 가시 엔티티 개수
+          view[1] = now;
+          view[2] = this.world.player.visualPos.x; 
+          view[3] = this.world.player.visualPos.y;
+          view[4] = this.world.shake;
+          view[5] = this.world.player.stats.hp;
+          view[6] = this.world.player.stats.maxHp;
+
+          // Body (Interleaved packing)
+          const ENTITY_STRIDE = 8;
+          let offset = HEADER_SIZE;
+          const { soa } = this.world.entities;
+
+          for (let i = 0; i < visibleIndices.length; i++) {
+            const idx = visibleIndices[i];
+            if (offset + ENTITY_STRIDE > view.length) break; // 버퍼 초과 방지
+
+            view[offset + 0] = soa.type[idx];
+            view[offset + 1] = soa.state[idx];
+            view[offset + 2] = soa.x[idx];
+            view[offset + 3] = soa.y[idx];
+            view[offset + 4] = soa.hp[idx];
+            view[offset + 5] = soa.maxHp[idx];
+            view[offset + 6] = soa.spriteIndex[idx]; // 또는 monsterDefIndex
+            view[offset + 7] = soa.width[idx]; // width & height 패킹 가능하나 일단 width
+
+            offset += ENTITY_STRIDE;
+          }
+          
+          (self as any).postMessage({ type: 'RENDER_SYNC', buffer }, [buffer]);
         }
 
         // 4. 자동 저장 (10초)
@@ -287,6 +379,21 @@ class GameEngineInstance {
   /** 게임 액션 수행 */
   handleAction(payload: any) {
     const { action, data } = payload;
+    
+    if (action === 'STRESS_TEST') {
+      console.log('[Worker] Stress Test: Spawning 5000 monsters...');
+      const px = this.world.player.pos.x;
+      const py = this.world.player.pos.y;
+      
+      for (let i = 0; i < 5000; i++) {
+        const rx = px + (Math.random() - 0.5) * 60; // 60타일 범위
+        const ry = py + (Math.random() - 0.5) * 60;
+        // 0: none, 1: monster, 2: boss
+        this.world.entities.create(1, rx * TILE_SIZE, ry * TILE_SIZE, undefined, 0);
+      }
+      return;
+    }
+
     const stats = this.world.player.stats;
 
     switch (action) {
@@ -550,7 +657,12 @@ self.addEventListener('message', (e: MessageEvent) => {
     case 'ACTION':
       engine.handleAction(payload);
       break;
-    case 'SAVE_REQUEST':
+      case 'RETURN_BUFFER':
+        if (payload.buffer) {
+          engine.returnBuffer(payload.buffer);
+        }
+        break;
+      case 'SAVE_REQUEST':
       if (payload.type === 'export') {
         self.postMessage({ 
           type: 'EXPORT_DATA', 

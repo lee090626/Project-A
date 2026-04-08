@@ -35,13 +35,25 @@ function updateMiningTarget(world: GameWorld) {
   const targetY = Math.floor(player.pos.y + (intent.moveY !== 0 ? intent.moveY * 1.0 : 0) + 0.5);
   const targetTile = tileMap.getTile(targetX, targetY);
   
-  // 몬스터 존재 여부 체크
-  const hasMonster = world.entities.some(e => 
-    (e.type === 'monster' || e.type === 'boss') && 
-    e.stats && e.stats.hp > 0 &&
-    targetX >= e.x && targetX < e.x + (e.width || 1) &&
-    targetY >= e.y && targetY < e.y + (e.height || 1)
-  );
+  // 몬스터 존재 여부 체크 (SoA & SpatialHash 사용)
+  let hasMonster = false;
+  const targetPxX = targetX * TILE_SIZE;
+  const targetPxY = targetY * TILE_SIZE;
+  const nearbyIdxs = world.spatialHash.query(targetPxX + TILE_SIZE / 2, targetPxY + TILE_SIZE / 2, TILE_SIZE);
+  for (let i = 0; i < nearbyIdxs.length; i++) {
+    const idx = nearbyIdxs[i];
+    const type = world.entities.soa.type[idx];
+    if ((type === 1 || type === 2) && world.entities.soa.hp[idx] > 0) { // 1: monster, 2: boss
+      const ex = world.entities.soa.x[idx];
+      const ey = world.entities.soa.y[idx];
+      const ew = world.entities.soa.width[idx] || TILE_SIZE;
+      const eh = world.entities.soa.height[idx] || TILE_SIZE;
+      if (targetPxX >= ex && targetPxX < ex + ew && targetPxY >= ey && targetPxY < ey + eh) {
+        hasMonster = true;
+        break;
+      }
+    }
+  }
 
   if (hasMonster || (targetTile && targetTile.type !== 'empty' && targetTile.type !== 'wall' && targetTile.type !== 'portal')) {
     intent.miningTarget = { x: targetX, y: targetY };
@@ -63,13 +75,25 @@ function handlePlayerMining(world: GameWorld, now: number) {
 
   const { x, y } = intent.miningTarget;
 
-  // 몬스터를 조준 중이면 바닥(타일) 채굴은 건너뛰고 combatSystem에서만 처리되도록 함
-  const hasMonster = entities.some(e => 
-    (e.type === 'monster' || e.type === 'boss') && 
-    e.stats && e.stats.hp > 0 &&
-    x >= e.x && x < e.x + (e.width || 1) &&
-    y >= e.y && y < e.y + (e.height || 1)
-  );
+  // 몬스터를 조준 중이면 바닥(타일) 채굴은 건너뛰고 combatSystem에서만 처리되도록 함 (SoA & SpatialHash 사용)
+  let hasMonster = false;
+  const targetPxX = x * TILE_SIZE;
+  const targetPxY = y * TILE_SIZE;
+  const nearbyIdxs = world.spatialHash.query(targetPxX + TILE_SIZE / 2, targetPxY + TILE_SIZE / 2, TILE_SIZE);
+  for (let i = 0; i < nearbyIdxs.length; i++) {
+    const idx = nearbyIdxs[i];
+    const type = world.entities.soa.type[idx];
+    if ((type === 1 || type === 2) && world.entities.soa.hp[idx] > 0) { // 1: monster, 2: boss
+      const ex = world.entities.soa.x[idx];
+      const ey = world.entities.soa.y[idx];
+      const ew = world.entities.soa.width[idx] || TILE_SIZE;
+      const eh = world.entities.soa.height[idx] || TILE_SIZE;
+      if (targetPxX >= ex && targetPxX < ex + ew && targetPxY >= ey && targetPxY < ey + eh) {
+        hasMonster = true;
+        break;
+      }
+    }
+  }
 
   if (hasMonster) {
     return;
