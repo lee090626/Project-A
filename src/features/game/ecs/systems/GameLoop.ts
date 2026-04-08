@@ -9,6 +9,8 @@ import { monsterAiSystem } from '@/features/game/ecs/systems/monsterAiSystem';
 import { combatSystem } from '@/features/game/ecs/systems/combatSystem';
 import { effectSystem } from '@/features/game/ecs/systems/effectSystem';
 import { renderSystem } from '@/features/game/ecs/systems/renderSystem';
+import { statusSystem } from '@/features/game/ecs/systems/statusSystem';
+import { orosAiSystem } from '@/features/game/ecs/systems/orosAiSystem';
 import * as PIXI from 'pixi.js';
 import { TILE_SIZE } from '@/shared/config/constants';
 
@@ -97,12 +99,14 @@ export class GameLoop {
 
       // 1. 게임 시뮬레이션
       inputSystem(this.world);
+      statusSystem(this.world, now);
       physicsSystem(this.world, now);
       miningSystem(this.world, now);
       interactionSystem(this.world);
       refinerySystem(this.world, now);
       spawnSystem(this.world);
       monsterAiSystem(this.world, now);
+      orosAiSystem(this.world, now);
       combatSystem(this.world, deltaTime, now);
       effectSystem(this.world, deltaTime);
 

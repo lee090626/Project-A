@@ -17,6 +17,7 @@ export const renderSystem = (
   layers: {
     stage: PIXI.Container;
     tileLayer: PIXI.Container;
+    staticLayer: PIXI.Container;
     entityLayer: PIXI.Container;
     effectLayer: PIXI.Container;
     lightLayer: PIXI.Container;
@@ -27,7 +28,7 @@ export const renderSystem = (
   lightingFilter: any | null = null
 ) => {
   const { player, tileMap, entities, assets, shake } = world;
-  const { stage, tileLayer, entityLayer, effectLayer, lightLayer, uiLayer } = layers;
+  const { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer } = layers;
 
   // 1. 카메라 제어 (중앙 정렬 및 셰이크 효과)
   const shakeX = (Math.random() - 0.5) * shake * 2;
@@ -44,10 +45,10 @@ export const renderSystem = (
   );
 
   // 2. 타일 렌더링 (뷰포트 최적화)
-  const startTileX = Math.floor(player.visualPos.x - 15);
-  const endTileX = Math.ceil(player.visualPos.x + 15);
-  const startTileY = Math.floor(player.visualPos.y - 12);
-  const endTileY = Math.ceil(player.visualPos.y + 12);
+  const startTileX = Math.floor(player.visualPos.x - 20); // 15 -> 20 (시야 확대 대응)
+  const endTileX = Math.ceil(player.visualPos.x + 20);
+  const startTileY = Math.floor(player.visualPos.y - 15); // 12 -> 15
+  const endTileY = Math.ceil(player.visualPos.y + 15);
 
   // 현재 화면에 필요한 타일 키 세트
   const visibleTileKeys = new Set<string>();
@@ -145,17 +146,55 @@ function updateParticlesAndTexts(world: GameWorld, layers: any) {
   floatingTexts.forEach((ft, i) => {
     let sprite = activeTextSprites.get(ft);
     if (ft.active) {
+      const isCrit = ft.text.includes('Crit');
+      const isGold = ft.text.includes('G') || ft.color === '#fbbf24'; // Gold color
+      const isBlock = ft.text === 'BLOCK!';
+      
       if (!sprite) {
-        sprite = textSpritePool.pop() || new PIXI.Text({ text: ft.text, style: { fontSize: 16, fill: 0xffffff, fontWeight: 'bold' } });
+        sprite = textSpritePool.pop() || new PIXI.Text({ text: ft.text });
+        
+        sprite.style.fontFamily = 'Russo One';
+        sprite.style.fontWeight = '900';
+        sprite.style.align = 'center';
         sprite.anchor.set(0.5, 0.5);
         effectLayer.addChild(sprite);
         activeTextSprites.set(ft, sprite);
       }
+      
+      // 재사용 시에도 스타일/텍스트 최신화
       sprite.text = ft.text;
-      sprite.style.fill = ft.color;
+      
+      // 프리미엄 색상 및 스타일 적용
+      if (isCrit) {
+        sprite.style.fill = 0xf87171; // Red
+        sprite.style.fontSize = 28;
+        sprite.style.stroke = { color: 0x000000, width: 4 };
+        sprite.style.dropShadow = { alpha: 0.6, blur: 5, color: 0x000000, distance: 4, angle: Math.PI / 6 };
+      } else if (isGold) {
+        sprite.style.fill = 0xfacc15; // Gold Yellow
+        sprite.style.fontSize = 20;
+        sprite.style.stroke = { color: 0x422006, width: 3 };
+        sprite.style.dropShadow = { alpha: 0.4, blur: 3, color: 0x000000, distance: 2, angle: Math.PI / 6 };
+      } else if (isBlock) {
+        sprite.style.fill = 0x3b82f6; // Blue (사용자 요청)
+        sprite.style.fontSize = 22;
+        sprite.style.stroke = { color: 0x1e3a8a, width: 3 };
+        sprite.style.dropShadow = { alpha: 0.3, blur: 2, color: 0x000000, distance: 2, angle: Math.PI / 6 };
+      } else {
+        sprite.style.fill = 0xffffff; // White
+        sprite.style.fontSize = 18;
+        sprite.style.stroke = { color: 0x000000, width: 3 };
+        sprite.style.dropShadow = false;
+      }
+      
       sprite.alpha = ft.life;
       sprite.position.set(ft.x, ft.y);
-      sprite.scale.set(0.5 + ft.life * 0.5);
+      
+      // 데미지 팝업 애니메이션 (포물선과 어울리는 펄스)
+      const t = 1.0 - ft.life; // 0.0 ~ 1.0
+      const pop = Math.sin(t * Math.PI) * 0.4;
+      const scale = (0.8 + pop) * (isCrit ? 1.5 : 1);
+      sprite.scale.set(scale);
     } else if (sprite) {
       effectLayer.removeChild(sprite);
       textSpritePool.push(sprite);
@@ -255,8 +294,9 @@ function updateDroppedItems(world: GameWorld, layers: any, textures: any) {
       const texture = textures[`item_${item.type}`] || PIXI.Texture.WHITE;
       sprite = new PIXI.Sprite(texture);
       sprite.anchor.set(0.5, 0.5);
-      sprite.width = 30;
-      sprite.height = 30;
+      const itemSize = TILE_SIZE * 0.5; // 30 -> TILE_SIZE 비례
+      sprite.width = itemSize;
+      sprite.height = itemSize;
       effectLayer.addChild(sprite);
       itemSpriteMap.set(id, sprite);
     }
@@ -272,7 +312,6 @@ function updateLighting(world: GameWorld, layers: any, app: PIXI.Application, no
   if (!lightingFilter) return;
 
   const { player, droppedItems } = world;
-  const TILE_SIZE = 60; // TODO: 상수 연동
 
   // 조광 계산을 위한 광원 데이터 수집 (Max 16)
   const lights: number[] = [];

@@ -41,8 +41,37 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
     if (!ft.active) continue;
 
     const dtFactor = deltaTime / 16.6;
-    ft.y -= 1 * dtFactor; // 서서히 위로 떠오름
-    ft.life -= 0.01 * dtFactor; // 서서히 투명해지며 소멸
+    
+    // 포물선 이동 (vx, vy 적용)
+    if (ft.vx !== undefined && ft.vy !== undefined) {
+      ft.x += ft.vx * dtFactor;
+      ft.y += ft.vy * dtFactor;
+      ft.vy += 0.25 * dtFactor; // 중력 적용
+      ft.vx *= 0.98; // 공기 저항
+      
+      // 자석 효과: 자원/골드 텍스트는 일정 시간 후 플레이어에게 끌려감
+      const isResource = ft.text.includes('G') || ft.text.includes('+');
+      if (isResource && ft.life < 0.7) {
+        const px = world.player.visualPos.x * TILE_SIZE + TILE_SIZE / 2;
+        const py = world.player.visualPos.y * TILE_SIZE + TILE_SIZE / 2;
+        
+        const dx = px - ft.x;
+        const dy = py - ft.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist > 5) {
+          const force = 0.15 * dtFactor;
+          ft.vx += (dx / dist) * force;
+          ft.vy += (dy / dist) * force;
+          ft.life -= 0.01 * dtFactor; // 빨리 획득되는 느낌을 위해 수명 추가 소모
+        }
+      }
+    } else {
+      // 기본 직선 이동 (하위 호환)
+      ft.y -= 1 * dtFactor;
+    }
+    
+    ft.life -= 0.012 * dtFactor; // 서서히 투명해지며 소멸 (약간 더 빠르게)
 
     // 수명이 다한 텍스트 비활성화 (풀반환)
     if (ft.life <= 0) {

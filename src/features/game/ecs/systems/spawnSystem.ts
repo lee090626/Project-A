@@ -7,6 +7,39 @@ import { TILE_SIZE } from '@/shared/config/constants';
 export const spawnSystem = (world: GameWorld) => {
   const { player, tileMap, spawnedCoords, entities } = world;
   
+  // 보스 소환 체크 (차원 1: 500m 상단)
+  if (player.stats.depth > 480 && player.stats.depth < 550) {
+    const bossId = 'oros_face';
+    const isKilled = player.stats.killedMonsterIds?.includes(bossId);
+    if (!isKilled && !entities.hasId(bossId)) {
+        const MONSTERS = require('@/shared/config/monsterData').MONSTERS;
+        const defIdx = MONSTERS.findIndex((m: any) => m.id === bossId);
+        
+        if (defIdx !== -1) {
+            const bossDef = MONSTERS[defIdx];
+            entities.create(
+                2, // type: boss
+                15 * TILE_SIZE - (2 * TILE_SIZE), // 중앙 정렬 (폭 고려)
+                500 * TILE_SIZE, 
+                bossId,
+                defIdx
+            );
+            
+            const idx = entities.soa.count - 1;
+            entities.soa.hp[idx] = bossDef.stats.hp;
+            entities.soa.maxHp[idx] = bossDef.stats.hp;
+            entities.soa.attack[idx] = bossDef.stats.attack;
+            entities.soa.width[idx] = TILE_SIZE * 5; // 보스는 크게
+            entities.soa.height[idx] = TILE_SIZE * 5;
+            
+            // 조우 기록
+            if (!player.stats.encounteredBossIds.includes(bossId)) {
+                player.stats.encounteredBossIds.push(bossId);
+            }
+        }
+    }
+  }
+
   // 플레이어 주변 일정 범위(뷰포트보다 약간 넓게) 탐색
   const rangeX = 15;
   const rangeY = 12;
@@ -51,8 +84,8 @@ export const spawnSystem = (world: GameWorld) => {
             entities.soa.maxHp[idx] = initialMonster.stats?.maxHp || 100;
             entities.soa.attack[idx] = initialMonster.stats?.attack || 5;
             entities.soa.speed[idx] = initialMonster.stats?.speed || 50;
-            entities.soa.width[idx] = initialMonster.width || 60;
-            entities.soa.height[idx] = initialMonster.height || 60;
+            entities.soa.width[idx] = initialMonster.width || TILE_SIZE; // 60에서 TILE_SIZE(32px)로 축소
+            entities.soa.height[idx] = initialMonster.height || TILE_SIZE;
           }
         }
       }
@@ -68,9 +101,11 @@ export const spawnSystem = (world: GameWorld) => {
     for (let i = entities.soa.count - 1; i >= 0; i--) {
       if (entities.soa.type[i] !== 1) continue; // 1: monster
       
-      const dx = player.pos.x - entities.soa.x[i];
-      const dy = player.pos.y - entities.soa.y[i];
-      if (Math.abs(dx) > 40 || Math.abs(dy) > 30) {
+      const dx = (player.pos.x * TILE_SIZE) - entities.soa.x[i];
+      const dy = (player.pos.y * TILE_SIZE) - entities.soa.y[i];
+      
+      // 픽셀 기준 거리 체크 (플레이어 주변 약 40-50타일 범위 밖이면 제거)
+      if (Math.abs(dx) > 50 * TILE_SIZE || Math.abs(dy) > 40 * TILE_SIZE) {
         entities.destroy(i);
       }
     }

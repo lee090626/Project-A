@@ -64,19 +64,25 @@ export function handlePlayerAction(world: GameWorld, payload: any) {
       }
       break;
 
-    case 'extractRune': {
-      const cost = 500 * Math.pow(2, data.tier);
-      if (stats.goldCoins >= cost) {
-        stats.goldCoins -= cost;
+    case 'summonRune': {
+      const count = data.count || 1;
+      const baseCost = 500 * Math.pow(2, data.tier);
+      const totalCost = baseCost * count;
+
+      if (stats.goldCoins >= totalCost) {
+        stats.goldCoins -= totalCost;
         const rarities: Rarity[] = ['Common', 'Uncommon', 'Rare', 'Epic', 'Radiant', 'Legendary', 'Mythic', 'Ancient'];
-        const finalTierIdx = Math.min(data.tier + (Math.random() < 0.05 ? 1 : 0), rarities.length - 1);
         const availableRunes = Object.values(SKILL_RUNES);
-        const rune = availableRunes[Math.floor(Math.random() * availableRunes.length)];
-        stats.inventoryRunes.push({
-          id: `rune_${Date.now()}_${Math.floor(Math.random() * 10000)}`,
-          runeId: rune.id,
-          rarity: rarities[finalTierIdx]
-        });
+
+        for (let i = 0; i < count; i++) {
+          const finalTierIdx = Math.min(data.tier + (Math.random() < 0.05 ? 1 : 0), rarities.length - 1);
+          const rune = availableRunes[Math.floor(Math.random() * availableRunes.length)];
+          stats.inventoryRunes.push({
+            id: `rune_${Date.now()}_${Math.floor(Math.random() * 10000)}_${i}`,
+            runeId: rune.id,
+            rarity: rarities[finalTierIdx]
+          });
+        }
       }
       break;
     }

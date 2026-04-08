@@ -76,11 +76,30 @@ export const combatSystem = (world: GameWorld, deltaTime: number, now: number) =
       const isHit = tx < ex + ew && tx + TILE_SIZE > ex && ty < ey + eh && ty + TILE_SIZE > ey;
 
       if (isHit) {
-        const { finalDamage, attackInterval } = calculateMiningDamage(player.stats, type === 2 ? 'boss' : 'monster');
+        const { finalDamage, attackInterval, isCrit } = calculateMiningDamage(player.stats, type === 2 ? 'boss' : 'monster');
+        
         if (now - player.lastAttackTime > attackInterval) {
-          entities.soa.hp[idx] -= finalDamage;
-          createFloatingText(world, ex, ey - 30, `${finalDamage}`, '#fbbf24');
+          const defIdx = entities.soa.monsterDefIndex[idx];
+          const monsterDef = MONSTERS[defIdx];
+          
+          let actualDamage = finalDamage;
+          let text = isCrit ? `Crit! -${finalDamage}` : `-${finalDamage}`;
+          let color = isCrit ? '#f87171' : '#ffffff';
+
+          // [특수 기믹] 크리티컬 온리 몬스터 처리
+          if (monsterDef?.mechanic === 'critical_only' && !isCrit) {
+            actualDamage = 0;
+            text = 'BLOCK!';
+            color = '#3b82f6'; // 파란색 (사용자 요청)
+          }
+
+          if (actualDamage > 0 || text === 'BLOCK!') {
+            entities.soa.hp[idx] -= actualDamage;
+            createFloatingText(world, ex, ey - 30, text, color);
+          }
+          
           player.lastAttackTime = now;
+          if (isCrit && actualDamage > 0) world.shake = Math.max(world.shake, 8);
         }
       }
     });
