@@ -17,7 +17,7 @@ interface ShopProps {
   stats: PlayerStats;
   onUpgrade: (type: string, requirements: any) => void;
   onSell: (resource: string, amount: number, price: number) => void;
-  onExtractRune: (tier: number) => { rune: any, isCrit: boolean } | null | void;
+  onSummonRune: (tier: number, count?: number) => void;
   onSynthesizeRunes: () => void;
   onClose: () => void;
 }
@@ -29,7 +29,7 @@ function Shop({
   stats,
   onUpgrade,
   onSell,
-  onExtractRune,
+  onSummonRune,
   onSynthesizeRunes,
   onClose,
 }: ShopProps) {
@@ -38,45 +38,48 @@ function Shop({
   
   // 가챠 연출용 상태
   const [gachaState, setGachaState] = useState<'idle' | 'drawing' | 'result'>('idle');
-  const [gachaResult, setGachaResult] = useState<{ rune: any, isCrit: boolean } | null>(null);
+  const [gachaResults, setGachaResults] = useState<{ runeId: string, rarity: string }[]>([]);
+  const [isMultiDraw, setIsMultiDraw] = useState(false);
+  const [prevRuneCount, setPrevRuneCount] = useState(0);
   const [rouletteItems, setRouletteItems] = useState<{runeId: string, rarity: string}[]>([]);
   const [startRouletteAnim, setStartRouletteAnim] = useState(false);
 
-  const performExtraction = (tierIndex: number) => {
-    const result = onExtractRune(tierIndex);
-    if (!result) return;
+  const performExtraction = (tierIndex: number, count: number = 1) => {
+    const cost = (500 * Math.pow(2, tierIndex)) * count;
+    if (stats.goldCoins < cost) return;
+
+    const currentCount = stats.inventoryRunes.length;
+    setPrevRuneCount(currentCount);
+    setIsMultiDraw(count > 1);
+    onSummonRune(tierIndex, count);
     
-    // 룰렛 더미 데이터 생성
-    const availableRunes = Object.values(SKILL_RUNES);
-    const rarities = ['Common', 'Uncommon', 'Rare', 'Epic', 'Radiant', 'Legendary', 'Mythic'];
-    
-    const items = [];
-    for(let i = 0; i < 60; i++) {
-       if (i === 50) {
-          // 인덱스 50번에 당첨 룬 확정 삽입
-          items.push({ runeId: result.rune.runeId, rarity: result.rune.rarity });
-       } else {
-          // 무작위 더미
-          const rRune = availableRunes[Math.floor(Math.random() * availableRunes.length)];
-          const rRarity = rarities[Math.floor(Math.random() * 3)]; // 하위 등급 위주
-          items.push({ runeId: rRune.id, rarity: rRarity });
-       }
-    }
-    
-    setRouletteItems(items);
-    setGachaResult(result as any);
     setGachaState('drawing');
-    setStartRouletteAnim(false);
     
-    // DOM 마운트 후 트랜지션 트리거 (3.5초 정지)
-    setTimeout(() => {
-      setStartRouletteAnim(true);
-    }, 50);
-    
-    setTimeout(() => {
-      setGachaState('result');
+    if (count === 1) {
+      // 단일 뽑기: 룰렛 연출
+      const availableRunes = Object.values(SKILL_RUNES);
+      const rarities = ['Common', 'Uncommon', 'Rare', 'Epic', 'Radiant', 'Legendary', 'Mythic'];
+      const items = Array.from({ length: 60 }, () => ({
+        runeId: availableRunes[Math.floor(Math.random() * availableRunes.length)].id,
+        rarity: rarities[Math.floor(Math.random() * 3)]
+      }));
+      setRouletteItems(items);
       setStartRouletteAnim(false);
-    }, 5500); 
+      
+      setTimeout(() => setStartRouletteAnim(true), 50);
+      setTimeout(() => checkResults(currentCount + count), 5500);
+    } else {
+      // 다중 뽑기: 빠른 연출
+      setTimeout(() => checkResults(currentCount + count), 1500);
+    }
+  };
+
+  const checkResults = (expectedTotal: number) => {
+    // 최신 인벤토리에서 새로 추가된 룬들 추출
+    const newRunes = stats.inventoryRunes.slice(prevRuneCount);
+    setGachaResults(newRunes.map(r => ({ runeId: r.runeId, rarity: r.rarity })));
+    setGachaState('result');
+    setStartRouletteAnim(false);
   };
   
   /** 광물별 판매 가격 매핑 */
@@ -163,12 +166,13 @@ function Shop({
               <span className="text-amber-500 text-[10px] md:text-xs uppercase tracking-widest font-black opacity-60">Gold</span>
             </span>
           </div>
-          <button
-            onClick={onClose}
-            className="w-10 h-10 md:w-14 md:h-14 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-rose-500 hover:text-white hover:border-rose-500 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50"
-          >
-            <span className="text-lg md:text-xl font-bold">✕</span>
-          </button>
+            <button
+              onClick={onClose}
+              disabled={gachaState === 'drawing'}
+              className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-emerald-400 hover:text-black hover:border-emerald-400 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span className="text-lg md:text-xl font-bold">✕</span>
+            </button>
         </div>
       </div>
 
@@ -321,8 +325,8 @@ function Shop({
                        />
                     </div>
                     
-                    <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter mb-2 group-hover:text-amber-400 transition-colors">Tier {tierIndex} Extractor</h3>
-                    <p className="text-zinc-500 text-xs md:text-sm mb-6 md:mb-8 font-bold tracking-tight max-w-[240px] opacity-80">Extraction of core energy modules from the {tierIndex === 0 ? 'Earth' : `Dimension ${tierIndex}`}.</p>
+                    <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter mb-2 group-hover:text-amber-400 transition-colors">Tier {tierIndex} Summoner</h3>
+                    <p className="text-zinc-500 text-xs md:text-sm mb-6 md:mb-8 font-bold tracking-tight max-w-[240px] opacity-80">Summoning of core energy modules from the {tierIndex === 0 ? 'Earth' : `Dimension ${tierIndex}`}.</p>
                     
                     {/* 확률표 */}
                     <div className="grid grid-cols-2 gap-2 w-full mb-8 bg-black/40 p-5 rounded-3xl border border-white/5 shadow-inner">
@@ -347,12 +351,20 @@ function Shop({
                       </div>
                     </div>
                     
-                    <button 
-                      onClick={() => performExtraction(tierIndex)} 
-                      className="w-full py-5 bg-linear-to-br from-amber-400 to-amber-600 text-black rounded-2xl md:rounded-3xl font-black text-lg tracking-[0.2em] uppercase transition-all shadow-[0_12px_24px_rgba(217,119,6,0.3)] active:scale-95 focus:outline-none focus:ring-4 focus:ring-amber-500/40 hover:brightness-110 active:translate-y-1"
-                    >
-                      Extract
-                    </button>
+                    <div className="w-full grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={() => performExtraction(tierIndex, 1)} 
+                        className="py-4 bg-linear-to-br from-amber-400 to-amber-600 text-black rounded-2xl font-black text-sm tracking-widest uppercase transition-all shadow-lg active:scale-95 hover:brightness-110"
+                      >
+                        Summon x1
+                      </button>
+                      <button 
+                        onClick={() => performExtraction(tierIndex, 10)} 
+                        className="py-4 bg-zinc-800 border border-amber-500/30 text-amber-500 rounded-2xl font-black text-sm tracking-widest uppercase transition-all shadow-lg active:scale-95 hover:bg-amber-500/10"
+                      >
+                        Summon x10
+                      </button>
+                    </div>
                   </div>
                 )})}
 
@@ -424,14 +436,14 @@ function Shop({
           onClick={() => {
             if (gachaState === 'result') {
               setGachaState('idle');
-              setGachaResult(null);
+              setGachaResults([]);
             }
           }}
         >
           {gachaState === 'drawing' && (
             <div className="flex flex-col items-center w-full max-w-5xl px-0 md:px-8 overflow-hidden relative">
               <p className="mb-10 md:mb-16 text-amber-500 font-black tracking-[0.4em] uppercase text-xl md:text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] animate-pulse">
-                Extracting Sequence...
+                Summoning Sequence...
               </p>
               
               <div className="relative w-full h-[180px] md:h-[240px] flex items-center bg-black/60 rounded-3xl md:rounded-[3rem] border-y-2 border-white/10 overflow-hidden shadow-[inset_0_0_80px_rgba(0,0,0,1)]">
@@ -463,40 +475,37 @@ function Shop({
             </div>
           )}
           
-          {gachaState === 'result' && gachaResult && (
-            <div className="flex flex-col items-center animate-in zoom-in-[0.8] duration-500 ease-out relative">
-              {/* 빛 터지는 효과 배경 */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-linear-to-tr from-transparent via-amber-500/10 to-transparent animate-[spin_10s_linear_infinite] pointer-events-none" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/20 blur-[120px] rounded-full pointer-events-none" />
+          {gachaState === 'result' && gachaResults.length > 0 && (
+            <div className="flex flex-col items-center animate-in zoom-in-[0.8] duration-500 ease-out relative w-full h-full justify-center px-4 overflow-y-auto pt-20 pb-10">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-linear-to-tr from-transparent via-amber-500/5 to-transparent animate-[spin_20s_linear_infinite] pointer-events-none" />
               
-              {gachaResult.isCrit ? (
-                 <div className="mb-10 text-rose-400 font-black text-3xl md:text-5xl tracking-[0.3em] uppercase drop-shadow-[0_0_20px_rgba(244,63,94,0.8)] animate-bounce text-center leading-tight">
-                   Critical<br className="md:hidden" /> Success!
-                 </div>
-              ) : (
-                 <div className="mb-10 text-amber-400 font-black text-2xl md:text-4xl tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(245,158,11,0.8)]">
-                   Acquired
-                 </div>
-              )}
+              <div className="mb-8 md:mb-12 text-amber-400 font-black text-2xl md:text-5xl tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] text-center">
+                Summoning Complete
+              </div>
 
-              <div className="relative z-10 w-48 h-48 md:w-72 md:h-72 shadow-2xl rounded-[3rem] overflow-hidden hover:scale-105 transition-transform duration-500 ring-4 ring-white/10 group cursor-pointer">
-                <SkillRuneIcon 
-                  runeId={gachaResult.rune.runeId} 
-                  rarity={gachaResult.rune.rarity} 
-                  size="w-full h-full"
-                />
+              <div className={`grid ${isMultiDraw ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-1'} gap-4 md:gap-8 max-w-6xl w-full justify-items-center`}>
+                {gachaResults.map((res, idx) => (
+                  <div key={idx} className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700" style={{ animationDelay: `${idx * 100}ms` }}>
+                    <div className="relative w-24 h-24 md:w-40 md:h-40 shadow-2xl rounded-2xl md:rounded-3xl overflow-hidden hover:scale-110 transition-transform duration-300 ring-4 ring-white/5 active:scale-95">
+                      <SkillRuneIcon 
+                        runeId={res.runeId} 
+                        rarity={res.rarity as any} 
+                        size="w-full h-full"
+                      />
+                    </div>
+                    <div className="flex flex-col items-center">
+                       <span className={`px-3 py-1 rounded-full text-[8px] md:text-[10px] font-black tracking-widest uppercase border backdrop-blur-md mb-1 ${rarityColors[res.rarity] || 'text-white border-white'}`}>
+                        {res.rarity}
+                      </span>
+                      <span className="text-xs md:text-sm font-black text-white/90 text-center drop-shadow-md truncate max-w-[120px]">
+                        {SKILL_RUNES[res.runeId]?.name.split(' ')[0]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
               
-              <div className="mt-12 flex flex-col items-center gap-3 relative z-10">
-                <span className={`px-6 py-2 rounded-full text-xs md:text-sm font-black tracking-widest uppercase border backdrop-blur-md shadow-xl ${rarityColors[gachaResult.rune.rarity] || 'text-white border-white'}`}>
-                  {gachaResult.rune.rarity} Class
-                </span>
-                <span className="text-4xl md:text-5xl font-black text-white px-8 text-center drop-shadow-2xl mt-4">
-                  {SKILL_RUNES[gachaResult.rune.runeId]?.name || 'Unknown Energy'}
-                </span>
-              </div>
-              
-              <div className="mt-20 text-zinc-500 font-bold tracking-[0.5em] uppercase text-xs md:text-sm animate-pulse cursor-pointer">
+              <div className="mt-16 md:mt-24 text-zinc-500 font-bold tracking-[0.5em] uppercase text-xs md:text-sm animate-pulse cursor-pointer">
                 - Tap anywhere to continue -
               </div>
             </div>

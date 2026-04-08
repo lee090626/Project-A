@@ -92,18 +92,23 @@ function StatusWindow({ stats, onClose, onUnequipRune, onEquipArtifact }: Status
 
           <div className="bg-[#252526] p-4 md:p-5 rounded-xl md:rounded-2xl border border-zinc-800 flex flex-col gap-3">
             {[
-              { label: 'Total Power', value: finalPower },
-              { label: 'Max HP', value: stats.maxHp },
-              { label: 'Crit Rate', value: `${(finalCritRate * 100).toFixed(1)}%` },
-              { label: 'Crit Damage', value: `${(finalCritDmg * 100).toFixed(0)}%` },
-              { label: 'Mining Speed', value: `${finalMiningInterval}ms` },
+              { label: 'Total Power', value: finalPower, bonus: runePowerBonus, color: 'text-emerald-400' },
+              { label: 'Max HP', value: stats.maxHp, color: 'text-rose-400' },
+              { label: 'Crit Rate', value: `${(finalCritRate * 100).toFixed(1)}%`, bonus: runeCritRate > 0 ? `(${(runeCritRate * 100).toFixed(1)}%)` : null, color: 'text-emerald-400' },
+              { label: 'Crit Damage', value: `${(finalCritDmg * 100).toFixed(0)}%`, bonus: runeCritDmg > 0 ? `(+${(runeCritDmg * 100).toFixed(0)}%)` : null, color: 'text-emerald-400' },
+              { label: 'Mining Speed', value: `${finalMiningInterval}ms`, bonus: runeSpeedBonus > 0 ? `(-${(runeSpeedBonus * 100).toFixed(0)}%)` : null, color: 'text-emerald-400' },
             ].map((stat, i) => (
               <div key={i} className="flex justify-between items-center group">
                 <div className="text-[11px] font-bold text-zinc-400 tracking-tight">
                   {stat.label}
                 </div>
-                <div className="text-sm font-black text-emerald-400 tabular-nums">
+                <div className={`text-sm font-black ${stat.color} tabular-nums flex items-center gap-1.5`}>
                   {stat.value}
+                  {stat.bonus && stat.bonus !== 0 && (
+                    <span className="text-[10px] text-blue-400 font-bold">
+                      {typeof stat.bonus === 'number' ? `(+${stat.bonus})` : stat.bonus}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
@@ -115,16 +120,21 @@ function StatusWindow({ stats, onClose, onUnequipRune, onEquipArtifact }: Status
           
           <div className="bg-[#252526] p-4 md:p-5 rounded-xl md:rounded-2xl border border-zinc-800 flex flex-col gap-3">
             {[
-              { label: 'Move Speed', value: `${(finalMoveSpeedMult * 100).toFixed(0)}%` },
-              { label: 'Luck (Drop Bonus)', value: `+${(finalLuck * 100).toFixed(0)}%` },
+              { label: 'Move Speed', value: `${(finalMoveSpeedMult * 100).toFixed(0)}%`, bonus: runeMoveSpeed > 0 ? `(+${runeMoveSpeed}%)` : null },
+              { label: 'Luck (Drop Bonus)', value: `+${(finalLuck * 100).toFixed(0)}%`, bonus: runeLuck > 0 ? `(+${(runeLuck * 100).toFixed(0)}%)` : null },
               { label: 'Gold Bonus', value: `+${((finalGoldBonus - 1) * 100).toFixed(0)}%` },
             ].map((stat, i) => (
               <div key={i} className="flex justify-between items-center group">
                 <div className="text-[11px] font-bold text-zinc-400 tracking-tight">
                   {stat.label}
                 </div>
-                <div className="text-sm font-black text-[#eab308] tabular-nums">
+                <div className="text-sm font-black text-[#eab308] tabular-nums flex items-center gap-1.5">
                   {stat.value}
+                  {stat.bonus && (
+                    <span className="text-[10px] text-blue-400 font-bold">
+                      {stat.bonus}
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
