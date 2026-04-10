@@ -41,6 +41,12 @@ export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string
   
   let totalPower = stats.power + drillPower + masteryBonus + Math.floor(runeAttackBonus) + researchBonuses.power;
   
+  // 상태 이상에 따른 위력 변조 (BUFF_POWER: 1.5배, WEAKEN: 0.7배)
+  if (stats.activeEffects) {
+    if (stats.activeEffects.some(e => e.type === 'BUFF_POWER')) totalPower = Math.floor(totalPower * 1.5);
+    if (stats.activeEffects.some(e => e.type === 'WEAKEN')) totalPower = Math.floor(totalPower * 0.7);
+  }
+  
   let isCrit = false;
   if (Math.random() < critRate) {
     totalPower = Math.floor(totalPower * critDamage);

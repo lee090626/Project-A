@@ -9,17 +9,32 @@ import { PlayerStats } from '../types/game';
 interface GameState {
   /** 플레이어 통계 및 진행 상태 */
   stats: PlayerStats | null;
-  /** 스토어 데이터 업데이트 (워커로부터 수신) */
+  /** 게임 설정 (화면 흔들림 등) */
+  settings: {
+    screenShake: boolean;
+    highPerformance: boolean;
+  };
+  /** 통계 데이터 업데이트 */
   updateStats: (stats: Partial<PlayerStats>) => void;
+  /** 설정 업데이트 */
+  updateSettings: (settings: Partial<GameState['settings']>) => void;
   /** 초기 데이터 설정 */
   setStats: (stats: PlayerStats) => void;
 }
 
 export const useGameStore = create<GameState>((set) => ({
   stats: null,
+  settings: {
+    screenShake: true,
+    highPerformance: false,
+  },
   
   updateStats: (newStats) => set((state) => ({
     stats: state.stats ? { ...state.stats, ...newStats } : (newStats as PlayerStats),
+  })),
+
+  updateSettings: (newSettings) => set((state) => ({
+    settings: { ...state.settings, ...newSettings }
   })),
 
   setStats: (stats) => set({ stats }),

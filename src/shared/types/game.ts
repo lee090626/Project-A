@@ -291,12 +291,14 @@ export interface PlayerStats {
 
   /** [상태 이상] 현재 적용 중인 상태 효과 목록 */
   activeEffects?: ActiveEffect[];
+  /** [튜토리얼] 이미 트리거된 가이드 ID 목록 */
+  tutorialFlags?: Record<string, boolean>;
 }
 
 /**
  * 상태 이상의 종류를 정의합니다.
  */
-export type StatusType = 'STUN' | 'SLOW' | 'BURN' | 'FREEZE' | 'POISON' | 'BUFF_POWER' | 'BUFF_SPEED';
+export type StatusType = 'STUN' | 'SLOW' | 'BURN' | 'FREEZE' | 'POISON' | 'BUFF_POWER' | 'BUFF_SPEED' | 'WEAKEN' | 'SHIELD' | 'LUCKY' | 'INVINCIBLE';
 
 /**
  * 활성화된 캐릭터 상태 효과 정보입니다.
@@ -304,6 +306,8 @@ export type StatusType = 'STUN' | 'SLOW' | 'BURN' | 'FREEZE' | 'POISON' | 'BUFF_
 export interface ActiveEffect {
   /** 효과 종류 */
   type: StatusType;
+  /** 효과 시작 시간 */
+  startTime: number;
   /** 효과 종료 시간 (Date.now() 기준 타임스탬프) */
   endTime: number;
   /** 효과의 강도나 수치 (옵션) */

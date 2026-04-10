@@ -10,7 +10,8 @@ export function useGameWorker(
   setIsEngineReady: (ready: boolean) => void,
   isReadyRef: React.MutableRefObject<boolean>,
   loadAssetsAndTransfer: (sendToWorker: (type: string, payload?: any, transfer?: Transferable[]) => void) => void,
-  handleTravelDimension: () => void
+  handleTravelDimension: () => void,
+  handleOpenGuide: (target: any) => void
 ) {
   const workerRef = useRef<Worker | null>(null);
 
@@ -68,6 +69,9 @@ export function useGameWorker(
         }
       } else if (type === 'DIMENSION_TRAVEL_COMPLETE') {
         alert(`Dimension ${payload.dimension}에 도착했습니다!`);
+      } else if (type === 'TUTORIAL_TRIGGER') {
+        // 워커로부터 튜토리얼 발생 신호를 받으면 가이드 창을 엶
+        handleOpenGuide('isGuideOpen');
       }
     };
 
