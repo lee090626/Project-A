@@ -28,6 +28,7 @@ export default function GameEngine() {
 
   // Zustand 스토어 상태 구독
   const stats = useGameStore((state) => state.stats);
+  const { screenShake } = useGameStore((state) => state.settings);
 
   // 트리플 버퍼링 및 보간(Lerp) 관련 Ref
   const snapshots = useRef<{ time: number, data: Float32Array }[]>([]);
@@ -96,7 +97,8 @@ export default function GameEngine() {
     setIsEngineReady,
     isReadyRef,
     loadAssetsAndTransfer,
-    handleTravelDimension
+    handleTravelDimension,
+    handleOpen
   );
 
   useEffect(() => {
@@ -152,7 +154,7 @@ export default function GameEngine() {
         
         worldRef.current.player.visualPos.x = interpolatedState.current.x;
         worldRef.current.player.visualPos.y = interpolatedState.current.y;
-        worldRef.current.shake = interpolatedState.current.shake;
+        worldRef.current.shake = screenShake ? interpolatedState.current.shake : 0;
         
         updateUi();
       }

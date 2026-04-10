@@ -11,6 +11,7 @@ import { effectSystem } from '@/features/game/ecs/systems/effectSystem';
 import { renderSystem } from '@/features/game/ecs/systems/renderSystem';
 import { statusSystem } from '@/features/game/ecs/systems/statusSystem';
 import { orosAiSystem } from '@/features/game/ecs/systems/orosAiSystem';
+import { tutorialSystem } from '@/features/game/ecs/systems/tutorialSystem';
 import * as PIXI from 'pixi.js';
 import { TILE_SIZE } from '@/shared/config/constants';
 
@@ -109,6 +110,7 @@ export class GameLoop {
       orosAiSystem(this.world, now);
       combatSystem(this.world, deltaTime, now);
       effectSystem(this.world, deltaTime);
+      tutorialSystem(this.world);
 
       // 2. 렌더링 호출
       if (this.pixiApp && this.layers) {

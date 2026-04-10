@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useGameStore } from '@/shared/lib/store';
 
 /**
  * 설정 컴포넌트의 Props 인터페이스입니다.
@@ -38,34 +39,28 @@ export default function Settings({
   onImport,
   onRegenerateWorld,
 }: SettingsProps) {
-  const [screenShake, setScreenShake] = useState(true);
-  const [highPerformance, setHighPerformance] = useState(false);
+  const { screenShake, highPerformance } = useGameStore((state) => state.settings);
+  const updateSettings = useGameStore((state) => state.updateSettings);
 
-  // 로컬 스토리지에서 저장된 설정 로드
+  // 로컬 스토리지에서 처음 설정 로드 (Store 초기화)
   useEffect(() => {
     const saved = localStorage.getItem('drilling-game-settings');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.screenShake !== undefined)
-          setScreenShake(parsed.screenShake);
-        if (parsed.highPerformance !== undefined)
-          setHighPerformance(parsed.highPerformance);
+        updateSettings(parsed);
       } catch (e) {
         console.error('설정을 불러오는데 실패했습니다.', e);
       }
     }
-  }, []);
+  }, [updateSettings]);
 
   /**
-   * 변경된 설정을 로컬 스토리지에 저장합니다.
+   * 변경된 설정을 저장하고 스토어를 업데이트합니다.
    */
-  const saveSettings = (updates: Partial<GameSettings>) => {
-    const current: GameSettings = {
-      screenShake,
-      highPerformance,
-      ...updates,
-    };
+  const saveAndSync = (updates: Partial<GameSettings>) => {
+    updateSettings(updates);
+    const current = { screenShake, highPerformance, ...updates };
     localStorage.setItem('drilling-game-settings', JSON.stringify(current));
   };
 
@@ -158,8 +153,7 @@ export default function Settings({
                 subLabel="In-game camera vibration effects"
                 active={screenShake}
                 onToggle={() => {
-                  setScreenShake(!screenShake);
-                  saveSettings({ screenShake: !screenShake });
+                  saveAndSync({ screenShake: !screenShake });
                 }}
               />
               <Toggle
@@ -167,8 +161,7 @@ export default function Settings({
                 subLabel="Unlock maximum frame rate"
                 active={highPerformance}
                 onToggle={() => {
-                  setHighPerformance(!highPerformance);
-                  saveSettings({ highPerformance: !highPerformance });
+                  saveAndSync({ highPerformance: !highPerformance });
                 }}
               />
             </div>

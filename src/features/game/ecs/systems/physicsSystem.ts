@@ -33,7 +33,15 @@ export const physicsSystem = (world: GameWorld, now: number) => {
   const baseSpeedStat = player.stats.moveSpeed || 100;
   const baseSpeedMult = (baseSpeedStat / 100) * researchBonuses.moveSpeed;
   const drillSpeedMult = drill.moveSpeedMult || 1;
-  const divisor = (baseSpeedMult * drillSpeedMult + runeSpeedMult) || 1;
+  
+  // 상태 이상에 따른 속도 변조 (SLOW: 0.5배, BUFF_SPEED: 1.5배)
+  let statusSpeedMult = 1.0;
+  if (player.stats.activeEffects) {
+    if (player.stats.activeEffects.some(e => e.type === 'SLOW')) statusSpeedMult *= 0.5;
+    if (player.stats.activeEffects.some(e => e.type === 'BUFF_SPEED')) statusSpeedMult *= 1.5;
+  }
+
+  const divisor = (baseSpeedMult * drillSpeedMult * statusSpeedMult + runeSpeedMult) || 1;
   const MOVEMENT_DELAY = MOVEMENT_DELAY_MS / divisor; 
   
   // 시각적 보간 속도 설정: 이동 속도가 빠를수록 보간도 빠르게 처리하여 밀림 방지
