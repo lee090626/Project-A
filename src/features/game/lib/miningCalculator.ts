@@ -1,7 +1,7 @@
 import { PlayerStats } from '@/shared/types/game';
 import { DRILLS } from '@/shared/config/drillData';
 import { MINERALS } from '@/shared/config/mineralData';
-import { getMasteryMultiplier, createInitialMasteryState } from '@/shared/lib/masteryUtils';
+import { getMasteryMultiplier, createInitialMasteryState, getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { getResearchBonuses } from '@/shared/lib/researchUtils';
 
