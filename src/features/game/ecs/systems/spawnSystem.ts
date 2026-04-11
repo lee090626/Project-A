@@ -11,41 +11,55 @@ export const spawnSystem = (world: GameWorld) => {
   // 현재 서클 설정 가져오기
   const config = getCircleConfig(player.stats.depth);
   
-  // 보스 소환 체크
+  // 보스 소환 체크 (해당 서클 내 랜덤 위치 결정론적 생성)
   if (config.boss) {
-    const bossDepth = config.depthStart + (config.boss.spawnLayer * 10);
-    // 보스 층 근처 (±20 깊이) 접근 시 보스 엔티티 로드
-    if (player.stats.depth > bossDepth - 20 && player.stats.depth <= bossDepth + 5) {
-      const bossId = config.boss.id;
-      const isKilled = player.stats.killedMonsterIds?.includes(bossId);
+    const bossId = config.boss.id;
+    const isKilled = player.stats.killedMonsterIds?.includes(bossId);
+    
+    if (!isKilled && !entities.hasId(bossId)) {
+      // 보스 위치 결정론적 계산 (시드 + 보스ID 해시)
+      const seed = world.player.stats.mapSeed || 12345;
+      const hash = (str: string) => {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+        return Math.abs(h);
+      };
       
-      if (!isKilled && !entities.hasId(bossId)) {
-          const MONSTER_LIST = require('@/shared/config/monsterData').MONSTER_LIST;
-          const defIdx = MONSTER_LIST.findIndex((m: any) => m.id === bossId);
-          
-          if (defIdx !== -1) {
-              const bossDef = MONSTER_LIST[defIdx];
-              entities.create(
-                  2, // type: boss
-                  15 * TILE_SIZE - (2 * TILE_SIZE), // 중앙 정렬 (폭 고려)
-                  bossDepth * TILE_SIZE, 
-                  bossId,
-                  defIdx
-              );
-              
-              const idx = entities.soa.count - 1;
-              entities.soa.hp[idx] = bossDef.stats.maxHp;
-              entities.soa.maxHp[idx] = bossDef.stats.maxHp;
-              entities.soa.attack[idx] = bossDef.stats.power;
-              entities.soa.attackCooldown[idx] = bossDef.stats.attackCooldown ?? 2500;
-              entities.soa.width[idx] = TILE_SIZE * 5; // 보스는 크게
-              entities.soa.height[idx] = TILE_SIZE * 5;
-              
-              // 조우 기록
-              if (!player.stats.encounteredBossIds.includes(bossId)) {
-                  player.stats.encounteredBossIds.push(bossId);
-              }
-          }
+      const bossHash = hash(bossId + seed);
+      const circleHeight = config.depthEnd - config.depthStart;
+      
+      // 서클의 10% ~ 90% 깊이 사이에서 랜덤 스폰
+      const spawnY = config.depthStart + Math.floor((bossHash % 100) / 100 * (circleHeight * 0.8) + (circleHeight * 0.1));
+      const spawnX = Math.floor((bossHash / 100 % 100) / 100 * 20) + 5; // 5~25 사이 랜덤 X
+      
+      // 보스 근처 접근 시 소환
+      const distY = Math.abs(player.stats.depth - spawnY);
+      if (distY < 15) {
+        const MONSTER_LIST = require('@/shared/config/monsterData').MONSTER_LIST;
+        const defIdx = MONSTER_LIST.findIndex((m: any) => m.id === bossId);
+        
+        if (defIdx !== -1) {
+            const bossDef = MONSTER_LIST[defIdx];
+            entities.create(
+                2, // type: boss
+                spawnX * TILE_SIZE - (2 * TILE_SIZE), 
+                spawnY * TILE_SIZE, 
+                bossId,
+                defIdx
+            );
+            
+            const idx = entities.soa.count - 1;
+            entities.soa.hp[idx] = bossDef.stats.maxHp;
+            entities.soa.maxHp[idx] = bossDef.stats.maxHp;
+            entities.soa.attack[idx] = bossDef.stats.power;
+            entities.soa.attackCooldown[idx] = bossDef.stats.attackCooldown ?? 2500;
+            entities.soa.width[idx] = TILE_SIZE * 5;
+            entities.soa.height[idx] = TILE_SIZE * 5;
+            
+            if (!player.stats.encounteredBossIds.includes(bossId)) {
+                player.stats.encounteredBossIds.push(bossId);
+            }
+        }
       }
     }
   }
