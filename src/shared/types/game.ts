@@ -31,6 +31,36 @@ export type TileType =
   | 'gold_ingot'      // 가공된 금 주괴
   | 'polished_diamond'; // 가공된 다이아몬드
 
+/** 타일 타입-ID 매핑 (저장 및 비트 패킹용) */
+export const TILE_TYPE_TO_ID: Record<string, number> = {
+  empty: 0,
+  dirt: 1,
+  stone: 2,
+  coal: 3,
+  iron: 4,
+  gold: 5,
+  diamond: 6,
+  emerald: 7,
+  ruby: 8,
+  sapphire: 9,
+  uranium: 10,
+  obsidian: 11,
+  lava: 12,
+  dungeon_bricks: 13,
+  boss_core: 14,
+  monster_nest: 15,
+  monster: 16,
+  wall: 17,
+  portal: 18,
+  boss_skin: 19,
+};
+
+/** ID-타일 타입 역매핑 */
+export const ID_TO_TILE_TYPE: Record<number, TileType> = Object.entries(TILE_TYPE_TO_ID).reduce((acc, [key, value]) => {
+  acc[value] = key as TileType;
+  return acc;
+}, {} as Record<number, TileType>);
+
 /**
  * 타일 객체의 구조를 정의합니다.
  */

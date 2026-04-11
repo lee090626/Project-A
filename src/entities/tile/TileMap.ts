@@ -1,22 +1,22 @@
-import { Tile, TileType, Entity } from '@/shared/types/game';
+import { Tile, TileType, Entity, TILE_TYPE_TO_ID, ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { getMineralStats } from '@/shared/lib/tileUtils';
 import { BASE_DEPTH } from '@/shared/config/constants';
 import { getDimensionConfig } from '@/shared/config/dimensionData';
 import { MONSTERS } from '@/shared/config/monsterData';
 import { BOSSES } from '@/shared/config/bossData';
 
-/** 맵의 최대 높이 (타일 단위) */
+/** Max map height (tiles) */
 export const MAP_HEIGHT = 1550;
-/** 맵의 가로 너비 (중심 0 기준 좌우 150칸) */
-export const MAP_WIDTH = 301; // 원점 포함하여 홀수로 맞춤 (-150 ~ +150)
+/** Map width (centered at 0, spans 150 tiles left/right) */
+export const MAP_WIDTH = 301; // odd number including origin (-150 to +150)
 export const HALF_WIDTH = 150;
 
-/** 비트 마스크 및 시프트 상수 */
-const TYPE_MASK = 0xFF; // 하위 8비트: 타입 ID
+/** Bit masks and shift constants */
+const TYPE_MASK = 0xFF; // Lower 8 bits: Tile Type ID
 const HP_BITS = 8;
-const HP_MASK = 0xFFFF; // 다음 16비트: 체력
-const GEN_FLAG = 1 << 24; // 24번 비트: 생성 여부 (Generated)
-const MOD_FLAG = 1 << 25; // 25번 비트: 수정 여부 (Modified)
+const HP_MASK = 0xFFFF; // Next 16 bits: Health
+const GEN_FLAG = 1 << 24; // Bit 24: Generated flag
+const MOD_FLAG = 1 << 25; // Bit 25: Modified flag
 
 /**
  * [초고최적화 버전] TileMap 클래스
@@ -198,7 +198,7 @@ export class TileMap {
     return null;
   }
 
-  /** 수정된 타일만 추출하여 저장 최적화 */
+  /** [Legacy] Extract modified tiles for JSON storage */
   serialize(): Record<string, [number, number]> {
     const result: Record<string, [number, number]> = {};
     for (const i of this.modifiedIndices) {
@@ -215,6 +215,37 @@ export class TileMap {
   }
 
   /**
+   * [고속 직렬화] 수정된 타일 맵 데이터를 압축된 Uint32Array로 반환합니다. 
+   * 포맷: [Version, MapWidth, DataCount, Reserved, index1, packed1, index2, packed2, ...]
+   */
+  serializeToBuffer(): Uint32Array {
+    let modCount = 0;
+    for (const i of this.modifiedIndices) {
+      if (this.data[i] & MOD_FLAG) modCount++;
+    }
+
+    const HEADER_SIZE = 4;
+    const buffer = new Uint32Array(HEADER_SIZE + modCount * 2);
+
+    // 헤더 작성
+    buffer[0] = 1; // Version
+    buffer[1] = MAP_WIDTH;
+    buffer[2] = modCount;
+    buffer[3] = 0; // Reserved
+
+    let ptr = HEADER_SIZE;
+    for (const i of this.modifiedIndices) {
+      const packed = this.data[i];
+      if (packed & MOD_FLAG) {
+        buffer[ptr++] = i;
+        buffer[ptr++] = packed;
+      }
+    }
+
+    return buffer;
+  }
+
+  /**
    * 타일 데이터를 완전히 초기화합니다. (차원 이동 시 사용)
    * @param newSeed 새로운 월드 시드
    * @param newDimension 새로운 차원 번호
@@ -226,6 +257,7 @@ export class TileMap {
     this.modifiedIndices.clear();
   }
 
+  /** [Legacy] 객체 형태의 타일 데이터를 복원합니다. */
   deserialize(data: any, seed?: number, dimension?: number): void {
     if (seed !== undefined) this.seed = seed;
     if (dimension !== undefined) this.dimension = dimension;
@@ -238,41 +270,55 @@ export class TileMap {
       const idx = this.getIndex(x, y);
       if (idx !== -1) {
         const [typeId, health] = tileData;
-        // GEN_FLAG와 MOD_FLAG 모두 설정
         const packed = (typeId & TYPE_MASK) | ((health & HP_MASK) << HP_BITS) | GEN_FLAG | MOD_FLAG;
         this.data[idx] = packed;
         this.modifiedIndices.add(idx);
       }
     }
   }
+
+  /**
+   * [Fast Restoration] Reconstruct tilemap from buffer.
+   * Remaps indices if MAP_WIDTH has changed since saving.
+   */
+  deserializeFromBuffer(buffer: ArrayBuffer, seed?: number, dimension?: number): void {
+    if (seed !== undefined) this.seed = seed;
+    if (dimension !== undefined) this.dimension = dimension;
+    
+    this.data.fill(0);
+    this.modifiedIndices.clear();
+    
+    if (!buffer || buffer.byteLength === 0) return;
+
+    const data32 = new Uint32Array(buffer);
+    const HEADER_SIZE = 4;
+    
+    if (data32.length < HEADER_SIZE) return;
+
+    const version = data32[0];
+    const savedMapWidth = data32[1];
+    const dataCount = data32[2];
+    
+    const savedHalfWidth = Math.floor(savedMapWidth / 2);
+
+    let ptr = HEADER_SIZE;
+    for (let i = 0; i < dataCount; i++) {
+      if (ptr >= data32.length) break;
+      
+      const savedIndex = data32[ptr++];
+      const packed = data32[ptr++];
+
+      let targetIndex = savedIndex;
+      if (savedMapWidth !== MAP_WIDTH) {
+        const x = (savedIndex % savedMapWidth) - savedHalfWidth;
+        const y = Math.floor(savedIndex / savedMapWidth);
+        targetIndex = this.getIndex(x, y);
+      }
+
+      if (targetIndex !== -1) {
+        this.data[targetIndex] = packed;
+        this.modifiedIndices.add(targetIndex);
+      }
+    }
+  }
 }
-
-/** 타일 타입-ID 매핑 (저장 및 비트 패킹용) */
-const TILE_TYPE_TO_ID: Record<string, number> = {
-  empty: 0,
-  dirt: 1,
-  stone: 2,
-  coal: 3,
-  iron: 4,
-  gold: 5,
-  diamond: 6,
-  emerald: 7,
-  ruby: 8,
-  sapphire: 9,
-  uranium: 10,
-  obsidian: 11,
-  lava: 12,
-  dungeon_bricks: 13,
-  boss_core: 14,
-  monster_nest: 15,
-  monster: 16,
-  wall: 17,
-  portal: 18,
-  boss_skin: 19,
-};
-
-/** 역매핑 리스트 */
-const ID_TO_TILE_TYPE: Record<number, TileType> = Object.entries(TILE_TYPE_TO_ID).reduce((acc, [key, value]) => {
-  acc[value] = key as TileType;
-  return acc;
-}, {} as Record<number, TileType>);
