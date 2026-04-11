@@ -3,6 +3,7 @@ import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE, BASE_DEPTH, CAMERA_SCALE } from '@/shared/config/constants';
 import { renderEntities } from './entityRenderer';
 import { createHitFlashFilter, createRadialLightMask } from '../../lib/pixiEffects';
+import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 
 // Tile sprite cache (coordinate key -> Sprite)
 const tileSpriteCache = new Map<string, PIXI.Sprite>();
@@ -116,7 +117,9 @@ function updateParticlesAndTexts(world: GameWorld, layers: any) {
   const { particles, floatingTexts } = world;
 
   // Particles
-  particles.forEach((p, i) => {
+  const pPool = world.particlePool.getPool();
+  for (let i = 0; i < pPool.length; i++) {
+    const p = pPool[i];
     let sprite = activeParticleSprites.get(p);
     if (p.active) {
       if (!sprite) {
@@ -133,10 +136,12 @@ function updateParticlesAndTexts(world: GameWorld, layers: any) {
       particleSpritePool.push(sprite);
       activeParticleSprites.delete(p);
     }
-  });
+  }
 
   // Floating Texts
-  floatingTexts.forEach((ft, i) => {
+  const ftPool = world.floatingTextPool.getPool();
+  for (let i = 0; i < ftPool.length; i++) {
+    const ft = ftPool[i];
     let sprite = activeTextSprites.get(ft);
     if (ft.active) {
       const isCrit = ft.text.includes('Crit');
@@ -189,7 +194,7 @@ function updateParticlesAndTexts(world: GameWorld, layers: any) {
       textSpritePool.push(sprite);
       activeTextSprites.delete(ft);
     }
-  });
+  }
 }
 
 function updateMiningTarget(world: GameWorld, layers: any) {
@@ -254,42 +259,45 @@ const itemSpriteMap = new Map<number, PIXI.Sprite>();
 
 function updateDroppedItems(world: GameWorld, layers: any, textures: any) {
   const { effectLayer } = layers;
-  const { droppedItems } = world;
+  const dp = world.droppedItemPool;
   
-  const currentItemIds = new Set(droppedItems.map(item => (item as any).id || (item.x + item.y)));
+  // Track currently active IDs from pool for sync
+  const activeIds = new Set<number>();
+  for (let i = 0; i < dp.capacity; i++) {
+    if (dp.active[i]) {
+      const id = (dp.generation[i] << 16) | i;
+      activeIds.add(id);
+      
+      let sprite = itemSpriteMap.get(id);
+      if (!sprite) {
+        const type = ID_TO_TILE_TYPE[dp.typeId[i]];
+        const texture = textures[`${type}_icon`] || textures[`item_${type}`] || textures[type] || PIXI.Texture.WHITE;
+        sprite = new PIXI.Sprite(texture);
+        sprite.anchor.set(0.5, 0.5);
+        const itemSize = TILE_SIZE * 0.5;
+        sprite.width = itemSize;
+        sprite.height = itemSize;
+        effectLayer.addChild(sprite);
+        itemSpriteMap.set(id, sprite);
+      }
+      sprite.position.set(dp.x[i], dp.y[i]);
+    }
+  }
 
+  // Remove sprites for inactive IDs
   for (const [id, sprite] of itemSpriteMap.entries()) {
-    if (!currentItemIds.has(id)) {
+    if (!activeIds.has(id)) {
       effectLayer.removeChild(sprite);
       sprite.destroy();
       itemSpriteMap.delete(id);
     }
   }
-
-  droppedItems.forEach(item => {
-    const id = (item as any).id || (item.x + item.y);
-    let sprite = itemSpriteMap.get(id);
-    
-    if (!sprite) {
-      // Texture lookup (multi-pattern support)
-      const texture = textures[`${item.type}_icon`] || textures[`item_${item.type}`] || textures[item.type] || PIXI.Texture.WHITE;
-      sprite = new PIXI.Sprite(texture);
-      sprite.anchor.set(0.5, 0.5);
-      const itemSize = TILE_SIZE * 0.5;
-      sprite.width = itemSize;
-      sprite.height = itemSize;
-      effectLayer.addChild(sprite);
-      itemSpriteMap.set(id, sprite);
-    }
-    
-    sprite.position.set(item.x, item.y);
-  });
 }
 
 function updateLighting(world: GameWorld, layers: any, app: PIXI.Application, now: number, lightingFilter: any) {
   if (!lightingFilter) return;
 
-  const { player, droppedItems } = world;
+  const { player } = world;
   const lights: number[] = [];
   
   // 1. Player light
@@ -302,11 +310,15 @@ function updateLighting(world: GameWorld, layers: any, app: PIXI.Application, no
   );
 
   // 2. Environmental lights
-  droppedItems.forEach(item => {
-    if (lights.length < 64 && (item.type === 'iron' || item.type === 'gold')) {
-        lights.push(item.x, item.y, TILE_SIZE * 2, 0.5);
+  const dp = world.droppedItemPool;
+  for (let i = 0; i < dp.capacity; i++) {
+    if (dp.active[i] && lights.length < 64) {
+      const type = ID_TO_TILE_TYPE[dp.typeId[i]];
+      if (type === 'iron' || type === 'gold') {
+        lights.push(dp.x[i], dp.y[i], TILE_SIZE * 2, 0.5);
+      }
     }
-  });
+  }
 
   const depthFactor = Math.min(1.0, player.stats.depth / 800);
   const darkness = 0.45 + (depthFactor * 0.5);

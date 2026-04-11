@@ -13,8 +13,12 @@ export interface SaveData {
   stats: PlayerStats;
   /** 플레이어 현재 위치 */
   position: Position;
-  /** 변경된 타일 맵 데이터 */
-  tileMap: Record<string, [number, number]>;
+  /** (Legacy) 구버전 호환용 타일 맵 데이터 */
+  tileMap?: Record<string, [number, number]>;
+  /** (New) Buffer를 Base64로 인코딩한 타일 맵 데이터 */
+  tileMapData?: string;
+  /** (Memory) 저장 직전 워커로부터 전달받는 버퍼 (저장 전 인코딩용, 실제 디스크에는 기록불가) */
+  tileMapBuffer?: Uint32Array;
 }
 
 const SAVE_KEY = 'drilling-game-save';
@@ -73,6 +77,17 @@ export const saveManager = {
    */
   save(data: SaveData) {
     try {
+      // Buffer가 존재할 경우 Base64 문자열로 인코딩
+      if (data.tileMapBuffer) {
+        const bytes = new Uint8Array(data.tileMapBuffer.buffer);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        data.tileMapData = btoa(binary);
+        delete data.tileMapBuffer; // 디스크에 저장 불필요
+      }
+      
       const json = JSON.stringify(data);
       const obfuscatedStr = obfuscate(json);
       localStorage.setItem(SAVE_KEY, obfuscatedStr);
@@ -136,6 +151,16 @@ export const saveManager = {
    * @returns 난독화된 세이브 문자열
    */
   export(data: SaveData): string {
+    // Buffer가 존재할 경우 Base64 문자열로 인코딩하여 외부용 텍스트 코드로 만듦
+    if (data.tileMapBuffer) {
+      const bytes = new Uint8Array(data.tileMapBuffer.buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      data.tileMapData = btoa(binary);
+      delete data.tileMapBuffer;
+    }
     return obfuscate(JSON.stringify(data));
   },
 
