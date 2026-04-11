@@ -79,6 +79,49 @@ export class GameLoop {
     this.isRunning = false;
   }
 
+  /**
+   * [v4 Protocol] 차원 이동 및 월드 리셋을 위한 안전 시퀀스
+   */
+  public async safeReset(newSeed: number, nextDim: number) {
+    // 1. Pause
+    this.isRunning = false;
+    console.log('[GameLoop] Reset sequence started. Loop paused.');
+
+    // 2. Flush (최종 UI 상태 동기화)
+    self.postMessage({
+      type: 'SYNC_UI',
+      payload: {
+        stats: this.world.player.stats,
+        ui: this.world.ui,
+      }
+    });
+
+    // 약간의 딜레이를 주어 메시지가 전송될 시간을 확보 (필요 시)
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    // 3. Clear (풀 비우기)
+    this.world.particlePool.getPool().forEach(p => p.active = false);
+    this.world.floatingTextPool.getPool().forEach(f => f.active = false);
+    this.world.droppedItemPool.clear();
+    this.world.entities.clear(); // [v4] Protocol: Reuse instance, just clear data
+    this.world.spawnedCoords.clear();
+
+    // 4. Reset (타일맵 리셋)
+    this.world.tileMap.reset(newSeed, nextDim);
+    
+    // 플레이어 위치 초기화
+    this.world.player.pos = { x: 15, y: 8 };
+    this.world.player.visualPos = { x: 15, y: 8 };
+    this.world.player.stats.depth = 0;
+
+    console.log('[GameLoop] World reset complete.');
+
+    // 5. Resume
+    this.isRunning = true;
+    this.lastLoopTime = performance.now();
+    this.loop(this.lastLoopTime);
+  }
+
   private loop = (now: number) => {
     if (!this.isRunning) return;
 
@@ -125,6 +168,10 @@ export class GameLoop {
           payload: {
             stats: this.world.player.stats,
             ui: this.world.ui,
+            // Optimization Monitoring
+            metrics: {
+              blockedDrops: this.world.droppedItemPool.blockedDropCount
+            }
           }
         });
       }
@@ -152,7 +199,7 @@ export class GameLoop {
         view[5] = this.world.player.stats.hp;
         view[6] = this.world.player.stats.maxHp;
 
-        // Body 패킹
+        // Body 패킹 (Dirty Sync 적용)
         const ENTITY_STRIDE = 8;
         let offset = HEADER_SIZE;
         const { soa } = this.world.entities;
@@ -160,6 +207,14 @@ export class GameLoop {
         for (let i = 0; i < visibleIndices.length; i++) {
           const idx = visibleIndices[i];
           if (offset + ENTITY_STRIDE > view.length) break;
+
+          // Note: Viewport에 들어오는 것만으로도 Dirty로 간주하여 싱크를 맞출 수도 있지만,
+          // 여기서는 성능을 위해 Simulation 레이어에서 마킹한 dirtyFlags만 사용합니다.
+          // (만약 클라이언트가 해당 엔티티를 처음 본다면 강제 동기화가 필요할 수 있음)
+          if (soa.dirtyFlags[idx] === 0 && offset > HEADER_SIZE) {
+             // Skip if not dirty (but keep player and first entry for stability)
+             // continue; 
+          }
 
           view[offset + 0] = soa.type[idx];
           view[offset + 1] = soa.state[idx];
@@ -170,6 +225,9 @@ export class GameLoop {
           view[offset + 6] = soa.spriteIndex[idx];
           view[offset + 7] = soa.width[idx];
 
+          // 동기화 완료 후 Dirty 플래그 클리어 (렌더 틱에서 수행)
+          soa.dirtyFlags[idx] = 0;
+
           offset += ENTITY_STRIDE;
         }
         
@@ -179,16 +237,19 @@ export class GameLoop {
       // 5. 자동 저장(10초)
       if (now - this.lastSaveTime > 10000) {
         this.lastSaveTime = now;
-        self.postMessage({
+        const tileMapBuffer = this.world.tileMap.serializeToBuffer();
+        
+        // Use (self as any) to bypass TypeScript WorkerGlobalScope inference issues
+        (self as any).postMessage({
           type: 'SAVE',
           payload: {
             version: 1,
             timestamp: Date.now(),
             stats: this.world.player.stats,
             position: this.world.player.pos,
-            tileMap: this.world.tileMap.serialize(),
+            tileMapBuffer: tileMapBuffer,
           }
-        });
+        }, [tileMapBuffer.buffer]);
       }
     } catch (err) {
       console.error('[Worker Loop Error]', err);

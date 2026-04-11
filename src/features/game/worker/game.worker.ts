@@ -100,11 +100,23 @@ class GameEngineInstance {
     this.world.staticEntities = currentStaticEntities;
 
     if (payload.saveData) {
-      const { stats, position, tileMap } = payload.saveData;
+      const { stats, position, tileMap, tileMapData } = payload.saveData;
       this.world.player.stats = stats;
       this.world.player.pos = position;
       this.world.player.visualPos = { ...position };
-      this.world.tileMap.deserialize(tileMap, stats.mapSeed, stats.dimension);
+      
+      if (tileMapData) {
+        // Decode base64 to ArrayBuffer within worker thread
+        const binary = atob(tileMapData);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        this.world.tileMap.deserializeFromBuffer(bytes.buffer, stats.mapSeed, stats.dimension);
+      } else if (tileMap) {
+        // Legacy object support
+        this.world.tileMap.deserialize(tileMap, stats.mapSeed, stats.dimension);
+      }
     }
 
     if (payload.offscreen) {
@@ -206,7 +218,33 @@ class GameEngineInstance {
   }
 
   handleAction(payload: any) {
+    const { action, data } = payload;
+    
+    if (action === 'travelDimension') {
+      const nextDim = this.world.player.stats.dimension + 1;
+      const newSeed = Math.floor(Math.random() * 1000000);
+      this.safeReset(newSeed, nextDim);
+      return;
+    }
+    
+    if (action === 'regenerateWorld') {
+      const newSeed = Math.floor(Math.random() * 1000000);
+      this.safeReset(newSeed, this.world.player.stats.dimension);
+      return;
+    }
+
     handlePlayerAction(this.world, payload);
+  }
+
+  /** [v4 Protocol] 차원 이동/리셋 안전 시퀀스 호출 */
+  async safeReset(seed: number, dimension: number) {
+    if (this.gameLoop) {
+      await this.gameLoop.safeReset(seed, dimension);
+      
+      // 세이브 상태 반영 (메인 스레드용)
+      this.world.player.stats.mapSeed = seed;
+      this.world.player.stats.dimension = dimension;
+    }
   }
 }
 
@@ -243,16 +281,17 @@ self.addEventListener('message', (e: MessageEvent) => {
       break;
     case 'SAVE_REQUEST':
       if (payload.type === 'export') {
-        self.postMessage({ 
+        const tileMapBuffer = engine.world.tileMap.serializeToBuffer();
+        (self as any).postMessage({ 
           type: 'EXPORT_DATA', 
           payload: {
             version: 1,
             timestamp: Date.now(),
             stats: engine.world.player.stats,
             position: engine.world.player.pos,
-            tileMap: engine.world.tileMap.serialize(),
+            tileMapBuffer: tileMapBuffer,
           } 
-        });
+        }, [tileMapBuffer.buffer]);
       }
       break;
   }

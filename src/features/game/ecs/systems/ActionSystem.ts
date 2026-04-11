@@ -88,15 +88,7 @@ export function handlePlayerAction(world: GameWorld, payload: any) {
     }
 
     case 'regenerateWorld': {
-      const newSeed = Math.floor(Math.random() * 1000000);
-      stats.mapSeed = newSeed;
-      world.tileMap = new TileMap(newSeed, stats.dimension);
-      world.player.pos = { x: 15, y: 8 };
-      world.player.visualPos = { x: 15, y: 8 };
-      world.player.stats.depth = 0;
-      world.particles = [];
-      world.floatingTexts = [];
-      world.droppedItems = [];
+      // Logic moved to game.worker.ts (safeReset)
       break;
     }
     
@@ -227,29 +219,7 @@ export function handlePlayerAction(world: GameWorld, payload: any) {
     }
 
     case 'travelDimension': {
-      const nextDim = stats.dimension + 1;
-      stats.dimension = nextDim;
-      
-      // 월드 초기화
-      const newSeed = Math.floor(Math.random() * 1000000);
-      stats.mapSeed = newSeed;
-      world.tileMap.reset(newSeed, nextDim);
-      
-      // 플레이어 상태 초기화
-      world.player.pos = { x: 15, y: 8 };
-      world.player.visualPos = { x: 15, y: 8 };
-      stats.depth = 0;
-      
-      // 휘발성 데이터 청소
-      world.particles = [];
-      world.floatingTexts = [];
-      world.droppedItems = [];
-      world.spawnedCoords.clear();
-      
-      console.log(`[Worker] Traveled to Dimension ${nextDim}`);
-      
-      // 메인 스레드에 알림 (필요시)
-      self.postMessage({ type: 'DIMENSION_TRAVEL_COMPLETE', payload: { dimension: nextDim } });
+      // Logic moved to game.worker.ts (safeReset)
       break;
     }
   }
