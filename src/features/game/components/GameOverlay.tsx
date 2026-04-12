@@ -44,7 +44,7 @@ export default function GameOverlay({
   const {
     handleUpgrade, handleCraft, handleSell, handleSummonRune, handleSynthesizeRunes,
     handleEquipDrill, handleEquipDrone, handleEquipRune, handleUnequipRune,
-    handleSelectCheckpoint, handleResetGame, handleRegenerateWorld, handleExportSave,
+    handleSelectCheckpoint, handleResetGame, handleExportSave,
     handleImportSave, handleStartSmelting, handleCollectSmelting, handleUnlockResearch,
     handleUseArtifact, handleEquipArtifact, handleTravelDimension, handleRespawn
   } = gameActions;
@@ -85,7 +85,7 @@ export default function GameOverlay({
       {ui.isElevatorOpen && <Overlay key="elevator" onClose={() => handleClose('isElevatorOpen')}><Elevator stats={currentStats} onClose={() => handleClose('isElevatorOpen')} onSelectCheckpoint={handleSelectCheckpoint} /></Overlay>}
       {ui.isEncyclopediaOpen && <Overlay key="encyclopedia" onClose={() => handleClose('isEncyclopediaOpen')}><Encyclopedia stats={currentStats} onClose={() => handleClose('isEncyclopediaOpen')} /></Overlay>}
       {/* [삭제됨] RefineryWindow — 용광로 시스템 제거됨 */}
-      {ui.isSettingsOpen && <Overlay key="settings" onClose={() => handleClose('isSettingsOpen')}><Settings onClose={() => handleClose('isSettingsOpen')} onReset={handleResetGame} onRegenerateWorld={handleRegenerateWorld} onExport={handleExportSave} onImport={() => {
+      {ui.isSettingsOpen && <Overlay key="settings" onClose={() => handleClose('isSettingsOpen')}><Settings onClose={() => handleClose('isSettingsOpen')} onReset={handleResetGame} onExport={handleExportSave} onImport={() => {
         const code = prompt('Enter save code:');
         if (code) handleImportSave(code);
       }} /></Overlay>}

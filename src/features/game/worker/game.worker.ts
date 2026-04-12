@@ -225,11 +225,6 @@ class GameEngineInstance {
       return;
     }
     
-    if (action === 'regenerateWorld') {
-      const newSeed = Math.floor(Math.random() * 1000000);
-      this.safeReset(newSeed, this.world.player.stats.dimension);
-      return;
-    }
 
     handlePlayerAction(this.world, payload);
   }

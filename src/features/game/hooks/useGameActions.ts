@@ -105,11 +105,6 @@ export const useGameActions = (
     updateUi();
   }, [sendToWorker, updateUi]);
 
-  /** 맵을 새로운 시드로 재생성하고 플레이어 위치를 초기화 */
-  const handleRegenerateWorld = useCallback(() => {
-    sendToWorker('ACTION', { action: 'regenerateWorld' });
-    updateUi();
-  }, [sendToWorker, updateUi]);
 
   /** 장착된 액티브 유물 스킬 사용 처리 */
   const handleUseArtifact = useCallback(() => {
@@ -151,7 +146,7 @@ export const useGameActions = (
     handleUnequipRune,
     handleSelectCheckpoint,
     handleResetGame,
-    handleRegenerateWorld,
+    handleResetGame,
     handleExportSave,
     handleImportSave,
     handleUnlockResearch,
