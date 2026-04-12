@@ -40,6 +40,7 @@ export type TileType =
   | 'glacialite'
   | 'abyssstone'
   // === 시스템 타일 ===
+  | 'stone'
   | 'lava'
   | 'dungeon_bricks'
   | 'boss_core'
@@ -85,6 +86,7 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   wall: 30,
   portal: 31,
   boss_skin: 32,
+  stone: 33,
 };
 
 /** ID-타일 타입 역매핑 */
@@ -103,6 +105,8 @@ export interface Tile {
   health: number;
   /** 최대 내구도 */
   maxHealth: number;
+  /** 광물 스팟(true)인지 배경 채우기 타일(false)인지 구분 */
+  isSpot?: boolean;
 }
 
 /**

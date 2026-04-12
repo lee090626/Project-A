@@ -23,6 +23,21 @@ export interface MineralDefinition {
 
 export const MINERALS: MineralDefinition[] = [
   {
+    key: 'stone',
+    name: 'Stone',
+    nameKo: '돌',
+    icon: '🪨',
+    description: 'Common background stone. Found throughout all circles.',
+    descriptionKo: '모든 서클에서 발견되는 일반 배경 돌입니다.',
+    color: '#9ca3af',
+    minDepth: 0,
+    basePrice: 0,
+    baseHealth: 50,
+    defense: 0,
+    image: null,
+    tileImage: 'StoneTile',
+  },
+  {
     key: 'crimsonstone',
     name: 'Crimsonstone',
     nameKo: '핏빛석',
@@ -34,7 +49,7 @@ export const MINERALS: MineralDefinition[] = [
     basePrice: 5,
     baseHealth: 100,
     defense: 20,
-    image: 'stone_icon',
+    image: 'CrimsonStoneIcon',
     tileImage: 'CrimsonStoneTile',
   },
   {
@@ -49,7 +64,7 @@ export const MINERALS: MineralDefinition[] = [
     basePrice: 10,
     baseHealth: 200,
     defense: 25,
-    image: 'stone_icon',
+    image: 'GaleStoneIcon',
     tileImage: 'GaleStoneTile',
   },
   {
@@ -64,7 +79,7 @@ export const MINERALS: MineralDefinition[] = [
     basePrice: 15,
     baseHealth: 300,
     defense: 30,
-    image: 'stone_icon',
+    image: 'FervorStoneIcon',
     tileImage: 'FervorStoneTile',
   },
   {
@@ -80,7 +95,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 250,
     defense: 30,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'siltstone',
@@ -95,7 +110,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 500,
     defense: 35,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'gorestone',
@@ -110,7 +125,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 750,
     defense: 40,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'goldstone',
@@ -125,7 +140,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 625,
     defense: 40,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'luststone',
@@ -140,7 +155,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 1250,
     defense: 45,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'midasite',
@@ -155,7 +170,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 1875,
     defense: 50,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'ragestone',
@@ -170,7 +185,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 1562,
     defense: 50,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'cinderstone',
@@ -185,7 +200,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 3125,
     defense: 55,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'furystone',
@@ -200,7 +215,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 4687,
     defense: 60,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'ashstone',
@@ -215,7 +230,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 3906,
     defense: 60,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'blightstone',
@@ -230,7 +245,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 7812,
     defense: 65,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'vexite',
@@ -245,7 +260,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 11718,
     defense: 70,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'thornstone',
@@ -260,7 +275,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 9765,
     defense: 70,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'bloodstone',
@@ -275,7 +290,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 19531,
     defense: 75,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'cruelite',
@@ -290,7 +305,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 29296,
     defense: 80,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'mimicite',
@@ -305,7 +320,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 24414,
     defense: 80,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'lurerstone',
@@ -320,7 +335,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 48828,
     defense: 85,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'phantomite',
@@ -335,7 +350,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 73242,
     defense: 90,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'froststone',
@@ -350,7 +365,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 61035,
     defense: 90,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'glacialite',
@@ -365,7 +380,7 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 122070,
     defense: 95,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
   {
     key: 'abyssstone',
@@ -380,6 +395,6 @@ export const MINERALS: MineralDefinition[] = [
     baseHealth: 183105,
     defense: 100,
     image: 'stone_icon',
-    tileImage: 'stone_tile',
+    tileImage: 'StoneTile',
   },
 ];
