@@ -56,7 +56,7 @@ export const createInitialPlayer = (seed: number): Player => ({
       ashstone: 0, blightstone: 0, vexite: 0,
       thornstone: 0, bloodstone: 0, cruelite: 0,
       mimicite: 0, lurerstone: 0, phantomite: 0,
-      froststone: 0, glacialite: 0, abyssstone: 0,
+      froststone: 0, glacialite: 0, abyssstone: 0, stone: 0,
     },
     equippedDroneId: null,
     ownedDroneIds: [],
