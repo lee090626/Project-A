@@ -146,7 +146,6 @@ export const useGameActions = (
     handleUnequipRune,
     handleSelectCheckpoint,
     handleResetGame,
-    handleResetGame,
     handleExportSave,
     handleImportSave,
     handleUnlockResearch,
