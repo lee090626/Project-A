@@ -61,11 +61,12 @@ export function getTotalRuneStat(
   let total = 0;
 
   // 현재 장착중인 드릴 확인
-  if (!stats.equippedDrillId || !stats.equipmentStates[stats.equippedDrillId]) {
+  const drillId = stats.equipment.drillId;
+  if (!drillId || !stats.equipmentStates[drillId]) {
     return 0; // 드릴 미장착이거나 에러 방지
   }
 
-  const equipmentState = stats.equipmentStates[stats.equippedDrillId];
+  const equipmentState = stats.equipmentStates[drillId];
   if (!equipmentState.slottedRunes) return 0;
 
   // 장착된 룬 ID들을 순회하며 인벤토리에서 실제 instance 찾기
