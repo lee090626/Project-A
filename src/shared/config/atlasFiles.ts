@@ -2,6 +2,7 @@
 // 에셋이 추가되면 이 파일이 자동으로 업데이트됩니다.
 
 export const ATLAS_FILE_MAPPING = {
+  Asmodeus: 'Asmodeus.png',
   AttackRune: 'AttackRune.png',
   BaseTileset: 'BaseTileset.png',
   BookIcon: 'BookIcon.webp',

@@ -48,20 +48,20 @@
         "y": 0.5
       }
     },
-    "Player.png": {
+    "AttackRune.png": {
       "frame": {
-        "x": 1087,
-        "y": 3,
-        "w": 876,
-        "h": 992
+        "x": 1033,
+        "y": 985,
+        "w": 1011,
+        "h": 926
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 148,
-        "y": 32,
-        "w": 876,
-        "h": 992
+        "x": 7,
+        "y": 47,
+        "w": 1011,
+        "h": 926
       },
       "sourceSize": {
         "w": 1024,
@@ -72,48 +72,240 @@
         "y": 0.5
       }
     },
-    "DiamondDrill.png": {
+    "MoneyIcon.webp": {
       "frame": {
-        "x": 1033,
-        "y": 1001,
-        "w": 470,
-        "h": 971
+        "x": 1087,
+        "y": 3,
+        "w": 935,
+        "h": 927
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 368,
-        "y": 5,
-        "w": 470,
-        "h": 971
+        "x": 56,
+        "y": 60,
+        "w": 935,
+        "h": 927
       },
       "sourceSize": {
-        "w": 1078,
-        "h": 976
+        "w": 1024,
+        "h": 1024
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "GoldDrill.png": {
+    "CrimsonStoneTile.png": {
       "frame": {
-        "x": 1509,
-        "y": 1001,
-        "w": 449,
-        "h": 928
+        "x": 1033,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "DirtTile.png": {
+      "frame": {
+        "x": 1167,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "FervorStoneTile.png": {
+      "frame": {
+        "x": 1301,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GaleStoneTile.png": {
+      "frame": {
+        "x": 1435,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "StoneTile.png": {
+      "frame": {
+        "x": 1569,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "boss_core.png": {
+      "frame": {
+        "x": 1703,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GaleStoneIcon.png": {
+      "frame": {
+        "x": 1837,
+        "y": 1917,
+        "w": 88,
+        "h": 92
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 368,
-        "y": 48,
-        "w": 449,
-        "h": 928
+        "x": 20,
+        "y": 18,
+        "w": 88,
+        "h": 92
       },
       "sourceSize": {
-        "w": 1078,
-        "h": 976
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "CrimsonStoneIcon.png": {
+      "frame": {
+        "x": 1931,
+        "y": 1917,
+        "w": 84,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 20,
+        "w": 84,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "boss_skin.png": {
+      "frame": {
+        "x": 1703,
+        "y": 1917,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
       },
       "pivot": {
         "x": 0.5,
@@ -127,8 +319,8 @@
     "image": "game-atlas-0.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1966,
-      "h": 2012
+      "w": 2047,
+      "h": 2048
     },
     "scale": 1
   }

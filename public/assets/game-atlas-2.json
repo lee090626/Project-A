@@ -24,44 +24,20 @@
         "y": 0.5
       }
     },
-    "MiningSpeedRune.png": {
-      "frame": {
-        "x": 1033,
-        "y": 3,
-        "w": 1008,
-        "h": 924
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 8,
-        "y": 50,
-        "w": 1008,
-        "h": 924
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "MoneyIcon.webp": {
+    "Player.png": {
       "frame": {
         "x": 3,
         "y": 1033,
-        "w": 935,
-        "h": 927
+        "w": 876,
+        "h": 992
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 56,
-        "y": 60,
-        "w": 935,
-        "h": 927
+        "x": 148,
+        "y": 32,
+        "w": 876,
+        "h": 992
       },
       "sourceSize": {
         "w": 1024,
@@ -72,48 +48,72 @@
         "y": 0.5
       }
     },
-    "EmeralDrill.png": {
+    "SettingsIcon.webp": {
       "frame": {
-        "x": 1033,
-        "y": 933,
-        "w": 472,
-        "h": 930
+        "x": 885,
+        "y": 1033,
+        "w": 906,
+        "h": 913
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 334,
-        "y": 33,
-        "w": 472,
-        "h": 930
+        "x": 59,
+        "y": 55,
+        "w": 906,
+        "h": 913
       },
       "sourceSize": {
-        "w": 1078,
-        "h": 976
+        "w": 1024,
+        "h": 1024
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "StoneDrill.png": {
+    "BookIcon.webp": {
       "frame": {
-        "x": 1511,
-        "y": 933,
-        "w": 413,
-        "h": 926
+        "x": 1033,
+        "y": 3,
+        "w": 835,
+        "h": 562
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 369,
-        "y": 25,
-        "w": 413,
-        "h": 926
+        "x": 95,
+        "y": 231,
+        "w": 835,
+        "h": 562
       },
       "sourceSize": {
-        "w": 1078,
-        "h": 976
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "StatusIcon.webp": {
+      "frame": {
+        "x": 1033,
+        "y": 571,
+        "w": 840,
+        "h": 295
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 89,
+        "y": 388,
+        "w": 840,
+        "h": 295
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
       },
       "pivot": {
         "x": 0.5,
@@ -127,8 +127,8 @@
     "image": "game-atlas-2.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2044,
-      "h": 1963
+      "w": 1876,
+      "h": 2028
     },
     "scale": 1
   }
