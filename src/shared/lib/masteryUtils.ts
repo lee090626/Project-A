@@ -1,5 +1,5 @@
-import { Drill, MasteryState, PlayerStats } from '../types/game';
-import { DRILLS } from '../config/drillData';
+import { MasteryState, PlayerStats } from '../types/game';
+import { EQUIPMENTS } from '../config/equipmentData';
 import { MASTERY_PERKS } from '../config/masteryPerks';
 
 /**
@@ -110,8 +110,8 @@ export const createInitialMasteryState = (id: string, maxSlots: number = 0): Mas
 /**
  * 특정 장비의 초기 상태 생성 (기존 호환성 유지를 위해 래핑)
  */
-export const createInitialEquipmentState = (drillId: string): MasteryState => {
-  const drill = DRILLS[drillId];
-  const maxSlots = drill?.maxSkillSlots || 0;
-  return createInitialMasteryState(drillId, maxSlots);
+export const createInitialEquipmentState = (equipmentId: string): MasteryState => {
+  const equipment = EQUIPMENTS[equipmentId];
+  const maxSlots = equipment?.maxSkillSlots || 0;
+  return createInitialMasteryState(equipmentId, maxSlots);
 };

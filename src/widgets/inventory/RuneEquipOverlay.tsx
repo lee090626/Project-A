@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
-import { DRILLS } from '@/shared/config/drillData';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
 import SkillRuneIcon from '@/shared/ui/SkillRuneIcon';
 
@@ -22,11 +22,12 @@ function RuneEquipOverlay({
   onEquipRune,
   onClose,
 }: RuneEquipOverlayProps) {
-  const equippedDrill = DRILLS[stats.equippedDrillId] || DRILLS['rusty_drill'];
+  const drillId = stats.equipment.drillId || 'crimson_fang'; // 기본값 안전 처리
+  const equippedDrill = EQUIPMENTS[drillId];
   const equipmentState =
-    stats.equipmentStates[stats.equippedDrillId] ||
-    createInitialMasteryState(stats.equippedDrillId, equippedDrill.maxSkillSlots);
-  const unlockedSlots = equippedDrill.maxSkillSlots || 0;
+    stats.equipmentStates[drillId] ||
+    createInitialMasteryState(drillId, equippedDrill?.maxSkillSlots || 0);
+  const unlockedSlots = equippedDrill?.maxSkillSlots || 0;
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-md pointer-events-auto animate-in fade-in duration-300">

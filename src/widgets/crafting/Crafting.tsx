@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PlayerStats } from '@/shared/types/game';
-import { DRILLS } from '@/shared/config/drillData';
+import { PlayerStats, EquipmentPart } from '@/shared/types/game';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 import RecipeDetail from './RecipeDetail';
@@ -25,22 +25,22 @@ interface CraftingProps {
 function Crafting({ stats, onCraft, onClose }: CraftingProps) {
   const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
 
-  const drillRecipes = Object.values(DRILLS)
-    .filter((drill) => drill.price) // 가격 정보가 있는(제작 가능한) 아이템만 필터링
-    .map((drill) => ({
-      name: drill.name,
-      icon: drill.icon,
-      requirements: drill.price || {},
+  const drillRecipes = Object.values(EQUIPMENTS)
+    .filter((eq) => eq.part === 'drill' && eq.price) // 드릴 부위 중 가격 정보가 있는 것만
+    .map((eq) => ({
+      name: eq.name,
+      icon: eq.icon,
+      requirements: eq.price || {},
       result: {
-        drillId: drill.id,
+        drillId: eq.id,
       },
-      description: drill.description,
-      id: drill.id,
-      power: drill.basePower,
-      cooldownMs: drill.cooldownMs,
-      specialEffect: drill.specialEffect,
-      maxSkillSlots: drill.maxSkillSlots,
-      image: drill.image,
+      description: eq.description,
+      id: eq.id,
+      power: eq.stats.power,
+      cooldownMs: 500, // 고정 공속
+      specialEffect: (eq as any).specialEffect,
+      maxSkillSlots: (eq as any).maxSkillSlots,
+      image: (eq as any).image,
       type: 'drill',
     }));
 
@@ -48,7 +48,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
 
   /** 해당 레시피를 제작할 수 있는지 확인하는 함수 */
   const canCraft = (rcp: any) => {
-    if (rcp.type === 'drill' && stats.ownedDrillIds?.includes(rcp.id)) return false;
+    if (rcp.type === 'drill' && stats.ownedEquipmentIds?.includes(rcp.id)) return false;
     // 모든 재료 조건을 충족하는지 확인
     return Object.entries(rcp.requirements).every(([key, val]) => {
       const currentVal =
@@ -130,7 +130,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                 {drillRecipes.map((rcp) => {
                   const active = selectedRecipe?.name === rcp.name;
                   const craftable = canCraft(rcp);
-                  const owned = rcp.type === 'drill' && stats.ownedDrillIds?.includes(rcp.id);
+                  const owned = rcp.type === 'drill' && stats.ownedEquipmentIds?.includes(rcp.id);
 
                   return (
                     <button

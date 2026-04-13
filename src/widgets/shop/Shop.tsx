@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { PlayerStats, Drill } from '@/shared/types/game';
+import { PlayerStats, Equipment, EquipmentPart } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import { DRILLS } from '@/shared/config/drillData';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 import SkillRuneIcon from '@/shared/ui/SkillRuneIcon';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
@@ -16,7 +16,7 @@ import GachaOverlay from './GachaOverlay';
  */
 interface ShopProps {
   stats: PlayerStats;
-  onUpgrade: (type: string, requirements: any) => void;
+  onUpgrade: (id: string, price: Record<string, number>) => void;
   onSell: (resource: string, amount: number, price: number) => void;
   onSummonRune: (tier: number, count?: number) => void;
   onSynthesizeRunes: () => void;
@@ -27,7 +27,9 @@ interface ShopProps {
  * 플레이어가 자원을 판매하고 장비를 업그레이드하거나 스킬젬을 관리할 수 있는 상점(Forge) 컴포넌트입니다.
  */
 function Shop({ stats, onUpgrade, onSell, onSummonRune, onSynthesizeRunes, onClose }: ShopProps) {
-  const [activeTab, setActiveTab] = useState<'minerals' | 'runes'>('minerals');
+  const [activeTab, setActiveTab] = useState<'minerals' | 'equipment' | 'runes'>('minerals');
+  const [selectedPart, setSelectedPart] = useState<EquipmentPart>('drill');
+  const [selectedCircle, setSelectedCircle] = useState<number>(2); // Circle 2부터 장비 시작
   const [sellAmounts, setSellAmounts] = useState<Record<string, number>>({});
 
   // 가챠 연출 Hook
@@ -91,6 +93,16 @@ function Shop({ stats, onUpgrade, onSell, onSummonRune, onSynthesizeRunes, onClo
               }`}
             >
               Sell
+            </button>
+            <button
+              onClick={() => setActiveTab('equipment')}
+              className={`flex-1 sm:flex-none px-6 md:px-8 py-2 md:py-2.5 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-wider transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 ${
+                activeTab === 'equipment'
+                  ? 'bg-amber-500 text-black shadow-[0_4px_12px_rgba(245,158,11,0.3)]'
+                  : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              Equip
             </button>
             <button
               onClick={() => setActiveTab('runes')}
@@ -258,6 +270,109 @@ function Shop({ stats, onUpgrade, onSell, onSummonRune, onSynthesizeRunes, onClo
                     </div>
                   );
                 })}
+              </div>
+            </section>
+          )}
+
+          {activeTab === 'equipment' && (
+            /* 장비 제작 섹션 */
+            <section className="flex flex-col gap-6 relative z-10 pb-20">
+              {/* 서클 및 부위 필터 */}
+              <div className="flex flex-col gap-4 bg-zinc-900/40 p-6 rounded-3xl border border-white/5 shadow-inner">
+                <div className="flex items-center gap-4 flex-wrap">
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mr-2">Circle Stage:</span>
+                  {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => setSelectedCircle(c)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all border ${
+                        selectedCircle === c
+                          ? 'bg-amber-500 text-black border-amber-500'
+                          : 'bg-black/20 text-zinc-500 border-zinc-800'
+                      }`}
+                    >
+                      C{c}
+                    </button>
+                  ))}
+                </div>
+                <div className="w-full h-px bg-white/5" />
+                <div className="flex items-center gap-4">
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mr-2">Category:</span>
+                  {(['drill', 'helmet', 'armor', 'boots'] as EquipmentPart[]).map((part) => (
+                    <button
+                      key={part}
+                      onClick={() => setSelectedPart(part)}
+                      className={`px-4 py-2 rounded-xl text-[10px] md:text-sm font-black tracking-widest border transition-all ${
+                        selectedPart === part
+                          ? 'bg-white text-black border-white'
+                          : 'bg-zinc-800/50 text-zinc-500 border-zinc-800'
+                      }`}
+                    >
+                      {part.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 장비 목록 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {Object.values(EQUIPMENTS)
+                  .filter((e) => e.circle === selectedCircle && e.part === selectedPart)
+                  .map((item) => {
+                    const isOwned = stats.ownedEquipmentIds?.includes(item.id);
+                    // 간소화된 비용 체크 로직
+                    const canAfford = Object.entries(item.price || {}).every(([res, amt]) => {
+                      if (res === 'goldCoins') return stats.goldCoins >= (amt as number);
+                      return ((stats.inventory as any)[res] || 0) >= (amt as number);
+                    });
+
+                    return (
+                      <div key={item.id} className="bg-zinc-900/60 p-6 rounded-3xl border border-white/10 flex flex-col gap-6 relative shadow-2xl group overflow-hidden">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-4">
+                            <div className="w-16 h-16 bg-black/40 rounded-2xl flex items-center justify-center border border-white/5 text-4xl shadow-inner">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <h4 className="text-xl font-black text-white leading-tight">{item.name}</h4>
+                              <p className="text-[10px] text-zinc-500 font-bold italic mt-1">{item.description}</p>
+                            </div>
+                          </div>
+                          {isOwned && (
+                            <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full font-black border border-emerald-500/30 uppercase tracking-widest">OWNED</span>
+                          )}
+                        </div>
+
+                        <div className="bg-black/30 p-4 rounded-2xl border border-white/5">
+                          <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-3 opacity-60">Required Materials</div>
+                          <div className="grid grid-cols-2 gap-3">
+                            {Object.entries(item.price || {}).map(([res, amt]) => (
+                              <div key={res} className="flex justify-between items-center bg-zinc-950/50 px-3 py-2 rounded-xl border border-white/5">
+                                <span className="text-[10px] text-zinc-400 font-bold uppercase">{res}</span>
+                                <span className={`text-xs font-black tabular-nums ${(res === 'goldCoins' ? stats.goldCoins >= (amt as number) : (stats.inventory as any)[res] >= (amt as number)) ? 'text-amber-500' : 'text-rose-500'}`}>
+                                  {(amt as number).toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {!isOwned && (
+                          <button
+                            onClick={() => onUpgrade(item.id, item.price || {})}
+                            disabled={!canAfford}
+                            className={`w-full py-4 rounded-2xl font-black text-sm tracking-widest uppercase transition-all active:scale-95 shadow-xl ${
+                              canAfford 
+                                ? 'bg-linear-to-br from-amber-400 to-amber-600 text-black hover:brightness-110 shadow-amber-500/20' 
+                                : 'bg-zinc-800 text-zinc-600 cursor-not-allowed opacity-50'
+                            }`}
+                          >
+                            Craft Equipment
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             </section>
           )}

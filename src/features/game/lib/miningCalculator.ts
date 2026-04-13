@@ -1,5 +1,5 @@
-import { PlayerStats } from '@/shared/types/game';
-import { DRILLS } from '@/shared/config/drillData';
+import { PlayerStats, EquipmentPart } from '@/shared/types/game';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { MINERALS } from '@/shared/config/mineralData';
 import {
   getMasteryMultiplier,
@@ -23,7 +23,7 @@ export interface DamageResult {
  * 플레이어의 현재 스탯과 장비를 기반으로 채굴 대미지를 계산합니다.
  */
 export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string): DamageResult => {
-  const currentDrill = DRILLS[stats.equippedDrillId] || DRILLS['rusty_drill'];
+  const currentDrill = stats.equipment.drillId ? EQUIPMENTS[stats.equipment.drillId] : null;
   const artifactBonuses = calculateArtifactBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
 
@@ -39,7 +39,8 @@ export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string
     speedBoostFactor += missingHpPercent;
   }
 
-  // 1. 공격 속도 계산 (유물 보너스 + 룬 파생 보너스 + 마스터리 속도 보너스 + 유물 고유 효과)
+  // 1. 공격 속도 계산 (고정 500ms 기반)
+  const baseInterval = 500;
   const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
   const totalSpeedBonusMult = Math.min(
     0.95,
@@ -48,7 +49,7 @@ export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string
       masteryBonuses.miningSpeedMult +
       speedBoostFactor,
   );
-  let attackInterval = currentDrill.cooldownMs * (1 - totalSpeedBonusMult);
+  let attackInterval = baseInterval * (1 - totalSpeedBonusMult);
 
   // FATIGUE (피로): 채굴 속도 50% 감소 (쿨타임 2배)
   if (stats.activeEffects?.some((e) => e.type === 'FATIGUE')) {
@@ -63,23 +64,22 @@ export const calculateMiningDamage = (stats: PlayerStats, targetTileType: string
 
   // 3. 룬 보너스 및 치명타 계산
   const runeAttackBonus = getTotalRuneStat(stats, 'power');
-  const critRate = getTotalRuneStat(stats, 'critRate');
-  // 치명타 기본 피해량 1.5배 + 룬 추가 피해량
+  const baseCritRate = (stats.luck || 0) * 0.01; // 행운 1당 1%
+  const critRate = Math.min(0.9, baseCritRate + getTotalRuneStat(stats, 'critRate'));
   const critDamage = 1.5 + getTotalRuneStat(stats, 'critDmg');
 
-  const drillPower = currentDrill.basePower;
+  // stats.power는 이미 statsSyncSystem에서 (기본20 + 장비파워)가 합산된 결과입니다.
+  // 숙련도는 '기초 드릴 파워'에 비례하여 추가 보너스를 줍니다.
+  const drillPower = currentDrill?.stats.power || 0;
   const levelMasteryBonus = Math.round(drillPower * (masteryMult - 1));
 
-  // --- 최종 위력 계산 (고정값 합산 후 배율 적용) ---
-  // 기초값 = 플레이어 기본 + 드릴 + 숙련도 레벨 보너스 + 마스터리 고정 특성 + 룬 고정 특성
+  // --- 최종 위력 계산 ---
   const basePower =
     stats.power +
-    drillPower +
     levelMasteryBonus +
     masteryBonuses.miningPower +
     Math.floor(runeAttackBonus);
 
-  // 배율 보완 (기본1 + 마스터리 배율. 내실 위력 배율은 당장 없으나 예약 가능)
   const totalPowerMult = 1 + masteryBonuses.miningPowerMult;
 
   let totalPower = Math.floor(basePower * totalPowerMult);
