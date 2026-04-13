@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Image, { StaticImageData } from 'next/image';
+import { getCircleConfig, getLayerFromDepth } from '@/shared/config/circleData';
 import { PlayerStats } from '@/shared/types/game';
-import { getCircleConfig } from '@/shared/config/circleData';
 import { getDrillData } from '@/shared/config/drillData';
 import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 
@@ -47,6 +47,17 @@ const Hud: React.FC<HudProps> = React.memo(({
 }) => {
   const hpPercent = Math.max(0, (stats.hp / stats.maxHp) * 100);
   const config = getCircleConfig(stats.depth);
+  const layerIdx = getLayerFromDepth(stats.depth, config);
+  
+  const layerName = useMemo(() => {
+    switch (layerIdx) {
+      case 1: return 'Upper';
+      case 2: return 'Middle';
+      case 3: return 'Lower';
+      case 4: return 'Deepest';
+      default: return '';
+    }
+  }, [layerIdx]);
 
   /** 하단 네비게이션 메뉴 항목 */
   const navItems: NavItem[] = useMemo(() => [
@@ -164,7 +175,7 @@ const Hud: React.FC<HudProps> = React.memo(({
 
         {/* 하단 우측: 현재 월드 정보 */}
         <div className="hidden md:flex flex-col items-end gap-1 opacity-80">
-            <span className="text-emerald-400 font-mono text-sm md:text-xl lg:text-3xl font-black tracking-widest uppercase">{config.name}</span>
+            <span className="text-emerald-400 font-mono text-sm md:text-xl lg:text-3xl font-black tracking-widest uppercase">{layerName} {config.name}</span>
         </div>
       </div>
 
