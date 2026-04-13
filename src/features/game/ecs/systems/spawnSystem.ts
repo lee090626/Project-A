@@ -40,7 +40,23 @@ export const spawnSystem = (world: GameWorld) => {
 
         if (defIdx !== -1) {
           const bossDef = MONSTER_LIST[defIdx];
-          // 5x5 크기(640px)이므로 중앙(15타일 지점)을 기준으로 좌측으로 2.5타일 이동하여 스폰
+
+          // --- [v4 Add] Boss Zone Cleanup ---
+          // 1. 타일 제거: 5x5 크기 보스를 위해 주변 7x7 영역(마진 포함)을 강제로 비움
+          tileMap.clearArea(spawnX - 3, spawnY - 3, 7, 7);
+
+          // 2. 기존 몬스터 제거: 보스 스폰 지점 주변의 일반 몬스터 즉시 소각
+          for (let i = entities.soa.count - 1; i >= 0; i--) {
+            if (entities.soa.type[i] === 1) { // 1: monster
+              const mdx = Math.abs(entities.soa.x[i] - spawnX * TILE_SIZE);
+              const mdy = Math.abs(entities.soa.y[i] - spawnY * TILE_SIZE);
+              if (mdx < 10 * TILE_SIZE && mdy < 10 * TILE_SIZE) {
+                entities.destroy(i);
+              }
+            }
+          }
+
+          // 3. 보스 엔티티 생성
           entities.create(
             2, // type: boss
             spawnX * TILE_SIZE - 2.5 * TILE_SIZE,
@@ -81,6 +97,17 @@ export const spawnSystem = (world: GameWorld) => {
 
       // 이미 체크한 좌표는 건너뜀
       if (spawnedCoords.has(coordKey)) continue;
+
+      // 보스가 이미 존재하면 일반 몬스터 소환 차단 (보스전 집중)
+      let bossExists = false;
+      for (let i = 0; i < entities.soa.count; i++) {
+        if (entities.soa.type[i] === 2) {
+          bossExists = true;
+          break;
+        }
+      }
+
+      if (bossExists) break; // 이번 틱 전체 소환 중단
 
       // 해당 좌표에 몬스터가 배치되어 있는지 확인
       const initialMonster = tileMap.getInitialMonster(x, y);

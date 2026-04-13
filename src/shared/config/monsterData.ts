@@ -96,7 +96,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Asmodeus',
     nameKo: '아스모데우스',
     type: 'boss',
-    imagePath: 'Player',
+    imagePath: 'Asmodeus',
     description:
       '3개의 머리 (황소, 인간, 숫양), 불꽃 날개, 뱀 꼬리. 몸 전체에서 붉은 열기가 뿜어져 나옴',
     stats: { maxHp: 15000, power: 120, defense: 20, speed: 1.5, attackCooldown: 2000 },

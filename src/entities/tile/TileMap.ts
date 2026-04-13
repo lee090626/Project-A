@@ -207,6 +207,27 @@ export class TileMap {
     return health <= 0;
   }
 
+  /**
+   * [v4 API] 특정 영역의 타일을 강제로 비웁니다 (보스전 등 전투 공간 확보용)
+   */
+  clearArea(startX: number, startY: number, width: number, height: number): void {
+    const emptyId = TILE_TYPE_TO_ID['empty'] & TYPE_MASK;
+
+    for (let cy = startY; cy < startY + height; cy++) {
+      if (cy < 0 || cy >= MAP_HEIGHT) continue;
+
+      for (let cx = startX; cx < startX + width; cx++) {
+        const { chunkX, localX } = this.getChunkInfo(cx);
+        const chunk = this.getChunk(chunkX);
+        const idx = cy * CHUNK_WIDTH + localX;
+
+        // 타입 0(empty), HP 0, GEN/MOD 플래그 설정
+        chunk[idx] = emptyId | GEN_FLAG | MOD_FLAG;
+        this.modifiedCoords.add(`${cx},${cy}`);
+      }
+    }
+  }
+
   getInitialMonster(x: number, y: number): Entity | null {
     if (y < BASE_DEPTH + 10) return null;
     const config = getCircleConfig(y - BASE_DEPTH);
