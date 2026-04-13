@@ -39,10 +39,10 @@ export function TileMasteryCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-end gap-2 mb-2">
-            <span className="text-sm font-black text-zinc-300 italic truncate uppercase tracking-tighter">{mineral?.name || tileKey}</span>
-            <span className="text-xs font-black text-emerald-500 shrink-0">LV.{mastery.level}</span>
+            <span className="text-[12px] font-black text-zinc-300 tracking-tighter leading-none">{mineral?.name || tileKey}</span>
+            <span className="text-[10px] font-black text-emerald-500 shrink-0 ml-auto">LV.{mastery.level}</span>
           </div>
-          <div className="h-2 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/50">
+          <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/50">
             <div 
               className="h-full bg-linear-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-1000" 
               style={{ width: `${expPercent}%` }} 
@@ -52,8 +52,8 @@ export function TileMasteryCard({
       </div>
       
       <div className="flex flex-col gap-3 pt-4 border-t border-zinc-800/50">
-        <div className="flex justify-between items-center text-[10px] font-black tracking-widest uppercase">
-          <span className="text-zinc-500 italic">Damage Buff</span>
+        <div className="flex justify-between items-center text-[9px] font-black tracking-widest">
+          <span className="text-zinc-500">Damage Buff</span>
           <span className="text-emerald-400 text-xs">+{((masteryMult - 1) * 100).toFixed(0)}%</span>
         </div>
         
@@ -90,7 +90,7 @@ export function TileMasteryCard({
         </div>
 
         <div className="flex justify-between items-center text-[8px] font-bold tabular-nums">
-          <span className="text-zinc-600">EXPERIENCE</span>
+          <span className="text-zinc-600">Experience</span>
           <span className="text-zinc-400">{mastery.exp} <span className="text-zinc-700">/</span> {nextExp}</span>
         </div>
       </div>
