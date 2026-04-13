@@ -176,7 +176,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
               : 'bg-zinc-800 text-zinc-600 border-white/5 cursor-not-allowed grayscale'
           }`}
         >
-          {(selectedRecipe.type === 'drill' && stats.ownedDrillIds?.includes(selectedRecipe.id)) ||
+          {(selectedRecipe.type === 'drill' && stats.ownedEquipmentIds?.includes(selectedRecipe.id)) ||
           (selectedRecipe.type === 'drone' && stats.ownedDroneIds?.includes(selectedRecipe.id))
             ? 'Already Owned'
             : 'System Craft'}

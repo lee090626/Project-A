@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { PlayerStats, TileType } from '@/shared/types/game';
-import { DRILLS } from '@/shared/config/drillData';
+import { PlayerStats, TileType, EquipmentPart } from '@/shared/types/game';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
 import { MINERALS } from '@/shared/config/mineralData';
 import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 import SkillRuneIcon from '@/shared/ui/SkillRuneIcon';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
-import DrillCard from './DrillCard';
+import EquipmentCard from './EquipmentCard';
 
 import RuneEquipOverlay from './RuneEquipOverlay';
 
@@ -18,7 +18,7 @@ import RuneEquipOverlay from './RuneEquipOverlay';
 interface InventoryProps {
   stats: PlayerStats;
   onClose: () => void;
-  onEquip?: (id: string, type: 'drill' | 'drone') => void;
+  onEquip?: (id: string, part: EquipmentPart) => void;
   onEquipRune?: (runeInstanceId: string, slotIndex: number) => void;
 }
 
@@ -33,8 +33,13 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
     'ingredients',
   );
   const [isEquippingRune, setIsEquippingRune] = useState(false);
+  const [selectedPart, setSelectedPart] = useState<EquipmentPart>('drill');
 
-  /** 현재 선택된 룬 정보 계산 */
+  /** 현재 선택된 광물 정보 계산 */
+  const selectedMineral = useMemo(
+    () => (selectedKey ? MINERALS.find((m) => m.key === selectedKey) : null),
+    [selectedKey],
+  );
   const selectedRuneInstance = useMemo(
     () => stats.inventoryRunes?.find((g) => g.id === selectedRuneId),
     [stats.inventoryRunes, selectedRuneId],
@@ -59,16 +64,29 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
       'bg-cyan-950/30 border-cyan-900/50 text-cyan-400 shadow-[0_0_35px_rgba(34,211,238,0.35)]',
   };
 
-  /** 현재 선택된 광물 정보 계산 */
-  const selectedMineral = useMemo(() => MINERALS.find((m) => m.key === selectedKey), [selectedKey]);
-  /** 현재 장착된 드릴 정보 및 숙련도 데이터 계산 */
-  const equippedDrill = DRILLS[stats.equippedDrillId] || DRILLS['rusty_drill'];
-  const equipmentState =
-    stats.equipmentStates[stats.equippedDrillId] ||
-    createInitialMasteryState(stats.equippedDrillId, equippedDrill.maxSkillSlots);
-  const unlockedSlots = equippedDrill.maxSkillSlots || 0; // Decoupled from mastery level
+  /** 현재 선택된 부위의 보유 장비 목록 필터링 */
+  const visibleEquipments = useMemo(() => {
+    return (stats.ownedEquipmentIds || [])
+      .filter((id) => {
+        const eq = EQUIPMENTS[id];
+        return eq && eq.part === selectedPart;
+      })
+      .sort((a, b) => (EQUIPMENTS[a]?.circle || 0) - (EQUIPMENTS[b]?.circle || 0));
+  }, [stats.ownedEquipmentIds, selectedPart]);
 
-  /** 모든 드릴에 현재 장착 중인 룬 인스턴스 ID 목록 */
+  /** 특정 장비가 장착 중인지 확인하는 함수 */
+  const isCurrentlyEquipped = (id: string, part: EquipmentPart) => {
+    const { equipment } = stats;
+    switch (part) {
+      case 'drill': return equipment.drillId === id;
+      case 'helmet': return equipment.helmetId === id;
+      case 'armor': return equipment.armorId === id;
+      case 'boots': return equipment.bootsId === id;
+      default: return false;
+    }
+  };
+
+  /** 모든 장비에 현재 장착 중인 룬 인스턴스 ID 목록 (드릴 전용) */
   const equippedRuneIds = new Set<string>();
   Object.values(stats.equipmentStates).forEach((eqState: any) => {
     if (eqState?.slottedRunes) {
@@ -106,7 +124,7 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
               onClick={() => setActiveTab('equipment')}
               className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${activeTab === 'equipment' ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              Equiment
+              Equipment
             </button>
             <button
               onClick={() => setActiveTab('skillrunes')}
@@ -240,19 +258,44 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
             </div>
           </>
         ) : activeTab === 'equipment' ? (
-          <div className="flex-1 overflow-y-auto pb-10 custom-scrollbar pr-0 md:pr-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 pb-20">
-              {stats.ownedDrillIds?.map((drillId) => (
-                <DrillCard
-                  key={drillId}
-                  drillId={drillId}
-                  isEquipped={stats.equippedDrillId === drillId}
-                  equipmentStates={stats.equipmentStates}
-                  onEquip={onEquip}
-                />
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* 부위별 필터 탭 */}
+            <div className="flex gap-2 mb-6 px-1 flex-wrap">
+              {(['drill', 'helmet', 'armor', 'boots'] as EquipmentPart[]).map((part) => (
+                <button
+                  key={part}
+                  onClick={() => setSelectedPart(part)}
+                  className={`px-4 py-2 rounded-xl text-[10px] md:text-sm font-black tracking-widest border transition-all ${
+                    selectedPart === part
+                      ? 'bg-cyan-400 text-black border-cyan-400 shadow-lg scale-105'
+                      : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-zinc-300'
+                  }`}
+                >
+                  {part.toUpperCase()}
+                </button>
               ))}
+            </div>
 
-              {/* [삭제됨] DroneCard — 드론 시스템 제거됨 */}
+            <div className="flex-1 overflow-y-auto pb-10 custom-scrollbar pr-0 md:pr-4">
+              {visibleEquipments.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 pb-20">
+                  {visibleEquipments.map((id) => (
+                    <EquipmentCard
+                      key={id}
+                      equipmentId={id}
+                      isEquipped={isCurrentlyEquipped(id, selectedPart)}
+                      onEquip={onEquip}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="h-64 flex flex-col items-center justify-center text-center opacity-20">
+                  <div className="text-5xl mb-6">🛡️</div>
+                  <p className="text-sm font-bold text-zinc-500 tracking-widest">
+                    No {selectedPart.toUpperCase()} Owned
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ) : (
