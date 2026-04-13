@@ -3,7 +3,8 @@ import { GameWorld } from '@/entities/world/model';
 import { Entity } from '@/shared/types/game';
 import { TILE_SIZE } from '@/shared/config/constants';
 
-import { MONSTERS } from '@/shared/config/monsterData';
+import { MONSTER_DEFINITIONS } from '@/shared/config/monsterData';
+import { getSafeTexture } from '@/shared/lib/assetUtils';
 
 /**
  * 엔티티별 Pixi 컨테이너 캐시 (ID -> Container)
@@ -99,19 +100,24 @@ function updateEntitySpriteFromSoA(idx: number, soa: any, player: any, container
 
   // 텍스처 및 색상 업데이트
   const body = container.getChildByLabel('body') as PIXI.Sprite;
-  if (body) {
+    if (body) {
     // 몬스터 종류에 따른 텍스처 교체 (SoA 인덱스 활용)
     const defIdx = soa.monsterDefIndex[idx];
-    const mobDef = MONSTERS[defIdx];
+    const mobDef = MONSTER_DEFINITIONS[defIdx];
 
     if (mobDef) {
-        const texture = textures[mobDef.imagePath] || PIXI.Texture.WHITE;
+        const texture = getSafeTexture(textures, mobDef.imagePath, 'LustfulWhisperer');
         body.tint = 0xffffff;
         
+        // 보스 특수 스케일링 및 틴트
+        if (type === 2) {
+          body.tint = 0xffcccc; // 약간 붉은 기운
+        }
+
         if (body.texture !== texture) {
             body.texture = texture;
-            body.width = ew;
-            body.height = eh;
+            body.width = ew * (type === 2 ? 1.2 : 1.0);
+            body.height = eh * (type === 2 ? 1.2 : 1.0);
         }
     } else if (type === 5) { // Projectile
         // 투사체 전용 시각 효과

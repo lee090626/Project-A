@@ -85,7 +85,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Asmodeus',
     nameKo: '아스모데우스',
     type: 'boss',
-    imagePath: 'oros_face',
+    imagePath: 'Player',
     description: '3개의 머리 (황소, 인간, 숫양), 불꽃 날개, 뱀 꼬리. 몸 전체에서 붉은 열기가 뿜어져 나옴',
     stats: { maxHp: 15000, power: 120, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: { exp: 7500, gold: 1500, drops: [
@@ -99,7 +99,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Bloated Devourer',
     nameKo: '비대한 포식자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
     stats: { maxHp: 1500, power: 60, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 150, gold: 30, drops: [
@@ -113,7 +113,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Carrion Worm',
     nameKo: '부패 벌레',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
     stats: { maxHp: 1200, power: 70, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 120, gold: 24, drops: [
@@ -127,7 +127,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Mud-stained Shade',
     nameKo: '진흙에 잠긴 그림자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
     stats: { maxHp: 1800, power: 50, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 180, gold: 36, drops: [
@@ -155,7 +155,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Hoarding Specter',
     nameKo: '수집가 망령',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
     stats: { maxHp: 4000, power: 120, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 400, gold: 80, drops: [
@@ -169,7 +169,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Gilded Sinner',
     nameKo: '황금 죄인',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
     stats: { maxHp: 5500, power: 150, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 550, gold: 110, drops: [
@@ -183,7 +183,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Fortune Mimic',
     nameKo: '운명의 미믹',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
     stats: { maxHp: 3500, power: 200, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 350, gold: 70, drops: [
@@ -211,7 +211,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Styx Dweller',
     nameKo: '스틱스의 거주자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
     stats: { maxHp: 12000, power: 300, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 1200, gold: 240, drops: [
@@ -225,7 +225,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Raging Fury',
     nameKo: '격노한 복수심',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
     stats: { maxHp: 10000, power: 450, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 1000, gold: 200, drops: [
@@ -239,7 +239,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Mud Golem',
     nameKo: '진흙 골렘',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
     stats: { maxHp: 25000, power: 250, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 2500, gold: 500, drops: [
@@ -253,7 +253,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Azazel',
     nameKo: '아자젤',
     type: 'boss',
-    imagePath: 'oros_face',
+    imagePath: 'Player',
     description: '타락한 천사, 검게 그을린 날개, 온몸에 쇠사슬이 감겨있음. 눈에서 붉은 불꽃',
     stats: { maxHp: 350000, power: 1200, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: { exp: 175000, gold: 35000, drops: [
@@ -267,7 +267,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Heretic Priest',
     nameKo: '이단 사제',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
     stats: { maxHp: 35000, power: 800, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 3500, gold: 700, drops: [
@@ -281,7 +281,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Eternal Flame Soul',
     nameKo: '영겁의 불꽃 영혼',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
     stats: { maxHp: 30000, power: 1200, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 3000, gold: 600, drops: [
@@ -295,7 +295,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Fallen Angel',
     nameKo: '타락한 천사',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
     stats: { maxHp: 50000, power: 900, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 5000, gold: 1000, drops: [
@@ -323,7 +323,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Centaur Archer',
     nameKo: '켄타우로스 궁수',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
     stats: { maxHp: 120000, power: 2500, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 12000, gold: 2400, drops: [
@@ -337,7 +337,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Blood-soaked Guard',
     nameKo: '선혈의 경비병',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
     stats: { maxHp: 180000, power: 3000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 18000, gold: 3600, drops: [
@@ -351,7 +351,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Minotaur Spawn',
     nameKo: '미노타우로스 하수인',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
     stats: { maxHp: 250000, power: 4500, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 25000, gold: 5000, drops: [
@@ -379,7 +379,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Malebranche',
     nameKo: '말레브랑케',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
     stats: { maxHp: 600000, power: 10000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 60000, gold: 12000, drops: [
@@ -393,7 +393,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'False Prophet',
     nameKo: '거짓 예언자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
     stats: { maxHp: 500000, power: 15000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 50000, gold: 10000, drops: [
@@ -407,7 +407,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Illusionist Shade',
     nameKo: '환술사의 그림자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
     stats: { maxHp: 450000, power: 12000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 45000, gold: 9000, drops: [
@@ -435,7 +435,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Ice-bound Sinner',
     nameKo: '빙결된 죄인',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
     stats: { maxHp: 2500000, power: 40000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 250000, gold: 50000, drops: [
@@ -449,7 +449,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Cocytus Specter',
     nameKo: '코키토스 망령',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
     stats: { maxHp: 2000000, power: 55000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 200000, gold: 40000, drops: [
@@ -463,7 +463,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     name: 'Treacherous Shadow',
     nameKo: '배신의 그림자',
     type: 'monster',
-    imagePath: 'pebble_golem',
+    imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
     stats: { maxHp: 3000000, power: 35000, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: { exp: 300000, gold: 60000, drops: [
