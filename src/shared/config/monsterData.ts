@@ -3,35 +3,62 @@
  * 이 파일은 scripts/genData.js에 의해 자동으로 생성됩니다.
  */
 export interface MonsterDefinition {
+  /** 몬스터의 고유 식별자 (예: 'c2_asmodeus') */
   id: string;
+  /** 영어 이름 */
   name: string;
+  /** 한국어 이름 */
   nameKo: string;
+  /** 몬스터 유형 (일반 몬스터 또는 보스) */
   type: 'monster' | 'boss';
-  imagePath: string; // atlas key
+  /** 아틀라스 키 (atlasMap.ts 참조) */
+  imagePath: string;
+  /** 몬스터 설명 */
   description: string;
+  /** 전투 메커니즘 설명 (선택사항) */
   mechanic?: string;
+  /** 희귀도 (선택사항) */
   rarity?: string;
+  /** 스탯 정보 */
   stats: {
+    /** 최대 체력 */
     maxHp: number;
+    /** 공격력 */
     power: number;
+    /** 방어력 */
     defense: number;
+    /** 이동 속도 */
     speed: number;
+    /** 공격 쿨타임 (밀리초) */
     attackCooldown: number;
   };
+  /** 보상 정보 */
   rewards: {
+    /** 경험치 */
     exp: number;
+    /** 골드 */
     gold: number;
+    /** 드롭 아이템 목록 */
     drops: Array<{
+      /** 아이템 ID */
       itemId: string;
+      /** 드롭 확률 (0.0 ~ 1.0) */
       chance: number;
+      /** 최소 드롭 수량 */
       minAmount: number;
+      /** 최대 드롭 수량 */
       maxAmount: number;
     }>;
   };
+  /** 행동 패턴 */
   behavior: {
+    /** 이동 패턴: 추적, 배회, 고정, 도망 */
     movementType: 'chase' | 'wander' | 'stationary' | 'flee';
+    /** 공격 사거리 (타일 단위) */
     attackRange: number;
+    /** 어그로 범위 (타일 단위) - 플레이어가 이 범위 안에 들어오면 적대적 행동 시작 */
     aggroRange: number;
+    /** 투사체 ID (선택사항, 투사체를 사용하는 몬스터만) */
     projectileId?: string;
   };
 }
@@ -108,7 +135,7 @@ export const MONSTER_LIST: MonsterDefinition[] = [
         { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10, projectileId: 'FireBall' },
   },
   {
     id: 'c3_devourer',
@@ -130,8 +157,8 @@ export const MONSTER_LIST: MonsterDefinition[] = [
   },
   {
     id: 'c3_worm',
-    name: 'Voracious Hound',
-    nameKo: '탐욕스러운 짐승',
+    name: 'Starving Wraith',
+    nameKo: '굶주린 망령',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
@@ -148,8 +175,8 @@ export const MONSTER_LIST: MonsterDefinition[] = [
   },
   {
     id: 'c3_mud_shade',
-    name: 'Mud-stained Shade',
-    nameKo: '진흙에 잠긴 그림자',
+    name: 'Greedy slaughter',
+    nameKo: '탐식의 도살자',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
@@ -165,9 +192,9 @@ export const MONSTER_LIST: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c3_beelzebub',
-    name: 'Beelzebub',
-    nameKo: '벨제붑',
+    id: 'c3_Fenrir',
+    name: 'Fenrir',
+    nameKo: '펜리르',
     type: 'boss',
     imagePath: 'oros_face',
     description:

@@ -5,6 +5,23 @@ import { updateStatusVFX } from './uiComponents';
 
 /**
  * 플레이어 전용 절차적 애니메이션 및 렌더링을 처리합니다.
+ * 플레이어 캐릭터의 시각적 표현(스프라이트, 애니메이션, 효과)을 업데이트합니다.
+ * 
+ * @param world - 게임 월드 객체 (플레이어 상태, 인텐트, 월드 상태 포함)
+ * @param entity - 플레이어 엔티티 객체 (위치, 상태, 시각적 위치 등)
+ * @param container - PIXI 컨테이너 (스프라이트, 애니메이션, 효과를 포함)
+ * @param now - 현재 시간 (밀리초)
+ * 
+ * @description
+ * 이 함수는 플레이어 캐릭터의 시각적 표현을 업데이트합니다. 다음을 처리합니다:
+ * 1. 피격 효과 (Hit Flash) - 피격 시 투명도 변화
+ * 2. 이동 및 드릴링 애니메이션
+ * 3. 방향 전환 (좌우 반전)
+ * 4. 상태 효과 시각적 효과
+ * 
+ * @example
+ * // 게임 루프에서 호출 예시
+ * updatePlayerRenderer(world, playerEntity, playerContainer, performance.now());
  */
 export function updatePlayerRenderer(
   world: GameWorld,

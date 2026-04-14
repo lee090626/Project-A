@@ -120,9 +120,33 @@
         "y": 0.5
       }
     },
-    "LustfulWhisperer.png": {
+    "BloatedDevourer.png": {
       "frame": {
         "x": 1249,
+        "y": 1863,
+        "w": 254,
+        "h": 136
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 60,
+        "w": 254,
+        "h": 136
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "LustfulWhisperer.png": {
+      "frame": {
+        "x": 1509,
         "y": 1863,
         "w": 176,
         "h": 170
@@ -146,7 +170,7 @@
     },
     "GaleBat.png": {
       "frame": {
-        "x": 1431,
+        "x": 1691,
         "y": 1863,
         "w": 178,
         "h": 154
@@ -168,20 +192,20 @@
         "y": 0.5
       }
     },
-    "FervorStoneIcon.png": {
+    "GaleStoneIcon.png": {
       "frame": {
-        "x": 1615,
+        "x": 1875,
         "y": 1863,
-        "w": 80,
-        "h": 86
+        "w": 88,
+        "h": 92
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 24,
-        "y": 21,
-        "w": 80,
-        "h": 86
+        "x": 20,
+        "y": 18,
+        "w": 88,
+        "h": 92
       },
       "sourceSize": {
         "w": 128,

@@ -52,3 +52,4 @@ docs/history/
 
 # Data Generator
 scripts/genData.js
+.aider*

@@ -106,21 +106,12 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
-  "GaleStoneIcon": {
+  "FireBall": {
     "atlasIndex": 0,
     "x": 1837,
     "y": 1917,
-    "width": 88,
-    "height": 92,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "CrimsonStoneIcon": {
-    "atlasIndex": 0,
-    "x": 1931,
-    "y": 1917,
-    "width": 84,
-    "height": 88,
+    "width": 170,
+    "height": 80,
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
@@ -178,9 +169,18 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
-  "LustfulWhisperer": {
+  "BloatedDevourer": {
     "atlasIndex": 1,
     "x": 1249,
+    "y": 1863,
+    "width": 254,
+    "height": 136,
+    "atlasWidth": 2044,
+    "atlasHeight": 2038
+  },
+  "LustfulWhisperer": {
+    "atlasIndex": 1,
+    "x": 1509,
     "y": 1863,
     "width": 176,
     "height": 170,
@@ -189,19 +189,19 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "GaleBat": {
     "atlasIndex": 1,
-    "x": 1431,
+    "x": 1691,
     "y": 1863,
     "width": 178,
     "height": 154,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
-  "FervorStoneIcon": {
+  "GaleStoneIcon": {
     "atlasIndex": 1,
-    "x": 1615,
+    "x": 1875,
     "y": 1863,
-    "width": 80,
-    "height": 86,
+    "width": 88,
+    "height": 92,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
@@ -211,7 +211,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 1024,
     "height": 1024,
-    "atlasWidth": 1876,
+    "atlasWidth": 1961,
     "atlasHeight": 2028
   },
   "Player": {
@@ -220,7 +220,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 1033,
     "width": 876,
     "height": 992,
-    "atlasWidth": 1876,
+    "atlasWidth": 1961,
     "atlasHeight": 2028
   },
   "SettingsIcon": {
@@ -229,7 +229,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 1033,
     "width": 906,
     "height": 913,
-    "atlasWidth": 1876,
+    "atlasWidth": 1961,
     "atlasHeight": 2028
   },
   "BookIcon": {
@@ -238,7 +238,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 835,
     "height": 562,
-    "atlasWidth": 1876,
+    "atlasWidth": 1961,
     "atlasHeight": 2028
   },
   "StatusIcon": {
@@ -247,7 +247,25 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 571,
     "width": 840,
     "height": 295,
-    "atlasWidth": 1876,
+    "atlasWidth": 1961,
+    "atlasHeight": 2028
+  },
+  "CrimsonStoneIcon": {
+    "atlasIndex": 2,
+    "x": 1874,
+    "y": 3,
+    "width": 84,
+    "height": 88,
+    "atlasWidth": 1961,
+    "atlasHeight": 2028
+  },
+  "FervorStoneIcon": {
+    "atlasIndex": 2,
+    "x": 1874,
+    "y": 97,
+    "width": 80,
+    "height": 86,
+    "atlasWidth": 1961,
     "atlasHeight": 2028
   },
   "DiamondDrill": {

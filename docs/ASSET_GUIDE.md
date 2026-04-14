@@ -13,9 +13,10 @@
 | `tiles/`    | 맵 타일 (1x1)     | `PascalCaseTile.png`  | **128x128**      | PNG        |
 | `minerals/` | 광물 아이콘       | `PascalCaseIcon.png`  | **128x128**      | PNG (투명) |
 | `rune/`     | 룬 스킬           | `PascalCaseRune.png`  | **1024x1024**    | PNG (투명) |
-| `entities/` | 일반 몬스터 (1x1) | `PascalCase.png`      | **128x128**      | PNG (투명) |
+| `entities/` | 일반 몬스터 (1x1) | `PascalCase.png`      | **256*256**      | PNG (투명) |
 | `entities/` | 거대 보스 (5x5)   | `PascalCase.png`      | **640x640**      | PNG (투명) |
 | `drills/`   | 드릴 장비         | `PascalCaseDrill.png` | **256x256**      | PNG (투명) |
+| `vfx/`      | 투사체/이펙트     | `PascalCase.png`      | **256x256**      | PNG (투명) |
 | `ui/icons/` | UI 시스템         | `PascalCaseIcon.webp` | **1024x1024**    | **WebP**   |
 
 > [!TIP]
@@ -116,9 +117,76 @@ npm run optimize:atlas && npm run update:atlas-map
 - **룬**: 스킬 상세 창 등에서 고품질 연출이 필요하므로 **1024x1024**를 유지하세요.
 - **드릴/UI**: 상점 및 장비 창 대응을 위해 **256x256 ~ 1024x1024** 범위를 사용하세요.
 
+### 💫 이펙트 및 투사체 (VFX / Projectiles)
+
+- **규격**: 기본적으로 **128x128** 크기를 권장하며, 배경이 투명한 PNG를 사용하세요.
+- **방향(중요)**: 투사체 이미지의 **기본 머리(앞) 방향은 위쪽(Top, ↑)**을 향하도록 그려야 합니다.
+  - _이유_: 렌더링 엔진(`entityProjectile.ts`)에서 물리 이동 벡터의 회전값에 `Math.PI / 2`를 더하여 렌더링하므로, 원본 에셋이 상승하는 형태여야만 실제 게임 내에서 이동 방향과 정확히 일치합니다.
+- **파일명**: `{ProjectileName}Projectile.png` 형식을 권장
+  - _예시_: `FireBallProjectile.png`, `IceShardProjectile.png`
+- **배치**: `src/shared/assets/vfx/` 폴더에 저장
+
 ---
 
-## 6. 주의 사항 및 알려진 이슈
+## 6. 카테고리별 에셋 추가 상세 가이드
+
+에셋 유형에 따른 세부 추가 방법입니다.
+
+### 6-1. 투사체 (Projectile) 추가
+
+```typescript
+// monsterData.ts에서 projectileId 연결
+{
+  id: 'boss_asmodeus',
+  behavior: {
+    projectileId: 'FireBallProjectile', // 에셋 파일명 (확장자 제외)
+  },
+}
+```
+
+크기 조정: `src/features/game/ecs/systems/bossBehaviorSystem.ts` (92-93줄)
+
+```typescript
+soa.width[idx] = 24; // 너비 (px)
+soa.height[idx] = 24; // 높이 (px)
+```
+
+### 6-2. 몬스터/보스 추가
+
+이미지를 `src/shared/assets/entities/`에 배치 후 `monsterData.ts`에 정의합니다.
+
+### 6-3. 광물/아이템 추가
+
+이미지를 `src/shared/assets/minerals/`에 배치 후 아이템 데이터에 `image` 필드로 연결합니다.
+
+---
+
+## 7. 통합 에셋 추가 플로우 (Quick Reference)
+
+에셋 유형에 따라 아래 표를 참고하여 빠르게 추가하세요.
+
+| 에셋 유형     | 저장 폴더   | 파일 명명                  | 아틀라스 후 연결 위치                      |
+| :------------ | :---------- | :------------------------- | :----------------------------------------- |
+| **타일**      | `tiles/`    | `PascalCaseTile.png`       | `tileData.ts` - `imagePath`                |
+| **광물**      | `minerals/` | `PascalCaseIcon.png`       | `mineralData.ts` - `image`                 |
+| **몬스터**    | `entities/` | `PascalCase.png`           | `monsterData.ts` - `imagePath`             |
+| **보스**      | `entities/` | `PascalCase.png` (5x5)     | `monsterData.ts` - `imagePath`             |
+| **투사체**    | `vfx/`      | `PascalCaseProjectile.png` | `monsterData.ts` - `behavior.projectileId` |
+| **드릴**      | `drills/`   | `PascalCaseDrill.png`      | `equipmentData.ts` - `image`               |
+| **룬**        | `rune/`     | `PascalCaseRune.png`       | `runeData.ts` - `image`                    |
+| **UI 아이콘** | `ui/icons/` | `PascalCaseIcon.webp`      | 컴포넌트에서 직접 사용                     |
+
+### One-Command로全体 등록
+
+모든 에셋 추가 후 반드시 실행:
+
+```bash
+npm run optimize:atlas && npm run update:atlas-map
+```
+
+---
+
+## 8. 주의 사항 및 알려진 이슈
 
 1.  **명명 규칙 준수**: 반드시 `PascalCase`를 사용하세요. `snake_case` 파일명은 지양합니다.
 2.  **자동 생성 파일 수정 금지**: `src/shared/config/atlasFiles.ts`와 `atlasMap.ts`는 직접 수정하지 마세요.
@@ -128,6 +196,4 @@ npm run optimize:atlas && npm run update:atlas-map
 
 ---
 
----
-
-최종 갱신일: 2026-04-12
+최종 갱신일: 2026-04-14

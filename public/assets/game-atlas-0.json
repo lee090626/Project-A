@@ -240,48 +240,24 @@
         "y": 0.5
       }
     },
-    "GaleStoneIcon.png": {
+    "FireBall.png": {
       "frame": {
         "x": 1837,
         "y": 1917,
-        "w": 88,
-        "h": 92
+        "w": 170,
+        "h": 80
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 20,
-        "y": 18,
-        "w": 88,
-        "h": 92
+        "x": 43,
+        "y": 88,
+        "w": 170,
+        "h": 80
       },
       "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonStoneIcon.png": {
-      "frame": {
-        "x": 1931,
-        "y": 1917,
-        "w": 84,
-        "h": 88
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 22,
-        "y": 20,
-        "w": 84,
-        "h": 88
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
+        "w": 256,
+        "h": 256
       },
       "pivot": {
         "x": 0.5,

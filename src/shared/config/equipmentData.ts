@@ -3,6 +3,24 @@ import { Equipment } from '../types/game';
 /**
  * 장비 데이터베이스 (EQUIPMENTS)
  * 모든 드릴, 투구, 갑옷, 신발 데이터를 중앙 관리합니다.
+ * 
+ * @description
+ * 각 Circle(지옥의 원)별로 4종류의 장비(드릴, 투구, 갑옷, 신발)를 제공합니다.
+ * 각 장비는 특정 Circle의 테마와 난이도에 맞는 스탯을 제공합니다.
+ * 
+ * @property {string} id - 장비의 고유 식별자
+ * @property {string} name - 장비의 이름
+ * @property {string} description - 장비 설명
+ * @property {string} part - 장비 부위 (drill, helmet, armor, boots)
+ * @property {number} circle - 해당 Circle 번호 (2-9)
+ * @property {string} icon - UI에 표시될 아이콘 (이모지)
+ * @property {Object} stats - 장비 스탯
+ * @property {number} stats.power - 공격력/채굴력 (드릴 전용)
+ * @property {number} stats.defense - 방어력 (투구, 갑옷, 신발)
+ * @property {number} stats.maxHp - 최대 체력 (갑옷, 신발)
+ * @property {number} stats.moveSpeed - 이동 속도 (신발)
+ * @property {Object} price - 제작/구매 비용
+ * @property {number} maxSkillSlots - 최대 스킬 슬롯 수 (드릴 전용)
  */
 export const EQUIPMENTS: Record<string, any> = {
   // === Circle 2 — Lust (색욕) ===

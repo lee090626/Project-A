@@ -1,33 +1,65 @@
 import { TileType } from '../types/game';
 
+/**
+ * 광물 생성 규칙을 정의하는 인터페이스입니다.
+ * 각 Circle(지옥의 원)마다 광물이 생성되는 방식을 제어합니다.
+ */
 export interface MineralRule {
+  /** 광물 타입 (TileType) */
   type: TileType;
+  /** 생성 확률 임계값 (0~1 범위, 값이 높을수록 희귀) */
   threshold: number; // 0~1 (조밀도)
+  /** 최소 생성 층 (해당 Circle 내 1~30층) */
   minLayer?: number; // 1~30 (해당 Circle 내 층)
+  /** 최대 생성 빈도 층 (가장 많이 생성되는 층) */
   peakLayer?: number;
+  /** 생성 범위 (층 단위) */
   range?: number;
+  /** 군집 크기 (값이 클수록 큰 덩어리로 생성) */
   scale?: number; // 군집 크기
 }
 
+/**
+ * 몬스터 스폰 규칙을 정의하는 인터페이스입니다.
+ * 각 Circle마다 어떤 몬스터가 어느 층에서 생성되는지 제어합니다.
+ */
 export interface MonsterSpawnRule {
+  /** 몬스터 ID (monsterData.ts 참조) */
   monsterId: string;
+  /** 스폰 확률 (0~1 범위) */
   chance: number;
+  /** 가중치 (다른 몬스터와 비교한 상대적 생성 빈도) */
   weight: number;
+  /** 최소 생성 층 */
   minLayer: number;
+  /** 최대 생성 층 (없으면 Circle 끝까지 생성) */
   maxLayer?: number;
 }
 
+/**
+ * Circle(지옥의 원) 설정을 정의하는 인터페이스입니다.
+ * 게임의 각 지역(원)마다 고유한 테마와 콘텐츠를 정의합니다.
+ */
 export interface CircleConfig {
+  /** Circle ID (1~9) */
   id: number;
+  /** 영어 이름 */
   name: string;
+  /** 한국어 이름 */
   nameKo: string;
+  /** 테마 설명 */
   theme: string;
+  /** 시작 깊이 (전체 게임 기준) */
   depthStart: number;
+  /** 종료 깊이 (전체 게임 기준) */
   depthEnd: number;
   /** 배경 채우기 타일 타입. 광물 스팟 외 기본 채워지는 타일. */
   bgType?: TileType;
+  /** 광물 생성 규칙 목록 */
   minerals: MineralRule[];
+  /** 몬스터 스폰 규칙 목록 */
   monsters: MonsterSpawnRule[];
+  /** 보스 정보 (해당 Circle의 최종 보스) */
   boss?: { id: string; spawnLayer: number };
 }
 
