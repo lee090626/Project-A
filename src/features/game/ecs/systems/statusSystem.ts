@@ -97,6 +97,14 @@ export const statusSystem = (world: GameWorld, now: number) => {
     world.intent.miningTarget = null;
     player.isDrilling = false;
   }
+
+  // --- [v4 Emergency Fix] Stuck Stun Cleanser ---
+  if (player.stats.activeEffects.length > 0) {
+    player.stats.activeEffects = player.stats.activeEffects.filter(e => {
+      if (e.type === 'STUN' && e.endTime > now + 3600000) return false; 
+      return true;
+    });
+  }
 };
 
 /**
@@ -149,9 +157,10 @@ export const applyStatusEffect = (
   world: GameWorld,
   effect: Omit<ActiveEffect, 'endTime' | 'startTime'>,
   durationMs: number,
+  nowArg?: number // 선택적 인자로 현재 시간 전달 가능
 ) => {
   const { player } = world;
-  const now = Date.now();
+  const now = nowArg || performance.now(); // Date.now() 대신 성능 기반 시간 사용
 
   const STUN_IMMUNITY_DURATION = 1000; // 스턴 종료 후 1초간 면역 (사용자 요청 반영)
 
