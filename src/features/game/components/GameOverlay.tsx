@@ -55,8 +55,7 @@ export default function GameOverlay({
     handleSell,
     handleSummonRune,
     handleSynthesizeRunes,
-    handleEquipDrill,
-    handleEquipDrone,
+    handleEquipEquipment,
     handleEquipRune,
     handleUnequipRune,
     handleSelectCheckpoint,
@@ -132,10 +131,7 @@ export default function GameOverlay({
           <Inventory
             stats={currentStats}
             onClose={() => handleClose('isInventoryOpen')}
-            onEquip={(id, type) => {
-              if (type === 'drill') handleEquipDrill(id);
-              else handleEquipDrone(id);
-            }}
+            onEquip={handleEquipEquipment}
             onEquipRune={handleEquipRune}
           />
         </Overlay>

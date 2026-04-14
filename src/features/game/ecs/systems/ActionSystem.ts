@@ -20,6 +20,7 @@ const actionHandlers: Record<string, ActionHandler> = {
   upgrade: handleEconomyAction,
   sell: handleEconomyAction,
   craft: handleEconomyAction,
+  equip: handleWorldAction,
 
   // 룬 관련 액션: 소환, 장착, 해제, 합성
   summonRune: handleRuneAction,

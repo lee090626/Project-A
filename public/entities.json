@@ -21,17 +21,6 @@
       "width": 6,
       "height": 6,
       "interactionType": "crafting"
-    },
-    {
-      "id": "refinery_1",
-      "type": "object",
-      "name": "Refinery",
-      "x": 26,
-      "y": 6,
-      "imagePath": "Refinery.png",
-      "width": 3,
-      "height": 4,
-      "interactionType": "refinery"
     }
   ]
 }
