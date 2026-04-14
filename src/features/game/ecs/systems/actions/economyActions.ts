@@ -40,10 +40,14 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
             (stats.inventory as any)[res] -= amt as number;
         });
       }
-      if (data.res.drillId && !stats.ownedEquipmentIds.includes(data.res.drillId)) {
-        stats.ownedEquipmentIds.push(data.res.drillId);
-        if (!stats.equipmentStates[data.res.drillId]) {
-          stats.equipmentStates[data.res.drillId] = createInitialEquipmentState(data.res.drillId);
+      if (data.res) {
+        const equipId = data.res.DrillId || data.res.HelmetId || data.res.ArmorId || data.res.BootsId || 
+                       data.res.drillId || data.res.helmetId || data.res.armorId || data.res.bootsId;
+        if (equipId && !stats.ownedEquipmentIds.includes(equipId)) {
+          stats.ownedEquipmentIds.push(equipId);
+          if (!stats.equipmentStates[equipId]) {
+            stats.equipmentStates[equipId] = createInitialEquipmentState(equipId);
+          }
         }
       }
       break;

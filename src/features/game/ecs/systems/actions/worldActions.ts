@@ -50,9 +50,14 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       break;
     }
 
-    case 'equip':
-      if (data.type === 'drill') stats.equipment.drillId = data.id;
-      else if (data.type === 'artifact') stats.equippedArtifactId = data.id;
+    case 'equip': {
+      const { id, part } = data;
+      if (part === 'Drill') stats.equipment.drillId = id;
+      else if (part === 'Helmet') stats.equipment.helmetId = id;
+      else if (part === 'Armor') stats.equipment.armorId = id;
+      else if (part === 'Boots') stats.equipment.bootsId = id;
+      else if (part === 'artifact') stats.equippedArtifactId = id;
       break;
+    }
   }
 };
