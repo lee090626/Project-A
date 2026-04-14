@@ -11,9 +11,9 @@ interface WorldInfoProps {
  */
 export const WorldInfo: React.FC<WorldInfoProps> = React.memo(({ layerName, depth, onOpenElevator }) => {
   return (
-    <div className="hidden md:flex flex-col items-end gap-1 opacity-80 pointer-events-auto">
-      <span className="text-emerald-400 font-mono text-sm md:text-xl lg:text-3xl font-black tracking-widest uppercase">
-        {layerName} (Depth: {depth}m)
+    <div className="hidden md:flex flex-col items-end gap-1 opacity-80 hover:opacity-100 transition-opacity pointer-events-auto">
+      <span className="text-emerald-400 font-mono text-sm md:text-xl lg:text-4xl font-black tracking-tighter drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+        {layerName}
       </span>
       {onOpenElevator && (
         <button 
