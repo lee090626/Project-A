@@ -24,7 +24,7 @@ interface CraftingProps {
  * 상점에 있던 장비 필터링 로직을 완벽하게 이식하고 UI를 강화했습니다.
  */
 function Crafting({ stats, onCraft, onClose }: CraftingProps) {
-  const [selectedPart, setSelectedPart] = useState<EquipmentPart>('drill');
+  const [selectedPart, setSelectedPart] = useState<EquipmentPart>('Drill');
   const [selectedCircle, setSelectedCircle] = useState<number>(2);
   const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
 
@@ -138,7 +138,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
               </div>
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mr-2">Part:</span>
-                {(['drill', 'helmet', 'armor', 'boots'] as EquipmentPart[]).map((part) => (
+                {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
                   <button
                     key={part}
                     onClick={() => {
