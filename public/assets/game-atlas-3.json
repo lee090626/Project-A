@@ -1,119 +1,23 @@
 {
   "frames": {
-    "DiamondDrill.png": {
+    "SettingsIcon.webp": {
       "frame": {
         "x": 3,
         "y": 3,
-        "w": 470,
-        "h": 971
+        "w": 906,
+        "h": 913
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 368,
-        "y": 5,
-        "w": 470,
-        "h": 971
+        "x": 59,
+        "y": 55,
+        "w": 906,
+        "h": 913
       },
       "sourceSize": {
-        "w": 1078,
-        "h": 976
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "EmeralDrill.png": {
-      "frame": {
-        "x": 3,
-        "y": 980,
-        "w": 472,
-        "h": 930
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 334,
-        "y": 33,
-        "w": 472,
-        "h": 930
-      },
-      "sourceSize": {
-        "w": 1078,
-        "h": 976
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "GoldDrill.png": {
-      "frame": {
-        "x": 479,
-        "y": 3,
-        "w": 449,
-        "h": 928
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 368,
-        "y": 48,
-        "w": 449,
-        "h": 928
-      },
-      "sourceSize": {
-        "w": 1078,
-        "h": 976
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "BaseTileset.png": {
-      "frame": {
-        "x": 481,
-        "y": 937,
-        "w": 640,
-        "h": 640
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 640,
-        "h": 640
-      },
-      "sourceSize": {
-        "w": 640,
-        "h": 640
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "StoneDrill.png": {
-      "frame": {
-        "x": 934,
-        "y": 3,
-        "w": 413,
-        "h": 926
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 369,
-        "y": 25,
-        "w": 413,
-        "h": 926
-      },
-      "sourceSize": {
-        "w": 1078,
-        "h": 976
+        "w": 1024,
+        "h": 1024
       },
       "pivot": {
         "x": 0.5,
@@ -122,8 +26,8 @@
     },
     "IronDrill.png": {
       "frame": {
-        "x": 1127,
-        "y": 935,
+        "x": 3,
+        "y": 922,
         "w": 410,
         "h": 912
       },
@@ -144,10 +48,82 @@
         "y": 0.5
       }
     },
+    "StatusIcon.webp": {
+      "frame": {
+        "x": 915,
+        "y": 3,
+        "w": 840,
+        "h": 295
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 89,
+        "y": 388,
+        "w": 840,
+        "h": 295
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "BookIcon.webp": {
+      "frame": {
+        "x": 915,
+        "y": 304,
+        "w": 835,
+        "h": 562
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 95,
+        "y": 231,
+        "w": 835,
+        "h": 562
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "BaseTileset.png": {
+      "frame": {
+        "x": 419,
+        "y": 922,
+        "w": 640,
+        "h": 640
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 640,
+        "h": 640
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "Asmodeus.png": {
       "frame": {
-        "x": 481,
-        "y": 1583,
+        "x": 419,
+        "y": 1568,
         "w": 624,
         "h": 392
       },
@@ -170,8 +146,8 @@
     },
     "Mechanic.png": {
       "frame": {
-        "x": 1353,
-        "y": 3,
+        "x": 1049,
+        "y": 1568,
         "w": 512,
         "h": 418
       },
@@ -192,34 +168,10 @@
         "y": 0.5
       }
     },
-    "InventoryIcon.webp": {
-      "frame": {
-        "x": 1353,
-        "y": 427,
-        "w": 481,
-        "h": 399
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 271,
-        "y": 312,
-        "w": 481,
-        "h": 399
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "Merchant.png": {
       "frame": {
-        "x": 1543,
-        "y": 832,
+        "x": 1567,
+        "y": 872,
         "w": 354,
         "h": 512
       },
@@ -239,6 +191,30 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    "InventoryIcon.webp": {
+      "frame": {
+        "x": 1065,
+        "y": 872,
+        "w": 481,
+        "h": 399
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 271,
+        "y": 312,
+        "w": 481,
+        "h": 399
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   },
   "meta": {
@@ -247,8 +223,8 @@
     "image": "game-atlas-3.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1900,
-      "h": 1978
+      "w": 1924,
+      "h": 1989
     },
     "scale": 1
   }
