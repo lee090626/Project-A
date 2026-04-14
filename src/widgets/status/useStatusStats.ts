@@ -69,9 +69,9 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const runeMoveSpeed = getTotalRuneStat(stats, 'moveSpeed');
 
     // 4. 최종 스탯 도출 (엔진 동기화 수치와 일치 시킴)
-    const finalPower = stats.power + (artifactBonuses?.power || 0) + runePowerBonus;
+    const finalPower = stats.power + (artifactBonuses?.power || 0) + runePowerBonus + (masteryBonuses.miningPower || 0);
     const finalDefense = (stats.defense || 0);
-    const finalMaxHp = stats.maxHp;
+    const finalMaxHp = Math.floor((stats.maxHp + (masteryBonuses.maxHp || 0)) * (1 + (masteryBonuses.maxHpMult || 0)));
     const finalLuck = (stats.luck || 0) + Math.floor(runeLuck * 100);
 
     const finalCritRate = runeCritRate + (artifactBonuses.critRate || 0) + (stats.luck || 0) * 0.01;
