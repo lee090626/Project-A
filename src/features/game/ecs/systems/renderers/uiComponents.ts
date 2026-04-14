@@ -65,6 +65,13 @@ export function updateAttackIndicatorFromSoA(
   const indicator = container.getChildByLabel('attackIndicator') as PIXI.Text;
   if (!indicator) return;
 
+  const entW = soa.width[idx] || TILE_SIZE;
+  const isBoss = soa.type[idx] === 2;
+
+  // 실시간 위치 동기화 (Pool 재사용 시 크기 불일치 해결)
+  indicator.x = entW / 2;
+  indicator.y = isBoss ? -40 : -14;
+
   const attackCooldown = soa.attackCooldown[idx];
   const lastAttack = soa.lastAttackTime[idx];
   const timeSinceLastAttack = lastAttack ? now - lastAttack : attackCooldown;
@@ -96,8 +103,9 @@ export function updateHPBarFromSoA(idx: number, soa: any, player: any, container
   const distSq = dx * dx + dy * dy;
   const shouldShowHP = hp < maxHp || distSq < 1638400; // (TILE_SIZE * 8)^2 = 40^2 * 64 = 1600 * 64 = 102400? (TILE_SIZE=128 기준 1024^2=1048576)
 
-  hpBar.visible = shouldShowHP;
-  if (!shouldShowHP) return;
+  const isBoss = soa.type && soa.type[idx] === 2;
+  hpBar.visible = shouldShowHP && !isBoss;
+  if (!hpBar.visible) return;
 
   const barW = entW - 12;
   const barH = 6;

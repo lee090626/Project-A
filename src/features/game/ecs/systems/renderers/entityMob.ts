@@ -34,8 +34,8 @@ export function updateMobRenderer(
 
       if (body.texture !== texture) {
         body.texture = texture;
-        body.width = ew * (type === 2 ? 1.2 : 1.0);
-        body.height = eh * (type === 2 ? 1.2 : 1.0);
+        body.width = ew;
+        body.height = eh;
       }
     }
   }

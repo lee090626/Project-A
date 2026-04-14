@@ -166,7 +166,7 @@ function createEntityContainer(
     });
     indicator.label = 'attackIndicator';
     indicator.anchor.set(0.5, 0.5);
-    indicator.position.set(entW / 2, -14);
+    indicator.position.set(entW / 2, entity.type === 'boss' ? -40 : -14);
     indicator.visible = false;
     container.addChild(indicator);
   }
