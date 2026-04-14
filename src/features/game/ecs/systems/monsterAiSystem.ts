@@ -26,10 +26,19 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
     // Worker 루프 내의 simple 프레임 카운터 역할 (now 값 사용)
     if (Math.floor(now / 16) % updateInterval !== 0) continue;
 
+    const ATTACK_RANGE = 1.5; // 1.2 -> 1.5 상향 (인접 타일 인식 개선)
+
     if (distSq < CHASE_RANGE * CHASE_RANGE) {
       if (distSq < ATTACK_RANGE * ATTACK_RANGE) {
-        if (entities.soa.state[i] !== 2) {
+        // [추가] 잡몹(Type 1)은 대각선 공격 불가능
+        const isDiagonal = Math.abs(dx) > 0.8 && Math.abs(dy) > 0.8;
+        const canAttack = entities.soa.type[i] === 2 || !isDiagonal;
+
+        if (canAttack && entities.soa.state[i] !== 2) {
           entities.soa.state[i] = 2; // 2: attack
+          entities.markDirty(i);
+        } else if (!canAttack && entities.soa.state[i] !== 0) {
+          entities.soa.state[i] = 0; // 대각선 잡몹은 대기 상태 유지
           entities.markDirty(i);
         }
       } else {
