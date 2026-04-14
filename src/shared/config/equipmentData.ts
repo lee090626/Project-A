@@ -14,6 +14,7 @@ import { Equipment } from '../types/game';
  * @property {string} part - 장비 부위 (drill, helmet, armor, boots)
  * @property {number} circle - 해당 Circle 번호 (2-9)
  * @property {string} icon - UI에 표시될 아이콘 (이모지)
+ * @property {string} image - 아틀라스에 등록된 이미지 ID (AtlasIconName)
  * @property {Object} stats - 장비 스탯
  * @property {number} stats.power - 공격력/채굴력 (드릴 전용)
  * @property {number} stats.defense - 방어력 (투구, 갑옷, 신발)
@@ -31,6 +32,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'drill',
     circle: 2,
     icon: '🦷',
+    image: 'CrimsonFangDrill',
     stats: { power: 15 },
     price: { crimsonstone: 20, goldCoins: 1000 },
     maxSkillSlots: 1
@@ -42,6 +44,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'helmet',
     circle: 2,
     icon: '🥽',
+    image: 'CrimsonVeilHelmet',
     stats: { defense: 5 },
     price: { crimsonstone: 15, goldCoins: 800 }
   },
@@ -52,6 +55,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'armor',
     circle: 2,
     icon: '🛡️',
+    image: 'CrimsonPlateArmor',
     stats: { maxHp: 100 },
     price: { crimsonstone: 25, goldCoins: 1200 }
   },
@@ -62,6 +66,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'boots',
     circle: 2,
     icon: '👢',
+    image: 'CrimsonStrideBoots',
     stats: { moveSpeed: 10, defense: 2, maxHp: 30 },
     price: { crimsonstone: 15, goldCoins: 900 }
   },

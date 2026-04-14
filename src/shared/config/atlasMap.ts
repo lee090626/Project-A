@@ -43,81 +43,72 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
-  "GoldIcon": {
+  "DiamondDrill": {
     "atlasIndex": 0,
     "x": 1087,
     "y": 3,
-    "width": 935,
-    "height": 927,
+    "width": 470,
+    "height": 971,
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
-  "CrimsonStoneTile": {
+  "EmeraldDrill": {
+    "atlasIndex": 0,
+    "x": 1563,
+    "y": 3,
+    "width": 472,
+    "height": 930,
+    "atlasWidth": 2047,
+    "atlasHeight": 2048
+  },
+  "CrimsonFangDrill": {
     "atlasIndex": 0,
     "x": 1033,
     "y": 1917,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "DirtTile": {
-    "atlasIndex": 0,
-    "x": 1167,
-    "y": 1917,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "FervorStoneTile": {
-    "atlasIndex": 0,
-    "x": 1301,
-    "y": 1917,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "GaleStoneTile": {
-    "atlasIndex": 0,
-    "x": 1435,
-    "y": 1917,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "StoneTile": {
-    "atlasIndex": 0,
-    "x": 1569,
-    "y": 1917,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2047,
-    "atlasHeight": 2048
-  },
-  "BossCoreTile": {
-    "atlasIndex": 0,
-    "x": 1703,
-    "y": 1917,
-    "width": 128,
-    "height": 128,
+    "width": 227,
+    "height": 96,
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
   "FireBall": {
     "atlasIndex": 0,
-    "x": 1837,
+    "x": 1266,
     "y": 1917,
     "width": 170,
     "height": 80,
     "atlasWidth": 2047,
     "atlasHeight": 2048
   },
-  "BossSkinTile": {
+  "CrimsonStrideBoots": {
     "atlasIndex": 0,
-    "x": 1703,
+    "x": 1442,
+    "y": 1917,
+    "width": 148,
+    "height": 102,
+    "atlasWidth": 2047,
+    "atlasHeight": 2048
+  },
+  "CrimsonPlateArmor": {
+    "atlasIndex": 0,
+    "x": 1596,
+    "y": 1917,
+    "width": 138,
+    "height": 120,
+    "atlasWidth": 2047,
+    "atlasHeight": 2048
+  },
+  "CrimsonStoneTile": {
+    "atlasIndex": 0,
+    "x": 1740,
+    "y": 1917,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 2047,
+    "atlasHeight": 2048
+  },
+  "CrimsonVeilHelmet": {
+    "atlasIndex": 0,
+    "x": 1874,
     "y": 1917,
     "width": 128,
     "height": 128,
@@ -160,48 +151,48 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
-  "WindTornSoul": {
-    "atlasIndex": 1,
-    "x": 1033,
-    "y": 1863,
-    "width": 210,
-    "height": 172,
-    "atlasWidth": 2044,
-    "atlasHeight": 2038
-  },
   "BloatedDevourer": {
     "atlasIndex": 1,
-    "x": 1249,
+    "x": 1033,
     "y": 1863,
     "width": 254,
     "height": 136,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
-  "LustfulWhisperer": {
+  "WindTornSoul": {
     "atlasIndex": 1,
-    "x": 1509,
+    "x": 1293,
     "y": 1863,
-    "width": 176,
-    "height": 170,
+    "width": 210,
+    "height": 172,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
   "GaleBat": {
     "atlasIndex": 1,
-    "x": 1691,
+    "x": 1509,
     "y": 1863,
     "width": 178,
     "height": 154,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
-  "GaleStoneIcon": {
+  "LustfulWhisperer": {
+    "atlasIndex": 1,
+    "x": 1693,
+    "y": 1863,
+    "width": 176,
+    "height": 170,
+    "atlasWidth": 2044,
+    "atlasHeight": 2038
+  },
+  "DirtTile": {
     "atlasIndex": 1,
     "x": 1875,
     "y": 1863,
-    "width": 88,
-    "height": 92,
+    "width": 128,
+    "height": 128,
     "atlasWidth": 2044,
     "atlasHeight": 2038
   },
@@ -211,7 +202,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 1024,
     "height": 1024,
-    "atlasWidth": 1961,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
   "Player": {
@@ -220,142 +211,187 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 1033,
     "width": 876,
     "height": 992,
-    "atlasWidth": 1961,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
-  "SettingsIcon": {
-    "atlasIndex": 2,
-    "x": 885,
-    "y": 1033,
-    "width": 906,
-    "height": 913,
-    "atlasWidth": 1961,
-    "atlasHeight": 2028
-  },
-  "BookIcon": {
+  "GoldIcon": {
     "atlasIndex": 2,
     "x": 1033,
     "y": 3,
-    "width": 835,
-    "height": 562,
-    "atlasWidth": 1961,
+    "width": 935,
+    "height": 927,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
-  "StatusIcon": {
+  "GoldDrill": {
     "atlasIndex": 2,
-    "x": 1033,
-    "y": 571,
-    "width": 840,
-    "height": 295,
-    "atlasWidth": 1961,
+    "x": 885,
+    "y": 1033,
+    "width": 449,
+    "height": 928,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "StoneDrill": {
+    "atlasIndex": 2,
+    "x": 1340,
+    "y": 936,
+    "width": 413,
+    "height": 926,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "FervorStoneTile": {
+    "atlasIndex": 2,
+    "x": 1340,
+    "y": 1868,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "GaleStoneTile": {
+    "atlasIndex": 2,
+    "x": 1474,
+    "y": 1868,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "StoneTile": {
+    "atlasIndex": 2,
+    "x": 1608,
+    "y": 1868,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "BossCoreTile": {
+    "atlasIndex": 2,
+    "x": 1742,
+    "y": 1868,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "GaleStoneIcon": {
+    "atlasIndex": 2,
+    "x": 1876,
+    "y": 936,
+    "width": 88,
+    "height": 92,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
   "CrimsonStoneIcon": {
     "atlasIndex": 2,
-    "x": 1874,
-    "y": 3,
+    "x": 1033,
+    "y": 936,
     "width": 84,
     "height": 88,
-    "atlasWidth": 1961,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
   "FervorStoneIcon": {
     "atlasIndex": 2,
-    "x": 1874,
-    "y": 97,
+    "x": 1123,
+    "y": 936,
     "width": 80,
     "height": 86,
-    "atlasWidth": 1961,
+    "atlasWidth": 1971,
     "atlasHeight": 2028
   },
-  "DiamondDrill": {
+  "BossSkinTile": {
+    "atlasIndex": 2,
+    "x": 1742,
+    "y": 1868,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1971,
+    "atlasHeight": 2028
+  },
+  "SettingsIcon": {
     "atlasIndex": 3,
     "x": 3,
     "y": 3,
-    "width": 470,
-    "height": 971,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
-  },
-  "EmeraldDrill": {
-    "atlasIndex": 3,
-    "x": 3,
-    "y": 980,
-    "width": 472,
-    "height": 930,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
-  },
-  "GoldDrill": {
-    "atlasIndex": 3,
-    "x": 479,
-    "y": 3,
-    "width": 449,
-    "height": 928,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
-  },
-  "BaseTileset": {
-    "atlasIndex": 3,
-    "x": 481,
-    "y": 937,
-    "width": 640,
-    "height": 640,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
-  },
-  "StoneDrill": {
-    "atlasIndex": 3,
-    "x": 934,
-    "y": 3,
-    "width": 413,
-    "height": 926,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
+    "width": 906,
+    "height": 913,
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
   },
   "IronDrill": {
     "atlasIndex": 3,
-    "x": 1127,
-    "y": 935,
+    "x": 3,
+    "y": 922,
     "width": 410,
     "height": 912,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
+  },
+  "StatusIcon": {
+    "atlasIndex": 3,
+    "x": 915,
+    "y": 3,
+    "width": 840,
+    "height": 295,
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
+  },
+  "BookIcon": {
+    "atlasIndex": 3,
+    "x": 915,
+    "y": 304,
+    "width": 835,
+    "height": 562,
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
+  },
+  "BaseTileset": {
+    "atlasIndex": 3,
+    "x": 419,
+    "y": 922,
+    "width": 640,
+    "height": 640,
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
   },
   "Asmodeus": {
     "atlasIndex": 3,
-    "x": 481,
-    "y": 1583,
+    "x": 419,
+    "y": 1568,
     "width": 624,
     "height": 392,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
   },
   "Mechanic": {
     "atlasIndex": 3,
-    "x": 1353,
-    "y": 3,
+    "x": 1049,
+    "y": 1568,
     "width": 512,
     "height": 418,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
-  },
-  "InventoryIcon": {
-    "atlasIndex": 3,
-    "x": 1353,
-    "y": 427,
-    "width": 481,
-    "height": 399,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
   },
   "Merchant": {
     "atlasIndex": 3,
-    "x": 1543,
-    "y": 832,
+    "x": 1567,
+    "y": 872,
     "width": 354,
     "height": 512,
-    "atlasWidth": 1900,
-    "atlasHeight": 1978
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
+  },
+  "InventoryIcon": {
+    "atlasIndex": 3,
+    "x": 1065,
+    "y": 872,
+    "width": 481,
+    "height": 399,
+    "atlasWidth": 1924,
+    "atlasHeight": 1989
   }
 };
