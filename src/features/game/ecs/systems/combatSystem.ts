@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
-import { MONSTERS } from '@/shared/config/monsterData';
+import { MONSTER_LIST } from '@/shared/config/monsterData';
 import { calculateMiningDamage } from '../../lib/miningCalculator';
 import { createFloatingText } from '@/shared/lib/effectUtils';
 import { handleBossDefeat } from './bossSystem';
@@ -89,7 +89,7 @@ export const combatSystem = (world: GameWorld, deltaTime: number, now: number) =
 
       if (isHit) {
         const defIdx = entities.soa.monsterDefIndex[idx];
-        const monsterDef = MONSTERS[defIdx];
+        const monsterDef = MONSTER_LIST[defIdx];
         const monsterDefense = monsterDef?.stats?.defense || 0;
 
         const { finalDamage, attackInterval, isCrit } = calculateMiningDamage(
@@ -130,7 +130,7 @@ export const combatSystem = (world: GameWorld, deltaTime: number, now: number) =
   for (let i = entities.soa.count - 1; i >= 0; i--) {
     if ((entities.soa.type[i] === 1 || entities.soa.type[i] === 2) && entities.soa.hp[i] <= 0) {
       const defIdx = entities.soa.monsterDefIndex[i];
-      const monsterDef = MONSTERS[defIdx];
+      const monsterDef = MONSTER_LIST[defIdx];
 
       if (monsterDef) {
         // 보상 지급
