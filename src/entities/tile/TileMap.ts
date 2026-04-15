@@ -291,6 +291,7 @@ export class TileMap {
             attack: mob.stats.power,
             speed: mob.stats.speed,
             defense: mob.stats.defense,
+            attackCooldown: mob.stats.attackCooldown,
           },
           state: 'idle',
         };

@@ -1,6 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { getCircleConfig } from '@/shared/config/circleData';
+import { MONSTER_LIST } from '@/shared/config/monsterData';
 
 /**
  * 플레이어의 위치를 기반으로 주변 맵에서 몬스터를 탐색하고 엔티티로 소환하는 시스템입니다.
@@ -35,7 +36,6 @@ export const spawnSystem = (world: GameWorld) => {
       // 보스 근처 접근 시 소환
       const distY = Math.abs(player.stats.depth - spawnY);
       if (distY < 15) {
-        const MONSTER_LIST = require('@/shared/config/monsterData').MONSTER_LIST;
         const defIdx = MONSTER_LIST.findIndex((m: any) => m.id === bossId);
 
         if (defIdx !== -1) {
@@ -119,9 +119,11 @@ export const spawnSystem = (world: GameWorld) => {
         if (!isKilled) {
           // 이미 해당 ID의 엔티티가 존재하지 않는지 최종 확인 (중복 방지 - $O(1)$ Hash Lookup)
           if (!entities.hasId(initialMonster.id)) {
-            // MonsterDefinition 인덱스 찾기 (최적화: 미리 맵핑 테이블을 만드는 게 좋지만 일단 findIndex 사용)
-            const MONSTER_LIST = require('@/shared/config/monsterData').MONSTER_LIST;
-            const defIdx = MONSTER_LIST.findIndex((m: any) => m.id === initialMonster.id);
+            // initialMonster.id는 "mob_{x}_{y}_{monsterId}" 형식으로, 앞 3개 토큰(mob, x, y)을 제거해야
+            // MONSTER_LIST의 정의 ID(예: "c2_whisperer")와 일치함
+            const idParts = initialMonster.id.split('_');
+            const definitionId = idParts.slice(3).join('_');
+            const defIdx = MONSTER_LIST.findIndex((m: any) => m.id === definitionId);
 
             entities.create(
               1, // type: monster
