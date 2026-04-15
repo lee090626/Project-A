@@ -155,20 +155,10 @@ function createEntityContainer(
       container.addChild(nameTag);
     }
 
-    const indicator = new PIXI.Text({
-      text: '!',
-      style: {
-        fontSize: 28,
-        fill: 0xff0000,
-        fontWeight: '900',
-        stroke: { color: 0xffffff, width: 3 },
-      },
-    });
-    indicator.label = 'attackIndicator';
-    indicator.anchor.set(0.5, 0.5);
-    indicator.position.set(entW / 2, entity.type === 'boss' ? -40 : -14);
-    indicator.visible = false;
-    container.addChild(indicator);
+    const castBar = new PIXI.Graphics();
+    castBar.label = 'castBar';
+    castBar.visible = false;
+    container.addChild(castBar);
   }
 
   return container;
