@@ -10,6 +10,10 @@ const STYLES = {
   HP_GREEN: { color: 0x10b981 },
   HP_AMBER: { color: 0xf59e0b },
   HP_ROSE: { color: 0xef4444 },
+  CAST_BG: { color: 0x09090b, alpha: 0.6 },
+  CAST_FILL: { color: 0xf59e0b },
+  CAST_BOSS: { color: 0xef4444 },
+  CAST_READY: { color: 0xffffff },
 } as const;
 
 /**
@@ -54,33 +58,56 @@ export function updateStatusVFX(
 }
 
 /**
- * 공격 예고 인디케이터 (!) 업데이트
+ * 하이엔드 캐스팅 바 (Cast Bar) 업데이트
  */
-export function updateAttackIndicatorFromSoA(
+export function updateCastBarFromSoA(
   idx: number,
   soa: any,
   container: PIXI.Container,
   now: number,
 ) {
-  const indicator = container.getChildByLabel('attackIndicator') as PIXI.Text;
-  if (!indicator) return;
+  const castBar = container.getChildByLabel('castBar') as PIXI.Graphics;
+  if (!castBar) return;
 
   const entW = soa.width[idx] || TILE_SIZE;
   const isBoss = soa.type[idx] === 2;
-
-  // 실시간 위치 동기화 (Pool 재사용 시 크기 불일치 해결)
-  indicator.x = entW / 2;
-  indicator.y = isBoss ? -40 : -14;
+  const barY = isBoss ? -40 : -14;
 
   const attackCooldown = soa.attackCooldown[idx];
   const lastAttack = soa.lastAttackTime[idx];
   const timeSinceLastAttack = lastAttack ? now - lastAttack : attackCooldown;
-  const isTelegraphing = timeSinceLastAttack > attackCooldown - 300;
-  indicator.visible = isTelegraphing;
+  
+  // 시전 시작 구간 (보스는 1000ms, 일반 몹은 500ms 전부터 노출)
+  const castDuration = isBoss ? 1000 : 500;
+  const isCasting = timeSinceLastAttack > attackCooldown - castDuration;
 
-  if (isTelegraphing) {
-    const pulse = 1 + Math.sin(now / 50) * 0.2;
-    indicator.scale.set(pulse);
+  castBar.visible = isCasting;
+  if (!isCasting) return;
+
+  const progressFactor = (timeSinceLastAttack - (attackCooldown - castDuration)) / castDuration;
+  const ratio = Math.max(0, Math.min(1, progressFactor));
+
+  // 바 디자인 수치
+  const barW = isBoss ? entW * 0.8 : TILE_SIZE * 0.7;
+  const barH = isBoss ? 8 : 4;
+  const barX = (entW - barW) / 2;
+
+  // 임박 시 깜빡임 효과 (마지막 150ms)
+  const isReady = timeSinceLastAttack > attackCooldown - 150;
+  const fillColor = isReady ? STYLES.CAST_READY : (isBoss ? STYLES.CAST_BOSS : STYLES.CAST_FILL);
+
+  castBar.clear();
+  
+  // 배경
+  castBar
+    .roundRect(barX, barY, barW, barH, 2)
+    .fill(STYLES.CAST_BG);
+  
+  // 게이지
+  if (ratio > 0) {
+    castBar
+      .roundRect(barX, barY, barW * ratio, barH, 2)
+      .fill(fillColor);
   }
 }
 
