@@ -70,6 +70,7 @@ export const spawnSystem = (world: GameWorld) => {
           entities.soa.maxHp[idx] = bossDef.stats.maxHp;
           entities.soa.attack[idx] = bossDef.stats.power;
           entities.soa.attackCooldown[idx] = bossDef.stats.attackCooldown ?? 2500;
+          entities.soa.aggroRange[idx] = bossDef.behavior.aggroRange ?? 20;
           entities.soa.width[idx] = TILE_SIZE * 5;
           entities.soa.height[idx] = TILE_SIZE * 5;
           entities.soa.lastAttackTime[idx] = performance.now(); // [Fix] use performance.now to match loop now
@@ -139,6 +140,7 @@ export const spawnSystem = (world: GameWorld) => {
             entities.soa.maxHp[idx] = initialMonster.stats?.maxHp || 100;
             entities.soa.attack[idx] = initialMonster.stats?.attack || 5;
             entities.soa.attackCooldown[idx] = initialMonster.stats?.attackCooldown ?? 1000;
+            entities.soa.aggroRange[idx] = MONSTER_LIST[defIdx !== -1 ? defIdx : 0].behavior.aggroRange || 8;
             entities.soa.speed[idx] = initialMonster.stats?.speed || 50;
             entities.soa.width[idx] = initialMonster.width || TILE_SIZE;
             entities.soa.height[idx] = initialMonster.height || TILE_SIZE;

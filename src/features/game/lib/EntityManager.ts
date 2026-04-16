@@ -8,6 +8,9 @@ export interface EntitySoA {
 
   // 고유 식별 및 유효성 검사 (Handle: Generation << 16 | Index)
   generation: Uint16Array;
+  /** 스왑 시에도 유지되는 엔티티 고유 인스턴스 ID (타이머/패턴 키로 활용) */
+  instanceId: Uint32Array;
+
 
   // 기본 정보
   type: Uint8Array; // 0: none, 1: monster, 2: boss, 3: npc, 4: object, 5: projectile
@@ -27,6 +30,8 @@ export interface EntitySoA {
   lastAttackTime: Float32Array;
   /** 개별 공격 쿨타임 (ms). 모스터 정의에서 초기화. */
   attackCooldown: Float32Array;
+  /** 인식 사거리 (타일 단위). 플레이어가 이 범위 안에 들어오면 AI가 활성화됨. */
+  aggroRange: Float32Array;
 
   // 시각 데이터 및 히트박스
   monsterDefIndex: Uint16Array;
@@ -52,12 +57,14 @@ export type EntityHandle = number;
 export class EntityManager {
   public soa: EntitySoA;
   private idMap: Map<string, EntityHandle> = new Map();
+  private nextInstanceId: number = 1;
 
   constructor(capacity: number = 5000) {
     this.soa = {
       capacity,
       count: 0,
       generation: new Uint16Array(capacity),
+      instanceId: new Uint32Array(capacity),
       type: new Uint8Array(capacity),
       state: new Uint8Array(capacity),
       x: new Float32Array(capacity),
@@ -70,6 +77,7 @@ export class EntityManager {
       speed: new Float32Array(capacity),
       lastAttackTime: new Float32Array(capacity),
       attackCooldown: new Float32Array(capacity).fill(1000), // 기본값 1000ms
+      aggroRange: new Float32Array(capacity).fill(8), // 기본 인식 사거리 8타일
       monsterDefIndex: new Uint16Array(capacity),
       spriteIndex: new Uint16Array(capacity),
       width: new Float32Array(capacity),
@@ -99,6 +107,9 @@ export class EntityManager {
     if (id) {
       this.idMap.set(id, handle);
     }
+
+    this.soa.instanceId[index] = this.nextInstanceId++;
+
 
     // 기본값 초기화
     this.soa.type[index] = type;
@@ -132,6 +143,7 @@ export class EntityManager {
     if (index !== lastIndex) {
       // 마지막 원소의 데이터를 삭제된 위치로 이동 (Swap)
       this.soa.generation[index] = this.soa.generation[lastIndex];
+      this.soa.instanceId[index] = this.soa.instanceId[lastIndex];
       this.soa.type[index] = this.soa.type[lastIndex];
       this.soa.state[index] = this.soa.state[lastIndex];
       this.soa.x[index] = this.soa.x[lastIndex];
@@ -144,6 +156,7 @@ export class EntityManager {
       this.soa.speed[index] = this.soa.speed[lastIndex];
       this.soa.lastAttackTime[index] = this.soa.lastAttackTime[lastIndex];
       this.soa.attackCooldown[index] = this.soa.attackCooldown[lastIndex];
+      this.soa.aggroRange[index] = this.soa.aggroRange[lastIndex];
       this.soa.monsterDefIndex[index] = this.soa.monsterDefIndex[lastIndex];
       this.soa.spriteIndex[index] = this.soa.spriteIndex[lastIndex];
       this.soa.width[index] = this.soa.width[lastIndex];
@@ -190,8 +203,10 @@ export class EntityManager {
 
   /** 모든 엔티티 데이터 초기화 (차원 이동 시) */
   public clear() {
+    this.nextInstanceId = 1;
     this.soa.count = 0;
     this.soa.generation.fill(0);
+    this.soa.instanceId.fill(0);
     this.soa.type.fill(0);
     this.soa.state.fill(0);
     this.soa.x.fill(0);
@@ -203,7 +218,8 @@ export class EntityManager {
     this.soa.attack.fill(0);
     this.soa.speed.fill(0);
     this.soa.lastAttackTime.fill(0);
-    this.soa.attackCooldown.fill(1000); // 기본값 1000ms 로 리셋
+    this.soa.attackCooldown.fill(1000);
+    this.soa.aggroRange.fill(8);
     this.soa.monsterDefIndex.fill(0);
     this.soa.spriteIndex.fill(0);
     this.soa.width.fill(0);

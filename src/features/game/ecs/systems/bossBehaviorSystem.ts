@@ -67,7 +67,8 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
 
   // --- 패턴 1: Flame Shot (모든 페이즈) ---
   const warningLeadTime = 1000; // 공격 1000ms 전부터 전조 표시
-  const lastPatternTime = bossPatternTimers.get(bossIdx) || (now - patternInterval);
+  const instanceId = soa.instanceId[bossIdx];
+  const lastPatternTime = bossPatternTimers.get(instanceId) || (now - patternInterval);
   const timeSinceLastPattern = now - lastPatternTime;
 
   if (timeSinceLastPattern > patternInterval - warningLeadTime) {
@@ -75,7 +76,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     soa.state[bossIdx] = 1; // 1: 공격 준비 상태 (렌더러에서 느낌표 표시)
     
     if (timeSinceLastPattern > patternInterval) {
-      bossPatternTimers.set(bossIdx, now);
+      bossPatternTimers.set(instanceId, now);
       const shotCount = phase === 3 ? 5 : phase === 2 ? 3 : 1;
       const speed = phase === 3 ? 12 : phase === 2 ? 8 : 5;
 
@@ -121,12 +122,15 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     const crossFireInterval = phase === 3 ? 3000 : 4000;
     const crossWarningTime = 1000;
 
-    const lastCrossFireTime = crossFireTimers.get(bossIdx) || (now - crossFireInterval);
+    const lastCrossFireTime = crossFireTimers.get(instanceId) || (now - crossFireInterval);
     const timeSinceCross = now - lastCrossFireTime;
 
     if (timeSinceCross > crossFireInterval - crossWarningTime) {
+      // Cross Fire 시전 시에도 상태를 1(공격 준비)로 유지
+      soa.state[bossIdx] = 1;
+
       if (timeSinceCross > crossFireInterval) {
-        crossFireTimers.set(bossIdx, now);
+        crossFireTimers.set(instanceId, now);
 
         const crossSpeed = phase === 3 ? 10 : 7;
         const crossDirections = [

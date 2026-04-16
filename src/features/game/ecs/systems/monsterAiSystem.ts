@@ -33,7 +33,10 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
 
     const ATTACK_RANGE = 1.5; // 1.2 -> 1.5 상향 (인접 타일 인식 개선)
 
-    if (distSq < CHASE_RANGE * CHASE_RANGE) {
+    const range = entities.soa.aggroRange[i] || 8;
+    const rangeSq = range * range;
+
+    if (distSq < rangeSq) {
       if (distSq < ATTACK_RANGE * ATTACK_RANGE) {
         // [추가] 잡몹(Type 1)은 대각선 공격 불가능
         const isDiagonal = Math.abs(dx) > 0.8 && Math.abs(dy) > 0.8;
