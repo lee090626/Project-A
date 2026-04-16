@@ -389,6 +389,8 @@ export interface PlayerStats {
   discoveredMinerals: string[];
   /** 조우한 보스 ID 목록 */
   encounteredBossIds: string[];
+  /** 보스별 재생성 가능 시간 (타임스탬프) */
+  bossRespawnTimers: Record<string, number>;
   /** 현재 탐험 중인 차원 번호 */
   dimension: number;
 
