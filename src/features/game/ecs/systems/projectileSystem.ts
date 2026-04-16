@@ -19,16 +19,19 @@ export const projectileSystem = (world: GameWorld, deltaTime: number, now: numbe
     soa.y[i] += soa.vy[i] * dtFactor;
     entities.markDirty(i);
 
-    // 2. 플레이어 충돌 체크
+    // 2. 플레이어 충돌 체크 (중앙 앵커 기반 AABB)
+    const HITBOX_SCALE = 0.7; // 70% 영역만 실제 판정 (코어 중심)
+    const ew = (soa.width[i] || 16) * HITBOX_SCALE;
+    const eh = (soa.height[i] || 16) * HITBOX_SCALE;
+
+    // 이미지 중앙(soa.x, soa.y)을 기준으로 AABB 좌측상단(ex, ey) 산출
+    const ex = soa.x[i] - ew / 2;
+    const ey = soa.y[i] - eh / 2;
+
     const px = player.pos.x * TILE_SIZE;
     const py = player.pos.y * TILE_SIZE;
     const pw = TILE_SIZE;
     const ph = TILE_SIZE;
-
-    const ex = soa.x[i];
-    const ey = soa.y[i];
-    const ew = soa.width[i] || 16;
-    const eh = soa.height[i] || 16;
 
     const isHitPlayer = ex < px + pw && ex + ew > px && ey < py + ph && ey + eh > py;
 
@@ -39,6 +42,7 @@ export const projectileSystem = (world: GameWorld, deltaTime: number, now: numbe
       player.stats.hp -= damage;
       player.lastHitTime = now;
 
+      // 피격 위치 보정 (플레이어 중앙)
       createFloatingText(world, px + TILE_SIZE / 2, py, `-${damage}`, '#ef4444');
       world.shake = Math.max(world.shake, 5);
 
@@ -46,9 +50,9 @@ export const projectileSystem = (world: GameWorld, deltaTime: number, now: numbe
       continue;
     }
 
-    // 3. 타일 충돌 및 맵 경계 체크
-    const tx = Math.floor(ex / TILE_SIZE);
-    const ty = Math.floor(ey / TILE_SIZE);
+    // 3. 타일 충돌 및 맵 경계 체크 (중앙 좌표 기준)
+    const tx = Math.floor(soa.x[i] / TILE_SIZE);
+    const ty = Math.floor(soa.y[i] / TILE_SIZE);
 
     // 월드 경계 밖으로 나감
     if (ty < 0 || ty >= 3000) {
