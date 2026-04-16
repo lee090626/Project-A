@@ -145,7 +145,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                       setSelectedPart(part);
                       setSelectedRecipe(null);
                     }}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-[0.1em] border transition-all uppercase ${
+                    className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all uppercase ${
                       selectedPart === part
                         ? 'bg-white text-black border-white shadow-xl'
                         : 'bg-zinc-800/40 text-zinc-500 border-zinc-800 hover:text-zinc-300'
@@ -171,7 +171,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                     <button
                       key={rcp.id}
                       onClick={() => setSelectedRecipe(rcp)}
-                      className={`relative p-5 rounded-[2rem] border transition-all flex items-center gap-6 text-left group overflow-hidden focus:outline-none ${
+                      className={`relative p-5 rounded-4xl border transition-all flex items-center gap-6 text-left group overflow-hidden focus:outline-none ${
                         active
                           ? 'bg-zinc-800 border-rose-500/50 shadow-lg ring-1 ring-rose-500/20'
                           : 'bg-zinc-950/40 border-white/5 hover:border-white/10'
