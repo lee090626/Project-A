@@ -16,8 +16,10 @@ export const spawnSystem = (world: GameWorld) => {
   if (config.boss) {
     const bossId = config.boss.id;
     const isKilled = player.stats.killedMonsterIds?.includes(bossId);
+    const respawnTime = player.stats.bossRespawnTimers?.[bossId] || 0;
+    const canSpawn = !isKilled || Date.now() >= respawnTime;
 
-    if (!isKilled && !entities.hasId(bossId)) {
+    if (canSpawn && !entities.hasId(bossId)) {
       // 보스 위치 결정론적 계산 (시드 + 보스ID 해시)
       const seed = world.player.stats.mapSeed || 12345;
       const hash = (str: string) => {
