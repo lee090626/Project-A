@@ -1,5 +1,5 @@
 import React from 'react';
-import { AtlasIcon } from '../AtlasIcon';
+import AtlasIcon from '../AtlasIcon';
 
 interface GoldDisplayProps {
   gold: number;
