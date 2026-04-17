@@ -1,238 +1,26 @@
 import { GameWorld } from '@/entities/world/model';
-import { TILE_SIZE } from '@/shared/config/constants';
-import { MONSTER_LIST } from '@/shared/config/monsterData';
-import { calculateMiningDamage } from '../../lib/miningCalculator';
-import { createFloatingText } from '@/shared/lib/effectUtils';
-import { handleBossDefeat } from './bossSystem';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
-import { modifierManager } from '@/features/game/lib/ModifierManager';
+import { damageProcessor } from './combat/DamageProcessor';
+import { deathHandler } from './combat/DeathHandler';
+import { LootGenerator } from './combat/LootGenerator';
+
+// 전역 초기화 여부 플래그
+let isCombatInitialized = false;
 
 /**
- * 플레이어와 몬스터 간의 전투(대미지 처리, 사망 등)를 담당하는 시스템입니다.
+ * 플레이어와 몬스터 간의 전투(대미지 처리, 사망 등)를 관리하는 메인 시스템(오케스트레이터)입니다.
+ * SoC 원칙에 따라 실질적인 연산은 하위 도메인 시스템에 위임합니다.
  */
 export const combatSystem = (world: GameWorld, deltaTime: number, now: number) => {
-  const { player, entities, floatingTexts } = world;
-
-  // 1. 몬스트 -> 플레이어 공격 (SpatialHash 기반)
-  const nearbyMonsters = world.spatialHash.query(
-    player.pos.x * TILE_SIZE,
-    player.pos.y * TILE_SIZE,
-    TILE_SIZE * 2,
-  );
-
-  nearbyMonsters.forEach((idx) => {
-    const type = entities.soa.type[idx];
-    if (type !== 1 && type !== 2) return; // 1: monster, 2: boss
-    if (entities.soa.hp[idx] <= 0) return;
-
-    // 몬스터 사거리 체크 (월드 좌표 기준)
-    const ex = entities.soa.x[idx];
-    const ey = entities.soa.y[idx];
-    const ew = entities.soa.width[idx] || TILE_SIZE;
-    const eh = entities.soa.height[idx] || TILE_SIZE;
-
-    const px = player.pos.x * TILE_SIZE;
-    const py = player.pos.y * TILE_SIZE;
-
-    const rangePadding = TILE_SIZE * 1.2; 
-    const isInRange =
-      px >= ex - rangePadding &&
-      px < ex + ew + rangePadding &&
-      py >= ey - rangePadding &&
-      py < ey + eh + rangePadding;
-
-    if (isInRange) {
-      // [추가] 잡몹(Type 1)은 대각선 공격 불가능
-      const dx = Math.abs(px - (ex + ew / 2));
-      const dy = Math.abs(py - (ey + eh / 2));
-      const isDiagonal = dx > TILE_SIZE * 0.8 && dy > TILE_SIZE * 0.8;
-      const canDamage = type === 2 || !isDiagonal;
-
-      if (canDamage) {
-        const cooldown = entities.soa.attackCooldown[idx]; // 몬스터 별 개별 공격 쿨타임
-        if (now - entities.soa.lastAttackTime[idx] > cooldown) {
-          const attack = entities.soa.attack[idx];
-          const damage = Math.max(1, attack - (player.stats.defense || 0));
-          player.stats.hp -= damage;
-          player.lastHitTime = now;
-
-          createFloatingText(world, px, py - 20, `-${damage}`, '#ef4444');
-          entities.soa.lastAttackTime[idx] = now;
-          world.shake = Math.max(world.shake, 5);
-        }
-      }
-    }
-  });
-
-  // 2. 플레이어 -> 몬스터 공격 (드릴링 중 주변 몬스터 타격)
-  if (player.isDrilling && world.intent.miningTarget) {
-    const target = world.intent.miningTarget;
-    const hitEntities = world.spatialHash.query(
-      target.x * TILE_SIZE + TILE_SIZE / 2,
-      target.y * TILE_SIZE + TILE_SIZE / 2,
-      TILE_SIZE * 0.5,
-    );
-
-    hitEntities.forEach((idx) => {
-      const type = entities.soa.type[idx];
-      if (type !== 1 && type !== 2) return;
-      if (entities.soa.hp[idx] <= 0) return;
-
-      const ex = entities.soa.x[idx];
-      const ey = entities.soa.y[idx];
-      const ew = entities.soa.width[idx] || TILE_SIZE;
-      const eh = entities.soa.height[idx] || TILE_SIZE;
-
-      const tx = target.x * TILE_SIZE;
-      const ty = target.y * TILE_SIZE;
-
-      const isHit = tx < ex + ew && tx + TILE_SIZE > ex && ty < ey + eh && ty + TILE_SIZE > ey;
-
-      if (isHit) {
-        const defIdx = entities.soa.monsterDefIndex[idx];
-        const monsterDef = MONSTER_LIST[defIdx];
-        const monsterDefense = monsterDef?.stats?.defense || 0;
-
-        const { finalDamage, attackInterval, isCrit } = calculateMiningDamage(
-          player.stats,
-          type === 2 ? 'boss' : 'monster',
-          monsterDefense
-        );
-
-        if (now - player.lastAttackTime > attackInterval) {
-          let actualDamage = finalDamage;
-          let text = isCrit ? `Crit! -${finalDamage}` : `-${finalDamage}`;
-          let color = isCrit ? '#f87171' : '#ffffff';
-
-          // [특수 기믹] 크리티컬 온리 몬스터 처리
-          if (monsterDef?.mechanic === 'critical_only' && !isCrit) {
-            actualDamage = 0;
-            text = 'BLOCK!';
-            color = '#3b82f6'; // 파란색 (사용자 요청)
-          }
-
-          if (actualDamage > 0 || text === 'BLOCK!') {
-            entities.soa.hp[idx] -= actualDamage;
-            entities.markDirty(idx);
-            createFloatingText(world, ex, ey - 30, text, color);
-          }
-
-          player.lastAttackTime = now;
-          if (isCrit && actualDamage > 0) world.shake = Math.max(world.shake, 8);
-        }
-      }
-    });
+  // 1. 도메인 서비스 초기화 (최초 1회)
+  if (!isCombatInitialized) {
+    LootGenerator.init();
+    isCombatInitialized = true;
   }
 
-  // 3. 플레이어 사망 체크
-  if (player.stats.hp <= 0) player.stats.hp = 0;
+  // 2. [SoC: 대미지] 상호 타격 판정 및 시각 효과 처리
+  damageProcessor(world, now);
 
-  // 4. 사망 처리 및 보상 ($O(1)$ Swap-and-Pop)
-  for (let i = entities.soa.count - 1; i >= 0; i--) {
-    if ((entities.soa.type[i] === 1 || entities.soa.type[i] === 2) && entities.soa.hp[i] <= 0) {
-      const defIdx = entities.soa.monsterDefIndex[i];
-      const monsterDef = MONSTER_LIST[defIdx];
-
-      if (monsterDef) {
-        // ModifierManager: 희귀도 배율 및 보스 배율 계산
-        // 기존 switch(rarity) 블록을 RARITY_MULTIPLIERS 상수 기반으로 대체합니다.
-        const isBoss = entities.soa.type[i] === 2;
-        const multiplier = modifierManager.getRarityMultiplier(monsterDef.rarity, isBoss);
-
-        const baseGold = 10;
-        const hpBonus = Math.floor(entities.soa.maxHp[i] * 0.1);
-        const totalGold = Math.floor(baseGold + hpBonus * multiplier);
-
-        player.stats.goldCoins += totalGold;
-        createFloatingText(
-          world,
-          entities.soa.x[i],
-          entities.soa.y[i] - 60,
-          `+${totalGold} G`,
-          '#fde047',
-          1.5,
-        );
-
-        // 보스 처치 시 진행 처리 및 재생성 타이머 설정
-        if (entities.soa.type[i] === 2) {
-          handleBossDefeat(world, entities.soa.x[i], entities.soa.y[i]);
-          
-          if (monsterDef.behavior.respawnMs) {
-            if (!player.stats.bossRespawnTimers) player.stats.bossRespawnTimers = {};
-            player.stats.bossRespawnTimers[monsterDef.id] = Date.now() + monsterDef.behavior.respawnMs;
-          }
-        }
-
-        // ModifierManager: 경험치 유물 효과 적용 (EXP_BOOST 등)
-        let expAmount = monsterDef.rewards.exp;
-        expAmount = modifierManager.applyAll('onKill', 'exp', expAmount, { playerStats: player.stats });
-
-        // ModifierManager: onKill 부수 효과 유물 적용 (LIFE_STEAL_PERCENT 등)
-        // sideEffect 콜백을 통해 힐 양 계산 후 실제 HP 회복 및 플로팅 텍스트를 여기서 처리합니다.
-        modifierManager.triggerOnKillSideEffects({
-          playerStats: player.stats,
-          sideEffect: (type, payload) => {
-            if (type === 'HEAL') {
-              const healAmount = payload as number;
-              player.stats.hp = Math.min(player.stats.maxHp, player.stats.hp + healAmount);
-              createFloatingText(
-                world,
-                player.pos.x * TILE_SIZE,
-                player.pos.y * TILE_SIZE - 40,
-                `+${healAmount} HP`,
-                '#4ade80',
-              );
-            }
-          },
-        });
-
-        // === [업데이트] 다중 드롭 시스템 (유물 & 전리품) ===
-        const artifactBonuses = calculateArtifactBonuses(player.stats);
-        const luckBonus = artifactBonuses.luck; // 0.01 = 1% 증가 개념
-
-        // ModifierManager: 드롭 수량 유물 효과 적용 (LOOT_QUANTITY_BOOST 등)
-        const lootMultiplier = modifierManager.applyAll(
-          'onKill',
-          'loot',
-          1.0,
-          { playerStats: player.stats },
-        );
-
-        if (monsterDef.rewards.drops) {
-          monsterDef.rewards.drops.forEach((drop) => {
-            const rand = Math.random();
-            if (rand < drop.chance) {
-              // 기본 수량 결정
-              const baseAmount =
-                Math.floor(Math.random() * (drop.maxAmount - drop.minAmount + 1)) + drop.minAmount;
-              // 행운 보너스 및 유물 전리품 보너스 적용
-              const finalAmount = Math.max(
-                1,
-                Math.floor(baseAmount * (1 + luckBonus) * lootMultiplier),
-              );
-
-              // 시각적 연출을 위해 가벼운 분산 스폰
-              const vx = (Math.random() - 0.5) * 10;
-              const vy = -Math.random() * 8 - 4;
-
-              world.droppedItemPool.spawn(
-                drop.itemId as any,
-                entities.soa.x[i] + (entities.soa.width[i] || TILE_SIZE) / 2,
-                entities.soa.y[i] + (entities.soa.height[i] || TILE_SIZE) / 2,
-                vx,
-                vy,
-                finalAmount,
-              );
-            }
-          });
-        }
-
-        // 처치 기록 (ID가 있을 경우 활성화)
-        if (!player.stats.killedMonsterIds) player.stats.killedMonsterIds = [];
-        player.stats.killedMonsterIds.push(monsterDef.id);
-      }
-
-      entities.destroy(i);
-    }
-  }
+  // 3. [SoC: 사망] HP 체크, 보상 정산 및 이벤트 발행
+  // 이 시스템 내부에서 'ENTITY_DIED' 메시지가 발행되며 LootGenerator가 이를 수신합니다.
+  deathHandler(world, now);
 };
