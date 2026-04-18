@@ -22,7 +22,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
       <div className="animate-in fade-in slide-in-from-right-4 duration-300">
         <div className="flex justify-between items-start mb-8">
           <span
-            className="text-[10px] font-black px-3 py-1.5 rounded-lg border tracking-widest uppercase"
+            className="text-[10px] font-black px-3 py-1.5 rounded-lg border tracking-widest"
             style={{
               backgroundColor: isDiscovered ? `${mineral.color}20` : '#18181b',
               borderColor: isDiscovered ? mineral.color : '#27272a',
@@ -32,7 +32,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
             {isDiscovered ? 'Mineral' : 'Unknown'}
           </span>
           <span className="text-[9px] font-black text-zinc-600 tracking-widest">
-            ID: {id.toUpperCase()}
+            ID: {id}
           </span>
         </div>
 
@@ -52,7 +52,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           </div>
           {!isDiscovered && (
             <div className="absolute inset-0 flex items-center justify-center text-zinc-800 font-black text-5xl opacity-40">
-              LOCKED
+              Locked
             </div>
           )}
           {isDiscovered && (
@@ -74,7 +74,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
             color="#94a3b8"
           />
           <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 text-center flex flex-col items-center justify-center">
-            <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest uppercase">
+            <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">
               Base Value
             </div>
             <div className="flex items-center gap-1.5">
@@ -86,7 +86,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           </div>
         </div>
 
-        <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800 leading-relaxed text-xs text-zinc-400 text-center italic">
+        <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800 leading-relaxed text-xs text-zinc-400 text-center">
           {isDiscovered
             ? mineral.description
             : 'Data is Locked. Please mine this mineral to unlock the data.'}
@@ -119,7 +119,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           </div>
           {!isEncountered && (
             <div className="absolute inset-0 flex items-center justify-center text-rose-900 font-black text-5xl opacity-40">
-              MISSING
+              Missing
             </div>
           )}
         </div>

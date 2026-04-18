@@ -46,7 +46,7 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-purple-400 leading-none">
                 Books
               </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest mt-1">
                 Discovery Archive
               </span>
             </div>
@@ -179,10 +179,10 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
           ) : (
             <div className="h-full py-8 md:py-0 flex flex-col items-center justify-center text-center">
               <div className="text-4xl md:text-6xl mb-4 md:mb-6 opacity-20 animate-pulse">📡</div>
-              <h3 className="text-base md:text-lg font-black text-zinc-700 tracking-widest uppercase">
+              <h3 className="text-base md:text-lg font-black text-zinc-700 tracking-widest">
                 Scanning Database...
               </h3>
-              <p className="text-[9px] md:text-[10px] text-zinc-800 mt-2 font-bold tracking-widest uppercase">
+              <p className="text-[9px] md:text-[10px] text-zinc-800 mt-2 font-bold tracking-widest">
                 Select an entry for analysis
               </p>
 
