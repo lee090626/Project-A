@@ -113,7 +113,7 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-zinc-400 leading-none">
                 Settings
               </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest mt-1">
                 System Configuration
               </span>
             </div>
@@ -179,13 +179,13 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={onExport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📤</span> Export Save
                   </button>
                   <button
                     onClick={onImport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold uppercase tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📥</span> Import Save
                   </button>

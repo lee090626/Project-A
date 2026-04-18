@@ -20,7 +20,7 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-500 leading-none">
                 Elevator
               </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest uppercase mt-1">
+              <span className="text-[10px] text-zinc-600 font-bold tracking-widest mt-1">
                 Vertical Transport
               </span>
             </div>
@@ -70,7 +70,7 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
             className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-400 hover:text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
           >
             <div className="flex flex-col items-start">
-              <span className="text-zinc-600 text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1 uppercase">
+              <span className="text-zinc-600 text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1">
                 Checkpoint
               </span>
               <span className="text-lg md:text-xl">Outpost_{depth}</span>

@@ -182,23 +182,23 @@ export default function GameOverlay({
         <div className="absolute inset-0 z-100 flex flex-col items-center justify-center bg-red-950/60 backdrop-blur-xl animate-in fade-in duration-700">
           <div className="text-center space-y-8 p-12 bg-zinc-950/80 border-2 border-red-500/50 rounded-3xl shadow-2xl shadow-red-900/40 max-w-md w-full pointer-events-auto">
             <div className="space-y-2">
-              <h2 className="text-5xl font-black text-red-500 tracking-tighter uppercase italic drop-shadow-sm">
+              <h2 className="text-5xl font-black text-red-500 tracking-tighter drop-shadow-sm">
                 Driller Down
               </h2>
-              <p className="text-zinc-400 font-medium tracking-widest text-xs uppercase">
+              <p className="text-zinc-400 font-medium tracking-widest text-xs">
                 Structural integrity compromised
               </p>
             </div>
 
             <div className="py-4">
               <div className="text-4xl font-mono text-zinc-500">
-                DEPTH: <span className="text-white">{currentStats.depth}m</span>
+                Depth: <span className="text-white">{currentStats.depth}m</span>
               </div>
             </div>
 
             <button
               onClick={handleRespawn}
-              className="w-full py-4 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-black rounded-xl transition-all shadow-lg shadow-red-900/20 uppercase tracking-widest text-sm"
+              className="w-full py-4 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-black rounded-xl transition-all shadow-lg shadow-red-900/20 tracking-widest text-sm"
             >
               Request Respawn
             </button>
