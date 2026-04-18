@@ -272,7 +272,7 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
                     
                     {/* 동적 능력치 보너스 표시 */}
                     {selectedArtifact.bonus && (
-                      <div className="text-[10px] text-orange-500 font-black tracking-[0.2em] mb-2">
+                      <div className="text-[16px] text-orange-500 font-black tracking-[0.2em] mb-2">
                         {(() => {
                           const statMap: Record<string, string> = {
                             power: 'Attack Power',
@@ -286,7 +286,9 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
                           };
                           const stacks = stats.collectionHistory?.[selectedArtifact.id] || 0;
                           const totalValue = selectedArtifact.bonus.value * stacks;
-                          const isPercent = Math.abs(selectedArtifact.bonus.value) < 1 && !['maxHp', 'defense'].includes(selectedArtifact.bonus.stat);
+                          // 퍼센트로 표시할 스탯 목록 (화이트리스트 방식)
+                          const percentStats = ['critRate', 'critDamage', 'miningSpeed'];
+                          const isPercent = percentStats.includes(selectedArtifact.bonus.stat);
                           const formattedValue = isPercent ? `${(totalValue * 100).toFixed(1)}%` : totalValue.toLocaleString();
                           
                           return `${statMap[selectedArtifact.bonus.stat] || selectedArtifact.bonus.stat} +${formattedValue}`;
