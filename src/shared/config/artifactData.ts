@@ -7,7 +7,8 @@ export interface ArtifactDefinition {
   type: ArtifactType;
   description: string;
   descriptionKo: string;
-  icon?: string; // 아이콘 에셋은 유저가 직접 준비 예정
+  icon?: string; // 레거시: 이모지 아이콘
+  image?: string; // 아틀라스 이미지 키 (PascalCaseEssence / PascalCaseRelic)
 
   // 공통: 기본 스탯 보너스 (stackable의 경우 개당 수치, unique의 경우 고정 수치)
   bonus?: {
@@ -45,6 +46,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Power slightly.',
     descriptionKo: '채굴 위력이 미세하게 증가합니다.',
+    image: 'LustEssence',
     bonus: { stat: 'power', value: 0.05 },
   },
   essence_gluttony: {
@@ -54,6 +56,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Max HP.',
     descriptionKo: '최대 체력이 증가합니다.',
+    image: 'GluttoyEssence',
     bonus: { stat: 'maxHp', value: 0.5 },
   },
   essence_greed: {
@@ -63,6 +66,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Luck slightly.',
     descriptionKo: '행운이 극히 미세하게 증가합니다.',
+    image: 'GreedEssence',
     bonus: { stat: 'luck', value: 0.01 },
   },
   essence_wrath: {
@@ -72,6 +76,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Critical Damage.',
     descriptionKo: '치명타 피해량이 증가합니다.',
+    image: 'WrathEssence',
     bonus: { stat: 'critDamage', value: 0.001 },
   },
   essence_heresy: {
@@ -81,6 +86,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Mining Speed.',
     descriptionKo: '채굴 속도가 미세하게 증가합니다.',
+    image: 'HeresyEssence',
     bonus: { stat: 'miningSpeed', value: 0.0005 },
   },
   essence_violence: {
@@ -90,6 +96,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Critical Rate.',
     descriptionKo: '치명타 확률이 미세하게 증가합니다.',
+    image: 'ViolenceEssence',
     bonus: { stat: 'critRate', value: 0.0002 },
   },
   essence_fraud: {
@@ -99,6 +106,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Movement Speed.',
     descriptionKo: '이동 속도가 증가합니다.',
+    image: 'FraudEssence',
     bonus: { stat: 'moveSpeed', value: 0.05 },
   },
   essence_treachery: {
@@ -108,6 +116,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     type: 'stackable',
     description: 'Increases Defense.',
     descriptionKo: '방어력이 증가합니다.',
+    image: 'TreacheryEssence',
     bonus: { stat: 'defense', value: 0.1 },
   },
 
@@ -117,6 +126,7 @@ export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
     name: "Asmodeus's Ring",
     nameKo: '아스모데우스의 반지',
     type: 'unique',
+    image: 'AsmodeusRingRelic',
     description: 'Increases EXP gain by 30%.',
     descriptionKo: '모든 몬스터 처치 시 획득 경험치(EXP)가 30% 증가합니다.',
     effectId: 'EXP_BOOST',
