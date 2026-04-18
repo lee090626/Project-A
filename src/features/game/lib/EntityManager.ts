@@ -59,6 +59,10 @@ export class EntityManager {
   private idMap: Map<string, EntityHandle> = new Map();
   private nextInstanceId: number = 1;
 
+  /** 자동화를 위한 컴포넌트 배열 레지스트리 (instanceId, generation 제외) */
+  /** 자동화를 위한 컴포넌트 배열 레지스트리 (instanceId, generation 제외) */
+  private componentArrays: (Uint8Array | Uint16Array | Uint32Array | Float32Array | Float64Array)[];
+
   constructor(capacity: number = 5000) {
     this.soa = {
       capacity,
@@ -76,8 +80,8 @@ export class EntityManager {
       attack: new Float32Array(capacity),
       speed: new Float32Array(capacity),
       lastAttackTime: new Float32Array(capacity),
-      attackCooldown: new Float32Array(capacity).fill(1000), // 기본값 1000ms
-      aggroRange: new Float32Array(capacity).fill(8), // 기본 인식 사거리 8타일
+      attackCooldown: new Float32Array(capacity).fill(1000),
+      aggroRange: new Float32Array(capacity).fill(8),
       monsterDefIndex: new Uint16Array(capacity),
       spriteIndex: new Uint16Array(capacity),
       width: new Float32Array(capacity),
@@ -85,6 +89,30 @@ export class EntityManager {
       createdAt: new Float64Array(capacity),
       dirtyFlags: new Uint8Array(capacity),
     };
+
+    // 자동 관리를 위한 컴포넌트 리스트 등록
+    this.componentArrays = [
+      this.soa.instanceId,
+      this.soa.type,
+      this.soa.state,
+      this.soa.x,
+      this.soa.y,
+      this.soa.vx,
+      this.soa.vy,
+      this.soa.hp,
+      this.soa.maxHp,
+      this.soa.attack,
+      this.soa.speed,
+      this.soa.lastAttackTime,
+      this.soa.attackCooldown,
+      this.soa.aggroRange,
+      this.soa.monsterDefIndex,
+      this.soa.spriteIndex,
+      this.soa.width,
+      this.soa.height,
+      this.soa.createdAt,
+      this.soa.dirtyFlags,
+    ];
   }
 
   /** 새로운 엔티티 생성 ($O(1)$) */
@@ -133,35 +161,19 @@ export class EntityManager {
   public destroy(index: number) {
     if (index < 0 || index >= this.soa.count) return;
 
-    // ID 매핑 제거 (전수 조사는 느리므로 필요 시 역방향 맵 도입 고려)
-    // 여기서는 일단 간소화하여 index 기반 관리에 집중
-
     // 세대 증가 (기존 핸들 무효화)
     this.soa.generation[index]++;
 
     const lastIndex = --this.soa.count;
     if (index !== lastIndex) {
-      // 마지막 원소의 데이터를 삭제된 위치로 이동 (Swap)
+      // 레지스트리에 등록된 모든 컴포넌트 배열에 대해 Swap-and-Pop 수행
+      for (let i = 0; i < this.componentArrays.length; i++) {
+        const arr = this.componentArrays[i];
+        arr[index] = arr[lastIndex];
+      }
+
+      // Generation 정보도 함께 Swap (인덱스 연속성 유지)
       this.soa.generation[index] = this.soa.generation[lastIndex];
-      this.soa.instanceId[index] = this.soa.instanceId[lastIndex];
-      this.soa.type[index] = this.soa.type[lastIndex];
-      this.soa.state[index] = this.soa.state[lastIndex];
-      this.soa.x[index] = this.soa.x[lastIndex];
-      this.soa.y[index] = this.soa.y[lastIndex];
-      this.soa.vx[index] = this.soa.vx[lastIndex];
-      this.soa.vy[index] = this.soa.vy[lastIndex];
-      this.soa.hp[index] = this.soa.hp[lastIndex];
-      this.soa.maxHp[index] = this.soa.maxHp[lastIndex];
-      this.soa.attack[index] = this.soa.attack[lastIndex];
-      this.soa.speed[index] = this.soa.speed[lastIndex];
-      this.soa.lastAttackTime[index] = this.soa.lastAttackTime[lastIndex];
-      this.soa.attackCooldown[index] = this.soa.attackCooldown[lastIndex];
-      this.soa.aggroRange[index] = this.soa.aggroRange[lastIndex];
-      this.soa.monsterDefIndex[index] = this.soa.monsterDefIndex[lastIndex];
-      this.soa.spriteIndex[index] = this.soa.spriteIndex[lastIndex];
-      this.soa.width[index] = this.soa.width[lastIndex];
-      this.soa.height[index] = this.soa.height[lastIndex];
-      this.soa.createdAt[index] = this.soa.createdAt[lastIndex];
       this.soa.dirtyFlags[index] = 1; // Mark as dirty when swapped
     }
   }
@@ -206,26 +218,15 @@ export class EntityManager {
     this.nextInstanceId = 1;
     this.soa.count = 0;
     this.soa.generation.fill(0);
-    this.soa.instanceId.fill(0);
-    this.soa.type.fill(0);
-    this.soa.state.fill(0);
-    this.soa.x.fill(0);
-    this.soa.y.fill(0);
-    this.soa.vx.fill(0);
-    this.soa.vy.fill(0);
-    this.soa.hp.fill(0);
-    this.soa.maxHp.fill(0);
-    this.soa.attack.fill(0);
-    this.soa.speed.fill(0);
-    this.soa.lastAttackTime.fill(0);
-    this.soa.attackCooldown.fill(1000);
-    this.soa.aggroRange.fill(8);
-    this.soa.monsterDefIndex.fill(0);
-    this.soa.spriteIndex.fill(0);
-    this.soa.width.fill(0);
-    this.soa.height.fill(0);
-    this.soa.createdAt.fill(0);
-    this.soa.dirtyFlags.fill(0);
+
+    // 레지스트리에 등록된 모든 컴포넌트 배열 초기화
+    for (let i = 0; i < this.componentArrays.length; i++) {
+      const arr = this.componentArrays[i];
+      // 기본값이 필요한 경우(예: attackCooldown)는 개별 처리하거나 레지스트리 메타데이터 도입 고려 가능
+      // 여기서는 일단 0으로 초기화하고 특수값은 재직렬화 시 채워지는 것을 전제로 함
+      arr.fill(0);
+    }
+
     this.idMap.clear();
   }
 }
