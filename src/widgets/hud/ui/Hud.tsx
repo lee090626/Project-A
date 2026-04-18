@@ -18,7 +18,6 @@ interface HudProps {
   onOpenElevator?: () => void;
   onOpenSettings?: () => void;
   onOpenGuide?: () => void;
-  onOpenAltar?: () => void;
 }
 
 /**
@@ -35,7 +34,6 @@ const Hud: React.FC<HudProps> = React.memo(
     onOpenElevator,
     onOpenSettings,
     onOpenGuide,
-    onOpenAltar,
   }) => {
     const config = getCircleConfig(stats.depth);
     const layerIdx = getLayerFromDepth(stats.depth, config);
@@ -86,7 +84,6 @@ const Hud: React.FC<HudProps> = React.memo(
           onClick: onOpenEncyclopedia,
           color: '#a855f7',
         },
-        { label: 'Altar', key: 'A', icon: '🔥', onClick: onOpenAltar, color: '#f97316' },
         {
           label: 'Setting',
           key: 'S',
@@ -96,7 +93,7 @@ const Hud: React.FC<HudProps> = React.memo(
         },
         { label: 'Guide', key: 'H', icon: '❓', onClick: onOpenGuide, color: '#22d3ee' },
       ],
-      [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenSettings, onOpenGuide, onOpenAltar],
+      [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenSettings, onOpenGuide],
     );
 
     return (
