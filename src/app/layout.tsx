@@ -90,6 +90,19 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        {/* Service Worker 등록: 에셋 캐싱으로 새로고침 시 즉각 로딩 */}
+        <Script id="register-sw" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                  // 등록 실패 시 게임은 정상 동작 (HTTP 캐시로 폴백)
+                  console.warn('[SW] Registration failed, falling back to HTTP cache:', err);
+                });
+              });
+            }
+          `}
+        </Script>
       </body>
     </html>
   );

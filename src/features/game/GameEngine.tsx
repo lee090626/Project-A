@@ -62,25 +62,32 @@ export default function GameEngine() {
         const atlasData: any[] = [];
         const transferList: Transferable[] = [];
 
+        // [성능 측정] DevTools Console에서 로딩 시간 확인
+        const t0 = performance.now();
+
         await Promise.all(
           manifest.atlasFiles.map(async (jsonFile: string) => {
-            const jsonRes = await fetch(`${assetsPath}/${jsonFile}`);
-            const jsonData = await jsonRes.json();
-
             const webpFile = jsonFile.replace('.json', '.webp');
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            await new Promise((resolve, reject) => {
-              img.onload = resolve;
-              img.onerror = reject;
-              img.src = `${assetsPath}/${webpFile}`;
-            });
 
-            const bitmap = await createImageBitmap(img);
+            // JSON + WebP 동시 fetch (직렬 → 병렬)
+            const [jsonRes, webpRes] = await Promise.all([
+              fetch(`${assetsPath}/${jsonFile}`),
+              fetch(`${assetsPath}/${webpFile}`),
+            ]);
+
+            if (!jsonRes.ok) throw new Error(`[AssetLoad] Failed: ${jsonFile} (${jsonRes.status})`);
+            if (!webpRes.ok) throw new Error(`[AssetLoad] Failed: ${webpFile} (${webpRes.status})`);
+
+            // blob → createImageBitmap: 이중 디코딩 제거 (new Image() 불필요)
+            const [jsonData, blob] = await Promise.all([jsonRes.json(), webpRes.blob()]);
+            const bitmap = await createImageBitmap(blob);
+
             atlasData.push({ json: jsonData, bitmap });
             transferList.push(bitmap);
           }),
         );
+
+        console.log(`[AssetLoad] ${atlasData.length} atlases decoded in ${(performance.now() - t0).toFixed(1)}ms`);
 
         const [layout, entities] = await Promise.all([fetchBaseLayout(), fetchEntities()]);
         sendWorker('ASSETS_ATLAS', { atlasData, layout, entities }, transferList);
