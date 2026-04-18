@@ -58,7 +58,7 @@ export default function MineralSellTab({
                   </div>
                   <div className="flex items-center gap-2 mt-1">
                     <div className="flex items-center gap-1.5 px-2 py-0.5 bg-black/30 rounded-md border border-white/5">
-                      <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+                      <span className="text-[10px] text-zinc-500 font-bold tracking-widest">
                         Inv
                       </span>
                       <span className="text-xs md:text-sm text-zinc-300 font-black tabular-nums">
@@ -66,7 +66,7 @@ export default function MineralSellTab({
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-500/10 rounded-md border border-amber-500/10">
-                      <span className="text-[10px] text-amber-500/60 font-bold uppercase tracking-widest italic">
+                      <span className="text-[10px] text-amber-500/60 font-bold tracking-widest">
                         Price
                       </span>
                       <span className="text-xs md:text-sm text-amber-500 font-black tabular-nums">
@@ -91,7 +91,7 @@ export default function MineralSellTab({
                   ))}
                   <button
                     onClick={() => updateAmount(count)}
-                    className="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 text-[11px] font-black rounded-lg transition-all active:scale-90 border border-amber-500/20 uppercase focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                    className="px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-500 text-[11px] font-black rounded-lg transition-all active:scale-90 border border-amber-500/20 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                   >
                     Max
                   </button>
@@ -107,7 +107,7 @@ export default function MineralSellTab({
                 </div>
 
                 <div className="flex flex-col items-center md:items-start min-w-[120px]">
-                  <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-0.5 opacity-60 italic">
+                  <div className="text-[10px] text-zinc-500 font-bold tracking-widest mb-0.5 opacity-60">
                     Total Value
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -131,7 +131,7 @@ export default function MineralSellTab({
                     updateAmount(0); // Reset after sell
                   }}
                   disabled={currentAmount <= 0}
-                  className={`w-full md:w-32 py-3.5 text-sm font-black rounded-2xl transition-all active:scale-95 tracking-[0.2em] uppercase focus:outline-none focus:ring-2 focus:ring-amber-400/50
+                  className={`w-full md:w-32 py-3.5 text-sm font-black rounded-2xl transition-all active:scale-95 tracking-[0.2em] focus:outline-none focus:ring-2 focus:ring-amber-400/50
                     ${
                       currentAmount > 0
                         ? 'bg-linear-to-br from-amber-400 to-amber-600 text-black shadow-[0_8px_20px_rgba(217,119,6,0.3)] hover:brightness-110 active:translate-y-0.5'

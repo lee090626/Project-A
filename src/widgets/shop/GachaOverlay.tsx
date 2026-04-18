@@ -33,7 +33,7 @@ export function GachaOverlay({
     >
       {gachaState === 'drawing' && (
         <div className="flex flex-col items-center w-full max-w-5xl px-0 md:px-8 overflow-hidden relative">
-          <p className="mb-10 md:mb-16 text-amber-500 font-black tracking-[0.4em] uppercase text-xl md:text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] animate-pulse">
+          <p className="mb-10 md:mb-16 text-amber-500 font-black tracking-[0.4em] text-xl md:text-3xl drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] animate-pulse">
             Summoning Sequence...
           </p>
 
@@ -75,7 +75,7 @@ export function GachaOverlay({
         <div className="flex flex-col items-center animate-in zoom-in-[0.8] duration-500 ease-out relative w-full h-full justify-center px-4 overflow-y-auto pt-20 pb-10">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300%] h-[300%] bg-linear-to-tr from-transparent via-amber-500/5 to-transparent animate-[spin_20s_linear_infinite] pointer-events-none" />
 
-          <div className="mb-8 md:mb-12 text-amber-400 font-black text-2xl md:text-5xl tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] text-center">
+          <div className="mb-8 md:mb-12 text-amber-400 font-black text-2xl md:text-5xl tracking-[0.3em] drop-shadow-[0_0_15px_rgba(245,158,11,0.8)] text-center">
             Summoning Complete
           </div>
 
@@ -93,7 +93,7 @@ export function GachaOverlay({
                 </div>
                 <div className="flex flex-col items-center">
                   <span
-                    className={`px-3 py-1 rounded-full text-[8px] md:text-[10px] font-black tracking-widest uppercase border backdrop-blur-md mb-1 ${RARITY_COLORS[res.rarity] || 'text-white border-white'}`}
+                    className={`px-3 py-1 rounded-full text-[8px] md:text-[10px] font-black tracking-widest border backdrop-blur-md mb-1 ${RARITY_COLORS[res.rarity] || 'text-white border-white'}`}
                   >
                     {res.rarity}
                   </span>
@@ -105,7 +105,7 @@ export function GachaOverlay({
             ))}
           </div>
 
-          <div className="mt-16 md:mt-24 text-zinc-500 font-bold tracking-[0.5em] uppercase text-xs md:text-sm animate-pulse cursor-pointer">
+          <div className="mt-16 md:mt-24 text-zinc-500 font-bold tracking-[0.5em] text-xs md:text-sm animate-pulse cursor-pointer">
             - Tap anywhere to continue -
           </div>
         </div>

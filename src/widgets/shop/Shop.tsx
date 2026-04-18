@@ -84,7 +84,7 @@ function Shop({ stats, onUpgrade, onSell, onSummonRune, onSynthesizeRunes, onClo
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-400 leading-none">
                 Shop
               </h2>
-              <span className="text-[10px] text-zinc-500 font-bold tracking-widest uppercase mt-1 opacity-60">
+              <span className="text-[10px] text-zinc-500 font-bold tracking-widest mt-1 opacity-60">
                 Global Market
               </span>
             </div>
@@ -121,7 +121,7 @@ function Shop({ stats, onUpgrade, onSell, onSummonRune, onSynthesizeRunes, onClo
             </div>
             <span className="text-sm md:text-2xl font-black text-white tabular-nums tracking-tighter flex items-baseline gap-2">
               {stats.goldCoins.toLocaleString()}
-              <span className="text-amber-500 text-[10px] md:text-xs uppercase tracking-widest font-black opacity-60">
+              <span className="text-amber-500 text-[10px] md:text-xs tracking-widest font-black opacity-60">
                 Gold
               </span>
             </span>

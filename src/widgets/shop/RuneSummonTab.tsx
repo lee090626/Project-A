@@ -38,7 +38,7 @@ export default function RuneSummonTab({
               <div className="absolute inset-0 bg-linear-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
               <div className="absolute top-6 left-1/2 -translate-x-1/2 md:left-10 md:translate-x-0 py-1.5 px-5 bg-amber-500 text-black rounded-full shadow-[0_4px_12px_rgba(245,158,11,0.4)]">
-                <span className="text-[10px] md:text-[11px] font-black tracking-widest uppercase">
+                <span className="text-[10px] md:text-[11px] font-black tracking-widest">
                   World {tierIndex} Tier
                 </span>
               </div>
@@ -81,7 +81,7 @@ export default function RuneSummonTab({
                     className={`flex flex-col items-center p-2 rounded-xl border border-transparent hover:border-white/5 transition-colors ${item.bg}`}
                   >
                     <span
-                      className={`text-[9px] font-black uppercase tracking-widest ${item.color}`}
+                      className={`text-[9px] font-black tracking-widest ${item.color}`}
                     >
                       {item.name.slice(0, 3)}
                     </span>
@@ -93,7 +93,7 @@ export default function RuneSummonTab({
               </div>
 
               <div className="w-full flex justify-between items-center mb-8 px-4 py-3 bg-black/20 rounded-2xl border border-white/5">
-                <span className="text-[11px] font-black text-zinc-500 tracking-widest uppercase">
+                <span className="text-[11px] font-black text-zinc-500 tracking-widest">
                   Fee
                 </span>
                 <div className="flex items-center gap-2">
@@ -109,13 +109,13 @@ export default function RuneSummonTab({
               <div className="w-full grid grid-cols-2 gap-3">
                 <button
                   onClick={() => performExtraction(tierIndex, 1)}
-                  className="py-4 bg-linear-to-br from-amber-400 to-amber-600 text-black rounded-2xl font-black text-sm tracking-widest uppercase transition-all shadow-lg active:scale-95 hover:brightness-110"
+                  className="py-4 bg-linear-to-br from-amber-400 to-amber-600 text-black rounded-2xl font-black text-sm tracking-widest transition-all shadow-lg active:scale-95 hover:brightness-110"
                 >
                   Summon x1
                 </button>
                 <button
                   onClick={() => performExtraction(tierIndex, 10)}
-                  className="py-4 bg-zinc-800 border border-amber-500/30 text-amber-500 rounded-2xl font-black text-sm tracking-widest uppercase transition-all shadow-lg active:scale-95 hover:bg-amber-500/10"
+                  className="py-4 bg-zinc-800 border border-amber-500/30 text-amber-500 rounded-2xl font-black text-sm tracking-widest transition-all shadow-lg active:scale-95 hover:bg-amber-500/10"
                 >
                   Summon x10
                 </button>
@@ -143,17 +143,17 @@ export default function RuneSummonTab({
           </p>
 
           <div className="w-full flex justify-between items-center mb-8 px-6 py-4 bg-black/20 rounded-2xl border border-white/5">
-            <span className="text-[11px] font-black text-zinc-500 tracking-widest uppercase">
+            <span className="text-[11px] font-black text-zinc-500 tracking-widest">
               Processor Mode
             </span>
-            <span className="text-xl md:text-2xl font-black text-purple-400 tracking-tighter uppercase italic">
+            <span className="text-xl md:text-2xl font-black text-purple-400 tracking-tighter">
               Batch Auto
             </span>
           </div>
 
           <button
             onClick={onSynthesizeRunes}
-            className="w-full py-5 bg-linear-to-br from-purple-500 to-purple-700 text-white rounded-2xl md:rounded-3xl font-black text-lg tracking-[0.2em] uppercase transition-all shadow-[0_12px_24px_rgba(168,85,247,0.3)] active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500/40 hover:brightness-110 active:translate-y-1"
+            className="w-full py-5 bg-linear-to-br from-purple-500 to-purple-700 text-white rounded-2xl md:rounded-3xl font-black text-lg tracking-[0.2em] transition-all shadow-[0_12px_24px_rgba(168,85,247,0.3)] active:scale-95 focus:outline-none focus:ring-4 focus:ring-purple-500/40 hover:brightness-110 active:translate-y-1"
           >
             Synthesize
           </button>
@@ -166,7 +166,7 @@ export default function RuneSummonTab({
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-2 h-2 rounded-full bg-amber-500" />
-            <h3 className="text-[14px] font-black text-white tracking-widest uppercase">
+            <h3 className="text-[14px] font-black text-white tracking-widest">
               Inventory Log
             </h3>
           </div>
@@ -174,7 +174,7 @@ export default function RuneSummonTab({
             <span className="text-amber-500 font-black tabular-nums tracking-tighter text-sm">
               {stats.inventoryRunes?.length || 0}
             </span>
-            <span className="ml-2 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
+            <span className="ml-2 text-[10px] text-zinc-500 font-bold tracking-widest">
               Active Modules
             </span>
           </div>
@@ -187,7 +187,7 @@ export default function RuneSummonTab({
               className={`px-5 py-3 border rounded-2xl flex items-center gap-4 transition-all shadow-xl backdrop-blur-md ${RARITY_COLORS[rarity] || 'bg-zinc-900 border-zinc-700 text-zinc-500'}`}
             >
               <div className="w-2 h-2 rounded-full bg-current opacity-40 animate-pulse" />
-              <span className="text-sm font-black tracking-widest uppercase">{rarity}</span>
+              <span className="text-sm font-black tracking-widest">{rarity}</span>
               <div className="w-px h-4 bg-white/10" />
               <span className="text-2xl font-black tabular-nums tracking-tighter text-white">
                 x{count}
@@ -199,7 +199,7 @@ export default function RuneSummonTab({
               <p className="text-lg font-black text-zinc-600 tracking-tighter mb-1">
                 No modules detected.
               </p>
-              <p className="text-xs font-bold text-zinc-700 uppercase tracking-widest">
+              <p className="text-xs font-bold text-zinc-700 tracking-widest">
                 Extract core energy from the Global Market.
               </p>
             </div>
