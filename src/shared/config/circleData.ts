@@ -113,7 +113,7 @@ export const CIRCLES: CircleConfig[] = [
       { monsterId: 'c3_worm', chance: 0.04, weight: 1, minLayer: 2 },
       { monsterId: 'c3_mud_shade', chance: 0.03, weight: 1, minLayer: 3 },
     ],
-    boss: { id: 'c3_beelzebub', spawnLayer: 4 },
+    boss: { id: 'c3_Fenrir', spawnLayer: 4 },
   },
   {
     id: 4,

@@ -103,6 +103,38 @@ const handleCross: PatternHandler = (ctx) => {
   return true;
 };
 
+const handleAoe: PatternHandler = (ctx) => {
+  const { entities, phase, bx, by, now, pattern } = ctx;
+  const { soa } = entities;
+
+  const override = pattern.phaseOverrides?.[phase - 1];
+  const count = override?.projectileCount ?? pattern.projectileCount ?? 12;
+  const speed = override?.projectileSpeed ?? pattern.projectileSpeed ?? 5;
+  const power = override?.projectilePower ?? pattern.projectilePower ?? 10;
+  const size = pattern.projectileSize ?? 128;
+
+  const angleStep = (Math.PI * 2) / count;
+
+  for (let i = 0; i < count; i++) {
+    const angle = i * angleStep;
+    const finalVx = Math.cos(angle) * speed;
+    const finalVy = Math.sin(angle) * speed;
+
+    const pIdx = entities.create(5, bx, by);
+    if (pIdx !== -1) {
+      const idx = entities.getIndex(pIdx);
+      soa.vx[idx] = finalVx;
+      soa.vy[idx] = finalVy;
+      soa.attack[idx] = power;
+      soa.createdAt[idx] = now;
+      soa.lastAttackTime[idx] = 0;
+      soa.width[idx] = size;
+      soa.height[idx] = size;
+    }
+  }
+  return true;
+};
+
 const handleLure: PatternHandler = (ctx) => {
   const { world, now, pattern } = ctx;
   const { player } = world;
@@ -131,5 +163,6 @@ const handleLure: PatternHandler = (ctx) => {
 export const patternRegistry: Map<BossPatternType, PatternHandler> = new Map([
   ['shot', handleShot],
   ['cross', handleCross],
+  ['aoe', handleAoe],
   ['lure', handleLure],
 ]);
