@@ -223,7 +223,7 @@ export const createInitialWorld = (seed: number): GameWorld => {
         artifactCooldowns: {},
         hp: 200,
         maxHp: 200,
-        power: 20,
+        power: 30,
         moveSpeed: 100,
         inventory: {
           crimsonstone: 0,
