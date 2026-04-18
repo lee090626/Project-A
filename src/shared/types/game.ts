@@ -57,7 +57,32 @@ export type TileType =
   | 'monster'
   | 'empty'
   | 'wall'
-  | 'portal';
+  | 'portal'
+  // === 몬스터 전리품 및 정수 (Loot & Essences) ===
+  | 'essence_lust'
+  | 'essence_gluttony'
+  | 'essence_greed'
+  | 'essence_wrath'
+  | 'essence_heresy'
+  | 'essence_violence'
+  | 'essence_fraud'
+  | 'essence_treachery'
+  | 'loot_whisperer_fragment'
+  | 'loot_spectral_breath'
+  | 'loot_devourer_skin'
+  | 'loot_worm_mucus'
+  | 'loot_hoarder_coin'
+  | 'loot_sinner_gold'
+  | 'loot_dweller_eye'
+  | 'loot_fury_flame'
+  | 'loot_priest_seal'
+  | 'loot_flame_soul'
+  | 'loot_malebranche_claw'
+  | 'loot_prophet_tongue'
+  | 'loot_centaur_hoof'
+  | 'loot_guard_blood'
+  | 'loot_sinner_ice'
+  | 'loot_shadow_essence';
 
 /** 타일 타입-ID 매핑 (저장 및 비트 패킹용) */
 export const TILE_TYPE_TO_ID: Record<string, number> = {
@@ -95,6 +120,31 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   portal: 31,
   boss_skin: 32,
   stone: 33,
+  // === 몬스터 전리품 및 정수 (100+) ===
+  essence_lust: 100,
+  essence_gluttony: 101,
+  essence_greed: 102,
+  essence_wrath: 103,
+  essence_heresy: 104,
+  essence_violence: 105,
+  essence_fraud: 106,
+  essence_treachery: 107,
+  loot_whisperer_fragment: 150,
+  loot_spectral_breath: 151,
+  loot_devourer_skin: 152,
+  loot_worm_mucus: 153,
+  loot_hoarder_coin: 154,
+  loot_sinner_gold: 155,
+  loot_dweller_eye: 156,
+  loot_fury_flame: 157,
+  loot_priest_seal: 158,
+  loot_flame_soul: 159,
+  loot_malebranche_claw: 160,
+  loot_prophet_tongue: 161,
+  loot_centaur_hoof: 162,
+  loot_guard_blood: 163,
+  loot_sinner_ice: 164,
+  loot_shadow_essence: 165,
 };
 
 /** ID-타일 타입 역매핑 */
@@ -297,8 +347,12 @@ export interface SkillRune {
   id: string;
   /** 스킬룬 이름 */
   name: string;
+  /** 스킬룬 이름 (한국어) */
+  nameKo?: string;
   /** 효과 설명 */
   description: string;
+  /** 효과 설명 (한국어) */
+  descriptionKo?: string;
   /** 효과 타입 */
   effectType: 'passive' | 'active';
   /** 희귀 등급 */
@@ -354,12 +408,6 @@ export interface PlayerStats {
   /** 탐험 정보 */
   /** 지금까지 도달한 최대 깊이 */
   maxDepthReached: number;
-  /** 보유 중인 유물 아이디 목록 */
-  artifacts: string[];
-  /** 현재 장착 중인 유물 ID */
-  equippedArtifactId: string | null;
-  /** 유물별 마지막 사용 타임스탬프 (쿨타임 관리) */
-  artifactCooldowns: { [artifactId: string]: number };
 
   /** 전투 및 기본 스탯 */
   /** 현재 체력 */
