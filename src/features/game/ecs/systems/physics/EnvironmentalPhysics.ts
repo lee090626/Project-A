@@ -30,5 +30,5 @@ export const environmentalPhysics = (world: GameWorld) => {
   // X: 0 ~ 63
   // Y: BASE_DEPTH ~ 2999
   player.pos.x = Math.max(0, Math.min(63, player.pos.x));
-  player.pos.y = Math.max(BASE_DEPTH, Math.min(2999, player.pos.y));
+  player.pos.y = Math.max(0, Math.min(2999, player.pos.y));
 };
