@@ -3,6 +3,7 @@ import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
+import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { getSafeTexture } from '@/shared/lib/assetUtils';
 
 // ============================================================
@@ -195,7 +196,8 @@ function _updateDroppedItems(
     if (!sprite) {
       const type    = ID_TO_TILE_TYPE[dp.typeId[i]];
       const mineral = MINERALS.find((m) => m.key === type);
-      const iconKey = mineral?.image || `${type}_icon`;
+      const artifact = ARTIFACT_DATA[type as keyof typeof ARTIFACT_DATA];
+      const iconKey = mineral?.image || artifact?.image || `${type}_icon`;
 
       const texture = getSafeTexture(textures, iconKey as string, 'StoneTile');
       sprite = new PIXI.Sprite(texture);

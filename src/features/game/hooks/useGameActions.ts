@@ -86,14 +86,6 @@ export const useGameActions = (
     updateUi();
   }, [sendToWorker, updateUi]);
 
-  /** 유물 장착 변경 */
-  const handleEquipArtifact = useCallback(
-    (id: string) => {
-      sendToWorker('ACTION', { action: 'equip', data: { type: 'artifact', id } });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
 
   /** 드릴 슬롯에 스킬룬 장착 */
   const handleEquipRune = useCallback(
@@ -121,21 +113,6 @@ export const useGameActions = (
     },
     [sendToWorker, updateUi],
   );
-
-  /** 연성 제단(Synthesis Altar)에서 새로운 성물(Relic) 연성 */
-  const handleSynthesizeRelic = useCallback(
-    (relicId: string) => {
-      sendToWorker('ACTION', { action: 'synthesizeRelic', data: { relicId } });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
-
-  /** 장착된 액티브 유물 스킬 사용 처리 */
-  const handleUseArtifact = useCallback(() => {
-    sendToWorker('ACTION', { action: 'useArtifact' });
-    updateUi();
-  }, [sendToWorker, updateUi]);
 
   const handleResetGame = useCallback(() => {
     if (confirm('Are you sure you want to reset all progress?')) {
@@ -173,9 +150,6 @@ export const useGameActions = (
     handleResetGame,
     handleExportSave,
     handleImportSave,
-    handleSynthesizeRelic,
-    handleUseArtifact,
-    handleEquipArtifact,
     handleTravelDimension: useCallback(
       (targetDepth: number) => {
         sendToWorker('ACTION', { action: 'travelDimension', targetDepth });
