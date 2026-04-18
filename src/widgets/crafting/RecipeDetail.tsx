@@ -18,10 +18,10 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
         <div className="w-24 h-24 bg-black/40 rounded-4xl flex items-center justify-center mb-8 text-rose-500/20 border border-white/5 shadow-inner">
           <span className="text-5xl font-black">?</span>
         </div>
-        <h4 className="text-xl font-black text-white/40 tracking-tighter uppercase mb-2">
+        <h4 className="text-xl font-black text-white/40 tracking-tighter mb-2">
           Awaiting Selection
         </h4>
-        <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest max-w-[200px]">
+        <p className="text-[10px] text-zinc-600 font-bold tracking-widest max-w-[200px]">
           Select a blueprint to begin the manufacturing process.
         </p>
       </div>
@@ -42,7 +42,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
               <span className="text-6xl relative z-10">{selectedRecipe.icon}</span>
             )}
           </div>
-          <h3 className="text-3xl font-black text-white tracking-tighter mb-2 leading-tight uppercase">
+          <h3 className="text-3xl font-black text-white tracking-tighter mb-2 leading-tight">
             {selectedRecipe.name}
           </h3>
         </div>
@@ -60,7 +60,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                       ? `+${Math.round((1 - selectedRecipe.smeltSpeedMult) * 100)}%`
                       : '0%'}
                   </span>
-                  <span className="text-[10px] text-sky-400 font-black tracking-widest uppercase">
+                  <span className="text-[10px] text-sky-400 font-black tracking-widest">
                     Smelt Speed
                   </span>
                 </div>
@@ -69,7 +69,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                   <span className="text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
                     +{selectedRecipe.smeltSlotBonus || 0}
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-black tracking-widest uppercase">
+                  <span className="text-[10px] text-emerald-400 font-black tracking-widest">
                     Extra Slots
                   </span>
                 </div>
@@ -170,7 +170,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
         <button
           disabled={!canCraft(selectedRecipe)}
           onClick={() => onCraft(selectedRecipe.requirements, selectedRecipe.result)}
-          className={`w-full py-5 rounded-3xl text-sm md:text-base font-black tracking-[0.2em] uppercase border transition-all active:scale-95 shadow-2xl focus:outline-none focus:ring-4 focus:ring-rose-500/40 ${
+          className={`w-full py-5 rounded-3xl text-sm md:text-base font-black tracking-[0.2em] border transition-all active:scale-95 shadow-2xl focus:outline-none focus:ring-4 focus:ring-rose-500/40 ${
             canCraft(selectedRecipe)
               ? 'bg-linear-to-br from-rose-500 to-rose-700 text-white border-rose-400 shadow-[0_12px_24px_rgba(244,63,94,0.3)] hover:brightness-110 active:translate-y-1'
               : 'bg-zinc-800 text-zinc-600 border-white/5 cursor-not-allowed grayscale'

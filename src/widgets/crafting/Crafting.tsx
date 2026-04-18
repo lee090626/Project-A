@@ -87,7 +87,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-rose-500 leading-none">
                 Forgemaster
               </h2>
-              <span className="text-[10px] text-zinc-500 font-bold tracking-widest uppercase mt-1 opacity-60">
+              <span className="text-[10px] text-zinc-500 font-bold tracking-widest mt-1 opacity-60">
                 Ancient Blacksmith
               </span>
             </div>
@@ -99,7 +99,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
             <AtlasIcon name="GoldIcon" size={32} />
             <span className="text-sm md:text-2xl font-black text-white tabular-nums tracking-tighter">
               {stats.goldCoins.toLocaleString()}
-              <span className="ml-2 text-rose-500 text-[10px] md:text-xs uppercase tracking-widest opacity-60">Gold</span>
+              <span className="ml-2 text-rose-500 text-[10px] md:text-xs tracking-widest opacity-60">Gold</span>
             </span>
           </div>
           <button
@@ -118,7 +118,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
             {/* Filters */}
             <div className="flex flex-col gap-6 mb-8">
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mr-2">Circle:</span>
+                <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Circle:</span>
                 {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
                   <button
                     key={c}
@@ -137,7 +137,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                 ))}
               </div>
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[10px] text-zinc-500 font-black uppercase tracking-[0.2em] mr-2">Part:</span>
+                <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Part:</span>
                 {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
                   <button
                     key={part}
@@ -145,7 +145,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                       setSelectedPart(part);
                       setSelectedRecipe(null);
                     }}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all uppercase ${
+                    className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all ${
                       selectedPart === part
                         ? 'bg-white text-black border-white shadow-xl'
                         : 'bg-zinc-800/40 text-zinc-500 border-zinc-800 hover:text-zinc-300'
@@ -191,7 +191,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                             {rcp.name}
                           </span>
                           {owned && (
-                            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded text-[8px] font-black uppercase tracking-widest">OWNED</span>
+                            <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded text-[8px] font-black tracking-widest">Owned</span>
                           )}
                         </div>
                         <div className="flex items-center gap-2">
@@ -208,7 +208,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
 
                 {visibleRecipes.length === 0 && (
                   <div className="col-span-full py-20 text-center opacity-20">
-                    <p className="text-sm font-black uppercase tracking-widest">No Designs Discovered</p>
+                    <p className="text-sm font-black tracking-widest">No Designs Discovered</p>
                   </div>
                 )}
               </div>
