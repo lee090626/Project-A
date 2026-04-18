@@ -43,8 +43,8 @@ export const calculateMiningDamage = (
     speedBoostFactor += missingHpPercent;
   }
 
-  // 1. 공격 속도 계산 (고정 500ms 기반)
-  const baseInterval = 500;
+  // 1. 공격 속도 계산 (기본 350ms로 전역 상향)
+  const baseInterval = 350;
   const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
   const totalSpeedBonusMult = Math.min(
     0.95,

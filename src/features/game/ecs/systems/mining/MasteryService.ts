@@ -49,6 +49,8 @@ export const masteryService = (
     // 신규 광물 발견 처리
     if (!player.stats.discoveredMinerals.includes(type)) {
       player.stats.discoveredMinerals.push(type);
+
+      // [Dopamine] 신규 발견 이벤트 발행 (제거됨)
     }
 
     // 3. 숙련도(Mastery) 성장 처리
@@ -66,6 +68,7 @@ export const masteryService = (
     if (tileMastery.exp >= nextExp) {
       tileMastery.level++;
       tileMastery.exp -= nextExp;
+
       showToast(`${type.toUpperCase()} Mastery Level Up: ${tileMastery.level}!!`, 'success');
 
       // 마스터리 돌파 특성(Perks) 해금 체크
