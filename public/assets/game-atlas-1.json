@@ -24,31 +24,7 @@
         "y": 0.5
       }
     },
-    "MoveSpeedRune.png": {
-      "frame": {
-        "x": 3,
-        "y": 1033,
-        "w": 1024,
-        "h": 938
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 43,
-        "w": 1024,
-        "h": 938
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "LuckRune.png": {
+    "MiningSpeedRune.png": {
       "frame": {
         "x": 1033,
         "y": 3,
@@ -72,20 +48,20 @@
         "y": 0.5
       }
     },
-    "MiningSpeedRune.png": {
+    "Player.png": {
       "frame": {
-        "x": 1033,
-        "y": 933,
-        "w": 1008,
-        "h": 924
+        "x": 3,
+        "y": 1033,
+        "w": 876,
+        "h": 992
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 8,
-        "y": 50,
-        "w": 1008,
-        "h": 924
+        "x": 148,
+        "y": 32,
+        "w": 876,
+        "h": 992
       },
       "sourceSize": {
         "w": 1024,
@@ -96,24 +72,24 @@
         "y": 0.5
       }
     },
-    "BloatedDevourer.png": {
+    "MoneyIcon.webp": {
       "frame": {
-        "x": 1033,
-        "y": 1863,
-        "w": 254,
-        "h": 136
+        "x": 885,
+        "y": 1033,
+        "w": 935,
+        "h": 927
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 1,
+        "x": 56,
         "y": 60,
-        "w": 254,
-        "h": 136
+        "w": 935,
+        "h": 927
       },
       "sourceSize": {
-        "w": 256,
-        "h": 256
+        "w": 1024,
+        "h": 1024
       },
       "pivot": {
         "x": 0.5,
@@ -122,8 +98,8 @@
     },
     "WindTornSoul.png": {
       "frame": {
-        "x": 1293,
-        "y": 1863,
+        "x": 1826,
+        "y": 933,
         "w": 210,
         "h": 172
       },
@@ -144,20 +120,20 @@
         "y": 0.5
       }
     },
-    "GaleBat.png": {
+    "HeresyEssence.png": {
       "frame": {
-        "x": 1509,
-        "y": 1863,
-        "w": 178,
-        "h": 154
+        "x": 1826,
+        "y": 1111,
+        "w": 200,
+        "h": 209
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 39,
-        "y": 51,
-        "w": 178,
-        "h": 154
+        "x": 29,
+        "y": 24,
+        "w": 200,
+        "h": 209
       },
       "sourceSize": {
         "w": 256,
@@ -168,20 +144,20 @@
         "y": 0.5
       }
     },
-    "LustfulWhisperer.png": {
+    "TreacheryEssence.png": {
       "frame": {
-        "x": 1693,
-        "y": 1863,
-        "w": 176,
-        "h": 170
+        "x": 1826,
+        "y": 1326,
+        "w": 205,
+        "h": 208
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 40,
-        "y": 43,
-        "w": 176,
-        "h": 170
+        "x": 25,
+        "y": 24,
+        "w": 205,
+        "h": 208
       },
       "sourceSize": {
         "w": 256,
@@ -192,24 +168,48 @@
         "y": 0.5
       }
     },
-    "DirtTile.png": {
+    "ViolenceEssence.png": {
       "frame": {
-        "x": 1875,
-        "y": 1863,
-        "w": 128,
-        "h": 128
+        "x": 1826,
+        "y": 1540,
+        "w": 202,
+        "h": 200
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
+        "x": 25,
+        "y": 28,
+        "w": 202,
+        "h": 200
       },
       "sourceSize": {
-        "w": 128,
-        "h": 128
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "LustEssence.png": {
+      "frame": {
+        "x": 1826,
+        "y": 1746,
+        "w": 192,
+        "h": 200
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 28,
+        "w": 192,
+        "h": 200
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
       },
       "pivot": {
         "x": 0.5,
@@ -224,7 +224,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2044,
-      "h": 2038
+      "h": 2028
     },
     "scale": 1
   }
