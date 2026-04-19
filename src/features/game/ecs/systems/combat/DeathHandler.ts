@@ -3,7 +3,7 @@ import { MONSTER_LIST } from '@/shared/config/monsterData';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { modifierManager } from '@/features/game/lib/ModifierManager';
 import { createFloatingText } from '@/shared/lib/effectUtils';
-import { handleBossDefeat } from '../bossSystem';
+import { handleBossDefeat } from '../boss/bossDefeatHandler';
 import { messageBus } from '@/shared/lib/MessageBus';
 
 /**
