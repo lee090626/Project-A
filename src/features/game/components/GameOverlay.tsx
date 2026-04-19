@@ -140,6 +140,7 @@ export default function GameOverlay({
             stats={currentStats}
             onClose={() => handleClose('isCraftingOpen')}
             onCraft={handleCraft}
+            onSynthesizeRelic={handleSynthesizeRelic}
           />
         </Overlay>
       )}

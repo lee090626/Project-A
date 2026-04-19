@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 import RecipeDetail from './RecipeDetail';
@@ -15,6 +16,8 @@ interface CraftingProps {
   stats: PlayerStats;
   /** 아이템 제작 실행 콜백 */
   onCraft: (requirements: any, result: any) => void;
+  /** 특수 아이템(Relic/Effect) 제작 콜백 */
+  onSynthesizeRelic: (relicId: string) => void;
   /** 제작 창 닫기 콜백 */
   onClose: () => void;
 }
@@ -23,34 +26,54 @@ interface CraftingProps {
  * 플레이어가 수집한 광물을 사용하여 4부위 장비를 제작할 수 있는 대장간(Forge) 컴포넌트입니다.
  * 상점에 있던 장비 필터링 로직을 완벽하게 이식하고 UI를 강화했습니다.
  */
-function Crafting({ stats, onCraft, onClose }: CraftingProps) {
+function Crafting({ stats, onCraft, onSynthesizeRelic, onClose }: CraftingProps) {
+  const [craftType, setCraftType] = useState<'Equipment' | 'Specials'>('Equipment');
   const [selectedPart, setSelectedPart] = useState<EquipmentPart>('Drill');
   const [selectedCircle, setSelectedCircle] = useState<number>(2);
   const [selectedRecipe, setSelectedRecipe] = useState<any>(null);
 
   /** 현재 필터링된 조건에 맞는 레시피 목록 생성 */
   const visibleRecipes = useMemo(() => {
-    return Object.values(EQUIPMENTS)
-      .filter((eq) => eq.circle === selectedCircle && eq.part === selectedPart)
-      .map((eq) => ({
-        ...eq,
-        requirements: eq.price || {},
-        result: {
-          [`${eq.part}Id`]: eq.id,
-        },
-        power: eq.stats.power || 0,
-        defense: eq.stats.defense || 0,
-        maxHp: eq.stats.maxHp || 0,
-        moveSpeed: eq.stats.moveSpeed || 0,
-        type: eq.part,
-      }));
-  }, [selectedCircle, selectedPart]);
+    if (craftType === 'Equipment') {
+      return Object.values(EQUIPMENTS)
+        .filter((eq) => eq.circle === selectedCircle && eq.part === selectedPart)
+        .map((eq) => ({
+          ...eq,
+          requirements: eq.price || {},
+          result: {
+            [`${eq.part}Id`]: eq.id,
+          },
+          power: eq.stats.power || 0,
+          defense: eq.stats.defense || 0,
+          maxHp: eq.stats.maxHp || 0,
+          moveSpeed: eq.stats.moveSpeed || 0,
+          type: eq.part,
+        }));
+    } else {
+      return Object.values(ARTIFACT_DATA)
+        .filter((art) => art.requirements)
+        .map((art) => ({
+          ...art,
+          result: { relicId: art.id },
+          power: 0,
+          defense: 0,
+          maxHp: 0,
+          moveSpeed: 0,
+          // type is already 'unique' | 'stackable' inside ARTIFACT_DATA
+        }));
+    }
+  }, [craftType, selectedCircle, selectedPart]);
 
   /** 해당 레시피를 제작할 수 있는지 확인하는 함수 */
   const canCraft = (rcp: any) => {
     if (!rcp) return false;
-    const owned = stats.ownedEquipmentIds?.includes(rcp.id);
-    if (owned) return false;
+    
+    if (craftType === 'Equipment') {
+      const owned = stats.ownedEquipmentIds?.includes(rcp.id);
+      if (owned) return false;
+    } else {
+      if (rcp.type === 'unique' && stats.unlockedResearchIds?.includes(rcp.id)) return false;
+    }
 
     // 모든 재료 조건을 충족하는지 확인
     return Object.entries(rcp.requirements).every(([key, val]) => {
@@ -115,49 +138,71 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
         {/* LEFT COLUMN: Filters & Blueprint List */}
         <div className="flex-1 flex flex-col h-auto lg:h-full overflow-hidden min-h-0 relative z-10">
           <div className="bg-zinc-900/60 backdrop-blur-xl p-6 rounded-3xl md:rounded-[3rem] flex flex-col h-full overflow-hidden shadow-2xl border border-white/5">
-            {/* Filters */}
-            <div className="flex flex-col gap-6 mb-8">
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Circle:</span>
-                {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => {
-                      setSelectedCircle(c);
-                      setSelectedRecipe(null);
-                    }}
-                    className={`px-4 py-2 rounded-xl text-xs font-black transition-all border ${
-                      selectedCircle === c
-                        ? 'bg-rose-500 text-white border-rose-400 shadow-[0_4px_12px_rgba(244,63,94,0.3)]'
-                        : 'bg-black/20 text-zinc-500 border-zinc-800 hover:border-zinc-700'
-                    }`}
-                  >
-                    C{c}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Part:</span>
-                {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
-                  <button
-                    key={part}
-                    onClick={() => {
-                      setSelectedPart(part);
-                      setSelectedRecipe(null);
-                    }}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all ${
-                      selectedPart === part
-                        ? 'bg-white text-black border-white shadow-xl'
-                        : 'bg-zinc-800/40 text-zinc-500 border-zinc-800 hover:text-zinc-300'
-                    }`}
-                  >
-                    {part}
-                  </button>
-                ))}
-              </div>
+            <div className="flex bg-black/40 p-1 rounded-2xl mb-6 shadow-inner border border-white/5 mx-auto max-w-sm">
+              {(['Equipment', 'Specials'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    setCraftType(tab);
+                    setSelectedRecipe(null);
+                  }}
+                  className={`flex-1 py-3 px-6 rounded-xl text-sm font-black tracking-widest transition-all ${
+                    craftType === tab
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/25'
+                      : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </div>
 
-            <div className="w-full h-px bg-white/5 mb-6" />
+            {/* Filters (Equipment Only) */}
+            {craftType === 'Equipment' && (
+              <>
+                <div className="flex flex-col gap-6 mb-8">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Circle:</span>
+                    {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => {
+                          setSelectedCircle(c);
+                          setSelectedRecipe(null);
+                        }}
+                        className={`px-4 py-2 rounded-xl text-xs font-black transition-all border ${
+                          selectedCircle === c
+                            ? 'bg-rose-500 text-white border-rose-400 shadow-[0_4px_12px_rgba(244,63,94,0.3)]'
+                            : 'bg-black/20 text-zinc-500 border-zinc-800 hover:border-zinc-700'
+                        }`}
+                      >
+                        C{c}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Part:</span>
+                    {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
+                      <button
+                        key={part}
+                        onClick={() => {
+                          setSelectedPart(part);
+                          setSelectedRecipe(null);
+                        }}
+                        className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all ${
+                          selectedPart === part
+                            ? 'bg-white text-black border-white shadow-xl'
+                            : 'bg-zinc-800/40 text-zinc-500 border-zinc-800 hover:text-zinc-300'
+                        }`}
+                      >
+                        {part}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="w-full h-px bg-white/5 mb-6" />
+              </>
+            )}
 
             {/* Blueprints Grid */}
             <div className="overflow-y-auto px-2 custom-scrollbar flex-1 pb-12 min-h-0">
@@ -165,7 +210,9 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
                 {visibleRecipes.map((rcp) => {
                   const active = selectedRecipe?.id === rcp.id;
                   const craftable = canCraft(rcp);
-                  const owned = stats.ownedEquipmentIds?.includes(rcp.id);
+                  const owned = craftType === 'Equipment'
+                    ? stats.ownedEquipmentIds?.includes(rcp.id)
+                    : (rcp.type === 'unique' && stats.unlockedResearchIds?.includes(rcp.id));
 
                   return (
                     <button
@@ -208,7 +255,7 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
 
                 {visibleRecipes.length === 0 && (
                   <div className="col-span-full py-20 text-center opacity-20">
-                    <p className="text-sm font-black tracking-widest">No Designs Discovered</p>
+                    <p className="text-sm font-black tracking-widest">No Items Available</p>
                   </div>
                 )}
               </div>
@@ -222,7 +269,13 @@ function Crafting({ stats, onCraft, onClose }: CraftingProps) {
             selectedRecipe={selectedRecipe}
             stats={stats}
             canCraft={canCraft}
-            onCraft={onCraft}
+            onCraft={(reqs, result) => {
+              if (craftType === 'Equipment') {
+                onCraft(reqs, result);
+              } else {
+                onSynthesizeRelic(result.relicId);
+              }
+            }}
           />
         </div>
       </div>

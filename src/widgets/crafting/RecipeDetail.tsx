@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
+import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { formatNumber } from '@/shared/lib/numberUtils';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 
@@ -12,6 +13,19 @@ interface RecipeDetailProps {
 }
 
 export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: RecipeDetailProps) {
+  const getStatName = (stat: string) => {
+    const map: Record<string, string> = {
+      power: 'Power',
+      maxHp: 'Max HP',
+      moveSpeed: 'Move Speed',
+      luck: 'Luck',
+      critRate: 'Crit Rate',
+      critDamage: 'Crit DMG',
+      defense: 'Defense',
+      miningSpeed: 'Mine Speed'
+    };
+    return map[stat] || stat;
+  };
   if (!selectedRecipe) {
     return (
       <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/5 p-12 rounded-4xl h-full flex flex-col items-center justify-center text-center shadow-2xl">
@@ -22,7 +36,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
           Awaiting Selection
         </h4>
         <p className="text-[10px] text-zinc-600 font-bold tracking-widest max-w-[200px]">
-          Select a blueprint to begin the manufacturing process.
+          Select an item to begin the manufacturing process.
         </p>
       </div>
     );
@@ -52,53 +66,46 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
           <div className="bg-black/40 px-6 py-6 rounded-3xl border border-white/5 flex items-center justify-around group/stat hover:border-rose-500/20 transition-all shadow-inner relative overflow-hidden">
             <div className="absolute inset-0 bg-linear-to-r from-transparent via-rose-500/5 to-transparent opacity-0 group-hover/stat:opacity-100 transition-opacity pointer-events-none" />
 
-            {selectedRecipe.type === 'drone' && selectedRecipe.category === 'support' ? (
-              <>
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
-                    {selectedRecipe.smeltSpeedMult
-                      ? `+${Math.round((1 - selectedRecipe.smeltSpeedMult) * 100)}%`
-                      : '0%'}
-                  </span>
-                  <span className="text-[10px] text-sky-400 font-black tracking-widest">
-                    Smelt Speed
-                  </span>
-                </div>
-                <div className="w-px h-10 bg-white/5 rounded-full" />
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
-                    +{selectedRecipe.smeltSlotBonus || 0}
-                  </span>
-                  <span className="text-[10px] text-emerald-400 font-black tracking-widest">
-                    Extra Slots
-                  </span>
-                </div>
-              </>
+            {selectedRecipe.type === 'stackable' || selectedRecipe.type === 'unique' ? (
+              <div className="flex flex-col items-center justify-center gap-2 w-full text-center py-2 px-4">
+                <span className="text-lg md:text-xl font-black text-rose-400 tracking-tighter leading-tight drop-shadow-md">
+                  {selectedRecipe.bonus ? `+${selectedRecipe.bonus.value} ${getStatName(selectedRecipe.bonus.stat)}` : ''}
+                  {selectedRecipe.effectDescription && (
+                    <>
+                      {selectedRecipe.bonus && <br />}
+                      <span className="text-emerald-400 text-base md:text-lg">{selectedRecipe.effectDescription}</span>
+                    </>
+                  )}
+                </span>
+                <span className="text-[10px] text-zinc-500 font-black tracking-widest uppercase mt-1">
+                  Passive Effect
+                </span>
+              </div>
             ) : (
-              <>
-                <div className="flex flex-col items-center gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
-                      {selectedRecipe.power}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-zinc-500 font-black tracking-widest">
-                    Power
-                  </span>
-                </div>
-                <div className="w-px h-10 bg-white/5 rounded-full" />
-                <div className="flex flex-col items-center gap-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
-                      {selectedRecipe.cooldownMs}
-                    </span>
-                  </div>
-                  <span className="text-[10px] text-zinc-500 font-black tracking-widest">
-                    Speed
-                  </span>
-                </div>
-              </>
+              <div className="flex flex-row items-center justify-center gap-4 w-full px-2">
+                {Object.entries(selectedRecipe.stats || {}).map(([stat, val], i, arr) => (
+                  <React.Fragment key={stat}>
+                    <div className="flex flex-col items-center gap-1 flex-1 min-w-[60px]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl md:text-2xl font-black text-white tabular-nums tracking-tighter leading-none">
+                          {val as number}
+                        </span>
+                      </div>
+                      <span className="text-[9px] md:text-[10px] text-zinc-500 font-black tracking-widest uppercase truncate w-full text-center">
+                        {getStatName(stat)}
+                      </span>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="w-px h-10 bg-white/5 rounded-full shrink-0" />
+                    )}
+                  </React.Fragment>
+                ))}
+                {(!selectedRecipe.stats || Object.keys(selectedRecipe.stats).length === 0) && (
+                  <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">No Stats</span>
+                )}
+              </div>
             )}
+
           </div>
         </div>
 
@@ -119,8 +126,16 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                   ? (stats as any)[key]
                   : (stats.inventory as any)[key] || 0;
               const met = currentVal >= (val as number);
+              
+              // 재료의 메타데이터 탐색 (광물 또는 유물/정수)
               const mineral = MINERALS.find((m) => m.key === key);
+              const artifact = ARTIFACT_DATA[key];
+              
               const progress = Math.min(100, (currentVal / (val as number)) * 100);
+
+              const itemImage = mineral?.image || artifact?.image;
+              const itemIcon = mineral?.icon || artifact?.icon;
+              const itemName = mineral?.name || artifact?.name || key;
 
               return (
                 <div key={key} className="group/req">
@@ -129,16 +144,14 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                       <div className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center p-1.5 shadow-inner">
                         {key === 'goldCoins' ? (
                           <AtlasIcon name="GoldIcon" size={24} />
-                        ) : mineral?.image ? (
-                          <AtlasIcon name={mineral.image} size={24} />
+                        ) : itemImage ? (
+                          <AtlasIcon name={itemImage} size={24} />
                         ) : (
-                          <span className="text-sm">{mineral?.icon || '📦'}</span>
+                          <span className="text-sm">{itemIcon || '📦'}</span>
                         )}
                       </div>
                       <span className="text-zinc-300 font-black text-sm tracking-tight capitalize group-hover/req:text-rose-400 transition-colors">
-                        {key === 'goldCoins'
-                          ? 'Gold'
-                          : (mineral as any)?.nameKo || mineral?.name || key}
+                        {key === 'goldCoins' ? 'Gold' : itemName}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5">
@@ -176,8 +189,8 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
               : 'bg-zinc-800 text-zinc-600 border-white/5 cursor-not-allowed grayscale'
           }`}
         >
-          {(selectedRecipe.type === 'drill' && stats.ownedEquipmentIds?.includes(selectedRecipe.id)) ||
-          (selectedRecipe.type === 'drone' && stats.ownedDroneIds?.includes(selectedRecipe.id))
+          {(['Drill', 'Helmet', 'Armor', 'Boots'].includes(selectedRecipe.type) && stats.ownedEquipmentIds?.includes(selectedRecipe.id)) ||
+          (selectedRecipe.type === 'unique' && stats.unlockedResearchIds?.includes(selectedRecipe.id))
             ? 'Already Owned'
             : 'System Craft'}
         </button>
