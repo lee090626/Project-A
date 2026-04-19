@@ -1,7 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
-import { bossDirector } from './spawn/BossDirector';
-import { mobSpawner } from './spawn/MobSpawner';
-import { spawnCleaner } from './spawn/SpawnCleaner';
+import { bossDirector } from './BossDirector';
+import { mobSpawner } from './MobSpawner';
+import { spawnCleaner } from './SpawnCleaner';
 
 /**
  * 플레이어의 위치를 기반으로 주변 서클의 보스, 일반 몬스터를 스폰하고
