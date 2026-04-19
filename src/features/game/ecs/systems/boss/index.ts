@@ -5,7 +5,7 @@ import {
   patternTimers,
   patternRegistry,
   PatternContext,
-} from './boss/bossPatternHandlers';
+} from './bossPatternHandlers';
 
 /**
  * [ECS] 보스 AI 및 패턴 제어 시스템 (Data-Driven 리팩토링)
