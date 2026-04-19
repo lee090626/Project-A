@@ -1,18 +1,18 @@
 import { GameWorld } from '@/entities/world/model';
 import { inputSystem } from '@/features/input/inputSystem';
-import { physicsSystem } from '@/features/game/ecs/systems/physicsSystem';
-import { miningSystem } from '@/features/game/ecs/systems/miningSystem';
+import { physicsSystem } from '@/features/game/ecs/systems/physics';
+import { miningSystem } from '@/features/game/ecs/systems/mining';
 import { interactionSystem } from '@/features/game/ecs/systems/interactionSystem';
 
-import { spawnSystem } from '@/features/game/ecs/systems/spawnSystem';
-import { monsterAiSystem } from '@/features/game/ecs/systems/monsterAiSystem';
-import { combatSystem } from '@/features/game/ecs/systems/combatSystem';
+import { spawnSystem } from '@/features/game/ecs/systems/spawn';
+import { monsterAiSystem } from '@/features/game/ecs/systems/combat/monsterAiSystem';
+import { combatSystem } from '@/features/game/ecs/systems/combat';
 import { effectSystem } from '@/features/game/ecs/systems/effectSystem';
 import { renderSystem } from '@/features/game/ecs/systems/renderSystem';
 import { statusSystem } from '@/features/game/ecs/systems/statusSystem';
 import { tutorialSystem } from '@/features/game/ecs/systems/tutorialSystem';
-import { bossBehaviorSystem } from '@/features/game/ecs/systems/bossBehaviorSystem';
-import { projectileSystem } from '@/features/game/ecs/systems/projectileSystem';
+import { bossBehaviorSystem } from '@/features/game/ecs/systems/boss';
+import { projectileSystem } from '@/features/game/ecs/systems/combat/projectileSystem';
 import { statsSyncSystem } from '@/features/game/ecs/systems/statsSyncSystem';
 import { spatialHashUpdateSystem } from '@/features/game/ecs/systems/spatialHashUpdateSystem';
 import { syncUiSystem } from '@/features/game/ecs/systems/syncSystem';
