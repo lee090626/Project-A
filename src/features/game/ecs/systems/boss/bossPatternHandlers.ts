@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { BossPattern, BossPatternType } from '@/shared/config/monsterData';
-import { EntityManager } from '@/features/game/lib/EntityManager';
+import { EntityManager } from '@/shared/lib/ecs/EntityManager';
 
 // ============================================================
 // 내부 타입 정의

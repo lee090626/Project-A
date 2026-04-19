@@ -12,8 +12,8 @@ import {
   TileType,
 } from '@/shared/types/game';
 import { ObjectPool } from '@/shared/lib/effectPool';
-import { EntityManager } from '@/features/game/lib/EntityManager';
-import { SpatialHash } from '@/features/game/lib/SpatialHash';
+import { EntityManager } from '@/shared/lib/ecs/EntityManager';
+import { SpatialHash } from '@/shared/lib/ecs/SpatialHash';
 import { TILE_SIZE } from '@/shared/config/constants';
 
 /**
