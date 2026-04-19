@@ -1,7 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
-import { damageProcessor } from './combat/DamageProcessor';
-import { deathHandler } from './combat/DeathHandler';
-import { LootGenerator } from './combat/LootGenerator';
+import { damageProcessor } from './DamageProcessor';
+import { deathHandler } from './DeathHandler';
+import { LootGenerator } from './LootGenerator';
 
 // 전역 초기화 여부 플래그
 let isCombatInitialized = false;
