@@ -164,4 +164,3 @@ function createEntityContainer(
   return container;
 }
 
-// [삭제됨] updateDrone — 드론 시스템 제거됨

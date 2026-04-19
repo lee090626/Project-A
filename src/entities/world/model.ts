@@ -119,17 +119,6 @@ export interface GameWorld {
   floatingTexts: FloatingText[];
   /** 드랍된 아이템 관리 객체 (TypedArray 풀링) */
   droppedItemPool: DroppedItemManager;
-  /** 활성화되어 플레이어를 따라다니는 펫 드론의 물리 및 애니메이션 상태 */
-  activeDrone: {
-    id: string;
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    targetX: number | null;
-    targetY: number | null;
-    lastHitTime: number;
-  } | null;
   /** 현재 눌려 있는 키보드 상태 맵 */
   keys: { [key: string]: boolean };
   /** 지상 베이스 캠프의 타일 레이아웃 데이터 */
@@ -215,8 +204,6 @@ export const createInitialWorld = (seed: number): GameWorld => {
           bootsId: null,
         },
         ownedEquipmentIds: [],
-        equippedDroneId: null,
-        ownedDroneIds: [],
         activeSmeltingJobs: [],
         refinerySlots: 1,
         maxDepthReached: 0,
@@ -319,7 +306,6 @@ export const createInitialWorld = (seed: number): GameWorld => {
     ),
     floatingTexts: [],
     droppedItemPool: new DroppedItemManager(500),
-    activeDrone: null,
     keys: {},
     baseLayout: null,
     assets: {

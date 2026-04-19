@@ -140,14 +140,11 @@ export default function LandingPage() {
 
             <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-indigo-500/30 transition-colors group">
               <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 border border-indigo-500/40 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🤖</span>
+                <span className="text-2xl">⚒️</span>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-zinc-100">Pet Drones &amp; Automation</h3>
+              <h3 className="text-2xl font-bold mb-4 text-zinc-100">Equipment Upgrades</h3>
               <p className="text-zinc-400 leading-relaxed">
-                Loyal AI 'Pet Drones' are available to assist you at all times. Choose a drone that
-                fits your playstyle, from a basic combat drone that automatically attacks nearby
-                minerals, to a special support drone with a Magnet effect that pulls remote items
-                toward you. Maximize your farming efficiency.
+                Refine the raw materials you gather into ingots and visit the Forgemaster to forge powerful new drills, helmets, armors, and boots. Each equipment piece provides unique stat boosts, allowing you to customize your build for efficient mining or tough boss battles.
               </p>
             </div>
 

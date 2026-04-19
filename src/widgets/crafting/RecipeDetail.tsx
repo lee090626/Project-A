@@ -141,9 +141,9 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                 <div key={key} className="group/req">
                   <div className="flex justify-between items-center mb-1.5">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center p-1.5 shadow-inner">
+                      <div className="w-9 h-9 rounded-lg bg-black/40 border border-white/5 flex items-center justify-center p-1.5 shadow-inner">
                         {key === 'goldCoins' ? (
-                          <AtlasIcon name="GoldIcon" size={24} />
+                          <AtlasIcon name="GoldIcon" size={20} />
                         ) : itemImage ? (
                           <AtlasIcon name={itemImage} size={24} />
                         ) : (

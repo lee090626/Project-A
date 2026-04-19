@@ -138,8 +138,7 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
       const dy = py - dp.y[i];
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const hasMagnet = world.player.stats.equippedDroneId === 'magnet_drone';
-      const pickupRadius = hasMagnet ? 80 : 30;
+      const pickupRadius = 30;
 
       if (dist < pickupRadius) {
         // Collect
@@ -169,14 +168,13 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
         // Remove from world
         dp.kill(i);
       } else {
-        // Magnet/Follow logic
-        const accel = hasMagnet ? 4.0 : 1.5;
+        const accel = 1.5;
         dp.vx[i] += (dx / dist) * accel;
         dp.vy[i] += (dy / dist) * accel;
         dp.vx[i] *= 0.85;
         dp.vy[i] *= 0.85;
 
-        const maxSpeed = hasMagnet ? 25 : 15;
+        const maxSpeed = 15;
         const speed = Math.sqrt(dp.vx[i] * dp.vx[i] + dp.vy[i] * dp.vy[i]);
         if (speed > maxSpeed) {
           dp.vx[i] = (dp.vx[i] / speed) * maxSpeed;

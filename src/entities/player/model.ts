@@ -91,8 +91,6 @@ export const createInitialPlayer = (seed: number): Player => ({
       essence_fraud: 0,
       essence_treachery: 0,
     },
-    equippedDroneId: null,
-    ownedDroneIds: [],
     activeSmeltingJobs: [],
     refinerySlots: 1,
     inventoryRunes: [],

@@ -278,23 +278,7 @@ export interface Equipment {
   specialEffect?: string;
 }
 
-/**
- * 플레이어와 동행하며 보조 채굴을 돕는 펫 드론의 명세입니다.
- */
-export interface Drone {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  category: 'mining' | 'support'; // 드론 유형: 채굴형 또는 보조형
-  basePower: number; // 1회 채굴당 타일 대미지
-  cooldownMs: number; // 채굴 주기 (밀리초)
-  miningRadius: number; // 탐색 및 채굴 가능 반경 (타일 단위)
-  specialEffect?: 'magnet' | 'light' | 'combat' | 'auto_smelt'; // 특화 효과
-  smeltSpeedMult?: number; // 제련 속도 배율 (예: 0.8일 경우 20% 단축)
-  smeltSlotBonus?: number; // 추가 제련 슬롯 수
-  price?: { [key: string]: number };
-}
+
 
 /**
  * 자원 가공소(용광로)에서 진행 중인 가공 작업 정보입니다.
@@ -364,10 +348,7 @@ export interface PlayerStats {
   /** 보유하고 있는 모든 장비의 ID 목록 */
   ownedEquipmentIds: string[];
 
-  /** 현재 장착 중인 드론의 ID (장착 해제 시 null) */
-  equippedDroneId: string | null;
-  /** 보유하고 있는 모든 드론의 ID 목록 */
-  ownedDroneIds: string[];
+
 
   /** 진행 중인 제련 작업 목록 */
   activeSmeltingJobs: SmeltingJob[];

@@ -126,12 +126,3 @@ export const calculateMiningDamage = (
   };
 };
 
-/**
- * 드론의 채굴 대미지를 계산합니다.
- */
-export const calculateDroneDamage = (dronePower: number, targetTileType: string): number => {
-  const mineralDef = MINERALS.find((m) => m.key === targetTileType);
-  const defense = mineralDef ? mineralDef.defense : 0;
-  const netPower = Math.max(0, dronePower - defense);
-  return Math.floor(Math.pow(netPower, 1.15));
-};

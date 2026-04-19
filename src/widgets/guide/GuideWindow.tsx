@@ -105,16 +105,6 @@ const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
                   </div>
                 </div>
 
-                <div className="flex gap-6 items-start bg-zinc-950/50 p-6 rounded-3xl border border-zinc-800/50 hover:border-emerald-500/30 transition-all">
-                  <div className="text-4xl">🤖</div>
-                  <div className="flex-1">
-                    <h5 className="text-white font-black text-xl mb-2">Drones (Companions)</h5>
-                    <p className="text-zinc-400 text-base leading-relaxed font-medium">
-                      Equip drones at the Lab to assist you in mining. They follow you and
-                      automatically break nearby tiles, providing constant support.
-                    </p>
-                  </div>
-                </div>
               </div>
             </section>
           </div>

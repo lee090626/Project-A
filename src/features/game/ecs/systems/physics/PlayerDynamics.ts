@@ -26,9 +26,6 @@ export const playerDynamics = (
   // 3. 시각적 위치 보간 (Renderer를 위한 Lerp)
   player.visualPos.x += (player.pos.x - player.visualPos.x) * lerpFactor;
   player.visualPos.y += (player.pos.y - player.visualPos.y) * lerpFactor;
-
-  // 4. 펫 드론 추사 (관성 이동)
-  updateDroneTracking(world);
 };
 
 /**
@@ -106,37 +103,3 @@ function processGridMovement(world: GameWorld, now: number) {
   }
 }
 
-/**
- * 장착된 펫 드론이 플레이어를 부드럽게 따라오게 합니다.
- */
-function updateDroneTracking(world: GameWorld) {
-  const { player } = world;
-  if (!player.stats.equippedDroneId) {
-    world.activeDrone = null;
-    return;
-  }
-
-  if (!world.activeDrone || world.activeDrone.id !== player.stats.equippedDroneId) {
-    world.activeDrone = {
-      id: player.stats.equippedDroneId,
-      x: player.visualPos.x * TILE_SIZE,
-      y: player.visualPos.y * TILE_SIZE - TILE_SIZE,
-      vx: 0,
-      vy: 0,
-      targetX: null,
-      targetY: null,
-      lastHitTime: 0,
-    };
-  } else {
-    const dx = player.visualPos.x * TILE_SIZE - TILE_SIZE * 0.8 - world.activeDrone.x;
-    const dy = player.visualPos.y * TILE_SIZE - TILE_SIZE * 0.8 - world.activeDrone.y;
-
-    world.activeDrone.vx += dx * 0.05;
-    world.activeDrone.vy += dy * 0.05;
-    world.activeDrone.vx *= 0.8;
-    world.activeDrone.vy *= 0.8;
-
-    world.activeDrone.x += world.activeDrone.vx;
-    world.activeDrone.y += world.activeDrone.vy;
-  }
-}
