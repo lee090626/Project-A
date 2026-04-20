@@ -2,10 +2,10 @@ import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { MONSTER_LIST } from '@/shared/config/monsterData';
 import { calculateMiningDamage } from '../../../lib/miningCalculator';
-import { createFloatingText } from '@/shared/lib/effectUtils';
+import { messageBus } from '@/shared/lib/MessageBus';
 
 /**
- * 플레이어와 몬스터 간의 상호 대미지 판정 및 시각 효과를 처리합니다.
+ * 플레이어와 몬스터 간의 상호 대미지 판정 분석 및 이벤트를 발행합니다.
  */
 export const damageProcessor = (world: GameWorld, now: number) => {
   processMonsterToPlayerDamage(world, now);
@@ -59,10 +59,14 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
           
           player.stats.hp -= damage;
           player.lastHitTime = now;
-
-          createFloatingText(world, px, py - 20, `-${damage}`, '#ef4444');
           entities.soa.lastAttackTime[idx] = now;
-          world.shake = Math.max(world.shake, 5);
+
+          // [Juice: 이벤트 발행] 플레이어 피격 연출 요청
+          messageBus.emit('game:player_hit', {
+            x: px,
+            y: py,
+            damage
+          });
         }
       }
     }
@@ -125,11 +129,19 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
         if (actualDamage > 0 || text === 'BLOCK!') {
           entities.soa.hp[idx] -= actualDamage;
           entities.markDirty(idx);
-          createFloatingText(world, ex, ey - 30, text, color);
+          
+          // [Juice: 이벤트 발행] 몬스터 타격 연출 요청
+          messageBus.emit('game:entity_hit', {
+            x: ex + ew / 2,
+            y: ey,
+            damage: actualDamage,
+            isCrit,
+            text,
+            color
+          });
         }
 
         player.lastAttackTime = now;
-        if (isCrit && actualDamage > 0) world.shake = Math.max(world.shake, 8);
       }
     }
   });

@@ -17,6 +17,7 @@ import { statsSyncSystem } from '@/features/game/ecs/systems/statsSyncSystem';
 import { spatialHashUpdateSystem } from '@/features/game/ecs/systems/spatialHashUpdateSystem';
 import { syncUiSystem } from '@/features/game/ecs/systems/syncSystem';
 import { autoSaveSystem } from '@/features/game/ecs/systems/storageSystem';
+import { vfxSystem } from '@/features/game/ecs/systems/VfxSystem';
 import * as PIXI from 'pixi.js';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { RenderSyncEncoder } from '@/features/game/lib/RenderSyncEncoder';
@@ -58,6 +59,9 @@ export class GameLoop {
     this.textures = textures;
     this.lightingFilter = lightingFilter;
     this.bufferPool = bufferPool;
+
+    // [STEP 9] 시각 효과(VFX) 시스템 초기화 및 이벤트 리스너 등록
+    vfxSystem.init(this.world);
   }
 
   public updateDependencies(
