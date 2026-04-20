@@ -30,62 +30,10 @@ export const statusSystem = (world: GameWorld, now: number) => {
     }
   }
 
-  // 2. 플레이어 상태 이상 업데이트 및 만료 처리
-  player.stats.activeEffects = player.stats.activeEffects.filter((effect) => {
-    const isExpired = now >= effect.endTime;
-    if (isExpired) {
-      // 스턴이 만료될 때 면역 시작 시간 기록
-      if (effect.type === 'STUN') {
-        (player.stats as any).lastStunEndTime = now;
-      }
-      return false;
-    }
+  // 2. [Specialist] 플레이어 상태 이상 업데이트 및 만료 처리
+  const { processActiveEffects } = require('./status/EffectProcessor');
+  processActiveEffects(world, now);
 
-    const startTime = effect.startTime || now;
-    const elapsed = now - startTime;
-
-    // BURN (화상): 0.5초마다 최대 HP의 2% 대미지
-    if (effect.type === 'BURN') {
-      const interval = 500;
-      const currentTicks = Math.floor(elapsed / interval);
-      const prevTicks = Math.floor((elapsed - 20) / interval);
-
-      if (currentTicks > prevTicks && currentTicks > 0) {
-        const damage = Math.max(1, Math.floor(player.stats.maxHp * 0.02));
-        player.stats.hp -= damage;
-        createFloatingText(
-          world,
-          player.visualPos.x * TILE_SIZE,
-          player.visualPos.y * TILE_SIZE - 20,
-          '-' + damage,
-          '#f97316',
-        );
-      }
-    }
-
-    // POISON (독): 1초마다 고정 대미지 (차원 비례)
-    if (effect.type === 'POISON') {
-      const interval = 1000;
-      const currentTicks = Math.floor(elapsed / interval);
-      const prevTicks = Math.floor((elapsed - 20) / interval);
-
-      if (currentTicks > prevTicks && currentTicks > 0) {
-        const damage = 5 + player.stats.dimension * 2;
-        player.stats.hp -= damage;
-        createFloatingText(
-          world,
-          player.visualPos.x * TILE_SIZE,
-          player.visualPos.y * TILE_SIZE - 20,
-          '-' + damage,
-          '#a855f7',
-        );
-      }
-    }
-
-    // BLEED (선혈) 및 기타 도트 효과는 여기서 확장 가능
-
-    return true;
-  });
 
   // 3. 행동 제어 상태 체크 (STUN) - FREEZE는 속도 저하로 physicsSystem에서 처리
   const isActionBlocked = player.stats.activeEffects.some((e) => e.type === 'STUN');
