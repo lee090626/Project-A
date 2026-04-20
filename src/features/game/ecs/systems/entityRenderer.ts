@@ -108,59 +108,6 @@ function updateEntitySpriteFromSoA(
   }
 }
 
-/**
- * 엔티티를 위한 Pixi 컨테이너와 스프라이트 초기 생성
- */
-function createEntityContainer(
-  entity: any,
-  textures: { [key: string]: PIXI.Texture },
-  forceTextureKey?: string,
-): PIXI.Container {
-  const container = new PIXI.Container();
-  const entW = (entity.width || 1) * TILE_SIZE;
-  const entH = (entity.height || 1) * TILE_SIZE;
-  const isPlayer = !entity.type || entity.type === 'player';
-  const textureKey = forceTextureKey || entity.imagePath || '';
+import { createEntityFactory as createEntityContainer } from './renderers/factory';
 
-  const texture = textures[textureKey] || PIXI.Texture.WHITE;
-  const sprite = new PIXI.Sprite(texture);
-  sprite.label = 'body';
-  sprite.width = entW;
-  sprite.height = entH;
-
-  if (!textureKey && !forceTextureKey) {
-    sprite.tint = entity.type === 'monster' ? 0xef4444 : 0xeab308;
-  }
-  container.addChild(sprite);
-
-  if (!isPlayer) {
-    const hpBar = new PIXI.Graphics();
-    hpBar.label = 'hpBar';
-    if (entity.type === 'projectile') hpBar.visible = false;
-    container.addChild(hpBar);
-
-    if (entity.type === 'boss') {
-      const nameTag = new PIXI.Text({
-        text: entity.name || 'Boss',
-        style: {
-          fontSize: 14,
-          fill: 0xffffff,
-          fontWeight: 'bold',
-          stroke: { color: 0x000000, width: 2 },
-        },
-      });
-      nameTag.label = 'nameTag';
-      nameTag.anchor.set(0.5, 0.5);
-      nameTag.position.set(entW / 2, -18);
-      container.addChild(nameTag);
-    }
-
-    const castBar = new PIXI.Graphics();
-    castBar.label = 'castBar';
-    castBar.visible = false;
-    container.addChild(castBar);
-  }
-
-  return container;
-}
 
