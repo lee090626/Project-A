@@ -1,0 +1,106 @@
+import { MasteryPerkDef } from './types';
+
+export const circle2MasteryPerks: MasteryPerkDef[] = [
+  // crimsonstone
+  {
+    id: 'perk_crimsonstone_50',
+    tileType: 'crimsonstone',
+    requiredLevel: 50,
+    name: '핏빛 질주',
+    description: '이동 속도가 10 증가합니다.',
+    effects: [{ type: 'moveSpeed', value: 10, isMultiplier: false }],
+  },
+  {
+    id: 'perk_crimsonstone_100',
+    tileType: 'crimsonstone',
+    requiredLevel: 100,
+    name: '욕망의 신속',
+    description: '이동 속도가 10% 증가합니다.',
+    effects: [{ type: 'moveSpeed', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_crimsonstone_150',
+    tileType: 'crimsonstone',
+    requiredLevel: 150,
+    name: '붉은 가속',
+    description: '채굴 속도가 5% 증가합니다.',
+    effects: [{ type: 'miningSpeed', value: 0.05, isMultiplier: true }],
+  },
+  {
+    id: 'perk_crimsonstone_200',
+    tileType: 'crimsonstone',
+    requiredLevel: 200,
+    name: '색욕의 현신',
+    description: '이동 속도가 20% 증가합니다.',
+    effects: [{ type: 'moveSpeed', value: 0.2, isMultiplier: true }],
+  },
+  // galestone
+  {
+    id: 'perk_galestone_50',
+    tileType: 'galestone',
+    requiredLevel: 50,
+    name: '미풍의 가호',
+    description: '이동 속도가 15 증가합니다.',
+    effects: [{ type: 'moveSpeed', value: 15, isMultiplier: false }],
+  },
+  {
+    id: 'perk_galestone_100',
+    tileType: 'galestone',
+    requiredLevel: 100,
+    name: '바람의 인도',
+    description: '채굴 속도가 10% 증가합니다.',
+    effects: [{ type: 'miningSpeed', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_galestone_150',
+    tileType: 'galestone',
+    requiredLevel: 150,
+    name: '돌풍의 의지',
+    description: '이동 속도가 15% 증가합니다.',
+    effects: [{ type: 'moveSpeed', value: 0.15, isMultiplier: true }],
+  },
+  {
+    id: 'perk_galestone_200',
+    tileType: 'galestone',
+    requiredLevel: 200,
+    name: '폭풍의 군주',
+    description: '이동 및 채굴 속도가 15% 증가합니다.',
+    effects: [
+      { type: 'moveSpeed', value: 0.15, isMultiplier: true },
+      { type: 'miningSpeed', value: 0.15, isMultiplier: true },
+    ],
+  },
+  // fervorstone
+  {
+    id: 'perk_fervorstone_50',
+    tileType: 'fervorstone',
+    requiredLevel: 50,
+    name: '열정의 불꽃',
+    description: '채굴 속도가 5% 증가합니다.',
+    effects: [{ type: 'miningSpeed', value: 0.05, isMultiplier: true }],
+  },
+  {
+    id: 'perk_fervorstone_100',
+    tileType: 'fervorstone',
+    requiredLevel: 100,
+    name: '끓는 피',
+    description: '채굴 공격력이 10% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_fervorstone_150',
+    tileType: 'fervorstone',
+    requiredLevel: 150,
+    name: '광란의 채굴',
+    description: '채굴 속도가 15% 증가합니다.',
+    effects: [{ type: 'miningSpeed', value: 0.15, isMultiplier: true }],
+  },
+  {
+    id: 'perk_fervorstone_200',
+    tileType: 'fervorstone',
+    requiredLevel: 200,
+    name: '타오르는 집념',
+    description: '채굴 속도가 25% 증가합니다.',
+    effects: [{ type: 'miningSpeed', value: 0.25, isMultiplier: true }],
+  },
+];

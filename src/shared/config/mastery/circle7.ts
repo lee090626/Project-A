@@ -1,0 +1,103 @@
+import { MasteryPerkDef } from './types';
+
+export const circle7MasteryPerks: MasteryPerkDef[] = [
+  // thornstone
+  {
+    id: 'perk_thornstone_50',
+    tileType: 'thornstone',
+    requiredLevel: 50,
+    name: '가시 박힌 드릴',
+    description: '채굴 위력이 50 증가합니다.',
+    effects: [{ type: 'miningPower', value: 50, isMultiplier: false }],
+  },
+  {
+    id: 'perk_thornstone_100',
+    tileType: 'thornstone',
+    requiredLevel: 100,
+    name: '부식성 가시',
+    description: '채굴 위력이 150 증가합니다.',
+    effects: [{ type: 'miningPower', value: 150, isMultiplier: false }],
+  },
+  {
+    id: 'perk_thornstone_150',
+    tileType: 'thornstone',
+    requiredLevel: 150,
+    name: '출혈 타격',
+    description: '채굴 위력이 20% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 0.2, isMultiplier: true }],
+  },
+  {
+    id: 'perk_thornstone_200',
+    tileType: 'thornstone',
+    requiredLevel: 200,
+    name: '파멸의 가시',
+    description: '채굴 위력이 40% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 0.4, isMultiplier: true }],
+  },
+  // bloodstone
+  {
+    id: 'perk_bloodstone_50',
+    tileType: 'bloodstone',
+    requiredLevel: 50,
+    name: '혈액 주입',
+    description: '채굴 위력이 100 증가합니다.',
+    effects: [{ type: 'miningPower', value: 100, isMultiplier: false }],
+  },
+  {
+    id: 'perk_bloodstone_100',
+    tileType: 'bloodstone',
+    requiredLevel: 100,
+    name: '응고된 힘',
+    description: '채굴 위력이 300 증가합니다.',
+    effects: [{ type: 'miningPower', value: 300, isMultiplier: false }],
+  },
+  {
+    id: 'perk_bloodstone_150',
+    tileType: 'bloodstone',
+    requiredLevel: 150,
+    name: '선혈의 축제',
+    description: '채굴 위력이 50% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 0.5, isMultiplier: true }],
+  },
+  {
+    id: 'perk_bloodstone_200',
+    tileType: 'bloodstone',
+    requiredLevel: 200,
+    name: '피의 폭군',
+    description: '채굴 위력이 80% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 0.8, isMultiplier: true }],
+  },
+  // cruelite
+  {
+    id: 'perk_cruelite_50',
+    tileType: 'cruelite',
+    requiredLevel: 50,
+    name: '잔혹한 충격',
+    description: '채굴 위력이 250 증가합니다.',
+    effects: [{ type: 'miningPower', value: 250, isMultiplier: false }],
+  },
+  {
+    id: 'perk_cruelite_100',
+    tileType: 'cruelite',
+    requiredLevel: 100,
+    name: '무자비한 파쇄',
+    description: '채굴 위력이 700 증가합니다.',
+    effects: [{ type: 'miningPower', value: 700, isMultiplier: false }],
+  },
+  {
+    id: 'perk_cruelite_150',
+    tileType: 'cruelite',
+    requiredLevel: 150,
+    name: '학살자의 위용',
+    description: '채굴 위력이 100% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 1.0, isMultiplier: true }],
+  },
+  {
+    id: 'perk_cruelite_200',
+    tileType: 'cruelite',
+    requiredLevel: 200,
+    name: '절대적 폭력',
+    description: '채굴 위력이 200% 증가합니다.',
+    effects: [{ type: 'miningPower', value: 2.0, isMultiplier: true }],
+  },
+];

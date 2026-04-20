@@ -1,0 +1,103 @@
+import { MasteryPerkDef } from './types';
+
+export const circle4MasteryPerks: MasteryPerkDef[] = [
+  // goldstone
+  {
+    id: 'perk_goldstone_50',
+    tileType: 'goldstone',
+    requiredLevel: 50,
+    name: '황금의 안목',
+    description: '행운이 20 증가합니다.',
+    effects: [{ type: 'luck', value: 20, isMultiplier: false }],
+  },
+  {
+    id: 'perk_goldstone_100',
+    tileType: 'goldstone',
+    requiredLevel: 100,
+    name: '빛나는 직감',
+    description: '행운이 50 증가합니다.',
+    effects: [{ type: 'luck', value: 50, isMultiplier: false }],
+  },
+  {
+    id: 'perk_goldstone_150',
+    tileType: 'goldstone',
+    requiredLevel: 150,
+    name: '재화의 부름',
+    description: '행운이 20% 증가합니다.',
+    effects: [{ type: 'luck', value: 0.2, isMultiplier: true }],
+  },
+  {
+    id: 'perk_goldstone_200',
+    tileType: 'goldstone',
+    requiredLevel: 200,
+    name: '황금의 축복',
+    description: '행운이 100% 증가합니다.',
+    effects: [{ type: 'luck', value: 1.0, isMultiplier: true }],
+  },
+  // luststone
+  {
+    id: 'perk_luststone_50',
+    tileType: 'luststone',
+    requiredLevel: 50,
+    name: '소유의 욕구',
+    description: '행운이 30 증가합니다.',
+    effects: [{ type: 'luck', value: 30, isMultiplier: false }],
+  },
+  {
+    id: 'perk_luststone_100',
+    tileType: 'luststone',
+    requiredLevel: 100,
+    name: '탐욕의 통찰',
+    description: '행운이 80 증가합니다.',
+    effects: [{ type: 'luck', value: 80, isMultiplier: false }],
+  },
+  {
+    id: 'perk_luststone_150',
+    tileType: 'luststone',
+    requiredLevel: 150,
+    name: '갈망하는 손길',
+    description: '행운이 30% 증가합니다.',
+    effects: [{ type: 'luck', value: 0.3, isMultiplier: true }],
+  },
+  {
+    id: 'perk_luststone_200',
+    tileType: 'luststone',
+    requiredLevel: 200,
+    name: '탐심의 정점',
+    description: '행운이 150% 증가합니다.',
+    effects: [{ type: 'luck', value: 1.5, isMultiplier: true }],
+  },
+  // midasite
+  {
+    id: 'perk_midasite_50',
+    tileType: 'midasite',
+    requiredLevel: 50,
+    name: '미다스의 손길',
+    description: '행운이 50 증가합니다.',
+    effects: [{ type: 'luck', value: 50, isMultiplier: false }],
+  },
+  {
+    id: 'perk_midasite_100',
+    tileType: 'midasite',
+    requiredLevel: 100,
+    name: '황금 변환',
+    description: '행운이 150 증가합니다.',
+    effects: [{ type: 'luck', value: 150, isMultiplier: false }],
+  },
+  {
+    id: 'perk_midasite_150',
+    tileType: 'midasite',
+    requiredLevel: 150,
+    name: '연금술의 극의',
+    description: '행운이 50% 증가합니다.',
+    effects: [{ type: 'luck', value: 0.5, isMultiplier: true }],
+  },
+  {
+    id: 'perk_midasite_200',
+    tileType: 'midasite',
+    requiredLevel: 200,
+    name: '전설의 미다스',
+    description: '행운이 300% 증가합니다.',
+    effects: [{ type: 'luck', value: 3.0, isMultiplier: true }],
+  },
+];

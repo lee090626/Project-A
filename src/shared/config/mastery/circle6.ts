@@ -1,0 +1,103 @@
+import { MasteryPerkDef } from './types';
+
+export const circle6MasteryPerks: MasteryPerkDef[] = [
+  // ashstone
+  {
+    id: 'perk_ashstone_50',
+    tileType: 'ashstone',
+    requiredLevel: 50,
+    name: '낙진의 지식',
+    description: '마스터리 경험치가 5% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.05, isMultiplier: true }],
+  },
+  {
+    id: 'perk_ashstone_100',
+    tileType: 'ashstone',
+    requiredLevel: 100,
+    name: '메마른 연구',
+    description: '마스터리 경험치가 10% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_ashstone_150',
+    tileType: 'ashstone',
+    requiredLevel: 150,
+    name: '잿빛 깨달음',
+    description: '마스터리 경험치가 20% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.2, isMultiplier: true }],
+  },
+  {
+    id: 'perk_ashstone_200',
+    tileType: 'ashstone',
+    requiredLevel: 200,
+    name: '이단의 성자',
+    description: '마스터리 경험치가 40% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.4, isMultiplier: true }],
+  },
+  // blightstone
+  {
+    id: 'perk_blightstone_50',
+    tileType: 'blightstone',
+    requiredLevel: 50,
+    name: '저주받은 통찰',
+    description: '마스터리 경험치가 10% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_blightstone_100',
+    tileType: 'blightstone',
+    requiredLevel: 100,
+    name: '금지된 서적',
+    description: '마스터리 경험치가 25% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.25, isMultiplier: true }],
+  },
+  {
+    id: 'perk_blightstone_150',
+    tileType: 'blightstone',
+    requiredLevel: 150,
+    name: '타락한 예언',
+    description: '마스터리 경험치가 50% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.5, isMultiplier: true }],
+  },
+  {
+    id: 'perk_blightstone_200',
+    tileType: 'blightstone',
+    requiredLevel: 200,
+    name: '암흑의 현자',
+    description: '마스터리 경험치 획득량이 100% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 1.0, isMultiplier: true }],
+  },
+  // vexite
+  {
+    id: 'perk_vexite_50',
+    tileType: 'vexite',
+    requiredLevel: 50,
+    name: '고뇌의 배움',
+    description: '마스터리 경험치가 15% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.15, isMultiplier: true }],
+  },
+  {
+    id: 'perk_vexite_100',
+    tileType: 'vexite',
+    requiredLevel: 100,
+    name: '비통한 탐구',
+    description: '마스터리 경험치가 40% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.4, isMultiplier: true }],
+  },
+  {
+    id: 'perk_vexite_150',
+    tileType: 'vexite',
+    requiredLevel: 150,
+    name: '고통의 극의',
+    description: '마스터리 경험치가 75% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 0.75, isMultiplier: true }],
+  },
+  {
+    id: 'perk_vexite_200',
+    tileType: 'vexite',
+    requiredLevel: 200,
+    name: '초월적 불신자',
+    description: '마스터리 경험치 획득량이 150% 증가합니다.',
+    effects: [{ type: 'masteryExp', value: 1.5, isMultiplier: true }],
+  },
+];

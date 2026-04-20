@@ -1,0 +1,106 @@
+import { MasteryPerkDef } from './types';
+
+export const circle3MasteryPerks: MasteryPerkDef[] = [
+  // moldstone
+  {
+    id: 'perk_moldstone_50',
+    tileType: 'moldstone',
+    requiredLevel: 50,
+    name: '포자의 회복',
+    description: 'HP 재생이 2 증가합니다.',
+    effects: [{ type: 'hpRegen', value: 2, isMultiplier: false }],
+  },
+  {
+    id: 'perk_moldstone_100',
+    tileType: 'moldstone',
+    requiredLevel: 100,
+    name: '질긴 균사',
+    description: '최대 체력이 50 증가합니다.',
+    effects: [{ type: 'maxHp', value: 50, isMultiplier: false }],
+  },
+  {
+    id: 'perk_moldstone_150',
+    tileType: 'moldstone',
+    requiredLevel: 150,
+    name: '증식하는 생명',
+    description: 'HP 재생이 5 증가합니다.',
+    effects: [{ type: 'hpRegen', value: 5, isMultiplier: false }],
+  },
+  {
+    id: 'perk_moldstone_200',
+    tileType: 'moldstone',
+    requiredLevel: 200,
+    name: '불사의 곰팡이',
+    description: '최대 체력이 20% 증가합니다.',
+    effects: [{ type: 'maxHp', value: 0.2, isMultiplier: true }],
+  },
+  // siltstone
+  {
+    id: 'perk_siltstone_50',
+    tileType: 'siltstone',
+    requiredLevel: 50,
+    name: '침전된 기력',
+    description: '최대 체력이 100 증가합니다.',
+    effects: [{ type: 'maxHp', value: 100, isMultiplier: false }],
+  },
+  {
+    id: 'perk_siltstone_100',
+    tileType: 'siltstone',
+    requiredLevel: 100,
+    name: '퇴적된 근육',
+    description: '최대 체력이 15% 증가합니다.',
+    effects: [{ type: 'maxHp', value: 0.15, isMultiplier: true }],
+  },
+  {
+    id: 'perk_siltstone_150',
+    tileType: 'siltstone',
+    requiredLevel: 150,
+    name: '단단한 침전',
+    description: 'HP 재생이 8 증가합니다.',
+    effects: [{ type: 'hpRegen', value: 8, isMultiplier: false }],
+  },
+  {
+    id: 'perk_siltstone_200',
+    tileType: 'siltstone',
+    requiredLevel: 200,
+    name: '대지의 요새',
+    description: '최대 체력이 40% 증가합니다.',
+    effects: [{ type: 'maxHp', value: 0.4, isMultiplier: true }],
+  },
+  // gorestone
+  {
+    id: 'perk_gorestone_50',
+    tileType: 'gorestone',
+    requiredLevel: 50,
+    name: '피의 치유',
+    description: 'HP 재생이 10% 증가합니다.',
+    effects: [{ type: 'hpRegen', value: 0.1, isMultiplier: true }],
+  },
+  {
+    id: 'perk_gorestone_100',
+    tileType: 'gorestone',
+    requiredLevel: 100,
+    name: '선혈의 장막',
+    description: '최대 체력이 200 증가합니다.',
+    effects: [{ type: 'maxHp', value: 200, isMultiplier: false }],
+  },
+  {
+    id: 'perk_gorestone_150',
+    tileType: 'gorestone',
+    requiredLevel: 150,
+    name: '넘치는 생기',
+    description: 'HP 재생이 20% 증가합니다.',
+    effects: [{ type: 'hpRegen', value: 0.2, isMultiplier: true }],
+  },
+  {
+    id: 'perk_gorestone_200',
+    tileType: 'gorestone',
+    requiredLevel: 200,
+    name: '탐식의 끝',
+    description: '최대 체력이 25% 증가하고 재생이 15 증가합니다.',
+    effects: [
+      { type: 'maxHp', value: 0.25, isMultiplier: true },
+      { type: 'hpRegen', value: 15, isMultiplier: false },
+    ],
+  },
+];
