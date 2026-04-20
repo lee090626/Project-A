@@ -1,0 +1,65 @@
+import { ArtifactDefinition } from './types';
+
+export const craftableArtifacts: Record<string, ArtifactDefinition> = {
+  vibrant_heart: {
+    id: 'vibrant_heart',
+    name: 'Vibrant Heart Charm',
+    nameKo: '생명의 부적',
+    type: 'stackable',
+    image: 'LustEssence',
+    description: 'Increases Max HP significantly via intricate crafting.',
+    descriptionKo: '정교한 제작을 통해 최대 체력을 미세하게 증가시킵니다.',
+    bonus: { stat: 'maxHp', value: 20 },
+    requirements: {
+      essence_lust: 10,
+      crimsonstone: 10,
+      galestone: 10,
+      fervorstone: 10,
+    },
+  },
+  swift_wing_boots: {
+    id: 'swift_wing_boots',
+    name: 'Swift Wing Boots',
+    nameKo: '순풍의 날개 장화',
+    type: 'stackable',
+    image: 'FraudEssence',
+    description: 'Increases movement speed significantly.',
+    descriptionKo: '이동 속도를 크게 증가시킵니다.',
+    bonus: { stat: 'moveSpeed', value: 0.5 },
+    requirements: {
+      essence_fraud: 10,
+      galestone: 15,
+      moldstone: 15,
+    },
+  },
+  heavy_drill_artifact: {
+    id: 'heavy_drill_artifact',
+    name: 'Heavy Drill Engine',
+    nameKo: '중량 드릴 엔진',
+    type: 'stackable',
+    image: 'HeresyEssence',
+    description: 'Increases mining speed significantly.',
+    descriptionKo: '채굴 속도를 크게 증가시킵니다.',
+    bonus: { stat: 'miningSpeed', value: 0.1 },
+    requirements: {
+      essence_gluttony: 10,
+      fervorstone: 15,
+      siltstone: 15,
+    },
+  },
+  lucky_clover: {
+    id: 'lucky_clover',
+    name: 'Gore-stained Clover',
+    nameKo: '피칠갑된 클로버',
+    type: 'stackable',
+    image: 'GreedEssence',
+    description: 'Increases luck significantly.',
+    descriptionKo: '행운을 크게 증가시킵니다.',
+    bonus: { stat: 'luck', value: 0.5 },
+    requirements: {
+      essence_lust: 10,
+      crimsonstone: 15,
+      gorestone: 15,
+    },
+  },
+};
