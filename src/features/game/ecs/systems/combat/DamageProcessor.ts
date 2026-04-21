@@ -53,13 +53,18 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
 
       if (canDamage) {
         const cooldown = entities.soa.attackCooldown[idx];
-        if (now - entities.soa.lastAttackTime[idx] > cooldown) {
+        const lastTime = entities.soa.lastAttackTime[idx];
+        const elapsed = now - lastTime;
+
+        // [Charging Combat 구현]
+        // 쿨타임이 완료된 시점에만 대미지를 입힘 (전조 시간 = 공속)
+        if (elapsed >= cooldown) {
           const attack = entities.soa.attack[idx];
           const damage = Math.max(1, attack - (player.stats.defense || 0));
           
           player.stats.hp -= damage;
           player.lastHitTime = now;
-          entities.soa.lastAttackTime[idx] = now;
+          entities.soa.lastAttackTime[idx] = now; // 다음 차징 시작
 
           // [Juice: 이벤트 발행] 플레이어 피격 연출 요청
           messageBus.emit('game:player_hit', {
@@ -68,6 +73,14 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
             damage
           });
         }
+      }
+    } else {
+      // [Kiting 지원] 사거리 밖으로 나가면 공격 타이머를 최신화하여, 
+      // 다시 사거리 진입 시 즉시 타격이 발생하지 않고 처음부터 차징하게 함.
+      // (단, 이미 쿨타임이 돌고 있는 상태에서만 갱신)
+      const cooldown = entities.soa.attackCooldown[idx];
+      if (now - entities.soa.lastAttackTime[idx] > cooldown) {
+         entities.soa.lastAttackTime[idx] = now;
       }
     }
   });
