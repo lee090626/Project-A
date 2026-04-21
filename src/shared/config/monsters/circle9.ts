@@ -60,6 +60,8 @@ export const circle9Monsters: MonsterDefinition[] = [
     imagePath: 'Asmodeus',
     description:
       '3개의 얼굴, 거대한 얼음에 하반신이 갇혀있음. 6개의 날개는 부러지고 검게 타있음. 눈물이 얼어붙어 있음',
+    width: 5,
+    height: 5,
     stats: { maxHp: 100000000, power: 250000, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 50000000,

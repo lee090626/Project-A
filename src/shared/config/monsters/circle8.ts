@@ -59,6 +59,8 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'boss',
     imagePath: 'Asmodeus',
     description: '신성한 심판자를 자처하지만, 사실은 기만과 부패로 영혼들을 타락시키는 서클 8의 지배자.',
+    width: 5,
+    height: 5,
     stats: { maxHp: 12000000, power: 45000, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 6000000,

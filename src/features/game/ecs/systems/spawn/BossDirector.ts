@@ -41,24 +41,31 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
 
   const bossDef = MONSTER_LIST[defIdx];
 
-  // 1. 보스 스폰 지점의 타일 및 일반 몹 정리 (Boss Zone Cleanup)
-  tileMap.clearArea(x - 3, y - 3, 7, 7);
+  // 2. 보스 엔티티 생성 (가변 크기 반영)
+  const width = bossDef.width || 5;
+  const height = bossDef.height || 5;
+  const halfW = Math.floor(width / 2);
+  const halfH = Math.floor(height / 2);
+
+  // 1. 보스 스폰 지점의 타일 및 일반 몹 정리 (Boss Zone Cleanup - 크기에 맞게 자동 확장)
+  tileMap.clearArea(x - halfW - 1, y - halfH - 1, width + 2, height + 2);
   
   for (let i = entities.soa.count - 1; i >= 0; i--) {
     if (entities.soa.type[i] === 1) { // 1: monster (일반 몹)
       const mdx = Math.abs(entities.soa.x[i] - x * TILE_SIZE);
       const mdy = Math.abs(entities.soa.y[i] - y * TILE_SIZE);
-      if (mdx < 10 * TILE_SIZE && mdy < 10 * TILE_SIZE) {
+      // 보스 크기에 따라 정리 거리 동적 조정
+      const clearRange = (Math.max(width, height) + 4) * TILE_SIZE;
+      if (mdx < clearRange && mdy < clearRange) {
         entities.destroy(i);
       }
     }
   }
 
-  // 2. 보스 엔티티 생성 (5x5 크기)
   entities.create(
     2, // type: boss
-    x * TILE_SIZE - 2 * TILE_SIZE,
-    y * TILE_SIZE - 2 * TILE_SIZE,
+    x * TILE_SIZE - halfW * TILE_SIZE,
+    y * TILE_SIZE - halfH * TILE_SIZE,
     bossId,
     defIdx,
   );
@@ -69,8 +76,8 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
   entities.soa.attack[idx] = bossDef.stats.power;
   entities.soa.attackCooldown[idx] = bossDef.stats.attackCooldown ?? 2500;
   entities.soa.aggroRange[idx] = bossDef.behavior.aggroRange ?? 20;
-  entities.soa.width[idx] = TILE_SIZE * 5;
-  entities.soa.height[idx] = TILE_SIZE * 5;
+  entities.soa.width[idx] = TILE_SIZE * width;
+  entities.soa.height[idx] = TILE_SIZE * height;
   entities.soa.lastAttackTime[idx] = performance.now();
 
   // 최초 조우 기록

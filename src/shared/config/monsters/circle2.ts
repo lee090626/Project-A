@@ -58,9 +58,10 @@ export const circle2Monsters: MonsterDefinition[] = [
     nameKo: '욕망의 군주, 아스모데우스',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description:
-      '3개의 머리 (황소, 인간, 숫양), 불꽃 날개, 뱀 꼬리. 몸 전체에서 붉은 열기가 뿜어져 나옴',
-    stats: { maxHp: 12000, power: 85, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    description: 'Circle 2 색욕의 지옥을 지배하는 위대한 악마. 치명적인 유혹과 갈망의 힘으로 침입자를 파멸시킵니다.',
+    width: 5,
+    height: 5,
+    stats: { maxHp: 12000, power: 85, defense: 20, speed: 0, attackCooldown: 2500 },
     rewards: {
       exp: 7500,
       gold: 1500,

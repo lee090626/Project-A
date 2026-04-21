@@ -93,17 +93,34 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
     if (type !== 1 && type !== 2) return;
     if (entities.soa.hp[idx] <= 0) return;
 
+    // 1. 엔티티 영역 (AABB)
     const ex = entities.soa.x[idx];
     const ey = entities.soa.y[idx];
     const ew = entities.soa.width[idx] || TILE_SIZE;
     const eh = entities.soa.height[idx] || TILE_SIZE;
 
+    // 2. 공격 영역 (현재는 1x1 타일을 기준으로 하되, 향후 drillStats 등으로 확장 가능)
     const tx = target.x * TILE_SIZE;
     const ty = target.y * TILE_SIZE;
+    const tw = TILE_SIZE; // 기본적으로 1x1 타일 공격
+    const th = TILE_SIZE;
 
-    const isHit = tx < ex + ew && tx + TILE_SIZE > ex && ty < ey + eh && ty + TILE_SIZE > ey;
+    // 3. 교차 영역(Intersection) 계산
+    const interX1 = Math.max(ex, tx);
+    const interY1 = Math.max(ey, ty);
+    const interX2 = Math.min(ex + ew, tx + tw);
+    const interY2 = Math.min(ey + eh, ty + th);
 
-    if (isHit) {
+    const interW = Math.max(0, interX2 - interX1);
+    const interH = Math.max(0, interY2 - interY1);
+
+    // 4. 중첩된 타일 수 계산 (Area / TILE_SIZE^2)
+    // 1x1 드릴은 항상 1 이하의 값이 나오므로 Math.max(1, ...)로 최소 배율 보장
+    const overlapTilesX = Math.ceil(interW / TILE_SIZE);
+    const overlapTilesY = Math.ceil(interH / TILE_SIZE);
+    const multiplier = overlapTilesX * overlapTilesY;
+
+    if (multiplier > 0) {
       const defIdx = entities.soa.monsterDefIndex[idx];
       const monsterDef = MONSTER_LIST[defIdx];
       const monsterDefense = monsterDef?.stats?.defense || 0;
@@ -115,25 +132,32 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
       );
 
       if (now - player.lastAttackTime > attackInterval) {
-        let actualDamage = finalDamage;
-        let text = isCrit ? `Crit! -${finalDamage}` : `-${finalDamage}`;
+        // [Multi-Hit] 중첩 타일 수만큼 대미지 배수 적용
+        const actualDamage = finalDamage * multiplier;
+        let text = isCrit ? `Crit! -${actualDamage}` : `-${actualDamage}`;
         let color = isCrit ? '#f87171' : '#ffffff';
+
+        // 보스에게 다중 타격 시 배수 표시 (예: "x15")
+        if (multiplier > 1) {
+          text += ` (x${multiplier})`;
+        }
 
         // 특수 기믹: 크리티컬 온리 몬스터
         if (monsterDef?.mechanic === 'critical_only' && !isCrit) {
-          actualDamage = 0;
           text = 'BLOCK!';
           color = '#3b82f6';
-        }
-
-        if (actualDamage > 0 || text === 'BLOCK!') {
+          
+          if (now - player.lastAttackTime > attackInterval) {
+            entities.soa.hp[idx] -= 0;
+          }
+        } else if (actualDamage > 0) {
           entities.soa.hp[idx] -= actualDamage;
           entities.markDirty(idx);
           
           // [Juice: 이벤트 발행] 몬스터 타격 연출 요청
           messageBus.emit('game:entity_hit', {
-            x: ex + ew / 2,
-            y: ey,
+            x: interX1 + interW / 2, // 타격 발생 지점 중심
+            y: interY1,
             damage: actualDamage,
             isCrit,
             text,

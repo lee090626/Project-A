@@ -57,6 +57,10 @@ export interface MonsterDefinition {
   nameKo: string;
   /** 몬스터 유형 */
   type: 'monster' | 'boss';
+  /** 타일 단위 가로 크기 (기본값 1) */
+  width?: number;
+  /** 타일 단위 세로 크기 (기본값 1) */
+  height?: number;
   /** 아틀라스 키 */
   imagePath: string;
   /** 몬스터 설명 */

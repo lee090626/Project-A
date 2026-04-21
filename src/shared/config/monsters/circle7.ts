@@ -59,6 +59,8 @@ export const circle7Monsters: MonsterDefinition[] = [
     type: 'boss',
     imagePath: 'Asmodeus',
     description: '폭력의 연못을 다스리는 냉혹한 처형자. 거대한 심판의 검으로 죄인들을 단죄합니다.',
+    width: 5,
+    height: 5,
     stats: { maxHp: 3000000, power: 15000, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 1500000,

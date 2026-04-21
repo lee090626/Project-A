@@ -58,8 +58,10 @@ export const circle4Monsters: MonsterDefinition[] = [
     nameKo: '황금의 수호자, 파프니르',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '황금으로 뒤덮인 거대한 용. 자신의 보물을 건드리는 자를 결코 용서하지 않습니다.',
-    stats: { maxHp: 120000, power: 500, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    description: 'Circle 4 탐욕의 지옥을 지키는 황금의 수호자. 자신의 보물을 건드리는 자를 용납하지 않습니다.',
+    width: 5,
+    height: 5,
+    stats: { maxHp: 180000, power: 550, defense: 65, speed: 0, attackCooldown: 2500 },
     rewards: {
       exp: 60000,
       gold: 12000,

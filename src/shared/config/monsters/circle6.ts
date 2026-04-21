@@ -59,6 +59,8 @@ export const circle6Monsters: MonsterDefinition[] = [
     type: 'boss',
     imagePath: 'Asmodeus',
     description: '타락한 신앙의 상징. 아름다우면서도 치명적인 권능으로 이단자들을 이끕니다.',
+    width: 5,
+    height: 5,
     stats: { maxHp: 900000, power: 3500, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 450000,
