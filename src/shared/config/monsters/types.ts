@@ -33,6 +33,10 @@ export interface BossPattern {
   lureCycle?: number;
   /** 공격 전조 표시 시작 시간 (밀리초) */
   warningLeadTime?: number;
+  /** dash 패턴 전용: 돌진 지속 시간 (밀리초) */
+  dashDuration?: number;
+  /** roar 패턴 전용: 효과 반경 (px) */
+  roarRadius?: number;
 }
 
 /**
