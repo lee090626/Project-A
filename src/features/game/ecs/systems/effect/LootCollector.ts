@@ -42,7 +42,8 @@ export const updateLootCollection = (world: GameWorld, deltaTime: number) => {
 
       // 인벤토리 및 수집 기록 가산
       if (id.startsWith('essence_')) {
-        player.stats.inventory[id] = (player.stats.inventory[id] || 0) + amount;
+        if (!player.stats.collectionHistory) player.stats.collectionHistory = {};
+        player.stats.collectionHistory[id] = (player.stats.collectionHistory[id] || 0) + amount;
         world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
       } else if (id.includes('stone') || id.includes('ite')) {
         // Mineral
