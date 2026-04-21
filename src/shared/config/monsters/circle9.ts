@@ -54,8 +54,8 @@ export const circle9Monsters: MonsterDefinition[] = [
   },
   {
     id: 'c9_lucifer',
-    name: 'Lucifer',
-    nameKo: '루시퍼',
+    name: 'Lucifer, the Fallen Star',
+    nameKo: '추락한 별, 루시퍼',
     type: 'boss',
     imagePath: 'Asmodeus',
     description:

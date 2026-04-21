@@ -54,8 +54,8 @@ export const circle2Monsters: MonsterDefinition[] = [
   },
   {
     id: 'c2_asmodeus',
-    name: 'Asmodeus',
-    nameKo: '아스모데우스',
+    name: 'Asmodeus, the Lord of Desire',
+    nameKo: '욕망의 군주, 아스모데우스',
     type: 'boss',
     imagePath: 'Asmodeus',
     description:

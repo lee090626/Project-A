@@ -53,12 +53,12 @@ export const circle7Monsters: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c7_belial',
-    name: 'Belial',
-    nameKo: '벨리알',
+    id: 'c7_camael',
+    name: 'Camael, the Divine Executioner',
+    nameKo: '신성한 처형자, 카마엘',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '불꽃 전차를 탄 타락천사, 두 개의 검은 날개, 온몸이 불꽃으로 이루어진 형태',
+    description: '폭력의 연못을 다스리는 냉혹한 처형자. 거대한 심판의 검으로 죄인들을 단죄합니다.',
     stats: { maxHp: 3000000, power: 15000, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 1500000,

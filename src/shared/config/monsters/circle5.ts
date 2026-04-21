@@ -54,8 +54,8 @@ export const circle5Monsters: MonsterDefinition[] = [
   },
   {
     id: 'c5_azazel',
-    name: 'Azazel',
-    nameKo: '아자젤',
+    name: 'Azazel, the First Warlord',
+    nameKo: '최초의 전쟁군주, 아자젤',
     type: 'boss',
     imagePath: 'Player',
     description: '타락한 천사, 검게 그을린 날개, 온몸에 쇠사슬이 감겨있음. 눈에서 붉은 불꽃',

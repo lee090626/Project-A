@@ -53,12 +53,12 @@ export const circle8Monsters: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c8_abaddon',
-    name: 'Abaddon',
-    nameKo: '아바돈',
+    id: 'c8_gadreel',
+    name: 'Gadreel, the False Judge',
+    nameKo: '거짓된 심판자 가드리엘',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '거대한 메뚜기 형태, 전갈 꼬리, 철 갑옷을 두른 날개. 주변에 메뚜기 군단이 들끓음',
+    description: '신성한 심판자를 자처하지만, 사실은 기만과 부패로 영혼들을 타락시키는 서클 8의 지배자.',
     stats: { maxHp: 12000000, power: 45000, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 6000000,

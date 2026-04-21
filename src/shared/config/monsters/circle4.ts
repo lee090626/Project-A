@@ -53,12 +53,12 @@ export const circle4Monsters: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c4_mammon',
-    name: 'Mammon',
-    nameKo: '마몬',
+    id: 'c4_fafnir',
+    name: 'Fafnir, the Guardian of Gold',
+    nameKo: '황금의 수호자, 파프니르',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '황금 갑옷으로 뒤덮인 거대 인간형, 눈이 황금 동전. 몸에서 금화가 흘러내림',
+    description: '황금으로 뒤덮인 거대한 용. 자신의 보물을 건드리는 자를 결코 용서하지 않습니다.',
     stats: { maxHp: 120000, power: 500, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 60000,

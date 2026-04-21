@@ -53,13 +53,13 @@ export const circle3Monsters: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c3_Fenrir',
-    name: 'Fenrir',
-    nameKo: '펜리르',
+    id: 'c3_cerberus',
+    name: 'Cerberus, the Hound of Gluttony',
+    nameKo: '탐식의 파수견, 케르베로스',
     type: 'boss',
     imagePath: 'Asmodeus',
     description:
-      '거대한 파리 형태, 썩은 날개, 복부가 비정상적으로 부풀어있음. 주변에 파리 떼가 항상 들끓음',
+      '음침한 비가 쏟아지는 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발깁니다.',
     stats: { maxHp: 45000, power: 250, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 22500,

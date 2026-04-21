@@ -113,7 +113,7 @@ export const CIRCLES: CircleConfig[] = [
       { monsterId: 'c3_worm', chance: 0.04, weight: 1, minLayer: 2 },
       { monsterId: 'c3_mud_shade', chance: 0.03, weight: 1, minLayer: 3 },
     ],
-    boss: { id: 'c3_Fenrir', spawnLayer: 4 },
+    boss: { id: 'c3_cerberus', spawnLayer: 4 },
   },
   {
     id: 4,
@@ -129,7 +129,7 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'midasite', threshold: 0.25, minLayer: 3, scale: 6 },
     ],
     monsters: [{ monsterId: 'c4_hoarder', chance: 0.08, weight: 1, minLayer: 1 }],
-    boss: { id: 'c4_mammon', spawnLayer: 4 },
+    boss: { id: 'c4_fafnir', spawnLayer: 4 },
   },
   {
     id: 5,
@@ -161,7 +161,7 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'vexite', threshold: 0.15, minLayer: 3, scale: 6 },
     ],
     monsters: [{ monsterId: 'c6_priest', chance: 0.07, weight: 1, minLayer: 1 }],
-    boss: { id: 'c6_samael', spawnLayer: 4 },
+    boss: { id: 'c6_lilith', spawnLayer: 4 },
   },
   {
     id: 7,
@@ -177,7 +177,7 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'cruelite', threshold: 0.12, minLayer: 3, scale: 6 },
     ],
     monsters: [{ monsterId: 'c7_centaur', chance: 0.06, weight: 1, minLayer: 1 }],
-    boss: { id: 'c7_belial', spawnLayer: 4 },
+    boss: { id: 'c7_camael', spawnLayer: 4 },
   },
   {
     id: 8,
@@ -193,7 +193,7 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'phantomite', threshold: 0.1, minLayer: 3, scale: 6 },
     ],
     monsters: [{ monsterId: 'c8_malebranche', chance: 0.05, weight: 1, minLayer: 1 }],
-    boss: { id: 'c8_abaddon', spawnLayer: 4 },
+    boss: { id: 'c8_gadreel', spawnLayer: 4 },
   },
   {
     id: 9,

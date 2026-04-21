@@ -53,13 +53,12 @@ export const circle6Monsters: MonsterDefinition[] = [
     behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
   },
   {
-    id: 'c6_samael',
-    name: 'Samael',
-    nameKo: '사마엘',
+    id: 'c6_lilith',
+    name: 'Lilith, the Heretic Saint',
+    nameKo: '이단의 성녀, 릴리스',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description:
-      '검게 물든 천사 날개, 온몸에 독이 흘러내림. 피부는 창백하고 균열이 가득하며 틈에서 보라빛 독액이 흘러나옴. 부러진 후광, 독이 묻은 검',
+    description: '타락한 신앙의 상징. 아름다우면서도 치명적인 권능으로 이단자들을 이끕니다.',
     stats: { maxHp: 900000, power: 3500, defense: 20, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 450000,
