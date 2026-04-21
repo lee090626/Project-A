@@ -168,14 +168,19 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     anyWarning = true;
   }
 
-  // --- 9. 이동 제어 (복귀 vs 추격 vs 정지) ---
+  // --- 9. 이동 제어 (복귀 vs 대시 vs 추격 vs 정지) ---
+  const status = world.bossCombatStatus[instanceId] as any;
+  const isDashing = status?.dashEndTime && status.dashEndTime > now;
+
   if (isReturning) {
     // 원점으로 강제 복귀
     const angle = Math.atan2(oy - by, ox - bx);
-    soa.vx[bossIdx] = Math.cos(angle) * soa.speed[bossIdx] * 1.5; // 복귀 시엔 조금 더 빠르게
+    soa.vx[bossIdx] = Math.cos(angle) * soa.speed[bossIdx] * 1.5;
     soa.vy[bossIdx] = Math.sin(angle) * soa.speed[bossIdx] * 1.5;
+  } else if (isDashing) {
+    // 대시 중: handleDash에서 설정한 vx, vy 유지 (이미 설정됨)
   } else if (anyWarning) {
-    // 공격 시전 중엔 무조건 정지 (Stop-while-Casting)
+    // 공격 시전 중: 정지 (단, 대시 중이 아닐 때만)
     soa.vx[bossIdx] = 0;
     soa.vy[bossIdx] = 0;
   } else if (bossDef.behavior.movementType === 'chase' && distToPlayer > attackRange * 0.8) {
