@@ -44,14 +44,4 @@ export interface ResearchNode {
   dependencies: string[];
 }
 
-/**
- * 스킬 정보를 정의합니다.
- */
-export interface Skill {
-  id: string;
-  name: string;
-  description: string;
-  cooldown: number;
-  type: 'active' | 'passive';
-  effectId: string;
-}
+

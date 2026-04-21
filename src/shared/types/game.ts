@@ -23,8 +23,8 @@ export type { SkillRune, SkillRuneItem, Artifact, SmeltingJob, DroppedItem } fro
 // 제작 시스템
 export type { CraftRequirements, CraftResult } from './game/crafting';
 
-// 성장 및 연구 (마스터리, 스킬)
-export type { MasteryState, ResearchEffect, ResearchNode, Skill } from './game/progress';
+// 성장 및 연구 (마스터리)
+export type { MasteryState, ResearchEffect, ResearchNode } from './game/progress';
 
 // UI 및 시각 효과
 export type { ToastType, ToastMessage, Particle, FloatingText, GameAssets } from './game/ui';
