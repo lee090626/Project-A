@@ -21,6 +21,10 @@ export interface EntitySoA {
   y: Float32Array;
   vx: Float32Array;
   vy: Float32Array;
+  /** 스폰 시점의 초기 X 좌표 (리싱/복귀 기준점) */
+  originX: Float32Array;
+  /** 스폰 시점의 초기 Y 좌표 (리싱/복귀 기준점) */
+  originY: Float32Array;
 
   // 전투 및 스탯
   hp: Float32Array;
@@ -86,6 +90,8 @@ export class EntityManager {
       spriteIndex: new Uint16Array(capacity),
       width: new Float32Array(capacity),
       height: new Float32Array(capacity),
+      originX: new Float32Array(capacity),
+      originY: new Float32Array(capacity),
       createdAt: new Float64Array(capacity),
       dirtyFlags: new Uint8Array(capacity),
     };
@@ -110,6 +116,8 @@ export class EntityManager {
       this.soa.spriteIndex,
       this.soa.width,
       this.soa.height,
+      this.soa.originX,
+      this.soa.originY,
       this.soa.createdAt,
       this.soa.dirtyFlags,
     ];
