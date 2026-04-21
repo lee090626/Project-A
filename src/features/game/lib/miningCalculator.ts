@@ -81,7 +81,6 @@ export const calculateMiningDamage = (
   const basePower =
     stats.power +
     tileMasteryBonus +
-    masteryBonuses.miningPower +
     Math.floor(runeAttackBonus);
 
   const totalPowerMult = 1 + masteryBonuses.miningPowerMult;

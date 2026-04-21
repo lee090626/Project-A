@@ -52,7 +52,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     artifactCooldowns: {},
     hp: 200,
     maxHp: 200,
-    power: 10,
+    power: 20,
     moveSpeed: 100,
     defense: 0,
     luck: 0,
