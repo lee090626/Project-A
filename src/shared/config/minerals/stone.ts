@@ -11,7 +11,7 @@ export const stoneMinerals: MineralDefinition[] = [
     color: '#9ca3af',
     minDepth: 0,
     basePrice: 0,
-    baseHealth: 50,
+    baseHealth: 20,
     defense: 0,
     image: null,
     tileImage: 'StoneTile',
