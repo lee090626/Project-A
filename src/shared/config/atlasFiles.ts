@@ -9,6 +9,7 @@ export const ATLAS_FILE_MAPPING = {
   BookIcon: 'BookIcon.webp',
   BossCoreTile: 'boss_core.png',
   BossSkinTile: 'boss_skin.png',
+  Cerberus: 'Cerberus.png',
   CrimsonFangDrill: 'CrimsonFangDrill.png',
   CrimsonPlateArmor: 'CrimsonPlateArmor.png',
   CrimsonStoneIcon: 'CrimsonStoneIcon.png',

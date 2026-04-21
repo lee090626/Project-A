@@ -6,7 +6,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     name: 'Bloated Devourer',
     nameKo: '비대한 포식자',
     type: 'monster',
-    imagePath: 'LustfulWhisperer',
+    imagePath: 'BloatedDevourer',
     description: 'Gluttony 서클의 하급 영혼입니다.',
     width: 2,
     height: 2,
@@ -59,7 +59,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     name: 'Cerberus, the Hound of Gluttony',
     nameKo: '탐식의 파수견, 케르베로스',
     type: 'boss',
-    imagePath: 'Asmodeus',
+    imagePath: 'Cerberus',
     description:
       '음침한 비가 쏟아지의 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발기며 탐식의 죄를 처단합니다.',
     width: 7,
