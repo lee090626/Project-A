@@ -24,6 +24,54 @@
         "y": 0.5
       }
     },
+    "AttackRune.png": {
+      "frame": {
+        "x": 3,
+        "y": 1033,
+        "w": 1011,
+        "h": 926
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 7,
+        "y": 47,
+        "w": 1011,
+        "h": 926
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "LuckRune.png": {
+      "frame": {
+        "x": 1020,
+        "y": 1033,
+        "w": 1008,
+        "h": 924
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 50,
+        "w": 1008,
+        "h": 924
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "MiningSpeedRune.png": {
       "frame": {
         "x": 1033,
@@ -47,174 +95,6 @@
         "x": 0.5,
         "y": 0.5
       }
-    },
-    "Player.png": {
-      "frame": {
-        "x": 3,
-        "y": 1033,
-        "w": 876,
-        "h": 992
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 148,
-        "y": 32,
-        "w": 876,
-        "h": 992
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "MoneyIcon.webp": {
-      "frame": {
-        "x": 885,
-        "y": 1033,
-        "w": 935,
-        "h": 927
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 56,
-        "y": 60,
-        "w": 935,
-        "h": 927
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "WindTornSoul.png": {
-      "frame": {
-        "x": 1826,
-        "y": 933,
-        "w": 210,
-        "h": 172
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 23,
-        "y": 42,
-        "w": 210,
-        "h": 172
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "HeresyEssence.png": {
-      "frame": {
-        "x": 1826,
-        "y": 1111,
-        "w": 200,
-        "h": 209
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 29,
-        "y": 24,
-        "w": 200,
-        "h": 209
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "TreacheryEssence.png": {
-      "frame": {
-        "x": 1826,
-        "y": 1326,
-        "w": 205,
-        "h": 208
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 25,
-        "y": 24,
-        "w": 205,
-        "h": 208
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "ViolenceEssence.png": {
-      "frame": {
-        "x": 1826,
-        "y": 1540,
-        "w": 202,
-        "h": 200
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 25,
-        "y": 28,
-        "w": 202,
-        "h": 200
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "LustEssence.png": {
-      "frame": {
-        "x": 1826,
-        "y": 1746,
-        "w": 192,
-        "h": 200
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 32,
-        "y": 28,
-        "w": 192,
-        "h": 200
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
     }
   },
   "meta": {
@@ -224,7 +104,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2044,
-      "h": 2028
+      "h": 1962
     },
     "scale": 1
   }

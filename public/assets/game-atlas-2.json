@@ -26,8 +26,8 @@
     },
     "StatusIcon.webp": {
       "frame": {
-        "x": 915,
-        "y": 3,
+        "x": 3,
+        "y": 922,
         "w": 840,
         "h": 295
       },
@@ -48,33 +48,9 @@
         "y": 0.5
       }
     },
-    "BookIcon.webp": {
-      "frame": {
-        "x": 915,
-        "y": 304,
-        "w": 835,
-        "h": 562
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 95,
-        "y": 231,
-        "w": 835,
-        "h": 562
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "BaseTileset.png": {
       "frame": {
-        "x": 3,
+        "x": 849,
         "y": 922,
         "w": 640,
         "h": 640
@@ -96,10 +72,58 @@
         "y": 0.5
       }
     },
+    "BookIcon.webp": {
+      "frame": {
+        "x": 3,
+        "y": 1223,
+        "w": 835,
+        "h": 562
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 95,
+        "y": 231,
+        "w": 835,
+        "h": 562
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Cerberus.png": {
+      "frame": {
+        "x": 915,
+        "y": 3,
+        "w": 638,
+        "h": 446
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 97,
+        "w": 638,
+        "h": 446
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "Asmodeus.png": {
       "frame": {
         "x": 915,
-        "y": 872,
+        "y": 455,
         "w": 624,
         "h": 392
       },
@@ -120,34 +144,10 @@
         "y": 0.5
       }
     },
-    "Mechanic.png": {
-      "frame": {
-        "x": 3,
-        "y": 1568,
-        "w": 512,
-        "h": 418
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 256,
-        "y": 303,
-        "w": 512,
-        "h": 418
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "Merchant.png": {
       "frame": {
-        "x": 649,
-        "y": 1270,
+        "x": 1495,
+        "y": 853,
         "w": 354,
         "h": 512
       },
@@ -168,10 +168,34 @@
         "y": 0.5
       }
     },
+    "Mechanic.png": {
+      "frame": {
+        "x": 1495,
+        "y": 1371,
+        "w": 512,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 256,
+        "y": 303,
+        "w": 512,
+        "h": 418
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "InventoryIcon.webp": {
       "frame": {
-        "x": 1009,
-        "y": 1270,
+        "x": 844,
+        "y": 1568,
         "w": 481,
         "h": 399
       },
@@ -194,8 +218,8 @@
     },
     "BloatedDevourer.png": {
       "frame": {
-        "x": 1496,
-        "y": 1270,
+        "x": 1545,
+        "y": 455,
         "w": 254,
         "h": 136
       },
@@ -216,10 +240,130 @@
         "y": 0.5
       }
     },
-    "FraudEssence.png": {
+    "HeresyEssence.png": {
+      "frame": {
+        "x": 1805,
+        "y": 455,
+        "w": 200,
+        "h": 209
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 29,
+        "y": 24,
+        "w": 200,
+        "h": 209
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "WindTornSoul.png": {
+      "frame": {
+        "x": 1805,
+        "y": 670,
+        "w": 210,
+        "h": 172
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 23,
+        "y": 42,
+        "w": 210,
+        "h": 172
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "TreacheryEssence.png": {
       "frame": {
         "x": 1545,
-        "y": 872,
+        "y": 597,
+        "w": 205,
+        "h": 208
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 24,
+        "w": 205,
+        "h": 208
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ViolenceEssence.png": {
+      "frame": {
+        "x": 1559,
+        "y": 3,
+        "w": 202,
+        "h": 200
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 25,
+        "y": 28,
+        "w": 202,
+        "h": 200
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "LustEssence.png": {
+      "frame": {
+        "x": 1767,
+        "y": 3,
+        "w": 192,
+        "h": 200
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 28,
+        "w": 192,
+        "h": 200
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "FraudEssence.png": {
+      "frame": {
+        "x": 1559,
+        "y": 209,
         "w": 192,
         "h": 199
       },
@@ -242,8 +386,8 @@
     },
     "WrathEssence.png": {
       "frame": {
-        "x": 1496,
-        "y": 1412,
+        "x": 1757,
+        "y": 209,
         "w": 192,
         "h": 199
       },
@@ -266,8 +410,8 @@
     },
     "GluttoyEssence.png": {
       "frame": {
-        "x": 521,
-        "y": 1788,
+        "x": 1855,
+        "y": 848,
         "w": 190,
         "h": 198
       },
@@ -290,8 +434,8 @@
     },
     "GreedEssence.png": {
       "frame": {
-        "x": 717,
-        "y": 1788,
+        "x": 1855,
+        "y": 1052,
         "w": 190,
         "h": 198
       },
@@ -312,10 +456,34 @@
         "y": 0.5
       }
     },
+    "CrimsonPlateArmor.png": {
+      "frame": {
+        "x": 1331,
+        "y": 1568,
+        "w": 138,
+        "h": 120
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 59,
+        "y": 68,
+        "w": 138,
+        "h": 120
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "GaleBat.png": {
       "frame": {
-        "x": 1545,
-        "y": 1077,
+        "x": 1331,
+        "y": 1795,
         "w": 178,
         "h": 154
       },
@@ -338,8 +506,8 @@
     },
     "LustfulWhisperer.png": {
       "frame": {
-        "x": 913,
-        "y": 1788,
+        "x": 1515,
+        "y": 1795,
         "w": 176,
         "h": 170
       },
@@ -359,222 +527,6 @@
         "x": 0.5,
         "y": 0.5
       }
-    },
-    "CrimsonPlateArmor.png": {
-      "frame": {
-        "x": 1496,
-        "y": 1617,
-        "w": 138,
-        "h": 120
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 59,
-        "y": 68,
-        "w": 138,
-        "h": 120
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonStoneTile.png": {
-      "frame": {
-        "x": 1095,
-        "y": 1743,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonVeilHelmet.png": {
-      "frame": {
-        "x": 1229,
-        "y": 1743,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 64,
-        "y": 64,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "DirtTile.png": {
-      "frame": {
-        "x": 1363,
-        "y": 1743,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "FervorStoneTile.png": {
-      "frame": {
-        "x": 1497,
-        "y": 1743,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "GaleStoneTile.png": {
-      "frame": {
-        "x": 649,
-        "y": 922,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "StoneTile.png": {
-      "frame": {
-        "x": 649,
-        "y": 1056,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "boss_core.png": {
-      "frame": {
-        "x": 1761,
-        "y": 3,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "boss_skin.png": {
-      "frame": {
-        "x": 1761,
-        "y": 3,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
     }
   },
   "meta": {
@@ -583,8 +535,8 @@
     "image": "game-atlas-2.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1892,
-      "h": 1989
+      "w": 2048,
+      "h": 1970
     },
     "scale": 1
   }
