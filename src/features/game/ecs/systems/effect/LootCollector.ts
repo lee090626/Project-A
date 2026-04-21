@@ -22,8 +22,8 @@ export const updateLootCollection = (world: GameWorld, deltaTime: number) => {
     dp.vx[i] *= 0.95; // 공기 저항
 
     // 2. 플레이어 자석 효과 (Magnet)
-    const dx = player.visualPos.x * TILE_SIZE + TILE_SIZE / 2 - dp.x[i];
-    const dy = player.visualPos.y * TILE_SIZE + TILE_SIZE / 2 - dp.y[i];
+    const dx = player.pos.x * TILE_SIZE + TILE_SIZE / 2 - dp.x[i];
+    const dy = player.pos.y * TILE_SIZE + TILE_SIZE / 2 - dp.y[i];
     const distSq = dx * dx + dy * dy;
     const magnetRange = 80;
 
