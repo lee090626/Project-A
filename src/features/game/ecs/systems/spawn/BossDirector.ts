@@ -1,5 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
-import { TILE_SIZE } from '@/shared/config/constants';
+import { TILE_SIZE, BOSS_ZONE_RADIUS } from '@/shared/config/constants';
 import { getCircleConfig } from '@/shared/config/circleData';
 import { MONSTER_LIST } from '@/shared/config/monsterData';
 
@@ -47,25 +47,30 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
   const halfW = Math.floor(width / 2);
   const halfH = Math.floor(height / 2);
 
-  // 1. 보스 스폰 지점의 타일 및 일반 몹 정리 (Boss Zone Cleanup - 크기에 맞게 자동 확장)
-  tileMap.clearArea(x - halfW - 1, y - halfH - 1, width + 2, height + 2);
+  // 1. 보스 존 아레나 확장 정리 (BOSS_ZONE_RADIUS 기반)
+  const arenaRadius = BOSS_ZONE_RADIUS;
+  tileMap.clearArea(x - arenaRadius, y - arenaRadius, arenaRadius * 2, arenaRadius * 2);
   
   for (let i = entities.soa.count - 1; i >= 0; i--) {
     if (entities.soa.type[i] === 1) { // 1: monster (일반 몹)
       const mdx = Math.abs(entities.soa.x[i] - x * TILE_SIZE);
       const mdy = Math.abs(entities.soa.y[i] - y * TILE_SIZE);
-      // 보스 크기에 따라 정리 거리 동적 조정
-      const clearRange = (Math.max(width, height) + 4) * TILE_SIZE;
+      // 보스 구역 내의 모든 일반 몬스터 제거
+      const clearRange = (arenaRadius + 2) * TILE_SIZE;
       if (mdx < clearRange && mdy < clearRange) {
         entities.destroy(i);
       }
     }
   }
 
+  // 보스 생성 위치 (물리 좌표)
+  const spawnPhysX = x * TILE_SIZE - halfW * TILE_SIZE;
+  const spawnPhysY = y * TILE_SIZE - halfH * TILE_SIZE;
+
   entities.create(
     2, // type: boss
-    x * TILE_SIZE - halfW * TILE_SIZE,
-    y * TILE_SIZE - halfH * TILE_SIZE,
+    spawnPhysX,
+    spawnPhysY,
     bossId,
     defIdx,
   );
@@ -79,6 +84,10 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
   entities.soa.width[idx] = TILE_SIZE * width;
   entities.soa.height[idx] = TILE_SIZE * height;
   entities.soa.lastAttackTime[idx] = performance.now();
+
+  // 원점(Origin) 좌표 기록 - 복귀 및 리싱의 기준점
+  entities.soa.originX[idx] = spawnPhysX;
+  entities.soa.originY[idx] = spawnPhysY;
 
   // 최초 조우 기록
   if (!player.stats.encounteredBossIds.includes(bossId)) {
