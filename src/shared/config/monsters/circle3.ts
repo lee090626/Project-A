@@ -74,7 +74,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'relic_beelzebub_needle', chance: 0.5, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 2.5, aggroRange: 10, respawnMs: 15000 },
+    behavior: { movementType: 'chase', attackRange: 3.5, aggroRange: 15, respawnMs: 15000 },
     patterns: [
       {
         type: 'swarm',
