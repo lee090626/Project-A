@@ -1,7 +1,7 @@
 /**
  * 보스가 사용할 수 있는 공격 패턴의 종류를 정의합니다.
  */
-export type BossPatternType = 'shot' | 'cross' | 'lure' | 'aoe' | 'swarm' | 'gravity';
+export type BossPatternType = 'shot' | 'cross' | 'lure' | 'aoe' | 'swarm' | 'gravity' | 'dash' | 'roar' | 'hellfire';
 
 /**
  * 보스의 단일 공격 패턴 데이터 정의입니다.
