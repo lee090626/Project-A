@@ -174,7 +174,7 @@ const handleSwarm: PatternHandler = (ctx) => {
       soa.vy[idx] = finalVy;
       soa.attack[idx] = power;
       soa.createdAt[idx] = now;
-      soa.lastAttackTime[idx] = 0;
+      soa.lifespan[idx] = 5000;
       soa.width[idx] = size;
       soa.height[idx] = size;
     }
@@ -184,20 +184,106 @@ const handleSwarm: PatternHandler = (ctx) => {
 
 const handleGravity: PatternHandler = (ctx) => {
   const { world, bx, by, px, py, pattern } = ctx;
-  
+
   const dx = bx - px;
   const dy = by - py;
   const dist = Math.sqrt(dx * dx + dy * dy);
-  
+
   if (dist < 10) return false; // 너무 가까우면 인력 중단
 
   // 인력 세기 (기본값 0.1 타일/틱)
-  const strength = 0.08; 
+  const strength = 0.08;
   world.environmentalForce = {
     vx: (dx / dist) * strength,
     vy: (dy / dist) * strength
   };
-  
+
+  return true;
+};
+
+/**
+ * [돌진] 플레이어 방향으로 강하게 가속합니다.
+ */
+const handleDash: PatternHandler = (ctx) => {
+  const { world, entities, bossIdx, bx, by, px, py, now, pattern } = ctx;
+  const speed = pattern.projectileSpeed ?? 8;
+  const duration = pattern.dashDuration ?? 1500;
+  const instanceId = entities.soa.instanceId[bossIdx].toString();
+
+  const dx = px - bx;
+  const dy = py - by;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist <= 0) return false;
+
+  // 대시 속도 및 종료 시간 기록 (bossBehaviorSystem에서 참조)
+  entities.soa.vx[bossIdx] = (dx / dist) * speed;
+  entities.soa.vy[bossIdx] = (dy / dist) * speed;
+
+  if (world.bossCombatStatus[instanceId]) {
+    (world.bossCombatStatus[instanceId] as any).dashEndTime = now + duration;
+  }
+
+  return true;
+};
+
+/**
+ * [포효] 주변 플레이어에게 피해를 주고 스턴을 부여합니다.
+ */
+const handleRoar: PatternHandler = (ctx) => {
+  const { world, bx, by, px, py, now, pattern } = ctx;
+  const radius = pattern.roarRadius ?? 200;
+  const power = pattern.projectilePower ?? 50;
+
+  const dx = px - bx;
+  const dy = py - by;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  if (dist < radius) {
+    const { player } = world;
+    const damage = Math.max(1, power - (player.stats.defense || 0));
+    player.stats.hp -= damage;
+    player.lastHitTime = now;
+
+    applyStatusEffect(world, { type: 'STUN' }, 1000, now);
+    world.shake = Math.max(world.shake, 10);
+  }
+
+  return true;
+};
+
+/**
+ * [지옥불 브레스] 부채꼴 모양으로 느리고 오래가는 투사체를 발사합니다.
+ */
+const handleHellfire: PatternHandler = (ctx) => {
+  const { entities, bx, by, px, py, now, pattern } = ctx;
+  const { soa } = entities;
+
+  const count = pattern.projectileCount ?? 7;
+  const speed = pattern.projectileSpeed ?? 3;
+  const spread = Math.PI / 4; // 45도 부채꼴
+  const lifespan = 10000; // 10초 잔류
+
+  const dx = px - bx;
+  const dy = py - by;
+  const baseAngle = Math.atan2(dy, dx);
+
+  for (let i = 0; i < count; i++) {
+    const angle = baseAngle - spread / 2 + (spread / (count - 1)) * i;
+    const vx = Math.cos(angle) * speed;
+    const vy = Math.sin(angle) * speed;
+
+    const pIdx = entities.create(5, bx, by);
+    if (pIdx !== -1) {
+      const idx = entities.getIndex(pIdx);
+      soa.vx[idx] = vx;
+      soa.vy[idx] = vy;
+      soa.attack[idx] = pattern.projectilePower ?? 15;
+      soa.createdAt[idx] = now;
+      soa.lifespan[idx] = lifespan;
+      soa.width[idx] = pattern.projectileSize ?? 64;
+      soa.height[idx] = pattern.projectileSize ?? 64;
+    }
+  }
   return true;
 };
 
@@ -208,4 +294,7 @@ export const patternRegistry: Map<BossPatternType, PatternHandler> = new Map([
   ['lure', handleLure],
   ['swarm', handleSwarm],
   ['gravity', handleGravity],
+  ['dash', handleDash],
+  ['roar', handleRoar],
+  ['hellfire', handleHellfire],
 ]);
