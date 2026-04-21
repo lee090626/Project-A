@@ -45,6 +45,8 @@ export interface EntitySoA {
 
   // 생명주기 및 시간 데이터
   createdAt: Float64Array; // 생성 시간 (performance.now)
+  /** 엔티티 수명 (ms). 투사체 소멸 기준 등으로 활용. */
+  lifespan: Float32Array;
 
 
   // Sync optimization
@@ -93,6 +95,7 @@ export class EntityManager {
       originX: new Float32Array(capacity),
       originY: new Float32Array(capacity),
       createdAt: new Float64Array(capacity),
+      lifespan: new Float32Array(capacity).fill(5000), // 기본 5초
       dirtyFlags: new Uint8Array(capacity),
     };
 
@@ -119,6 +122,7 @@ export class EntityManager {
       this.soa.originX,
       this.soa.originY,
       this.soa.createdAt,
+      this.soa.lifespan,
       this.soa.dirtyFlags,
     ];
   }
@@ -156,6 +160,7 @@ export class EntityManager {
     this.soa.vy[index] = 0;
     this.soa.state[index] = 0; // Idle
     this.soa.createdAt[index] = performance.now();
+    this.soa.lifespan[index] = 5000; // 기본 수명 5초
     this.soa.dirtyFlags[index] = 1; // Mark as dirty on creation
 
     return handle;
