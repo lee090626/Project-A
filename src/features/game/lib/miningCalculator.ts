@@ -1,6 +1,7 @@
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
-import { MINERALS } from '@/shared/config/mineralData';
+import { MINERAL_MAP } from '@/shared/config/mineralData';
+import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
 import {
   getMasteryMultiplier,
   createInitialMasteryState,
@@ -31,23 +32,14 @@ export const calculateMiningDamage = (
   const artifactBonuses = calculateArtifactBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
 
-  // A. [유물] 사탄의 타오르는 열정 (MINING_SPEED_BOOST): 기본 채굴 속도 25% 증가
-  let speedBoostFactor = 0;
-  if (hasArtifactEffect(stats, 'MINING_SPEED_BOOST')) {
-    speedBoostFactor += 0.25;
-  }
+  // A. 유물 기반 동적 속도 배율
+  const speedBoostFactor = artifactBonuses.speedMultiplier || 0;
 
-  // B. [유물] 레비아탄의 뒤틀린 투영 (TWISTED_PROJECTION): 잃은 체력 1%당 속도 1% 증가
-  const missingHpPercent = Math.max(0, (stats.maxHp - stats.hp) / stats.maxHp);
-  if (hasArtifactEffect(stats, 'TWISTED_PROJECTION')) {
-    speedBoostFactor += missingHpPercent;
-  }
-
-  // 1. 공격 속도 계산 (기본 350ms로 전역 상향)
-  const baseInterval = 350;
+  // 1. 공격 속도 계산 (상수화 적용)
+  const baseInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
   const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
   const totalSpeedBonusMult = Math.min(
-    0.95,
+    COMBAT_CONSTANTS.MAX_ATTACK_SPEED_CAP,
     artifactBonuses.miningSpeed +
       runeSpeedBonus +
       masteryBonuses.miningSpeedMult +
@@ -55,9 +47,9 @@ export const calculateMiningDamage = (
   );
   let attackInterval = baseInterval * (1 - totalSpeedBonusMult);
 
-  // FATIGUE (피로): 채굴 속도 50% 감소 (쿨타임 2배)
+  // FATIGUE (피로): 채굴 속도 50% 감소
   if (stats.activeEffects?.some((e) => e.type === 'FATIGUE')) {
-    attackInterval *= 2;
+    attackInterval *= COMBAT_CONSTANTS.FATIGUE_COOLDOWN_MULTIPLIER;
   }
 
   // 2. 숙련도 배율 계산 (기본 숙련도 레벨 보너스)
@@ -69,8 +61,8 @@ export const calculateMiningDamage = (
   // 3. 룬 보너스 및 치명타 계산
   const runeAttackBonus = getTotalRuneStat(stats, 'power');
   const baseCritRate = 0; // 행운은 크리티컬 확률에 영향을 주지 않음
-  const critRate = Math.min(0.9, baseCritRate + getTotalRuneStat(stats, 'critRate'));
-  const critDamage = 1.5 + getTotalRuneStat(stats, 'critDmg');
+  const critRate = Math.min(COMBAT_CONSTANTS.MAX_CRIT_RATE_CAP, baseCritRate + getTotalRuneStat(stats, 'critRate'));
+  const critDamage = COMBAT_CONSTANTS.BASE_CRIT_DAMAGE + getTotalRuneStat(stats, 'critDmg');
 
   // stats.power는 이미 statsSyncSystem에서 (기본20 + 장비파워)가 합산된 결과입니다.
   // 숙련도는 '기초 드릴 파워'에 비례하여 추가 보너스를 줍니다.
@@ -87,17 +79,18 @@ export const calculateMiningDamage = (
 
   let totalPower = Math.floor(basePower * totalPowerMult);
 
-  // 상태 이상에 따른 위력 변조 (BUFF_POWER: 1.5배, WEAKEN: 0.7배)
+  // 상태 이상에 따른 위력 변조
   if (stats.activeEffects) {
     if (stats.activeEffects.some((e) => e.type === 'BUFF_POWER'))
-      totalPower = Math.floor(totalPower * 1.5);
+      totalPower = Math.floor(totalPower * COMBAT_CONSTANTS.BUFF_POWER_MULTIPLIER);
     if (stats.activeEffects.some((e) => e.type === 'WEAKEN'))
-      totalPower = Math.floor(totalPower * 0.7);
+      totalPower = Math.floor(totalPower * COMBAT_CONSTANTS.WEAKEN_POWER_MULTIPLIER);
   }
 
-  // C. [유물] 레비아탄의 뒤틀린 투영 (TWISTED_PROJECTION): 잃은 체력 1%당 최종 대미지 1% 증가
-  if (hasArtifactEffect(stats, 'TWISTED_PROJECTION')) {
-    totalPower = Math.floor(totalPower * (1 + missingHpPercent));
+  // B. 유물 기반 동적 대미지 배율 (TWISTED_PROJECTION 등)
+  const damageBoostFactor = artifactBonuses.damageMultiplier || 0;
+  if (damageBoostFactor > 0) {
+    totalPower = Math.floor(totalPower * (1 + damageBoostFactor));
   }
 
   let isCrit = false;
@@ -109,12 +102,12 @@ export const calculateMiningDamage = (
   // 4. 방어력 적용 및 최종 대미지 (지수 공식)
   let defense = customDefense !== undefined ? customDefense : 0;
   if (customDefense === undefined) {
-    const mineralDef = MINERALS.find((m) => m.key === targetTileType);
+    const mineralDef = MINERAL_MAP[targetTileType];
     defense = mineralDef ? mineralDef.defense : 0;
   }
 
   const netPower = Math.max(0, totalPower - defense);
-  const exponent = 1.15;
+  const exponent = COMBAT_CONSTANTS.DEFENSE_EXPONENT;
   const finalDamage = Math.floor(Math.pow(netPower, exponent));
 
   return {

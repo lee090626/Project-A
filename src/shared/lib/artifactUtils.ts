@@ -13,6 +13,8 @@ export interface ArtifactBonuses {
   critDamage: number;
   defense: number;
   miningSpeed: number;
+  speedMultiplier: number;
+  damageMultiplier: number;
 }
 
 /**
@@ -23,16 +25,26 @@ export function isArtifactUnlocked(stats: PlayerStats, artifactId: string): bool
 }
 
 /**
+ * 특정 특수 효과의 총 중첩(Stack) 수를 반환합니다.
+ */
+export function getArtifactEffectStack(stats: PlayerStats, effectId: string): number {
+  if (!stats.collectionHistory) return 0;
+
+  let totalStack = 0;
+  for (const [id, count] of Object.entries(stats.collectionHistory)) {
+    const data = ARTIFACT_DATA[id];
+    if (data && data.effectId === effectId) {
+      totalStack += count;
+    }
+  }
+  return totalStack;
+}
+
+/**
  * 특정 특수 효과가 활성화되어 있는지 확인합니다.
  */
 export function hasArtifactEffect(stats: PlayerStats, effectId: string): boolean {
-  if (!stats.collectionHistory) return false;
-
-  // 해당 효과를 가진 유물을 하나라도 보유(스택 1 이상)하고 있는지 체크
-  return Object.keys(stats.collectionHistory).some((id) => {
-    const data = ARTIFACT_DATA[id];
-    return data && data.effectId === effectId && (stats.collectionHistory![id] || 0) > 0;
-  });
+  return getArtifactEffectStack(stats, effectId) > 0;
 }
 
 /**
@@ -50,6 +62,8 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
     critDamage: 0,
     defense: 0,
     miningSpeed: 0,
+    speedMultiplier: 0,
+    damageMultiplier: 0,
   };
 
   if (!stats.collectionHistory) return bonuses;
@@ -65,10 +79,10 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
   }
 
   // 2. 루시퍼의 영겁 서리 (INFINITE_SCALING) 효과 적용
-  // - 100m마다 모든 스탯 1% 복리 증가
-  if (hasArtifactEffect(stats, 'INFINITE_SCALING')) {
+  const luciferStacks = getArtifactEffectStack(stats, 'INFINITE_SCALING');
+  if (luciferStacks > 0) {
     const depth = stats.maxDepthReached || 0;
-    const itemStack = stats.collectionHistory['relic_lucifer_ice'] || 0;
+    const itemStack = luciferStacks; 
     const stacks = Math.floor(depth / 100) * itemStack; // 유물 스택 수만큼 배율 강화
     
     if (stacks > 0) {
@@ -77,6 +91,23 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
       bonuses.maxHp = (bonuses.maxHp || 0) * multiplier;
       bonuses.defense = (bonuses.defense || 0) * multiplier;
     }
+  }
+
+  // 3. 사탄의 타오르는 열정 (MINING_SPEED_BOOST)
+  const speedStacks = getArtifactEffectStack(stats, 'MINING_SPEED_BOOST');
+  if (speedStacks > 0) {
+    bonuses.speedMultiplier += 0.25 * speedStacks;
+  }
+
+  // 4. 레비아탄의 뒤틀린 투영 (TWISTED_PROJECTION)
+  const twistedStacks = getArtifactEffectStack(stats, 'TWISTED_PROJECTION');
+  if (twistedStacks > 0) {
+    const safeHp = stats.hp !== undefined ? stats.hp : stats.maxHp;
+    const missingHpPercent = Math.max(0, (stats.maxHp - safeHp) / stats.maxHp);
+    
+    // 잃은 체력 1%당 속도 및 공격력 1% 증가 * 중첩수
+    bonuses.speedMultiplier += missingHpPercent * twistedStacks;
+    bonuses.damageMultiplier += missingHpPercent * twistedStacks;
   }
 
   return bonuses;
