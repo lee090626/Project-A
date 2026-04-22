@@ -27,3 +27,14 @@ export const MINERALS: MineralDefinition[] = [
   ...circle8Minerals,
   ...circle9Minerals,
 ];
+
+/**
+ * 빠른 조회(O(1))를 위한 광물 맵입니다.
+ */
+export const MINERAL_MAP: Record<string, MineralDefinition> = MINERALS.reduce(
+  (acc, mineral) => {
+    acc[mineral.key] = mineral;
+    return acc;
+  },
+  {} as Record<string, MineralDefinition>
+);
