@@ -19,7 +19,11 @@ import { syncUiSystem } from '@/features/game/ecs/systems/syncSystem';
 import { autoSaveSystem } from '@/features/game/ecs/systems/storageSystem';
 import { vfxSystem } from '@/features/game/ecs/systems/VfxSystem';
 import * as PIXI from 'pixi.js';
-import { TILE_SIZE } from '@/shared/config/constants';
+import {
+  TILE_SIZE,
+  UI_SYNC_INTERVAL,
+  SPATIAL_HASH_INTERVAL,
+} from '@/shared/config/constants';
 import { RenderSyncEncoder } from '@/features/game/lib/RenderSyncEncoder';
 import { GameLayers, TextureRegistry } from '@/shared/types/engine';
 import { LightingFilter } from '@/features/game/lib/LightingFilter';
@@ -35,8 +39,8 @@ export class GameLoop {
   // 상태 동기화 관리
   private lastSyncTime: number = 0;
   private lastUiSyncTime: number = 0;
+  private lastSpatialHashTime: number = 0;
   private lastSaveTime: number = 0;
-  private readonly uiSyncInterval: number = 500; // 2Hz (Optimized to reduce cloning load)
   public readonly syncInterval: number = 16.66; // 60Hz Target
 
   // 의존성 주입(DI) 데이터
@@ -141,8 +145,11 @@ export class GameLoop {
     this.lastLoopTime = now;
 
     try {
-      // 0. 공간 분할(Spatial Hash) 그리드 업데이트
-      spatialHashUpdateSystem(this.world);
+      // 0. 공간 분할(Spatial Hash) 그리드 업데이트 (Throttling 적용: ~30Hz)
+      if (now - this.lastSpatialHashTime > SPATIAL_HASH_INTERVAL) {
+        spatialHashUpdateSystem(this.world);
+        this.lastSpatialHashTime = now;
+      }
 
       // 1. 게임 시뮬레이션 (역경직 중에는 스킵)
       const isHitStopping = now < this.world.hitStopUntil;
@@ -171,8 +178,8 @@ export class GameLoop {
         renderSystem(this.world, this.pixiApp, this.layers, now, this.textures, this.lightingFilter);
       }
 
-      // 3. UI 동기화 방출
-      this.lastUiSyncTime = syncUiSystem(this.world, this.lastUiSyncTime, now, this.uiSyncInterval);
+      // 3. UI 동기화 방출 (Zustand 데이터)
+      this.lastUiSyncTime = syncUiSystem(this.world, this.lastUiSyncTime, now, UI_SYNC_INTERVAL);
 
       // 4. 트리플 버퍼 기반 렌더 패킷 방출 (Viewport Culling 적용)
       if (now - this.lastSyncTime > this.syncInterval && this.bufferPool.length > 0) {

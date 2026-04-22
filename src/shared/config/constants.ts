@@ -63,3 +63,11 @@ export const SECRET_KEY = 'DRILL_RPG_SALT_2024';
  */
 export const BOSS_ZONE_RADIUS = 15; // 보스 아레나 크기 (반지름, 타일 단위)
 export const BOSS_LEASH_RANGE = 12; // 보스가 원점에서 벗어날 수 있는 최대 거리 (타일 단위)
+
+/**
+ * 성능 및 동기화 관련 상수
+ */
+export const UI_SYNC_INTERVAL = 500; // UI 동기화 주기 (ms)
+export const SPATIAL_HASH_INTERVAL = 33.3; // 공간 분할 그리드 업데이트 주기 (ms, ~30Hz)
+export const SAVE_INTERVAL = 10000; // 자동 저장 주기 (ms)
+export const MINING_BASE_INTERVAL = 350; // 기본 채굴 간격 (ms)
