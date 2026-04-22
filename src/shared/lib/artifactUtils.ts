@@ -25,16 +25,26 @@ export function isArtifactUnlocked(stats: PlayerStats, artifactId: string): bool
 }
 
 /**
+ * 특정 특수 효과의 총 중첩(Stack) 수를 반환합니다.
+ */
+export function getArtifactEffectStack(stats: PlayerStats, effectId: string): number {
+  if (!stats.collectionHistory) return 0;
+
+  let totalStack = 0;
+  for (const [id, count] of Object.entries(stats.collectionHistory)) {
+    const data = ARTIFACT_DATA[id];
+    if (data && data.effectId === effectId) {
+      totalStack += count;
+    }
+  }
+  return totalStack;
+}
+
+/**
  * 특정 특수 효과가 활성화되어 있는지 확인합니다.
  */
 export function hasArtifactEffect(stats: PlayerStats, effectId: string): boolean {
-  if (!stats.collectionHistory) return false;
-
-  // 해당 효과를 가진 유물을 하나라도 보유(스택 1 이상)하고 있는지 체크
-  return Object.keys(stats.collectionHistory).some((id) => {
-    const data = ARTIFACT_DATA[id];
-    return data && data.effectId === effectId && (stats.collectionHistory![id] || 0) > 0;
-  });
+  return getArtifactEffectStack(stats, effectId) > 0;
 }
 
 /**
