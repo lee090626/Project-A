@@ -4,6 +4,13 @@ import { LightingFilter } from '@/features/game/lib/LightingFilter';
 import { GameLoop } from '@/features/game/ecs/systems/GameLoop';
 import { handlePlayerAction } from '@/features/game/ecs/systems/ActionSystem';
 import { AssetParser } from '../lib/AssetParser';
+import {
+  InitPayload,
+  UpdateAssetsPayload,
+  InputPayload,
+  ActionPayload,
+} from '@/shared/types/worker';
+import { GameLayers, TextureRegistry } from '@/shared/types/engine';
 
 /**
  * GameEngineInstance class
@@ -14,17 +21,8 @@ export class GameEngineInstance {
   pixiApp: PIXI.Application | null = null;
 
   // Pixi layer structure
-  layers: {
-    stage: PIXI.Container;
-    tileLayer: PIXI.Container;
-    staticLayer: PIXI.Container;
-    entityLayer: PIXI.Container;
-    effectLayer: PIXI.Container;
-    uiLayer: PIXI.Container;
-    lightLayer: PIXI.Container;
-  } | null = null;
-
-  textures: { [key: string]: PIXI.Texture } = {};
+  layers: GameLayers | null = null;
+  textures: TextureRegistry = {};
   lightingFilter: LightingFilter | null = null;
 
   private readonly BUFFER_SIZE = (16 + 5000 * 8) * 4;
@@ -92,17 +90,23 @@ export class GameEngineInstance {
     this.bufferPool.push(buffer);
   }
 
-  async init(payload: any) {
+  /**
+   * 엔진 초기화 및 세이브 데이터 로드
+   * @param payload 초기화 설정 및 데이터
+   */
+  async init(payload: InitPayload) {
     const seed = payload.seed || 12345;
     const currentAssets = this.world.assets;
     const currentLayout = this.world.baseLayout;
     const currentStaticEntities = this.world.staticEntities;
 
+    // 월드 초기화
     this.world = createInitialWorld(seed);
     this.world.assets = currentAssets;
     this.world.baseLayout = currentLayout;
     this.world.staticEntities = currentStaticEntities;
 
+    // 세이브 데이터 복구
     if (payload.saveData) {
       const { stats, position, tileMap, tileMapData } = payload.saveData;
       this.world.player.stats = stats;
@@ -121,10 +125,12 @@ export class GameEngineInstance {
       }
     }
 
+    // 캔버스 설정
     if (payload.offscreen) {
       await this.setCanvas(payload.offscreen);
     }
 
+    // 게임 루프 시작 또는 업데이트
     if (!this.gameLoop) {
       this.gameLoop = new GameLoop(
         this.world,
@@ -147,7 +153,11 @@ export class GameEngineInstance {
     }
   }
 
-  async updateAssetsFromAtlas(payload: any) {
+  /**
+   * 아틀라스 데이터로부터 에셋 및 레이아웃 업데이트
+   * @param payload 에셋 데이터
+   */
+  async updateAssetsFromAtlas(payload: UpdateAssetsPayload) {
     if (!this.world) return;
     const { atlasData, layout, entities } = payload;
 
@@ -176,7 +186,11 @@ export class GameEngineInstance {
     }
   }
 
-  handleInput(payload: any) {
+  /**
+   * 입력 상태 업데이트 (키보드, 조이스틱)
+   * @param payload 입력 데이터
+   */
+  handleInput(payload: InputPayload) {
     if (payload.keys) {
       this.world.keys = { ...this.world.keys, ...payload.keys };
     }
@@ -185,8 +199,12 @@ export class GameEngineInstance {
     }
   }
 
-  handleAction(payload: any) {
-    const { action, data } = payload;
+  /**
+   * 액션 처리 (차원 이동 등)
+   * @param payload 액션 데이터
+   */
+  handleAction(payload: ActionPayload) {
+    const { action } = payload;
 
     if (action === 'travelDimension') {
       const targetDepth = payload.targetDepth || 0;

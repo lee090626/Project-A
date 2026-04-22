@@ -5,6 +5,8 @@ import { renderEntities } from './entityRenderer';
 import { renderTiles } from './renderers/TileRenderer';
 import { renderEffects } from './renderers/EffectRenderer';
 import { renderLighting } from './renderers/LightRenderer';
+import { GameLayers, TextureRegistry } from '@/shared/types/engine';
+import { LightingFilter } from '@/features/game/lib/LightingFilter';
 
 /**
  * System that renders all visual elements using PixiJS.
@@ -12,18 +14,10 @@ import { renderLighting } from './renderers/LightRenderer';
 export const renderSystem = (
   world: GameWorld,
   app: PIXI.Application,
-  layers: {
-    stage: PIXI.Container;
-    tileLayer: PIXI.Container;
-    staticLayer: PIXI.Container;
-    entityLayer: PIXI.Container;
-    effectLayer: PIXI.Container;
-    lightLayer: PIXI.Container;
-    uiLayer: PIXI.Container;
-  },
+  layers: GameLayers,
   now: number,
-  textures: { [key: string]: PIXI.Texture },
-  lightingFilter: any | null = null,
+  textures: TextureRegistry,
+  lightingFilter: LightingFilter | null = null,
 ) => {
   const { player, tileMap, entities, assets, shake } = world;
   const { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer } = layers;
@@ -59,7 +53,7 @@ export const renderSystem = (
 
 
 
-function updateMiningTarget(world: GameWorld, layers: any) {
+function updateMiningTarget(world: GameWorld, layers: GameLayers) {
   const { uiLayer } = layers;
   const { intent, tileMap } = world;
 

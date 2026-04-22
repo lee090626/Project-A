@@ -4,6 +4,8 @@ import { TILE_SIZE } from '@/shared/config/constants';
 import { updatePlayerRenderer } from './renderers/entityPlayer';
 import { updateMobRenderer } from './renderers/entityMob';
 import { updateProjectileRenderer } from './renderers/entityProjectile';
+import { GameLayers, TextureRegistry } from '@/shared/types/engine';
+import { EntitySoA } from '@/shared/lib/ecs/EntityManager';
 
 /**
  * 엔티티별 Pixi 컨테이너 캐시 (ID -> Container)
@@ -21,9 +23,9 @@ const entityPool: PIXI.Container[] = [];
  */
 export const renderEntities = (
   world: GameWorld,
-  layers: { staticLayer: PIXI.Container; entityLayer: PIXI.Container; effectLayer: PIXI.Container },
+  layers: Pick<GameLayers, 'staticLayer' | 'entityLayer' | 'effectLayer'>,
   now: number,
-  textures: { [key: string]: PIXI.Texture },
+  textures: TextureRegistry,
 ) => {
   const { entities, player } = world;
   const { staticLayer, entityLayer } = layers;
@@ -91,11 +93,11 @@ export const renderEntities = (
  */
 function updateEntitySpriteFromSoA(
   idx: number,
-  soa: any,
-  player: any,
+  soa: EntitySoA,
+  player: GameWorld['player'],
   container: PIXI.Container,
   now: number,
-  textures: any,
+  textures: TextureRegistry,
 ) {
   const type = soa.type[idx];
 

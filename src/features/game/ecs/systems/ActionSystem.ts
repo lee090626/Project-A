@@ -1,4 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
+import { ActionPayload } from '@/shared/types/worker';
 import { handleEconomyAction } from './actions/economyActions';
 import { handleRuneAction } from './actions/runeActions';
 import { handleWorldAction } from './actions/worldActions';
@@ -46,7 +47,7 @@ const actionHandlers: Record<string, ActionHandler> = {
  * // 룬 소환 액션
  * handlePlayerAction(world, { action: 'summonRune', data: { runeType: 'fire' } });
  */
-export function handlePlayerAction(world: GameWorld, payload: any) {
+export function handlePlayerAction(world: GameWorld, payload: ActionPayload) {
   const { action, data } = payload;
   const handler = actionHandlers[action] || handleWorldAction;
 

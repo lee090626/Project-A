@@ -21,6 +21,8 @@ import { vfxSystem } from '@/features/game/ecs/systems/VfxSystem';
 import * as PIXI from 'pixi.js';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { RenderSyncEncoder } from '@/features/game/lib/RenderSyncEncoder';
+import { GameLayers, TextureRegistry } from '@/shared/types/engine';
+import { LightingFilter } from '@/features/game/lib/LightingFilter';
 
 /**
  * 게임 메인 루프를 관리하는 클래스 (Ticker)
@@ -40,17 +42,17 @@ export class GameLoop {
   // 의존성 주입(DI) 데이터
   private world: GameWorld;
   private pixiApp: PIXI.Application | null;
-  private layers: any | null;
-  private textures: { [key: string]: PIXI.Texture };
-  private lightingFilter: any | null;
+  private layers: GameLayers | null;
+  private textures: TextureRegistry;
+  private lightingFilter: LightingFilter | null;
   private bufferPool: ArrayBuffer[];
 
   constructor(
     world: GameWorld,
     pixiApp: PIXI.Application | null,
-    layers: any | null,
-    textures: { [key: string]: PIXI.Texture },
-    lightingFilter: any | null,
+    layers: GameLayers | null,
+    textures: TextureRegistry,
+    lightingFilter: LightingFilter | null,
     bufferPool: ArrayBuffer[]
   ) {
     this.world = world;
@@ -67,9 +69,9 @@ export class GameLoop {
   public updateDependencies(
     world: GameWorld,
     pixiApp: PIXI.Application | null,
-    layers: any | null,
-    textures: { [key: string]: PIXI.Texture },
-    lightingFilter: any | null
+    layers: GameLayers | null,
+    textures: TextureRegistry,
+    lightingFilter: LightingFilter | null
   ) {
     this.world = world;
     this.pixiApp = pixiApp;
