@@ -12,7 +12,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | `tiles/` | 맵 타일 (1x1) | `PascalCaseTile.png` | **128x128** | PNG |
 | `minerals/` | 광물 아이콘 | `PascalCaseIcon.png` | **128x128** | PNG (투명) |
-| `rune/` | 룬 스킬 | `PascalCaseRune.png` | **1024x1024** | PNG (투명) |
+
 | `entities/` | 일반 몬스터 (1x1) | `PascalCase.png` | **256x256** | PNG (투명) |
 | `entities/` | 거대 보스 (5x5) | `PascalCase.png` | **640x640** | PNG (투명) |
 | `drills/` | 드릴 장비 | `PascalCaseDrill.png` | **256x256** | PNG (투명) |
@@ -20,7 +20,7 @@
 | `armors/` | 갑옷 장비 | `PascalCaseArmor.png` | **256x256** | PNG (투명) |
 | `boots/` | 신발 장비 | `PascalCaseBoots.png` | **256x256** | PNG (투명) |
 | `vfx/` | 투사체/이펙트 | `PascalCaseProjectile.png` | **256x256** | PNG (투명) |
-| `essences/` | 정수 (소모성 유물) | `PascalCaseEssence.png` | **256x256** | PNG (투명) |
+| `essences/` | 정수 (기본 제작 재료/드롭템) | `PascalCaseEssence.png` | **256x256** | PNG (투명) |
 | `relics/` | 성물 (고유 유물) | `PascalCaseRelic.png` | **512x512** | PNG (투명) |
 | `ui/icons/` | UI 시스템 | `PascalCaseIcon.webp` | **1024x1024** | **WebP** |
 
@@ -152,7 +152,7 @@ src/shared/assets/
 아이콘과 장비는 UI 레이어에서 디자인에 따라 다양한 크기로 표현됩니다.
 
 - **광물**: 게임 화면과 인벤토리에서 주로 사용되므로 **128x128** 권장
-- **룬**: 스킬 상세 창 등에서 고품질 연출이 필요하므로 **1024x1024** 유지
+
 - **드릴/UI**: 상점 및 장비 창 대응을 위해 **256x256 ~ 1024x1024** 범위 사용
 
 ### 6-3. 이펙트 및 투사체 (VFX / Projectiles)
@@ -232,7 +232,7 @@ soa.height[idx] = 24; // 높이 (px)
 | **신발** | `boots/` | `PascalCaseBoots.png` | `equipmentData.ts` - `image` |
 | **정수** | `essences/` | `PascalCaseEssence.png` | `artifactData.ts` - `image` |
 | **성물** | `relics/` | `PascalCaseRelic.png` | `artifactData.ts` - `image` |
-| **룬** | `rune/` | `PascalCaseRune.png` | `runeData.ts` - `image` |
+
 | **UI 아이콘** | `ui/icons/` | `PascalCaseIcon.webp` | 컴포넌트에서 직접 사용 |
 
 ### One-Command로 전체 등록
@@ -258,37 +258,6 @@ npm run optimize:atlas && npm run update:atlas-map
 **최종 갱신일**: 2026-04-14  
 **갱신 내용**: 장비(드릴/투구/갑옷/신발) 폴더 구조 및 명명 규칙 추가, 에셋 가이드 전면 개정
 
----
 
-## 10. 통합 에셋 추가 플로우 (Quick Reference)
 
-에셋 유형에 따라 아래 표를 참고하여 빠르게 추가하세요.
 
-| 에셋 유형 | 저장 폴더 | 파일 명명 | 아틀라스 후 연결 위치 |
-| :--- | :--- | :--- | :--- |
-| **타일** | `tiles/` | `PascalCaseTile.png` | `tileData.ts` - `imagePath` |
-| **광물** | `minerals/` | `PascalCaseIcon.png` | `mineralData.ts` - `image` |
-| **몬스터** | `entities/` | `PascalCase.png` | `monsterData.ts` - `imagePath` |
-| **보스** | `entities/` | `PascalCase.png` (5x5) | `monsterData.ts` - `imagePath` |
-| **투사체** | `vfx/` | `PascalCaseProjectile.png` | `monsterData.ts` - `behavior.projectileId` |
-| **드릴** | `drills/` | `PascalCaseDrill.png` | `equipmentData.ts` - `image` |
-| **투구** | `helmets/` | `PascalCaseHelmet.png` | `equipmentData.ts` - `image` |
-| **갑옷** | `armors/` | `PascalCaseArmor.png` | `equipmentData.ts` - `image` |
-| **신발** | `boots/` | `PascalCaseBoots.png` | `equipmentData.ts` - `image` |
-| **정수** | `essences/` | `PascalCaseEssence.png` | `artifactData.ts` - `image` |
-| **성물** | `relics/` | `PascalCaseRelic.png` | `artifactData.ts` - `image` |
-| **룬** | `rune/` | `PascalCaseRune.png` | `runeData.ts` - `image` |
-| **UI 아이콘** | `ui/icons/` | `PascalCaseIcon.webp` | 컴포넌트에서 직접 사용 |
-
-### One-Command로 전체 등록
-
-모든 에셋 추가 후 반드시 실행:
-
-```bash
-npm run optimize:atlas && npm run update:atlas-map
-```
-
----
-
-**최종 갱신일**: 2026-04-14  
-**갱신 내용**: 장비(드릴/투구/갑옷/신발) 폴더 구조 및 명명 규칙 추가, 에셋 가이드 전면 개정

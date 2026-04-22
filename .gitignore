@@ -47,7 +47,6 @@ yarn-error.log*
 # generate_save.js
 generate_save.js
 # AI Agent Session Log
-AGENTS.md
 docs/history/
 
 # Data Generator
