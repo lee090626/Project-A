@@ -22,6 +22,37 @@ export interface PatternContext {
 
 export type PatternHandler = (ctx: PatternContext) => boolean;
 
+/**
+ * 보스 투사체를 생성하고 초기화하는 공통 헬퍼 함수
+ */
+function spawnBossProjectile(
+  entities: EntityManager,
+  x: number,
+  y: number,
+  vx: number,
+  vy: number,
+  power: number,
+  size: number,
+  now: number,
+  lifespan: number = 5000
+) {
+  const pIdx = entities.create(5, x, y);
+  if (pIdx === -1) return -1;
+
+  const idx = entities.getIndex(pIdx);
+  const { soa } = entities;
+  soa.vx[idx] = vx;
+  soa.vy[idx] = vy;
+  soa.attack[idx] = power;
+  soa.createdAt[idx] = now;
+  soa.lastAttackTime[idx] = 0;
+  soa.width[idx] = size;
+  soa.height[idx] = size;
+  soa.lifespan[idx] = lifespan;
+
+  return idx;
+}
+
 // ============================================================
 // 전역 타이머 맵 (instanceId 기반)
 // ============================================================
@@ -57,17 +88,7 @@ const handleShot: PatternHandler = (ctx) => {
     const finalVx = baseVx * cos - baseVy * sin;
     const finalVy = baseVx * sin + baseVy * cos;
 
-    const pIdx = entities.create(5, bx, by);
-    if (pIdx !== -1) {
-      const idx = entities.getIndex(pIdx);
-      soa.vx[idx] = finalVx;
-      soa.vy[idx] = finalVy;
-      soa.attack[idx] = power;
-      soa.createdAt[idx] = now;
-      soa.lastAttackTime[idx] = 0;
-      soa.width[idx] = size;
-      soa.height[idx] = size;
-    }
+    spawnBossProjectile(entities, bx, by, finalVx, finalVy, power, size, now);
   }
   return true;
 };
@@ -89,17 +110,7 @@ const handleCross: PatternHandler = (ctx) => {
   ];
 
   for (const dir of directions) {
-    const pIdx = entities.create(5, bx, by);
-    if (pIdx !== -1) {
-      const idx = entities.getIndex(pIdx);
-      soa.vx[idx] = dir.vx;
-      soa.vy[idx] = dir.vy;
-      soa.attack[idx] = power;
-      soa.createdAt[idx] = now;
-      soa.lastAttackTime[idx] = 0;
-      soa.width[idx] = size;
-      soa.height[idx] = size;
-    }
+    spawnBossProjectile(entities, bx, by, dir.vx, dir.vy, power, size, now);
   }
   return true;
 };
@@ -121,17 +132,7 @@ const handleAoe: PatternHandler = (ctx) => {
     const finalVx = Math.cos(angle) * speed;
     const finalVy = Math.sin(angle) * speed;
 
-    const pIdx = entities.create(5, bx, by);
-    if (pIdx !== -1) {
-      const idx = entities.getIndex(pIdx);
-      soa.vx[idx] = finalVx;
-      soa.vy[idx] = finalVy;
-      soa.attack[idx] = power;
-      soa.createdAt[idx] = now;
-      soa.lastAttackTime[idx] = 0;
-      soa.width[idx] = size;
-      soa.height[idx] = size;
-    }
+    spawnBossProjectile(entities, bx, by, finalVx, finalVy, power, size, now);
   }
   return true;
 };
@@ -167,17 +168,7 @@ const handleSwarm: PatternHandler = (ctx) => {
     const finalVx = Math.cos(angle) * speed;
     const finalVy = Math.sin(angle) * speed;
 
-    const pIdx = entities.create(5, bx, by);
-    if (pIdx !== -1) {
-      const idx = entities.getIndex(pIdx);
-      soa.vx[idx] = finalVx;
-      soa.vy[idx] = finalVy;
-      soa.attack[idx] = power;
-      soa.createdAt[idx] = now;
-      soa.lifespan[idx] = 5000;
-      soa.width[idx] = size;
-      soa.height[idx] = size;
-    }
+    spawnBossProjectile(entities, bx, by, finalVx, finalVy, power, size, now, 5000);
   }
   return true;
 };
@@ -272,17 +263,17 @@ const handleHellfire: PatternHandler = (ctx) => {
     const vx = Math.cos(angle) * speed;
     const vy = Math.sin(angle) * speed;
 
-    const pIdx = entities.create(5, bx, by);
-    if (pIdx !== -1) {
-      const idx = entities.getIndex(pIdx);
-      soa.vx[idx] = vx;
-      soa.vy[idx] = vy;
-      soa.attack[idx] = pattern.projectilePower ?? 15;
-      soa.createdAt[idx] = now;
-      soa.lifespan[idx] = lifespan;
-      soa.width[idx] = pattern.projectileSize ?? 64;
-      soa.height[idx] = pattern.projectileSize ?? 64;
-    }
+    spawnBossProjectile(
+      entities,
+      bx,
+      by,
+      vx,
+      vy,
+      pattern.projectilePower ?? 15,
+      pattern.projectileSize ?? 64,
+      now,
+      lifespan,
+    );
   }
   return true;
 };
