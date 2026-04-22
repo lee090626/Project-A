@@ -8,7 +8,8 @@ import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
-import { calculateArtifactBonuses, hasArtifactEffect } from '@/shared/lib/artifactUtils';
+import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { modifierManager } from './ModifierManager';
 
 /**
  * 채굴 대미지 계산 결과 인터페이스
@@ -32,19 +33,16 @@ export const calculateMiningDamage = (
   const artifactBonuses = calculateArtifactBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
 
-  // A. 유물 기반 동적 속도 배율
-  const speedBoostFactor = artifactBonuses.speedMultiplier || 0;
-
-  // 1. 공격 속도 계산 (상수화 적용)
+  // 1. 공격 속도 배율 계산
   const baseInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
   const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
-  const totalSpeedBonusMult = Math.min(
-    COMBAT_CONSTANTS.MAX_ATTACK_SPEED_CAP,
-    artifactBonuses.miningSpeed +
-      runeSpeedBonus +
-      masteryBonuses.miningSpeedMult +
-      speedBoostFactor,
-  );
+
+  // ModifierManager를 통한 속도 배율 취합 (유물 기반 동적 속도 배율 포함)
+  let totalSpeedBonusMult = artifactBonuses.miningSpeed + runeSpeedBonus + masteryBonuses.miningSpeedMult;
+  totalSpeedBonusMult = modifierManager.applyAll('onMining', 'miningSpeed', totalSpeedBonusMult, { playerStats: stats });
+
+  // 최대 감축 제한 (상수 적용)
+  totalSpeedBonusMult = Math.min(COMBAT_CONSTANTS.MAX_ATTACK_SPEED_CAP, totalSpeedBonusMult);
   let attackInterval = baseInterval * (1 - totalSpeedBonusMult);
 
   // FATIGUE (피로): 채굴 속도 50% 감소
@@ -87,11 +85,8 @@ export const calculateMiningDamage = (
       totalPower = Math.floor(totalPower * COMBAT_CONSTANTS.WEAKEN_POWER_MULTIPLIER);
   }
 
-  // B. 유물 기반 동적 대미지 배율 (TWISTED_PROJECTION 등)
-  const damageBoostFactor = artifactBonuses.damageMultiplier || 0;
-  if (damageBoostFactor > 0) {
-    totalPower = Math.floor(totalPower * (1 + damageBoostFactor));
-  }
+  // ModifierManager를 통한 최종 위력 보정 (예: 체력 비례 대미지 등)
+  totalPower = modifierManager.applyAll('onMining', 'miningDamage', totalPower, { playerStats: stats });
 
   let isCrit = false;
   if (Math.random() < critRate) {

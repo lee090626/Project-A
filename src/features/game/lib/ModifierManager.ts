@@ -32,8 +32,9 @@ export const RARITY_MULTIPLIERS: Record<string, number> = {
  * - onKill: 처치 시 (보상, 흡혈, 경험치 등)
  * - preDamage: 피해 계산 전 (방어력 무시, 취약 등)
  * - postDamage: 피해 계산 후 (반사 대미지 등)
+ * - onMining: 채굴 계산 시 (채굴 속도, 채굴 대미지 등)
  */
-export type ModifierHook = 'onKill' | 'preDamage' | 'postDamage';
+export type ModifierHook = 'onKill' | 'preDamage' | 'postDamage' | 'onMining';
 
 /**
  * 모디파이어가 영향을 주는 스탯 카테고리입니다.
@@ -42,8 +43,10 @@ export type ModifierHook = 'onKill' | 'preDamage' | 'postDamage';
  * - loot: 드롭 아이템 배율
  * - damage: 플레이어 → 몬스터 공격력
  * - incomingDamage: 몬스터 → 플레이어 피해량
+ * - miningDamage: 채굴 공격 위력
+ * - miningSpeed: 채굴 속도 (Interval 감소 배율)
  */
-export type ModifierStat = 'exp' | 'gold' | 'loot' | 'damage' | 'incomingDamage';
+export type ModifierStat = 'exp' | 'gold' | 'loot' | 'damage' | 'incomingDamage' | 'miningDamage' | 'miningSpeed';
 
 /**
  * 모디파이어 적용 함수에 전달되는 컨텍스트 객체입니다.
@@ -131,6 +134,47 @@ const ARTIFACT_MODIFIER_REGISTRY: ArtifactModifierDef[] = [
       const healAmount = Math.floor(ctx.playerStats.maxHp * 0.05);
       ctx.sideEffect?.('HEAL', healAmount);
       return base; // 피해량 값은 변경 없음
+    },
+  },
+
+  // ─── onMining ──────────────────────────────────────────────
+
+  /**
+   * [사탄의 타오르는 열정] MINING_SPEED_BOOST
+   * 기본 채굴 속도 배율 25% 증가
+   */
+  {
+    effectId: 'MINING_SPEED_BOOST',
+    hook: 'onMining',
+    stat: 'miningSpeed',
+    transform: (base) => base + 0.25,
+  },
+
+  /**
+   * [레비아탄의 뒤틀린 투영] TWISTED_PROJECTION
+   * 잃은 체력 1%당 채굴 속도 1% 증가
+   */
+  {
+    effectId: 'TWISTED_PROJECTION',
+    hook: 'onMining',
+    stat: 'miningSpeed',
+    transform: (base, ctx) => {
+      const missingPercent = Math.max(0, (ctx.playerStats.maxHp - ctx.playerStats.hp) / ctx.playerStats.maxHp);
+      return base + missingPercent;
+    },
+  },
+
+  /**
+   * [레비아탄의 뒤틀린 투영] TWISTED_PROJECTION
+   * 잃은 체력 1%당 채굴 위력 1% 증가
+   */
+  {
+    effectId: 'TWISTED_PROJECTION',
+    hook: 'onMining',
+    stat: 'miningDamage',
+    transform: (base, ctx) => {
+      const missingPercent = Math.max(0, (ctx.playerStats.maxHp - ctx.playerStats.hp) / ctx.playerStats.maxHp);
+      return base * (1 + missingPercent);
     },
   },
 ];
