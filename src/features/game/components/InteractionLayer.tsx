@@ -1,9 +1,11 @@
 import React from 'react';
+import { PlayerStats } from '@/shared/types/game';
+import { GameWorld } from '@/entities/world/model';
 
 interface InteractionLayerProps {
-  currentStats: any;
+  currentStats: PlayerStats;
   showInteractionPrompt: boolean;
-  activeInteractionType: any;
+  activeInteractionType: GameWorld['ui']['activeInteractionType'];
   handleRespawn: () => void;
 }
 

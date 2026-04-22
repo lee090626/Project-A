@@ -5,11 +5,13 @@ import { PlayerStats, Position } from './game';
  */
 export type WorkerMessageType =
   | 'INIT'
-  | 'UPDATE_ASSETS'
+  | 'ASSETS_ATLAS'
+  | 'SET_CANVAS'
   | 'RESIZE'
   | 'INPUT'
   | 'ACTION'
-  | 'EXPORT_DATA_REQUEST'
+  | 'RETURN_BUFFER'
+  | 'SAVE_REQUEST'
   | 'SAFE_RESET';
 
 /**

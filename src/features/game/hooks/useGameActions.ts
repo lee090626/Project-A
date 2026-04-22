@@ -8,6 +8,7 @@ import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
 import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
+import { SendToWorker, UseGameActionsResult } from './types';
 
 /**
  * 게임의 핵심 액션(업그레이드, 제작, 판매 등)을 처리하는 커스텀 훅입니다.
@@ -15,8 +16,8 @@ import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
 export const useGameActions = (
   worldRef: React.MutableRefObject<GameWorld>,
   updateUi: () => void,
-  sendToWorker: (type: string, payload?: any) => void,
-) => {
+  sendToWorker: SendToWorker,
+): UseGameActionsResult => {
   /** 업그레이드(공격력, 최대 체력) 처리 */
   const handleUpgrade = useCallback(
     (type: string, requirements: CraftRequirements) => {

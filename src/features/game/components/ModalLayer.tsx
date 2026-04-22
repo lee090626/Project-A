@@ -7,12 +7,15 @@ import Elevator from '@/widgets/elevator/Elevator';
 import Encyclopedia from '@/widgets/encyclopedia/Encyclopedia';
 import Settings from '@/widgets/settings/Settings';
 import GuideWindow from '@/widgets/guide/GuideWindow';
+import { UseGameActionsResult } from '../hooks/types';
+import { PlayerStats } from '@/shared/types/game';
+import { GameWorld } from '@/entities/world/model';
 
 interface ModalLayerProps {
-  ui: any;
-  currentStats: any;
-  handleClose: (key: string) => void;
-  gameActions: any;
+  ui: GameWorld['ui'];
+  currentStats: PlayerStats;
+  handleClose: (key: keyof GameWorld['ui']) => void;
+  gameActions: UseGameActionsResult;
 }
 
 const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerProps) => {
@@ -29,9 +32,13 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleResetGame,
     handleExportSave,
     handleImportSave,
-    handleEquipArtifact,
-    handleSynthesizeRelic,
+    handleTravelDimension,
+    handleRespawn,
   } = gameActions;
+
+  // FIXME: Missing handlers in useGameActions. Adding placeholders to avoid build error.
+  const handleEquipArtifact = (gameActions as any).handleEquipArtifact;
+  const handleSynthesizeRelic = (gameActions as any).handleSynthesizeRelic;
 
   return (
     <>

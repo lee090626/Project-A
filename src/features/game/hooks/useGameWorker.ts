@@ -1,6 +1,8 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { saveManager } from '@/shared/lib/saveManager';
 import { useGameStore } from '@/shared/lib/store';
+import { SendToWorker } from './types';
+import { WorkerMessageType } from '@/shared/types/worker';
 
 let globalWorker: Worker | null = null;
 
@@ -10,18 +12,21 @@ export function useGameWorker(
   setIsEngineReady: (ready: boolean) => void,
   isReadyRef: React.MutableRefObject<boolean>,
   loadAssetsAndTransfer: (
-    sendToWorker: (type: string, payload?: any, transfer?: Transferable[]) => void,
+    sendToWorker: SendToWorker,
   ) => void,
   handleTravelDimension: (targetDepth: number) => void,
-  handleOpenModal: (target: any) => void,
+  handleOpenModal: (target: keyof (import('@/entities/world/model').GameWorld)['ui']) => void,
 ) {
   const workerRef = useRef<Worker | null>(null);
 
-  const sendToWorker = useCallback((type: string, payload?: any, transfer?: Transferable[]) => {
-    if (globalWorker) {
-      globalWorker.postMessage({ type, payload }, transfer || []);
-    }
-  }, []);
+  const sendToWorker: SendToWorker = useCallback(
+    (type: WorkerMessageType, payload?: any, transfer?: Transferable[]) => {
+      if (globalWorker) {
+        globalWorker.postMessage({ type, payload }, transfer || []);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     if (!isClient || typeof window === 'undefined') return;

@@ -1,12 +1,16 @@
 import { useCallback } from 'react';
 import { GameWorld } from '@/entities/world/model';
+import { UseGameUIResult } from './types';
 
 /**
  * 게임의 UI 상태(모달 창의 열림/닫힘)를 관리하는 커스텀 훅입니다.
  * @param worldRef 게임 월드 상태 객체에 대한 Ref
  * @param updateUi UI 갱신을 트리거하는 콜백 함수
  */
-export const useGameUI = (worldRef: React.MutableRefObject<GameWorld>, updateUi: () => void) => {
+export const useGameUI = (
+  worldRef: React.MutableRefObject<GameWorld>,
+  updateUi: () => void,
+): UseGameUIResult => {
   /** 모든 모달 창을 닫습니다. */
   const closeAllModals = useCallback(() => {
     const { ui } = worldRef.current;
@@ -32,9 +36,6 @@ export const useGameUI = (worldRef: React.MutableRefObject<GameWorld>, updateUi:
     (target: keyof GameWorld['ui']) => {
       const { ui } = worldRef.current;
       const current = ui[target];
-
-      // (선택 사항) 새로운 창을 열 때 다른 창을 모두 닫는 로직을 추가할 수 있습니다.
-      // closeAllModals();
 
       (ui as any)[target] = !current;
       updateUi();

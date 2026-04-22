@@ -10,6 +10,8 @@ import { useGameUI } from './hooks/useGameUI';
 import { useGameActions } from './hooks/useGameActions';
 import { useGameInput } from './hooks/useGameInput';
 import { useGameWorker } from './hooks/useGameWorker';
+import { SendToWorker } from './hooks/types';
+import { WorkerMessageType } from '@/shared/types/worker';
 
 // UI Overlay
 import GameOverlay from './components/GameOverlay';
@@ -50,7 +52,7 @@ export default function GameEngine() {
   }, []);
 
   const loadAssetsAndTransfer = useCallback(
-    async (sendWorker: (t: string, p?: any, tr?: any[]) => void) => {
+    async (sendWorker: SendToWorker) => {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
       const assetsPath = `${basePath}/assets`;
 
@@ -104,7 +106,9 @@ export default function GameEngine() {
   const { toggleModal, handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
 
   // Need to provide a throwaway `sendToWorker` for `useGameActions` initially, or properly wrap
-  const [workerSender, setWorkerSender] = useState<{ send: any }>({ send: () => {} });
+  const [workerSender, setWorkerSender] = useState<{ send: SendToWorker }>({
+    send: () => {},
+  });
 
   const gameActions = useGameActions(worldRef, updateUi, workerSender.send);
   const { handleTravelDimension } = gameActions;
@@ -216,7 +220,7 @@ export default function GameEngine() {
       />
       <GameOverlay
         worldRef={worldRef}
-        stats={stats}
+        stats={stats || worldRef.current.player.stats}
         interpolatedState={interpolatedState}
         uiActions={uiActions}
         gameActions={gameActions}

@@ -5,6 +5,8 @@ import Hud from '@/widgets/hud/ui/Hud';
 import ToastContainer from '@/shared/ui/ToastContainer';
 import BossHealthBar from './BossHealthBar';
 import { useGameStore } from '@/shared/lib/store';
+import { UseGameActionsResult, UseGameUIResult, SendToWorker } from '../hooks/types';
+import { PlayerStats } from '@/shared/types/game';
 
 // 새롭게 분리된 레이어 컴포넌트들
 import InteractionLayer from './InteractionLayer';
@@ -16,7 +18,7 @@ import ModalLayer from './ModalLayer';
  */
 interface GameOverlayProps {
   worldRef: React.MutableRefObject<GameWorld>;
-  stats: any;
+  stats: PlayerStats;
   interpolatedState: React.MutableRefObject<{
     x: number;
     y: number;
@@ -25,10 +27,10 @@ interface GameOverlayProps {
     shake: number;
     hp: number;
   }>;
-  uiActions: any; // useGameUI의 반환값
-  gameActions: any; // useGameActions의 반환값
+  uiActions: UseGameUIResult;
+  gameActions: UseGameActionsResult;
   visibleEntitiesCount: number;
-  sendToWorker: (type: string, payload?: any) => void;
+  sendToWorker: SendToWorker;
 }
 
 export default function GameOverlay({
@@ -37,6 +39,8 @@ export default function GameOverlay({
   interpolatedState,
   uiActions,
   gameActions,
+  visibleEntitiesCount,
+  sendToWorker,
 }: GameOverlayProps) {
   const world = worldRef.current;
   const { ui, player } = world;

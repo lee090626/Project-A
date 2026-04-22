@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { GameWorld } from '@/entities/world/model';
+import { SendToWorker } from './types';
 
 const SHORTCUTS: Record<string, keyof GameWorld['ui']> = {
   KeyI: 'isInventoryOpen',
@@ -17,7 +18,7 @@ export function useGameInput(
   closeAllModals: () => void,
   handleOpen: (modal: keyof GameWorld['ui']) => void,
   handleClose: (modal: keyof GameWorld['ui']) => void,
-  sendToWorker: (type: string, payload?: any) => void,
+  sendToWorker: SendToWorker,
 ) {
   const keyStateRef = useRef<Record<string, boolean>>({});
 

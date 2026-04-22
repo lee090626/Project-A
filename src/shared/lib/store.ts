@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { PlayerStats } from '../types/game';
+import { PlayerStats, InteractionType } from '../types/game';
 
 /**
  * 게임의 UI 상태 및 저빈도 데이터를 관리하는 Zustand 스토어입니다.
@@ -19,7 +19,7 @@ interface GameState {
   /** UI 상태 (상호작용 안내 등) */
   ui: {
     showInteractionPrompt: boolean;
-    activeInteractionType: string | null;
+    activeInteractionType: InteractionType | null;
   };
   /** 다중 보스 전투 상태 (키: instanceId) */
   boss: Record<string, {
