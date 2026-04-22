@@ -68,7 +68,7 @@ export const calculateMiningDamage = (
 
   // 3. 룬 보너스 및 치명타 계산
   const runeAttackBonus = getTotalRuneStat(stats, 'power');
-  const baseCritRate = (stats.luck || 0) * 0.01; // 행운 1당 1%
+  const baseCritRate = 0; // 행운은 크리티컬 확률에 영향을 주지 않음
   const critRate = Math.min(0.9, baseCritRate + getTotalRuneStat(stats, 'critRate'));
   const critDamage = 1.5 + getTotalRuneStat(stats, 'critDmg');
 
