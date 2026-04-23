@@ -1,4 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
+import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
 import { hasArtifactEffect } from '@/shared/lib/artifactUtils';
 
@@ -21,6 +22,7 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
           }
         });
       }
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
 
     case 'sell':
@@ -50,6 +52,7 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
           }
         }
       }
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
   }
 };

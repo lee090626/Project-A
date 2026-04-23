@@ -1,5 +1,6 @@
 import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { GameWorld } from '@/entities/world/model';
+import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 
 /**
  * 부활, 체크포인트 이동, 유물 합성 등 월드 관련 액션을 처리합니다.
@@ -20,6 +21,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       world.shake = 0;
       
       console.log('[Worker] Player respawned at Base Camp. Combat status reset.');
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }
 
@@ -27,6 +29,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       world.player.pos.y = data.depth + 10;
       world.player.visualPos.y = data.depth + 10;
       stats.depth = data.depth;
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }
 
@@ -57,6 +60,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
           stats.collectionHistory[data.relicId] = (stats.collectionHistory[data.relicId] || 0) + 1;
         }
       }
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }
 
@@ -72,6 +76,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       else if (part === 'Armor') stats.equipment.armorId = id;
       else if (part === 'Boots') stats.equipment.bootsId = id;
       else if (part === 'artifact') stats.equippedArtifactId = id;
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }
   }

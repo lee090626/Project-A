@@ -1,4 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
+import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { getTileColor } from '@/shared/lib/tileUtils';
 import {
@@ -73,6 +74,9 @@ export const masteryService = (
 
       // 마스터리 돌파 특성(Perks) 해금 체크
       processMasteryPerks(world, type, tileMastery.level);
+      
+      // 스탯 재계산 신호 (마스터리 보너스 적용을 위해)
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
     }
   }
 };
