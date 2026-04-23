@@ -120,12 +120,16 @@ export class GameEngineInstance {
 
     // 세이브 데이터 복구
     if (payload.saveData) {
-      const { stats, position, tileMap, tileMapData } = payload.saveData;
+      const { stats, position, tileMap, tileMapData, tileMapBuffer } = payload.saveData;
       this.world.player.stats = stats;
       this.world.player.pos = position;
       this.world.player.visualPos = { ...position };
 
-      if (tileMapData) {
+      if (tileMapBuffer) {
+        // [New] IndexedDB에서 로드한 바이너리 버퍼 직접 사용 (변환 없음)
+        this.world.tileMap.deserializeFromBuffer(tileMapBuffer, stats.mapSeed, stats.dimension);
+      } else if (tileMapData) {
+        // [Legacy] Base64 문자열을 디코딩 후 복원
         const binary = atob(tileMapData);
         const bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) {

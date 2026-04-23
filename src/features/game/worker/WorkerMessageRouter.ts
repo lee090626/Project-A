@@ -36,6 +36,10 @@ export class WorkerMessageRouter {
           this.engine.returnBuffer(payload.buffer);
         }
         break;
+      case 'RETURN_SAVE_BUFFER':
+        // Zero-Copy 흐름: 메인이 IndexedDB에 저장 후 반환한 버퍼를 사용 가능한 상태로 유지
+        // (현재는 그대로 멏 쓰지만, 추후 pre-allocated 저장 버퍼로 확장 가능)
+        break;
       case 'SAVE_REQUEST':
         if (payload.type === 'export') {
           this.engine.handleSaveRequest();

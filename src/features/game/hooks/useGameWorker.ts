@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { saveManager } from '@/shared/lib/saveManager';
+import { gameDB } from '@/shared/lib/db';
 import { useGameStore } from '@/shared/lib/store';
 import { SendToWorker } from './types';
 import { WorkerMessageType } from '@/shared/types/worker';
@@ -67,8 +68,22 @@ export function useGameWorker(
       } else if (type === 'ENGINE_READY') {
         setIsEngineReady(true);
         console.log('[Main] Engine is ready to render!');
-      } else if (type === 'SAVE') {
-        saveManager.save(payload);
+      } else if (type === 'SAVE' && payload) {
+        // Zero-Copy 흐름: 버퍼를 IndexedDB에 저장한 뒤 워커에돌려줌
+        const { tileMapBuffer, ...rest } = payload;
+        saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
+        if (tileMapBuffer instanceof ArrayBuffer && gameDB.isAvailable) {
+          gameDB.saveTileMap(tileMapBuffer).then(() => {
+            // 저장 완료 후 버퍼를 워커에게 돌려줌 (Zero-Copy 재활용)
+            worker.postMessage(
+              { type: 'RETURN_SAVE_BUFFER', payload: { buffer: tileMapBuffer } },
+              [tileMapBuffer]
+            );
+          });
+        } else {
+          // IndexedDB 불가 시 폴백: 기존 Base64 방식
+          saveManager.save(payload);
+        }
       } else if (type === 'EXPORT_DATA') {
         const exported = saveManager.export(payload);
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -99,14 +114,42 @@ export function useGameWorker(
 
     worker.addEventListener('message', onMessage);
 
-    const saved = saveManager.load();
-    console.log('[Main] Sending INIT to worker...');
-    worker.postMessage({
-      type: 'INIT',
-      payload: { seed: saved?.stats.mapSeed || 12345, saveData: saved },
-    });
+    // IndexedDB 초기화 후 세이브 데이터 로드
+    gameDB.init().then(async () => {
+      const saved = saveManager.load();
+      console.log('[Main] Sending INIT to worker...');
 
-    loadAssetsAndTransfer(sendToWorker);
+      let tileMapBuffer: ArrayBuffer | undefined;
+
+      if (saved) {
+        if (gameDB.isAvailable) {
+          // 마이그레이션: 레거시 tileMapData가 있는 경우 IndexedDB로 이사
+          if (saved.tileMapData) {
+            await saveManager.migrateTileMapToIndexedDB(saved.tileMapData);
+          }
+          // IndexedDB에서 타일맵 바이너리 로드
+          const buf = await gameDB.loadTileMap();
+          if (buf) tileMapBuffer = buf;
+        }
+      }
+
+      // INIT 메시지 전송 (타일맵 버퍼가 있으면 Transferable로 전달)
+      const transferables: Transferable[] = tileMapBuffer ? [tileMapBuffer] : [];
+      worker.postMessage(
+        {
+          type: 'INIT',
+          payload: {
+            seed: saved?.stats.mapSeed || 12345,
+            saveData: saved
+              ? { ...saved, tileMapData: undefined, tileMapBuffer }
+              : undefined,
+          },
+        },
+        transferables
+      );
+
+      loadAssetsAndTransfer(sendToWorker);
+    });
 
     const timeoutId = setTimeout(() => {
       if (!isReadyRef.current) {
