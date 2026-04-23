@@ -11,6 +11,7 @@ export type WorkerMessageType =
   | 'INPUT'
   | 'ACTION'
   | 'RETURN_BUFFER'
+  | 'RETURN_SAVE_BUFFER'
   | 'SAVE_REQUEST'
   | 'SAFE_RESET';
 
@@ -24,7 +25,8 @@ export interface InitPayload {
     stats: PlayerStats;
     position: Position;
     tileMap?: any; // Legacy
-    tileMapData?: string; // Binary string
+    tileMapData?: string; // Legacy Base64
+    tileMapBuffer?: ArrayBuffer; // New: IndexedDB 직접 로드한 바이너리 버퍼
   };
 }
 
@@ -70,7 +72,10 @@ export type EngineMessageType =
   | 'RENDER_SYNC'
   | 'EXPORT_DATA'
   | 'DIMENSION_TRAVEL_COMPLETE'
-  | 'SYNC_UI';
+  | 'SYNC_UI'
+  | 'SAVE'
+  | 'PORTAL_TRIGGERED'
+  | 'SHOW_TOAST';
 
 /**
  * 워커 -> 메인 통합 메시지 인터페이스

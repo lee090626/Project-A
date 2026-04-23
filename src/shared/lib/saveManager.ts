@@ -1,6 +1,7 @@
 import { PlayerStats, Position, Inventory } from '../types/game';
 import { DRILLING_SECRET_KEY } from '../config/constants';
 import { MINERALS } from '../config/mineralData';
+import { gameDB } from './db';
 
 /**
  * 저장될 게임 데이터의 규격을 정의합니다.
@@ -74,22 +75,41 @@ function deobfuscate(encoded: string): string {
 export const saveManager = {
   /**
    * 새로운 데이터를 저장합니다.
+   * - 스탯/위치: LocalStorage (JSON)
+   * - 타일맵: IndexedDB를 통해 바이너리로 저장 (IndexedDB 공: Base64 폴백)
    * @param data 저장할 세이브 데이터 객체
    */
   save(data: SaveData) {
     try {
-      // Buffer가 존재할 경우 Base64 문자열로 인코딩
+      // 타일맵 버퍼 IndexedDB에 저장 (비동기, 폴백 시 LocalStorage에 Base64로 저장)
       if (data.tileMapBuffer) {
-        const bytes = new Uint8Array(data.tileMapBuffer.buffer);
-        let binary = '';
-        for (let i = 0; i < bytes.byteLength; i++) {
-          binary += String.fromCharCode(bytes[i]);
+        const buffer = data.tileMapBuffer.buffer as ArrayBuffer;
+        if (gameDB.isAvailable) {
+          // IndexedDB: 바이너리 그대로 저장
+          gameDB.saveTileMap(buffer);
+          delete data.tileMapData; // 이전 Base64 데이터 활성화 안 됨
+        } else {
+          // 폴백: 기존 Base64 방식
+          const bytes = new Uint8Array(buffer);
+          let binary = '';
+          for (let i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          data.tileMapData = btoa(binary);
         }
-        data.tileMapData = btoa(binary);
-        delete data.tileMapBuffer; // 디스크에 저장 불필요
+        delete data.tileMapBuffer;
       }
 
-      const json = JSON.stringify(data);
+      // 스탯/위치는 LocalStorage에 JSON으로 저장 (기존 방식 유지하되 타일맵 제외하다 훨씬 가볈)
+      const statsOnly = {
+        version: data.version,
+        timestamp: data.timestamp,
+        stats: data.stats,
+        position: data.position,
+        // IndexedDB 가용 시 tileMapData를 포함하지 않음
+        ...(gameDB.isAvailable ? {} : { tileMapData: data.tileMapData }),
+      };
+      const json = JSON.stringify(statsOnly);
       const obfuscatedStr = obfuscate(json);
       localStorage.setItem(SAVE_KEY, obfuscatedStr);
     } catch (e) {
@@ -174,6 +194,57 @@ export const saveManager = {
    */
   clear() {
     localStorage.removeItem(SAVE_KEY);
+    if (gameDB.isAvailable) {
+      gameDB.clearTileMap();
+    }
+  },
+
+  /**
+   * [1회성 실행] LocalStorage의 레거시 tileMapData(Base64)를
+   * IndexedDB 바이너리로 안전하게 이사합니다.
+   *
+   * 쳋변: 복사 -> 검증 -> 삭제 철칙을 엄격히 준수합니다.
+   * 검증 실패 시 IndexedDB 데이터를 삭제하고 LocalStorage 원본을 유지합니다.
+   *
+   * @param tileMapDataBase64 LocalStorage에서 받은 Base64 타일맵 문자열
+   */
+  async migrateTileMapToIndexedDB(tileMapDataBase64: string): Promise<void> {
+    if (!gameDB.isAvailable) return;
+
+    try {
+      // 1. Base64 데코딩 후 ArrayBuffer로 변환
+      const binary = atob(tileMapDataBase64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const buffer = bytes.buffer;
+
+      // 2. IndexedDB에 복사
+      await gameDB.saveTileMap(buffer);
+
+      // 3. 검증: IndexedDB에서 다시 불러와 크기 확인
+      const loaded = await gameDB.loadTileMap();
+      if (!loaded || loaded.byteLength !== buffer.byteLength) {
+        throw new Error(`검증 실패: 예상 ${buffer.byteLength}bytes, 실제 ${loaded?.byteLength ?? 0}bytes`);
+      }
+
+      // 4. 검증 성공 시에만 LocalStorage의 tileMapData 제거
+      const saved = localStorage.getItem(SAVE_KEY);
+      if (saved) {
+        const json = deobfuscate(saved);
+        const data = JSON.parse(json);
+        delete data.tileMapData;
+        delete data.tileMap;
+        localStorage.setItem(SAVE_KEY, obfuscate(JSON.stringify(data)));
+      }
+
+      console.log('[SaveManager] 타일맵 IndexedDB 마이그레이션 완료.');
+    } catch (e) {
+      // 5. 실패 시 롤백: IndexedDB 데이터 삭제, LocalStorage 원본 유지
+      console.warn('[SaveManager] 마이그레이션 실패. LocalStorage 원본 유지.', e);
+      await gameDB.clearTileMap();
+    }
   },
 
   /**
