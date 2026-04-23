@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
+import atlasManifest from '../../public/assets/manifest.json';
+import { CORE_DATA_FILES } from '@/shared/config/coreDataFiles';
+import { getBasePath, withBasePath } from '@/shared/lib/basePath';
 import './globals.css';
 
 const geistSans = Geist({
@@ -70,6 +73,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const basePath = getBasePath();
+  const atlasFiles = Array.isArray(atlasManifest.atlasFiles) ? atlasManifest.atlasFiles : [];
+  const swPath = withBasePath('/sw.js');
+
   return (
     <html lang="en">
       <head>
@@ -82,19 +89,37 @@ export default function RootLayout({
 
         {/* 게임 에셋 preload: JS 실행 전부터 병렬 다운로드 시작 */}
         {/* 아틀라스 이미지 (가장 크고 무거운 파일 → 최우선) */}
-        <link rel="preload" href="/assets/game-atlas-0.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/assets/game-atlas-1.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/assets/game-atlas-2.webp" as="image" type="image/webp" />
+        {atlasFiles.map((atlasJsonFile) => (
+          <link
+            key={`atlas-image-${atlasJsonFile}`}
+            rel="preload"
+            href={`${basePath}/assets/${atlasJsonFile.replace('.json', '.webp')}`}
+            as="image"
+            type="image/webp"
+          />
+        ))}
 
         {/* 아틀라스 JSON (이미지와 함께 쓰이는 메타데이터) */}
-        <link rel="preload" href="/assets/game-atlas-0.json" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/assets/game-atlas-1.json" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/assets/game-atlas-2.json" as="fetch" crossOrigin="anonymous" />
+        {atlasFiles.map((atlasJsonFile) => (
+          <link
+            key={`atlas-json-${atlasJsonFile}`}
+            rel="preload"
+            href={`${basePath}/assets/${atlasJsonFile}`}
+            as="fetch"
+            crossOrigin="anonymous"
+          />
+        ))}
 
         {/* 게임 초기 데이터 (엔진 init에 즉시 사용) */}
-        <link rel="preload" href="/game-init-data.json" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/baseLayout.json" as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href="/entities.json" as="fetch" crossOrigin="anonymous" />
+        {CORE_DATA_FILES.map((filePath) => (
+          <link
+            key={`core-data-${filePath}`}
+            rel="preload"
+            href={withBasePath(filePath)}
+            as="fetch"
+            crossOrigin="anonymous"
+          />
+        ))}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
@@ -110,8 +135,9 @@ export default function RootLayout({
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
+              const swPath = '${swPath}';
               window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                navigator.serviceWorker.register(swPath).catch(function(err) {
                   // 등록 실패 시 게임은 정상 동작 (HTTP 캐시로 폴백)
                   console.warn('[SW] Registration failed, falling back to HTTP cache:', err);
                 });

@@ -1,0 +1,7 @@
+{
+  "coreDataFiles": [
+    "/baseLayout.json",
+    "/entities.json",
+    "/game-init-data.json"
+  ]
+}
