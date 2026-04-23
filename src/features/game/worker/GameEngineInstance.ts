@@ -49,53 +49,77 @@ export class GameEngineInstance {
     });
   }
 
-  /** Initialize Pixi with new OffscreenCanvas */
+  private pendingCanvas?: OffscreenCanvas;
+  private isPixiInitializing: boolean = false;
+
+  /** 캔버스를 저장만 하고, 초기화는 지연시킵니다 */
   async setCanvas(newCanvas: OffscreenCanvas) {
-    if (this.pixiApp) {
-      this.pixiApp.destroy(true, { children: true, texture: true });
+    this.pendingCanvas = newCanvas;
+    this.tryInitializePixi();
+  }
+
+  /** PixiJS 초기화를 백그라운드에서 비동기로 실행합니다 */
+  private tryInitializePixi() {
+    if (!this.pendingCanvas || !this.world || this.isPixiInitializing || this.pixiApp) {
+      return;
     }
 
-    this.pixiApp = new PIXI.Application();
-    await this.pixiApp.init({
-      canvas: newCanvas,
-      width: newCanvas.width,
-      height: newCanvas.height,
-      backgroundAlpha: 0,
-      antialias: true,
-      preference: 'webgl',
-    });
+    this.isPixiInitializing = true;
+    const canvas = this.pendingCanvas;
 
-    const stage = new PIXI.Container();
-    const tileLayer = new PIXI.Container();
-    const staticLayer = new PIXI.Container();
-    const entityLayer = new PIXI.Container();
-    const effectLayer = new PIXI.Container();
-    const lightLayer = new PIXI.Container();
-    const uiLayer = new PIXI.Container();
+    // 이벤트 루프를 양보하여 ENGINE_READY 메시지가 메인 스레드로 먼저 전달되게 함
+    setTimeout(async () => {
+      try {
+        console.log('[Worker] Starting background PixiJS init...');
+        this.pixiApp = new PIXI.Application();
+        await this.pixiApp.init({
+          canvas: canvas,
+          width: canvas.width,
+          height: canvas.height,
+          backgroundAlpha: 0,
+          antialias: true,
+          preference: 'webgl',
+        });
 
-    stage.addChild(tileLayer);
-    stage.addChild(staticLayer);
-    stage.addChild(entityLayer);
-    stage.addChild(effectLayer);
-    stage.addChild(lightLayer);
-    stage.addChild(uiLayer);
+        const stage = new PIXI.Container();
+        const tileLayer = new PIXI.Container();
+        const staticLayer = new PIXI.Container();
+        const entityLayer = new PIXI.Container();
+        const effectLayer = new PIXI.Container();
+        const lightLayer = new PIXI.Container();
+        const uiLayer = new PIXI.Container();
 
-    this.pixiApp.stage.addChild(stage);
+        stage.addChild(tileLayer);
+        stage.addChild(staticLayer);
+        stage.addChild(entityLayer);
+        stage.addChild(effectLayer);
+        stage.addChild(lightLayer);
+        stage.addChild(uiLayer);
 
-    this.lightingFilter = new LightingFilter();
-    stage.filters = [this.lightingFilter];
+        this.pixiApp.stage.addChild(stage);
 
-    this.layers = { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer };
+        this.lightingFilter = new LightingFilter();
+        stage.filters = [this.lightingFilter];
 
-    if (this.gameLoop) {
-      this.gameLoop.updateDependencies(
-        this.world,
-        this.pixiApp,
-        this.layers,
-        this.textures,
-        this.lightingFilter,
-      );
-    }
+        this.layers = { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer };
+
+        if (this.gameLoop) {
+          this.gameLoop.updateDependencies(
+            this.world,
+            this.pixiApp,
+            this.layers,
+            this.textures,
+            this.lightingFilter,
+          );
+        }
+        
+        console.log('[Worker] PixiJS init complete. Renderer attached to GameLoop.');
+      } catch (err) {
+        console.error('[Worker] PixiJS init failed:', err);
+      } finally {
+        this.isPixiInitializing = false;
+      }
+    }, 0);
   }
 
   returnBuffer(buffer: ArrayBuffer) {
@@ -141,9 +165,9 @@ export class GameEngineInstance {
       }
     }
 
-    // 캔버스 설정
+    // 캔버스 설정(페이로드에 있을 경우)
     if (payload.offscreen) {
-      await this.setCanvas(payload.offscreen);
+      this.pendingCanvas = payload.offscreen;
     }
 
     // 게임 루프 시작 또는 업데이트
@@ -158,6 +182,9 @@ export class GameEngineInstance {
       );
       this.gameLoop.start();
       self.postMessage({ type: 'ENGINE_READY' });
+      
+      // 루프 시작 후 비동기로 PixiJS 초기화 시도
+      this.tryInitializePixi();
     } else {
       this.gameLoop.updateDependencies(
         this.world,
