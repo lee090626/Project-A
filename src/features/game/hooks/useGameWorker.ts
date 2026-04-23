@@ -114,16 +114,19 @@ export function useGameWorker(
 
     worker.addEventListener('message', onMessage);
 
-    // IndexedDB 초기화 후 세이브 데이터 로드
+    // 에셋 로딩은 IndexedDB와 독립적으로 즉시 병렬 시작
+    loadAssetsAndTransfer(sendToWorker);
+
+    // IndexedDB 초기화 + 세이브 데이터 로드 (병렬 진행)
+    const t0 = performance.now();
     gameDB.init().then(async () => {
       const saved = saveManager.load();
-      console.log('[Main] Sending INIT to worker...');
 
       let tileMapBuffer: ArrayBuffer | undefined;
 
       if (saved) {
         if (gameDB.isAvailable) {
-          // 마이그레이션: 레거시 tileMapData가 있는 경우 IndexedDB로 이사
+          // 마이그레이션: 레거시 tileMapData가 있는 경우 IndexedDB로 이사 (1회성)
           if (saved.tileMapData) {
             await saveManager.migrateTileMapToIndexedDB(saved.tileMapData);
           }
@@ -132,6 +135,10 @@ export function useGameWorker(
           if (buf) tileMapBuffer = buf;
         }
       }
+
+      const elapsed = (performance.now() - t0).toFixed(1);
+      console.log(`[Main] Save load complete in ${elapsed}ms (IndexedDB: ${gameDB.isAvailable})`);
+      console.log('[Main] Sending INIT to worker...');
 
       // INIT 메시지 전송 (타일맵 버퍼가 있으면 Transferable로 전달)
       const transferables: Transferable[] = tileMapBuffer ? [tileMapBuffer] : [];
@@ -147,8 +154,6 @@ export function useGameWorker(
         },
         transferables
       );
-
-      loadAssetsAndTransfer(sendToWorker);
     });
 
     const timeoutId = setTimeout(() => {
