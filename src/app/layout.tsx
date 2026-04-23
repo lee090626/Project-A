@@ -79,6 +79,22 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
           rel="stylesheet"
         />
+
+        {/* 게임 에셋 preload: JS 실행 전부터 병렬 다운로드 시작 */}
+        {/* 아틀라스 이미지 (가장 크고 무거운 파일 → 최우선) */}
+        <link rel="preload" href="/assets/game-atlas-0.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/assets/game-atlas-1.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/assets/game-atlas-2.webp" as="image" type="image/webp" />
+
+        {/* 아틀라스 JSON (이미지와 함께 쓰이는 메타데이터) */}
+        <link rel="preload" href="/assets/game-atlas-0.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/assets/game-atlas-1.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/assets/game-atlas-2.json" as="fetch" crossOrigin="anonymous" />
+
+        {/* 게임 초기 데이터 (엔진 init에 즉시 사용) */}
+        <link rel="preload" href="/game-init-data.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/baseLayout.json" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/entities.json" as="fetch" crossOrigin="anonymous" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
