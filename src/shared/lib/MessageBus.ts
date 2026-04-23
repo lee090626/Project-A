@@ -24,7 +24,7 @@ class MessageBus {
   }
 
   /** 특정 주제로 메시지를 발행합니다. */
-  public emit<T = any>(topic: string, payload: T): void {
+  public emit<T = any>(topic: string, payload?: T): void {
     const topicHandlers = this.handlers.get(topic);
     if (topicHandlers) {
       topicHandlers.forEach((handler) => {

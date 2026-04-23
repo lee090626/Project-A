@@ -4,6 +4,7 @@ import { LightingFilter } from '@/features/game/lib/LightingFilter';
 import { GameLoop } from '@/features/game/ecs/systems/GameLoop';
 import { handlePlayerAction } from '@/features/game/ecs/systems/ActionSystem';
 import { syncPermanentStats } from '@/features/game/ecs/systems/statsSyncSystem';
+import { forceSyncUi } from '@/features/game/ecs/systems/syncSystem';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { AssetParser } from '../lib/AssetParser';
 import {
@@ -42,6 +43,8 @@ export class GameEngineInstance {
     messageBus.on(TOPIC.RECALCULATE_PLAYER_STATS, () => {
       if (this.world?.player) {
         syncPermanentStats(this.world.player);
+        // 즉시 UI 동기화 (반영 핑 제거)
+        forceSyncUi(this.world);
       }
     });
   }
