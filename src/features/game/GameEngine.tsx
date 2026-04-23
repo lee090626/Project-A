@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createInitialWorld, GameWorld } from '@/entities/world/model';
 import { fetchBaseLayout, fetchEntities } from '@/shared/lib/dataLoader';
+import { getBasePath } from '@/shared/lib/basePath';
 import { useGameStore } from '@/shared/lib/store';
 
 // Custom Hooks
@@ -53,7 +54,7 @@ export default function GameEngine() {
 
   const loadAssetsAndTransfer = useCallback(
     async (sendWorker: SendToWorker) => {
-      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+      const basePath = getBasePath();
       const assetsPath = `${basePath}/assets`;
 
       try {
