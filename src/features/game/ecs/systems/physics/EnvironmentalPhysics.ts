@@ -26,9 +26,7 @@ export const environmentalPhysics = (world: GameWorld) => {
     }
   }
 
-  // 2. 월드 경계 제한 (64x3000 그리드 기준)
-  // X: 0 ~ 63
-  // Y: BASE_DEPTH ~ 2999
-  player.pos.x = Math.max(0, Math.min(63, player.pos.x));
+  // 2. 월드 경계 제한
+  // Y: 0 ~ MAP_HEIGHT-1 (상부 및 하부 제한)
   player.pos.y = Math.max(0, Math.min(2999, player.pos.y));
 };
