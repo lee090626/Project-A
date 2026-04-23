@@ -17,10 +17,10 @@ export const EquipmentInfo: React.FC<EquipmentInfoProps> = React.memo(
           <span className="text-[10px] font-black text-zinc-500 tracking-widest">Navigation Unit</span>
         </div>
         
-        <div className="font-mono text-[14px] lg:text-[16px] font-black tracking-[0.2em] text-white">
-          <span className="text-white/40">X</span> <span className="text-amber-400">{Math.floor(pos.x).toString().padStart(3, '0')}</span> 
+        <div className="font-mono text-[14px] lg:text-[16px] font-black tracking-widest text-white">
+          <span className="text-white/40">X</span> <span className="text-amber-400">{Math.round(pos.x)}</span> 
           <span className="mx-3 text-white/10">|</span>
-          <span className="text-white/40">Y</span> <span className="text-amber-400">{Math.floor(pos.y).toString().padStart(3, '0')}</span>
+          <span className="text-white/40">Y</span> <span className="text-amber-400">{Math.round(pos.y)}</span>
         </div>
       </div>
     );
