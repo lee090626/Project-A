@@ -14,7 +14,7 @@ export default function LandingPage() {
             className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-700/30 rounded-full blur-[100px] animate-pulse"
             style={{ animationDelay: '2s' }}
           ></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
@@ -33,7 +33,7 @@ export default function LandingPage() {
               href="/play"
               className="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white transition-all duration-200 bg-cyan-500 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600 hover:bg-cyan-400 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(6,182,212,0.5)]"
             >
-              <div className="absolute -inset-2 transition-all duration-200 rounded-xl opacity-20 blur-xl group-hover:opacity-40 group-hover:duration-200 bg-gradient-to-r from-cyan-400 to-blue-500"></div>
+              <div className="absolute -inset-2 transition-all duration-200 rounded-xl opacity-20 blur-xl group-hover:opacity-40 group-hover:duration-200 bg-linear-to-r from-cyan-400 to-blue-500"></div>
               Play for Free Now
               <svg
                 className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform"
@@ -58,7 +58,7 @@ export default function LandingPage() {
 
         {/* Scroll Indicator */}
         <div className="absolute bottom-10 animate-bounce text-zinc-500">
-          <p className="text-sm mb-2 opacity-60 uppercase tracking-widest font-semibold text-center">
+          <p className="text-sm mb-2 opacity-60 tracking-widest font-semibold text-center">
             Scroll Down
           </p>
           <svg
@@ -104,7 +104,7 @@ export default function LandingPage() {
 
         {/* AdSense Placeholder Area */}
         <div className="w-full min-h-[150px] bg-zinc-900 border border-dashed border-zinc-700 flex flex-col items-center justify-center text-zinc-500 my-10 p-4">
-          <p className="text-sm uppercase tracking-widest font-semibold mb-2">
+          <p className="text-sm tracking-widest font-semibold mb-2">
             Google AdSense Area
           </p>
           <p className="text-xs text-center max-w-sm opacity-60">

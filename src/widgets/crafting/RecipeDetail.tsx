@@ -77,7 +77,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                     </>
                   )}
                 </span>
-                <span className="text-[10px] text-zinc-500 font-black tracking-widest uppercase mt-1">
+                <span className="text-[10px] text-zinc-500 font-black tracking-widest mt-1">
                   Passive Effect
                 </span>
               </div>
@@ -91,7 +91,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                           {val as number}
                         </span>
                       </div>
-                      <span className="text-[9px] md:text-[10px] text-zinc-500 font-black tracking-widest uppercase truncate w-full text-center">
+                      <span className="text-[9px] md:text-[10px] text-zinc-500 font-black tracking-widest truncate w-full text-center">
                         {getStatName(stat)}
                       </span>
                     </div>
@@ -101,7 +101,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                   </React.Fragment>
                 ))}
                 {(!selectedRecipe.stats || Object.keys(selectedRecipe.stats).length === 0) && (
-                  <span className="text-sm font-bold text-zinc-500 uppercase tracking-widest">No Stats</span>
+                  <span className="text-sm font-bold text-zinc-500 tracking-widest">No Stats</span>
                 )}
               </div>
             )}

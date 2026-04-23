@@ -51,7 +51,7 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
       `}
     >
       <div className="flex flex-col">
-        <span className="text-sm font-black tracking-tight leading-tight uppercase opacity-50 mb-0.5">
+        <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
           {toast.type}
         </span>
         <p className="text-base md:text-lg font-bold tracking-tighter text-white">

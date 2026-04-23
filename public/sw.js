@@ -1,7 +1,7 @@
 // ⚠️ 이 파일은 scripts/generate-sw.js에 의해 자동 생성됩니다. 직접 편집하지 마세요.
-// Generated at: 2026-04-20T03:58:05.536Z
+// Generated at: 2026-04-23T00:02:02.433Z
 
-const CACHE_NAME = 'game-assets-1776657485536';
+const CACHE_NAME = 'game-assets-1776902522433';
 const ASSET_PATTERNS = [
   /\/assets\/.*\.webp$/,
   /\/assets\/game-atlas.*\.json$/,
