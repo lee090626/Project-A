@@ -7,7 +7,7 @@ import { WorkerMessageType } from '@/shared/types/worker';
  */
 export type SendToWorker = (
   type: WorkerMessageType,
-  payload?: any,
+  payload?: unknown,
   transfer?: Transferable[],
 ) => void;
 

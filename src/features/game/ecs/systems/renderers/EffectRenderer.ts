@@ -132,7 +132,7 @@ function _updateFloatingTexts(world: GameWorld, effectLayer: PIXI.Container): vo
 
       if (!sprite) {
         sprite = textSpritePool.pop() ?? new PIXI.Text({ text: ft.text });
-        sprite.style.fontFamily  = 'Russo One';
+        sprite.style.fontFamily  = 'Geist, Arial, sans-serif';
         sprite.style.fontWeight  = '900';
         sprite.style.align       = 'center';
         sprite.anchor.set(0.5, 0.5);

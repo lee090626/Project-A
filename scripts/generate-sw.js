@@ -10,19 +10,17 @@
 
 const fs = require('fs');
 const path = require('path');
-const coreDataFilesConfig = require('../src/shared/config/coreDataFiles.json');
+const { execSync } = require('child_process');
 
-const version = Date.now().toString();
-const outPath = path.join(__dirname, '../public/sw.js');
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+async function main() {
+  const { validateCoreDataFiles } = await import('../src/shared/config/assetConfigValidation.mjs');
+  const coreDataFilesConfig = require('../src/shared/config/coreDataFiles.json');
 
-const coreDataFiles = Array.isArray(coreDataFilesConfig.coreDataFiles)
-  ? coreDataFilesConfig.coreDataFiles
-  : [];
+  const outPath = path.join(__dirname, '../public/sw.js');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-if (coreDataFiles.length === 0) {
-  throw new Error('coreDataFiles is empty. Check src/shared/config/coreDataFiles.json');
-}
+  const coreDataFiles = validateCoreDataFiles(coreDataFilesConfig);
+  const { value: version, source: versionSource } = resolveSwVersion();
 
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -40,6 +38,7 @@ const precacheUrlsLiteral = coreDataFiles
 
 const content = `// ⚠️ 이 파일은 scripts/generate-sw.js에 의해 자동 생성됩니다. 직접 편집하지 마세요.
 // Generated at: ${new Date().toISOString()}
+// Version source: ${versionSource}
 
 const CACHE_NAME = 'game-assets-${version}';
 
@@ -120,4 +119,48 @@ self.addEventListener('fetch', (e) => {
 `;
 
 fs.writeFileSync(outPath, content, 'utf-8');
-console.log(`[generate-sw] public/sw.js generated (version: ${version})`);
+  console.log(`[generate-sw] public/sw.js generated (version: ${version}, source: ${versionSource})`);
+}
+
+function resolveSwVersion() {
+  if (process.env.SW_VERSION) {
+    return {
+      value: process.env.SW_VERSION.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 40),
+      source: 'SW_VERSION',
+    };
+  }
+
+  const ciShaEnvKeys = [
+    'GITHUB_SHA',
+    'CI_COMMIT_SHA',
+    'CF_PAGES_COMMIT_SHA',
+    'VERCEL_GIT_COMMIT_SHA',
+    'COMMIT_SHA',
+  ];
+
+  for (const key of ciShaEnvKeys) {
+    const value = process.env[key];
+    if (value) {
+      return {
+        value: value.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 12),
+        source: key,
+      };
+    }
+  }
+
+  try {
+    const gitSha = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+    if (gitSha) {
+      return { value: gitSha, source: 'git-rev-parse' };
+    }
+  } catch (_err) {
+    // Fallback below
+  }
+
+  return { value: Date.now().toString(), source: 'timestamp-fallback' };
+}
+
+main().catch((err) => {
+  console.error('[generate-sw] failed:', err);
+  process.exit(1);
+});

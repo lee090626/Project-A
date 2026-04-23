@@ -1,11 +1,26 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { saveManager } from '@/shared/lib/saveManager';
+import { saveManager, SaveData } from '@/shared/lib/saveManager';
 import { gameDB } from '@/shared/lib/db';
 import { useGameStore } from '@/shared/lib/store';
+import { ToastType } from '@/shared/types/game';
 import { SendToWorker } from './types';
-import { WorkerMessageType } from '@/shared/types/worker';
+import {
+  MainToWorkerMessage,
+  WorkerMessageType,
+  isMainToWorkerMessage,
+  isWorkerToMainMessage,
+} from '@/shared/types/worker';
 
 let globalWorker: Worker | null = null;
+const isObjectPayload = (value: unknown): value is Record<string, any> =>
+  !!value && typeof value === 'object';
+
+const isSaveDataPayload = (value: unknown): value is SaveData =>
+  isObjectPayload(value) &&
+  typeof value.version === 'number' &&
+  typeof value.timestamp === 'number' &&
+  isObjectPayload(value.stats) &&
+  isObjectPayload(value.position);
 
 export function useGameWorker(
   isClient: boolean,
@@ -23,7 +38,12 @@ export function useGameWorker(
   const sendToWorker: SendToWorker = useCallback(
     (type: WorkerMessageType, payload?: any, transfer?: Transferable[]) => {
       if (globalWorker) {
-        globalWorker.postMessage({ type, payload }, transfer || []);
+        const message: MainToWorkerMessage = { type, payload } as MainToWorkerMessage;
+        if (!isMainToWorkerMessage(message)) {
+          console.warn('[Main] Dropping invalid outgoing worker message:', message);
+          return;
+        }
+        globalWorker.postMessage(message, transfer || []);
       }
     },
     [],
@@ -40,10 +60,16 @@ export function useGameWorker(
 
     const worker = globalWorker;
     const onMessage = (e: MessageEvent) => {
-      const { type, payload, buffer } = e.data;
+      if (!isWorkerToMainMessage(e.data)) {
+        console.warn('[Main] Dropping invalid incoming worker message:', e.data);
+        return;
+      }
+      const message = e.data;
+      const type = message.type;
+      const payload = 'payload' in message ? message.payload : undefined;
 
-      if (type === 'RENDER_SYNC' && buffer) {
-        const view = new Float32Array(buffer);
+      if (type === 'RENDER_SYNC') {
+        const view = new Float32Array(message.buffer);
         const timestamp = view[1];
 
         snapshots.current.push({ time: timestamp, data: view });
@@ -59,7 +85,7 @@ export function useGameWorker(
         if (!isReadyRef.current) {
           setIsEngineReady(true);
         }
-      } else if (type === 'SYNC_UI' && payload) {
+      } else if (type === 'SYNC_UI' && isObjectPayload(payload)) {
         // Zustand Update
         if (payload.stats) useGameStore.getState().updateStats(payload.stats);
         if (payload.ui) useGameStore.getState().updateUI(payload.ui);
@@ -68,10 +94,12 @@ export function useGameWorker(
       } else if (type === 'ENGINE_READY') {
         setIsEngineReady(true);
         console.log('[Main] Engine is ready to render!');
-      } else if (type === 'SAVE' && payload) {
+      } else if (type === 'SAVE' && isObjectPayload(payload)) {
         // Zero-Copy 흐름: 버퍼를 IndexedDB에 저장한 뒤 워커에돌려줌
         const { tileMapBuffer, ...rest } = payload;
-        saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
+        if (isSaveDataPayload(rest)) {
+          saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
+        }
         if (tileMapBuffer instanceof ArrayBuffer && gameDB.isAvailable) {
           gameDB.saveTileMap(tileMapBuffer).then(() => {
             // 저장 완료 후 버퍼를 워커에게 돌려줌 (Zero-Copy 재활용)
@@ -82,15 +110,19 @@ export function useGameWorker(
           });
         } else {
           // IndexedDB 불가 시 폴백: 기존 Base64 방식
-          saveManager.save(payload);
+          if (isSaveDataPayload(payload)) {
+            saveManager.save(payload);
+          }
         }
       } else if (type === 'EXPORT_DATA') {
+        if (!isSaveDataPayload(payload)) return;
         const exported = saveManager.export(payload);
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
           navigator.clipboard.writeText(exported);
           alert('Save code copied to clipboard!');
         }
       } else if (type === 'PORTAL_TRIGGERED') {
+        if (!isObjectPayload(payload)) return;
         if (
           confirm(
             `Circle ${payload.nextCircleId}로 하강하시겠습니까?\n새로운 심연 탐험이 시작됩니다!`,
@@ -103,12 +135,16 @@ export function useGameWorker(
       } else if (type === 'TUTORIAL_TRIGGER') {
         // 워커로부터 튜토리얼 발생 신호를 받으면 가이드 창을 엶
         handleOpenModal('isGuideOpen');
-      } else if (type === 'OPEN_MODAL' && payload) {
+      } else if (type === 'OPEN_MODAL' && isObjectPayload(payload)) {
         // 워커에서 상호작용 성공 시 모달 오픈 신호를 보냄
-        handleOpenModal(payload.target);
-      } else if (type === 'SHOW_TOAST' && payload) {
+        handleOpenModal(payload.target as keyof (import('@/entities/world/model').GameWorld)['ui']);
+      } else if (type === 'SHOW_TOAST' && isObjectPayload(payload)) {
         // 워커로부터 토스트 알림 요청을 받음
-        useGameStore.getState().addToast(payload.message, payload.type, payload.duration);
+        useGameStore.getState().addToast(
+          payload.message,
+          (payload.type || 'info') as ToastType,
+          payload.duration,
+        );
       }
     };
 

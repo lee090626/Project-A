@@ -1,19 +1,22 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import Script from 'next/script';
 import atlasManifest from '../../public/assets/manifest.json';
 import { CORE_DATA_FILES } from '@/shared/config/coreDataFiles';
+import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
 import { getBasePath, withBasePath } from '@/shared/lib/basePath';
 import './globals.css';
 
-const geistSans = Geist({
+const geistSans = localFont({
+  src: '../../public/fonts/geist-latin.woff2',
   variable: '--font-geist-sans',
-  subsets: ['latin'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: '../../public/fonts/geist-mono-latin.woff2',
   variable: '--font-geist-mono',
-  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -74,19 +77,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const basePath = getBasePath();
-  const atlasFiles = Array.isArray(atlasManifest.atlasFiles) ? atlasManifest.atlasFiles : [];
+  const atlasFiles = validateAtlasManifest(atlasManifest).atlasFiles;
   const swPath = withBasePath('/sw.js');
 
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
-          rel="stylesheet"
-        />
-
         {/* 게임 에셋 preload: JS 실행 전부터 병렬 다운로드 시작 */}
         {/* 아틀라스 이미지 (가장 크고 무거운 파일 → 최우선) */}
         {atlasFiles.map((atlasJsonFile) => (

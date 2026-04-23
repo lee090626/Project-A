@@ -1,4 +1,5 @@
 import { GameEngineInstance } from './GameEngineInstance';
+import { isMainToWorkerMessage } from '@/shared/types/worker';
 
 /**
  * 워커 스레드의 메인 진입점에서 메시지를 수신하여 GameEngineInstance로 라우팅하는 책임을 가집니다.
@@ -8,17 +9,22 @@ export class WorkerMessageRouter {
   constructor(private engine: GameEngineInstance) {}
 
   public handleMessage(e: MessageEvent) {
+    if (!isMainToWorkerMessage(e.data)) {
+      console.warn('[WorkerMessageRouter] Dropping invalid message:', e.data);
+      return;
+    }
+
     const { type, payload } = e.data;
 
     switch (type) {
       case 'INIT':
-        this.engine.init(payload);
+        this.engine.init(payload || {});
         break;
       case 'ASSETS_ATLAS':
         this.engine.updateAssetsFromAtlas(payload);
         break;
       case 'SET_CANVAS':
-        if (payload.offscreen) {
+        if (payload?.offscreen) {
           this.engine.setCanvas(payload.offscreen);
         }
         break;
@@ -32,7 +38,7 @@ export class WorkerMessageRouter {
         this.engine.handleAction(payload);
         break;
       case 'RETURN_BUFFER':
-        if (payload.buffer) {
+        if (payload?.buffer) {
           this.engine.returnBuffer(payload.buffer);
         }
         break;
@@ -41,7 +47,7 @@ export class WorkerMessageRouter {
         // (현재는 그대로 멏 쓰지만, 추후 pre-allocated 저장 버퍼로 확장 가능)
         break;
       case 'SAVE_REQUEST':
-        if (payload.type === 'export') {
+        if (payload?.type === 'export') {
           this.engine.handleSaveRequest();
         }
         break;

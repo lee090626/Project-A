@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createInitialWorld, GameWorld } from '@/entities/world/model';
+import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
 import { fetchBaseLayout, fetchEntities } from '@/shared/lib/dataLoader';
 import { getBasePath } from '@/shared/lib/basePath';
 import { useGameStore } from '@/shared/lib/store';
@@ -60,7 +61,7 @@ export default function GameEngine() {
       try {
         const manifestRes = await fetch(`${assetsPath}/manifest.json`);
         if (!manifestRes.ok) throw new Error('Failed to load atlas manifest');
-        const manifest = await manifestRes.json();
+        const manifest = validateAtlasManifest(await manifestRes.json());
 
         const atlasData: any[] = [];
         const transferList: Transferable[] = [];
@@ -69,7 +70,7 @@ export default function GameEngine() {
         const t0 = performance.now();
 
         await Promise.all(
-          manifest.atlasFiles.map(async (jsonFile: string) => {
+          manifest.atlasFiles.map(async (jsonFile) => {
             const webpFile = jsonFile.replace('.json', '.webp');
 
             // JSON + WebP 동시 fetch (직렬 → 병렬)
