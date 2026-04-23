@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:gh": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg next build",
-    "build:itch": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
-    "build:cf": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
+    "build:gh": "npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg next build",
+    "build:itch": "npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
+    "build:cf": "npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
     "start": "next start",
     "lint": "eslint",
     "deploy": "npm run build:gh && touch out/.nojekyll && gh-pages -t -d out",
@@ -16,8 +16,9 @@
     "optimize:atlas": "node scripts/generate-atlas.mjs",
     "update:atlas-map": "node scripts/generateAtlasMap.js",
     "format": "prettier --write .",
-    "predev": "node scripts/generate-sw.js",
-    "prebuild": "node scripts/generate-sw.js"
+    "gen:sw": "node scripts/generate-sw.js",
+    "predev": "npm run gen:sw",
+    "prebuild": "npm run gen:sw"
   },
   "dependencies": {
     "free-tex-packer-core": "^0.3.5",
