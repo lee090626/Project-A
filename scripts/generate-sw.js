@@ -10,9 +10,33 @@
 
 const fs = require('fs');
 const path = require('path');
+const coreDataFilesConfig = require('../src/shared/config/coreDataFiles.json');
 
 const version = Date.now().toString();
 const outPath = path.join(__dirname, '../public/sw.js');
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+const coreDataFiles = Array.isArray(coreDataFilesConfig.coreDataFiles)
+  ? coreDataFilesConfig.coreDataFiles
+  : [];
+
+if (coreDataFiles.length === 0) {
+  throw new Error('coreDataFiles is empty. Check src/shared/config/coreDataFiles.json');
+}
+
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function toRegexLiteral(filePath) {
+  const escaped = escapeRegExp(filePath).replace(/\//g, '\\/');
+  return `/${escaped}$/`;
+}
+
+const coreDataPatternLiterals = coreDataFiles.map((filePath) => `  ${toRegexLiteral(filePath)},`).join('\n');
+const precacheUrlsLiteral = coreDataFiles
+  .map((filePath) => `  '${`${basePath}${filePath}`}',`)
+  .join('\n');
 
 const content = `// ⚠️ 이 파일은 scripts/generate-sw.js에 의해 자동 생성됩니다. 직접 편집하지 마세요.
 // Generated at: ${new Date().toISOString()}
@@ -29,9 +53,7 @@ const CACHE_FIRST_PATTERNS = [
   /\\/assets\\/.*\\.webp$/,
   /\\/assets\\/game-atlas.*\\.json$/,
   /\\/assets\\/manifest\\.json$/,
-  /\\/baseLayout\\.json$/,
-  /\\/entities\\.json$/,
-  /\\/game-init-data\\.json$/,
+${coreDataPatternLiterals}
   /\\/_next\\/static\\/.+\\.(js|css)$/,
 ];
 
@@ -40,9 +62,7 @@ const CACHE_FIRST_PATTERNS = [
  * 첫 방문 시에도 두 번째 방문과 같은 속도를 보장합니다.
  */
 const PRECACHE_URLS = [
-  '/baseLayout.json',
-  '/entities.json',
-  '/game-init-data.json',
+${precacheUrlsLiteral}
 ];
 
 /** 설치 즉시 pre-cache 후 활성화 (기존 SW 대기 없이 교체) */
