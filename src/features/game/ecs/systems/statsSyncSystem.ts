@@ -57,9 +57,12 @@ export function syncPermanentStats(player: any) {
   const baseHp = 200 + eqMaxHp + masteryBonuses.maxHp + (artifactBonuses?.maxHp || 0);
   const finalMaxHp = Math.floor(baseHp * (1 + masteryBonuses.maxHpMult));
 
-  const hpRatio = player.stats.maxHp > 0 ? player.stats.hp / player.stats.maxHp : 1;
-  player.stats.maxHp = finalMaxHp;
-  player.stats.hp = Math.floor(finalMaxHp * hpRatio);
+  // Max HP가 변경되었을 때만 현재 HP를 비율에 맞춰 조정 (매 프레임 재계산 시 정밀도 문제로 회복이 씹히는 현상 방지)
+  if (player.stats.maxHp !== finalMaxHp) {
+    const hpRatio = player.stats.maxHp > 0 ? player.stats.hp / player.stats.maxHp : 1;
+    player.stats.maxHp = finalMaxHp;
+    player.stats.hp = Math.floor(finalMaxHp * hpRatio);
+  }
 
   // 3. 이동 속도 동기화: (기본 100 + 장비이속 + 유물 이속) * (기본 배율 1.0 + 마스터리 배율)
   const baseMoveSpeed = 100 + eqMoveSpeed + (artifactBonuses?.moveSpeed || 0) + masteryBonuses.moveSpeed;
