@@ -6,7 +6,6 @@ import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
  * 플레이어의 영구 스탯(체력, 이속 등)을 장비, 마스터리 및 유물 보너스에 맞춰 동기화합니다.
  */
 export function syncPermanentStats(player: any) {
-  console.log('[Event] syncPermanentStats triggered');
   const masteryBonuses = getMasteryBonuses(player.stats);
   const artifactBonuses = calculateArtifactBonuses(player.stats);
 

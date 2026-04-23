@@ -41,6 +41,8 @@ export class GameLoop {
   private lastUiSyncTime: number = 0;
   private lastSpatialHashTime: number = 0;
   private lastSaveTime: number = 0;
+  private lastStatsSyncTime: number = 0;
+  private readonly STATS_SYNC_FALLBACK_INTERVAL: number = 2000; // 2초 안전망
   public readonly syncInterval: number = 16.66; // 60Hz Target
 
   // 의존성 주입(DI) 데이터
@@ -157,7 +159,10 @@ export class GameLoop {
       if (!isHitStopping) {
         inputSystem(this.world);
         statusSystem(this.world, now);
-        statsSyncSystem(this.world.player);
+        
+        // [Stage 3] 매 프레임 호출 제거 (이벤트 기반으로 전환)
+        // statsSyncSystem(this.world.player); 
+
         physicsSystem(this.world, now);
         miningSystem(this.world, now);
         interactionSystem(this.world);
@@ -190,6 +195,12 @@ export class GameLoop {
 
       // 5. 자동 저장(10초)
       this.lastSaveTime = autoSaveSystem(this.world, this.lastSaveTime, now);
+
+      // 6. [Stage 3] 스탯 동기화 안전망 (이벤트 누락 대비 2초마다 1회 실행)
+      if (now - this.lastStatsSyncTime > this.STATS_SYNC_FALLBACK_INTERVAL) {
+        statsSyncSystem(this.world.player);
+        this.lastStatsSyncTime = now;
+      }
     } catch (err) {
       console.error('[Worker Loop Error]', err);
     }

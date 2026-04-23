@@ -3,6 +3,8 @@ import * as PIXI from 'pixi.js';
 import { LightingFilter } from '@/features/game/lib/LightingFilter';
 import { GameLoop } from '@/features/game/ecs/systems/GameLoop';
 import { handlePlayerAction } from '@/features/game/ecs/systems/ActionSystem';
+import { syncPermanentStats } from '@/features/game/ecs/systems/statsSyncSystem';
+import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { AssetParser } from '../lib/AssetParser';
 import {
   InitPayload,
@@ -35,6 +37,13 @@ export class GameEngineInstance {
     for (let i = 0; i < 3; i++) {
       this.bufferPool.push(new ArrayBuffer(this.BUFFER_SIZE));
     }
+
+    // [Stage 3] 스탯 재계산 이벤트 리스너 등록
+    messageBus.on(TOPIC.RECALCULATE_PLAYER_STATS, () => {
+      if (this.world?.player) {
+        syncPermanentStats(this.world.player);
+      }
+    });
   }
 
   /** Initialize Pixi with new OffscreenCanvas */
@@ -151,6 +160,9 @@ export class GameEngineInstance {
         this.lightingFilter,
       );
     }
+
+    // [Stage 3] 초기화 완료 후 최초 1회 강제 스탯 동기화
+    syncPermanentStats(this.world.player);
   }
 
   /**
