@@ -21,15 +21,14 @@ export const updateLootCollection = (world: GameWorld, deltaTime: number) => {
     dp.vy[i] += 0.2 * dtFactor; // 중력
     dp.vx[i] *= 0.95; // 공기 저항
 
-    // 2. 플레이어 자석 효과 (Magnet)
+    // 2. 플레이어 자석 효과 (Magnet): 거리와 상관없이 항상 끌어당김
     const dx = player.pos.x * TILE_SIZE + TILE_SIZE / 2 - dp.x[i];
     const dy = player.pos.y * TILE_SIZE + TILE_SIZE / 2 - dp.y[i];
     const distSq = dx * dx + dy * dy;
-    const magnetRange = 80;
+    const dist = Math.sqrt(distSq);
 
-    if (distSq < magnetRange * magnetRange) {
-      const dist = Math.sqrt(distSq);
-      const force = 0.5 * dtFactor;
+    if (dist > 0) {
+      const force = 0.6 * dtFactor;
       dp.vx[i] += (dx / dist) * force;
       dp.vy[i] += (dy / dist) * force;
     }
