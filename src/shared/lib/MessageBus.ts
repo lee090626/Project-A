@@ -45,3 +45,11 @@ class MessageBus {
 
 // 전역 싱글턴 인스턴스 (워커 스레드 내에서만 사용)
 export const messageBus = new MessageBus();
+
+/** 
+ * 시스템 간 공유되는 공통 토픽 상수 정의 
+ */
+export const TOPIC = {
+  /** 플레이어 스탯 재계산 필요 시 발행 */
+  RECALCULATE_PLAYER_STATS: 'RECALCULATE_PLAYER_STATS',
+} as const;
