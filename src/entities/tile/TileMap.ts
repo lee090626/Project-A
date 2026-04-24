@@ -21,6 +21,7 @@ import { MapSerializer } from './MapSerializer';
 export class TileMap {
   private chunks: Map<number, Int32Array> = new Map();
   private generator: MapGenerator;
+  private hasUnsavedTileChanges: boolean = false;
 
   public seed: number;
   public dimension: number;
@@ -113,6 +114,7 @@ export class TileMap {
 
     chunk[idx] = packed;
     this.modifiedCoords.add(`${x},${y}`);
+    this.hasUnsavedTileChanges = true;
     return health <= 0;
   }
 
@@ -130,8 +132,17 @@ export class TileMap {
         // 타입 0(empty), HP 0, GEN/MOD 플래그 설정
         chunk[idx] = emptyId | GEN_FLAG | MOD_FLAG;
         this.modifiedCoords.add(`${cx},${cy}`);
+        this.hasUnsavedTileChanges = true;
       }
     }
+  }
+
+  hasPendingTileMapSave(): boolean {
+    return this.hasUnsavedTileChanges;
+  }
+
+  markTileMapSaved(): void {
+    this.hasUnsavedTileChanges = false;
   }
 
   serializeToBuffer(): Uint32Array {
@@ -147,6 +158,7 @@ export class TileMap {
 
     this.chunks.clear();
     this.modifiedCoords.clear();
+    this.hasUnsavedTileChanges = false;
 
     MapSerializer.deserializeFromBuffer(
       buffer,
@@ -166,6 +178,7 @@ export class TileMap {
 
     this.chunks.clear();
     this.modifiedCoords.clear();
+    this.hasUnsavedTileChanges = false;
 
     MapSerializer.deserializeObject(
       data,
@@ -184,5 +197,6 @@ export class TileMap {
     if (newDimension !== undefined) this.dimension = newDimension;
     this.chunks.clear();
     this.modifiedCoords.clear();
+    this.hasUnsavedTileChanges = false;
   }
 }
