@@ -17,17 +17,7 @@ export interface ArtifactBonuses {
   damageMultiplier: number;
 }
 
-const STACK_LIMITS = {
-  stackable: 1000,
-  unique: 1,
-} as const;
-
-/**
- * 특정 유물이 해금되었는지 확인합니다 (고유 유물 전용).
- */
-export function isArtifactUnlocked(stats: PlayerStats, artifactId: string): boolean {
-  return stats.unlockedResearchIds?.includes(artifactId) || false;
-}
+const DEFAULT_ARTIFACT_STACK_LIMIT = 1000;
 
 /**
  * 특정 특수 효과의 총 중첩(Stack) 수를 반환합니다.
@@ -65,7 +55,7 @@ export function isArtifactId(itemId: string): boolean {
 export function getArtifactStackLimit(artifactId: string): number {
   const artifact = ARTIFACT_DATA[artifactId];
   if (!artifact) return Number.POSITIVE_INFINITY;
-  return artifact.maxStack ?? STACK_LIMITS[artifact.type];
+  return artifact.maxStack ?? DEFAULT_ARTIFACT_STACK_LIMIT;
 }
 
 /**

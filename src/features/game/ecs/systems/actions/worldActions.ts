@@ -37,9 +37,6 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
     case 'synthesizeRelic': {
       const artifact = ARTIFACT_DATA[data.relicId];
       if (artifact && artifact.requirements) {
-        // Unique 아이템이고 이미 해금했다면 중단
-        if (artifact.type === 'unique' && stats.unlockedResearchIds.includes(data.relicId)) break;
-
         const hasEnough = Object.entries(artifact.requirements).every(([res, amt]) => {
           const owned = res === 'goldCoins' ? stats.goldCoins : stats.inventory[res as any] || 0;
           return owned >= (amt as number);
@@ -53,12 +50,8 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
           else (stats.inventory[res as any] as number) -= amt as number;
         });
 
-        // 결과 반영 (Unique는 ID 리스트, Stackable은 collectionHistory 수치 증가)
-        if (artifact.type === 'unique') {
-          stats.unlockedResearchIds.push(data.relicId);
-        } else {
-          addArtifactStack(stats, data.relicId, 1);
-        }
+        // 결과 반영: 모든 보유효과형 아이템은 스택 누적 규칙을 따릅니다.
+        addArtifactStack(stats, data.relicId, 1);
       }
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
