@@ -13,6 +13,8 @@ interface RecipeDetailProps {
 }
 
 export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: RecipeDetailProps) {
+  const isPossessionEffectItem = !!selectedRecipe?.result?.relicId;
+
   const getStatName = (stat: string) => {
     const map: Record<string, string> = {
       power: 'Power',
@@ -66,7 +68,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
           <div className="bg-black/40 px-6 py-6 rounded-3xl border border-white/5 flex items-center justify-around group/stat hover:border-rose-500/20 transition-all shadow-inner relative overflow-hidden">
             <div className="absolute inset-0 bg-linear-to-r from-transparent via-rose-500/5 to-transparent opacity-0 group-hover/stat:opacity-100 transition-opacity pointer-events-none" />
 
-            {selectedRecipe.type === 'stackable' || selectedRecipe.type === 'unique' ? (
+            {isPossessionEffectItem ? (
               <div className="flex flex-col items-center justify-center gap-2 w-full text-center py-2 px-4">
                 <span className="text-lg md:text-xl font-black text-rose-400 tracking-tighter leading-tight drop-shadow-md">
                   {selectedRecipe.bonus ? `+${selectedRecipe.bonus.value} ${getStatName(selectedRecipe.bonus.stat)}` : ''}
@@ -189,8 +191,8 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
               : 'bg-zinc-800 text-zinc-600 border-white/5 cursor-not-allowed grayscale'
           }`}
         >
-          {(['Drill', 'Helmet', 'Armor', 'Boots'].includes(selectedRecipe.type) && stats.ownedEquipmentIds?.includes(selectedRecipe.id)) ||
-          (selectedRecipe.type === 'unique' && stats.unlockedResearchIds?.includes(selectedRecipe.id))
+          {(['Drill', 'Helmet', 'Armor', 'Boots'].includes(selectedRecipe.type) &&
+            stats.ownedEquipmentIds?.includes(selectedRecipe.id))
             ? 'Already Owned'
             : 'System Craft'}
         </button>

@@ -8,7 +8,9 @@ interface VitalityRelicSectionProps {
 }
 
 const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) => {
-  const relicIds = stats.unlockedResearchIds.filter((id) => id.startsWith('relic_'));
+  const possessionEffectItems = Object.entries(stats.collectionHistory || {})
+    .filter(([id, stack]) => !!ARTIFACT_DATA[id] && stack > 0)
+    .map(([id, stack]) => ({ id, stack }));
 
   return (
     <div className="space-y-6 flex flex-col">
@@ -53,13 +55,13 @@ const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) 
       {/* ARTIFACTS SECTION */}
       <div className="bg-[#252526] p-4 md:p-6 rounded-xl md:rounded-2xl border border-zinc-800 flex flex-col min-h-[300px] flex-1">
         <h4 className="text-[10px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 flex justify-between items-center">
-          <span>Unique Artifacts</span>
-          <span className="text-purple-500 font-black">{relicIds.length}</span>
+          <span>Possession Effects</span>
+          <span className="text-purple-500 font-black">{possessionEffectItems.length}</span>
         </h4>
         <div className="space-y-3 overflow-y-auto custom-scrollbar pr-2 flex-1">
-          {relicIds.length > 0 ? (
-            relicIds.map((artifactId, idx) => {
-              const info = ARTIFACT_DATA[artifactId];
+          {possessionEffectItems.length > 0 ? (
+            possessionEffectItems.map(({ id, stack }, idx) => {
+              const info = ARTIFACT_DATA[id];
               return (
                 <div
                   key={idx}
@@ -69,10 +71,10 @@ const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) 
                     <span className="text-2xl">💍</span>
                     <div className="flex flex-col flex-1">
                       <span className="text-xs font-black text-white tracking-tight">
-                        {info?.name || artifactId}
+                        {info?.name || id}
                       </span>
                       <span className="text-[9px] text-emerald-400 font-bold leading-tight">
-                        Ancient Passive
+                        Stack x{stack}
                       </span>
                     </div>
                   </div>
@@ -81,7 +83,7 @@ const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) 
             })
           ) : (
             <div className="text-center py-10 opacity-20 text-[10px] font-bold tracking-widest">
-              Search deeper for artifacts
+              Search deeper for possession items
             </div>
           )}
         </div>

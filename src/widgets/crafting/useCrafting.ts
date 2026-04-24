@@ -49,8 +49,6 @@ export function useCrafting(stats: PlayerStats) {
     if (craftType === 'Equipment') {
       const owned = stats.ownedEquipmentIds?.includes(rcp.id);
       if (owned) return false;
-    } else {
-      if (rcp.type === 'unique' && stats.unlockedResearchIds?.includes(rcp.id)) return false;
     }
 
     // 모든 재료 조건을 충족하는지 확인

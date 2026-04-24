@@ -28,7 +28,7 @@ const RecipeList = ({
           const craftable = canCraft(rcp);
           const owned = craftType === 'Equipment'
             ? stats.ownedEquipmentIds?.includes(rcp.id)
-            : (rcp.type === 'unique' && stats.unlockedResearchIds?.includes(rcp.id));
+            : false;
 
           return (
             <button
