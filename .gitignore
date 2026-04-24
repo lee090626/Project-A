@@ -57,3 +57,6 @@ scripts/genData.js
 public/sw.js
 
 AGENTS.md
+
+# JetBrains local workspace state
+.idea/workspace.xml
