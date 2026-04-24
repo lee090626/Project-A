@@ -41,9 +41,8 @@ function processDeath(world: GameWorld, index: number, now: number) {
   // 1. 기본 보상(Gold) 계산 및 지급
   const isBoss = type === 2;
   const multiplier = modifierManager.getRarityMultiplier(monsterDef.rarity, isBoss);
-  const baseGold = 10;
-  const hpBonus = Math.floor(entities.soa.maxHp[index] * 0.1);
-  const totalGold = Math.floor((baseGold + hpBonus) * multiplier);
+  const rewardGold = monsterDef.rewards?.gold ?? 0;
+  const totalGold = Math.floor(rewardGold * multiplier);
 
   player.stats.goldCoins += totalGold;
   createFloatingText(
