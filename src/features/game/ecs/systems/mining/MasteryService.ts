@@ -9,6 +9,7 @@ import {
 import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
 import { showToast } from '../toastSystem';
 import { MASTERY_PERKS } from '@/shared/config/masteryPerks';
+import { toPascalCase } from '@/shared/lib/textCase';
 
 /**
  * 타일 파괴 시 보상(아이템 드롭) 및 숙련도 성장을 처리합니다.
@@ -70,7 +71,7 @@ export const masteryService = (
       tileMastery.level++;
       tileMastery.exp -= nextExp;
 
-      showToast(`${type.toUpperCase()} Mastery Level Up: ${tileMastery.level}!!`, 'success');
+      showToast(`${toPascalCase(type)} Mastery Level Up: ${tileMastery.level}!!`, 'success');
 
       // 마스터리 돌파 특성(Perks) 해금 체크
       processMasteryPerks(world, type, tileMastery.level);
@@ -97,7 +98,7 @@ function processMasteryPerks(world: GameWorld, type: string, currentLevel: numbe
           world,
           player.pos.x * TILE_SIZE,
           player.pos.y * TILE_SIZE - 40,
-          `✨ ${perk.name} UNLOCKED!`,
+          `✨ ${perk.name} Unlocked!`,
           '#fbbf24',
         );
       }

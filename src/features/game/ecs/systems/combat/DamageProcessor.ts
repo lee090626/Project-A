@@ -157,7 +157,7 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
 
         // 특수 기믹: 크리티컬 온리 몬스터
         if (monsterDef?.mechanic === 'critical_only' && !isCrit) {
-          text = 'BLOCK!';
+          text = 'Block!';
           color = '#3b82f6';
           
           if (now - player.lastAttackTime > attackInterval) {

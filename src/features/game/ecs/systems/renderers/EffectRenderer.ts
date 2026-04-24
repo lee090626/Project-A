@@ -128,7 +128,7 @@ function _updateFloatingTexts(world: GameWorld, effectLayer: PIXI.Container): vo
     if (ft.active) {
       const isCrit  = ft.text.includes('Crit');
       const isGold  = ft.text.includes('G') || ft.color === '#fbbf24';
-      const isBlock = ft.text === 'BLOCK!';
+      const isBlock = ft.text === 'Block!';
 
       if (!sprite) {
         sprite = textSpritePool.pop() ?? new PIXI.Text({ text: ft.text });

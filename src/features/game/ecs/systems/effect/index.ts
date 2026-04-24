@@ -3,6 +3,7 @@ import { showToast } from '../toastSystem';
 import { updateParticles } from './ParticlePhysics';
 import { updateFloatingTexts } from './FloatingTextPhysics';
 import { updateLootCollection } from './LootCollector';
+import { toPascalCase } from '@/shared/lib/textCase';
 
 // Buffer for item pickup aggregation
 const pickupBuffer: Record<string, number> = {};
@@ -22,7 +23,7 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
   if (lastPickupEventTime > 0 && now - lastPickupEventTime > AGGREGATION_WINDOW) {
     const entries = Object.entries(pickupBuffer);
     if (entries.length > 0) {
-      const message = entries.map(([id, count]) => `${id.toUpperCase()} x${count}`).join(', ');
+      const message = entries.map(([id, count]) => `${toPascalCase(id)} x${count}`).join(', ');
       showToast(`${message} Acquired!`, 'info', 2000);
       for (const key in pickupBuffer) delete pickupBuffer[key];
       lastPickupEventTime = 0;
