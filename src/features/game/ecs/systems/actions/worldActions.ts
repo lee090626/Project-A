@@ -2,9 +2,10 @@ import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { addArtifactStack } from '@/shared/lib/artifactUtils';
+import { showToast } from '../toastSystem';
 
 /**
- * 부활, 체크포인트 이동, 유물 합성 등 월드 관련 액션을 처리합니다.
+ * 부활, 웨이포인트 이동, 유물 합성 등 월드 관련 액션을 처리합니다.
  */
 export const handleWorldAction = (world: GameWorld, action: string, data: any) => {
   const stats = world.player.stats;
@@ -27,7 +28,17 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
     }
 
     case 'selectCheckpoint': {
+      if (!Array.isArray(stats.unlockedWaypoints)) {
+        stats.unlockedWaypoints = [0];
+      }
+      if (!stats.unlockedWaypoints.includes(data.depth)) {
+        showToast('Locked waypoint', 'warning', 1800);
+        break;
+      }
+
+      world.player.pos.x = 15;
       world.player.pos.y = data.depth + 10;
+      world.player.visualPos.x = 15;
       world.player.visualPos.y = data.depth + 10;
       stats.depth = data.depth;
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);

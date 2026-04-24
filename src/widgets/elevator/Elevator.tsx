@@ -9,6 +9,10 @@ interface ElevatorProps {
 }
 
 const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose }) => {
+  const waypointDepths = (stats.unlockedWaypoints || [])
+    .filter((depth) => depth > 0)
+    .sort((a, b) => a - b);
+
   return (
     <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
       {/* HEADER SECTION - Bento Style Floating Header */}
@@ -18,10 +22,10 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
             <span className="text-2xl md:text-3xl">🛗</span>
             <div className="flex flex-col">
               <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-amber-500 leading-none">
-                Elevator
+                Waypoints
               </h2>
               <span className="text-[10px] text-zinc-600 font-bold tracking-widest mt-1">
-                Vertical Transport
+                Fast Travel Network
               </span>
             </div>
           </div>
@@ -60,10 +64,7 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
           </span>
         </button>
 
-        {Array.from(
-          { length: Math.floor(stats.maxDepthReached / 100) },
-          (_, i) => (i + 1) * 100,
-        ).map((depth) => (
+        {waypointDepths.map((depth) => (
           <button
             key={depth}
             onClick={() => onSelectCheckpoint(depth)}
@@ -71,15 +72,21 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
           >
             <div className="flex flex-col items-start">
               <span className="text-zinc-600 text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1">
-                Checkpoint
+                Waypoint
               </span>
-              <span className="text-lg md:text-xl">Outpost_{depth}</span>
+              <span className="text-lg md:text-xl">Transit_{depth}</span>
             </div>
             <span className="bg-zinc-900 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-mono">
               {depth}m
             </span>
           </button>
         ))}
+
+        {waypointDepths.length === 0 && (
+          <div className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-500 text-sm md:text-base">
+            Reach 100m depth to unlock your first waypoint.
+          </div>
+        )}
       </div>
     </div>
   );

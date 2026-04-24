@@ -143,6 +143,17 @@ export const saveManager = {
         if (!s.tileMastery) s.tileMastery = {};
         if (!s.unlockedMasteryPerks) s.unlockedMasteryPerks = [];
         if (!s.collectionHistory) s.collectionHistory = {};
+        if (!Array.isArray(s.unlockedWaypoints)) {
+          s.unlockedWaypoints = [0];
+        }
+        if (!s.unlockedWaypoints.includes(0)) {
+          s.unlockedWaypoints.push(0);
+        }
+        const validWaypoints = s.unlockedWaypoints.filter(
+          (depth: unknown): depth is number =>
+            typeof depth === 'number' && Number.isFinite(depth) && depth >= 0,
+        );
+        s.unlockedWaypoints = Array.from(new Set<number>(validWaypoints)).sort((a, b) => a - b);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
         if (s.inventory) {

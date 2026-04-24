@@ -48,6 +48,8 @@ export interface PlayerStats {
   /** 탐험 정보 */
   /** 지금까지 도달한 최대 깊이 */
   maxDepthReached: number;
+  /** 해금된 웨이포인트 깊이 목록 (0m은 베이스 캠프) */
+  unlockedWaypoints: number[];
 
   /** 전투 및 기본 스탯 */
   /** 현재 체력 */

@@ -30,6 +30,12 @@ export function syncPermanentStats(player: any) {
   if (!player.stats.equipmentStates) {
     player.stats.equipmentStates = {};
   }
+  if (!Array.isArray(player.stats.unlockedWaypoints)) {
+    player.stats.unlockedWaypoints = [0];
+  }
+  if (!player.stats.unlockedWaypoints.includes(0)) {
+    player.stats.unlockedWaypoints.push(0);
+  }
   if (player.stats.defense === undefined) player.stats.defense = 0;
   if (player.stats.luck === undefined) player.stats.luck = 0;
 

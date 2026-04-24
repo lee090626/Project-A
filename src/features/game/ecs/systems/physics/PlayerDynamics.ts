@@ -1,5 +1,31 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE, BASE_DEPTH } from '@/shared/config/constants';
+import { showToast } from '../toastSystem';
+
+const WAYPOINT_INTERVAL = 100;
+
+/**
+ * 현재 최대 깊이를 기준으로 해금되어야 할 웨이포인트를 동기화합니다.
+ *
+ * @param world 게임 월드
+ */
+const syncUnlockedWaypoints = (world: GameWorld, showUnlockToast: boolean = false) => {
+  const { stats } = world.player;
+  if (!Array.isArray(stats.unlockedWaypoints)) {
+    stats.unlockedWaypoints = [0];
+  }
+
+  const maxUnlockDepth = Math.floor(stats.maxDepthReached / WAYPOINT_INTERVAL) * WAYPOINT_INTERVAL;
+  for (let depth = WAYPOINT_INTERVAL; depth <= maxUnlockDepth; depth += WAYPOINT_INTERVAL) {
+    if (stats.unlockedWaypoints.includes(depth)) continue;
+    stats.unlockedWaypoints.push(depth);
+    if (showUnlockToast) {
+      showToast(`Waypoint ${depth}m unlocked`, 'success', 2200);
+    }
+  }
+
+  stats.unlockedWaypoints.sort((a, b) => a - b);
+};
 
 /**
  * 플레이어의 이동 메카닉, 시각적 보간 및 펫 드론 추적을 관리합니다.
@@ -21,7 +47,10 @@ export const playerDynamics = (
   player.stats.depth = Math.floor(player.pos.y) - BASE_DEPTH;
   if (player.stats.depth > player.stats.maxDepthReached) {
     player.stats.maxDepthReached = player.stats.depth;
+    syncUnlockedWaypoints(world, true);
   }
+  // 기존 세이브(이미 100m+ 도달) 보정: maxDepth 기반으로 웨이포인트를 항상 동기화
+  syncUnlockedWaypoints(world, false);
 
   // 3. 시각적 위치 보간 (Renderer를 위한 Lerp)
   player.visualPos.x += (player.pos.x - player.visualPos.x) * lerpFactor;
@@ -102,4 +131,3 @@ function processGridMovement(world: GameWorld, now: number) {
     player.isDrilling = false;
   }
 }
-

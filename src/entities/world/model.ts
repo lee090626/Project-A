@@ -209,6 +209,7 @@ export const createInitialWorld = (seed: number): GameWorld => {
         activeSmeltingJobs: [],
         refinerySlots: 1,
         maxDepthReached: 0,
+        unlockedWaypoints: [0],
         artifacts: [],
         equippedArtifactId: null,
         artifactCooldowns: {},

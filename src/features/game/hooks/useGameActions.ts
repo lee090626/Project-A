@@ -106,7 +106,7 @@ export const useGameActions = (
     [sendToWorker, updateUi],
   );
 
-  /** 엘리베이터를 통한 층 이동 처리 */
+  /** 웨이포인트를 통한 층 이동 처리 */
   const handleSelectCheckpoint = useCallback(
     (depth: number) => {
       sendToWorker('ACTION', { action: 'selectCheckpoint', data: { depth } });

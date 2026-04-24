@@ -20,7 +20,7 @@ export const WorldInfo: React.FC<WorldInfoProps> = React.memo(({ layerName, dept
           onClick={onOpenElevator}
           className="text-[10px] text-zinc-500 hover:text-white transition-colors font-black tracking-widest"
         >
-          [ Open Elevator ]
+          [ Open Waypoints ]
         </button>
       )}
     </div>

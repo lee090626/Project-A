@@ -47,6 +47,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     },
     ownedEquipmentIds: [],
     maxDepthReached: 0,
+    unlockedWaypoints: [0],
     artifacts: [],
     equippedArtifactId: null,
     artifactCooldowns: {},
