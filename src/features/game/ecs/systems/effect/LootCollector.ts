@@ -1,6 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
+import { addArtifactStack, isArtifactId } from '@/shared/lib/artifactUtils';
 
 
 /**
@@ -40,10 +41,11 @@ export const updateLootCollection = (world: GameWorld, deltaTime: number) => {
       const amount = dp.amount[i];
 
       // 인벤토리 및 수집 기록 가산
-      if (id.startsWith('essence_')) {
-        if (!player.stats.collectionHistory) player.stats.collectionHistory = {};
-        player.stats.collectionHistory[id] = (player.stats.collectionHistory[id] || 0) + amount;
-        world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
+      if (isArtifactId(id)) {
+        const gained = addArtifactStack(player.stats, id, amount);
+        if (gained > 0) {
+          world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
+        }
       } else if (id.includes('stone') || id.includes('ite')) {
         // Mineral
         player.stats.inventory[id] = (player.stats.inventory[id] || 0) + amount;

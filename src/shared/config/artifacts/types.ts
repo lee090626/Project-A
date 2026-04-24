@@ -5,6 +5,8 @@ export interface ArtifactDefinition {
   name: string;
   nameKo: string;
   type: ArtifactType;
+  /** 최대 중첩 수량 (미지정 시 type 기본값 사용: stackable=1000, unique=1) */
+  maxStack?: number;
   description: string;
   descriptionKo: string;
   icon?: string; // 레거시: 이모지 아이콘

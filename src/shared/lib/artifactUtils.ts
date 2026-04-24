@@ -17,6 +17,11 @@ export interface ArtifactBonuses {
   damageMultiplier: number;
 }
 
+const STACK_LIMITS = {
+  stackable: 1000,
+  unique: 1,
+} as const;
+
 /**
  * 특정 유물이 해금되었는지 확인합니다 (고유 유물 전용).
  */
@@ -45,6 +50,43 @@ export function getArtifactEffectStack(stats: PlayerStats, effectId: string): nu
  */
 export function hasArtifactEffect(stats: PlayerStats, effectId: string): boolean {
   return getArtifactEffectStack(stats, effectId) > 0;
+}
+
+/**
+ * 특정 아이템 ID가 유물 데이터에 존재하는지 확인합니다.
+ */
+export function isArtifactId(itemId: string): boolean {
+  return !!ARTIFACT_DATA[itemId];
+}
+
+/**
+ * 유물의 최대 중첩 수량을 반환합니다.
+ */
+export function getArtifactStackLimit(artifactId: string): number {
+  const artifact = ARTIFACT_DATA[artifactId];
+  if (!artifact) return Number.POSITIVE_INFINITY;
+  return artifact.maxStack ?? STACK_LIMITS[artifact.type];
+}
+
+/**
+ * 유물 스택을 상한선까지 안전하게 누적합니다.
+ * @returns 실제로 증가한 스택 수량
+ */
+export function addArtifactStack(stats: PlayerStats, artifactId: string, amount: number): number {
+  if (amount <= 0) return 0;
+  if (!isArtifactId(artifactId)) return 0;
+
+  if (!stats.collectionHistory) stats.collectionHistory = {};
+  const current = stats.collectionHistory[artifactId] || 0;
+  const limit = getArtifactStackLimit(artifactId);
+  const next = Math.min(limit, current + amount);
+  const gained = Math.max(0, next - current);
+
+  if (gained > 0) {
+    stats.collectionHistory[artifactId] = next;
+  }
+
+  return gained;
 }
 
 /**

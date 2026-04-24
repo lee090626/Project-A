@@ -1,6 +1,7 @@
 import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
+import { addArtifactStack } from '@/shared/lib/artifactUtils';
 
 /**
  * 부활, 체크포인트 이동, 유물 합성 등 월드 관련 액션을 처리합니다.
@@ -56,8 +57,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
         if (artifact.type === 'unique') {
           stats.unlockedResearchIds.push(data.relicId);
         } else {
-          if (!stats.collectionHistory) stats.collectionHistory = {};
-          stats.collectionHistory[data.relicId] = (stats.collectionHistory[data.relicId] || 0) + 1;
+          addArtifactStack(stats, data.relicId, 1);
         }
       }
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
