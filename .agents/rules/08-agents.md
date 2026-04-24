@@ -140,4 +140,3 @@ EOF
 ## 📚 7. 주요 문서 참조 (References)
 
 - **[🖼️ 상세 에셋 가이드](06-asset-guide.md)**
-- **[📐 ADR: Ping-Pong Sync](adr/ADR_PING_PONG_SYNC.md)**
