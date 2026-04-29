@@ -8,25 +8,40 @@ import {
 } from './TileMapConstants';
 
 export class MapSerializer {
+  private static addModifiedIndex(
+    modifiedTileIndicesByChunk: Map<number, Set<number>>,
+    chunkX: number,
+    idx: number,
+  ): void {
+    let set = modifiedTileIndicesByChunk.get(chunkX);
+    if (!set) {
+      set = new Set<number>();
+      modifiedTileIndicesByChunk.set(chunkX, set);
+    }
+    set.add(idx);
+  }
+
   public static serializeToBuffer(
-    modifiedCoords: Set<string>,
+    modifiedTileIndicesByChunk: Map<number, Set<number>>,
     chunks: Map<number, Int32Array>,
-    getChunkInfo: (x: number) => { chunkX: number; localX: number }
   ): Uint32Array {
     let modCount = 0;
     const validCoords: { x: number; y: number; packed: number }[] = [];
 
-    for (const coordStr of modifiedCoords) {
-      const [x, y] = coordStr.split(',').map(Number);
-      const { chunkX, localX } = getChunkInfo(x);
+    for (const [chunkX, indices] of modifiedTileIndicesByChunk) {
       const chunk = chunks.get(chunkX);
-      if (chunk) {
-        const idx = y * CHUNK_WIDTH + localX;
+      if (!chunk) continue;
+
+      for (const idx of indices) {
         const packed = chunk[idx];
-        if (packed & MOD_FLAG) {
-          validCoords.push({ x, y, packed });
-          modCount++;
-        }
+        if (!(packed & MOD_FLAG)) continue;
+
+        const y = Math.floor(idx / CHUNK_WIDTH);
+        const localX = idx - y * CHUNK_WIDTH;
+        const x = chunkX * CHUNK_WIDTH + localX;
+
+        validCoords.push({ x, y, packed });
+        modCount++;
       }
     }
 
@@ -51,8 +66,7 @@ export class MapSerializer {
   public static deserializeFromBuffer(
     buffer: ArrayBuffer,
     chunks: Map<number, Int32Array>,
-    modifiedCoords: Set<string>,
-    getChunkInfo: (x: number) => { chunkX: number; localX: number },
+    modifiedTileIndicesByChunk: Map<number, Set<number>>,
     getChunk: (chunkX: number) => Int32Array
   ): void {
     if (!buffer || buffer.byteLength === 0) return;
@@ -73,11 +87,12 @@ export class MapSerializer {
         const y = data32[ptr++];
         const packed = data32[ptr++];
 
-        const { chunkX, localX } = getChunkInfo(x);
+        const chunkX = Math.floor(x / CHUNK_WIDTH);
+        const localX = x - chunkX * CHUNK_WIDTH;
         const chunk = getChunk(chunkX);
         const idx = y * CHUNK_WIDTH + localX;
         chunk[idx] = packed;
-        modifiedCoords.add(`${x},${y}`);
+        this.addModifiedIndex(modifiedTileIndicesByChunk, chunkX, idx);
       }
     } else {
       const savedHalfWidth = Math.floor(savedMapWidth / 2);
@@ -89,11 +104,12 @@ export class MapSerializer {
         const x = (savedIndex % savedMapWidth) - savedHalfWidth;
         const y = Math.floor(savedIndex / savedMapWidth);
 
-        const { chunkX, localX } = getChunkInfo(x);
+        const chunkX = Math.floor(x / CHUNK_WIDTH);
+        const localX = x - chunkX * CHUNK_WIDTH;
         const chunk = getChunk(chunkX);
         const idx = y * CHUNK_WIDTH + localX;
         chunk[idx] = packed;
-        modifiedCoords.add(`${x},${y}`);
+        this.addModifiedIndex(modifiedTileIndicesByChunk, chunkX, idx);
       }
     }
   }
@@ -101,22 +117,22 @@ export class MapSerializer {
   public static deserializeObject(
     data: any,
     chunks: Map<number, Int32Array>,
-    modifiedCoords: Set<string>,
-    getChunkInfo: (x: number) => { chunkX: number; localX: number },
+    modifiedTileIndicesByChunk: Map<number, Set<number>>,
     getChunk: (chunkX: number) => Int32Array
   ): void {
     if (!data) return;
 
     for (const [key, tileData] of Object.entries(data as Record<string, [number, number]>)) {
       const [x, y] = key.split(',').map(Number);
-      const { chunkX, localX } = getChunkInfo(x);
+      const chunkX = Math.floor(x / CHUNK_WIDTH);
+      const localX = x - chunkX * CHUNK_WIDTH;
       const chunk = getChunk(chunkX);
       const idx = y * CHUNK_WIDTH + localX;
 
       const [typeId, health] = tileData;
       const packed = (typeId & TYPE_MASK) | ((health & HP_MASK) << HP_BITS) | GEN_FLAG | MOD_FLAG;
       chunk[idx] = packed;
-      modifiedCoords.add(`${x},${y}`);
+      this.addModifiedIndex(modifiedTileIndicesByChunk, chunkX, idx);
     }
   }
 }

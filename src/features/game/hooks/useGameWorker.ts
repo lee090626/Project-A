@@ -97,10 +97,14 @@ export function useGameWorker(
       } else if (type === 'SAVE' && isObjectPayload(payload)) {
         // Zero-Copy 흐름: 버퍼를 IndexedDB에 저장한 뒤 워커에돌려줌
         const { tileMapBuffer, ...rest } = payload;
-        if (isSaveDataPayload(rest)) {
-          saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
+        const canUseIndexedDBPath = tileMapBuffer instanceof ArrayBuffer && gameDB.isAvailable;
+
+        if (canUseIndexedDBPath && isSaveDataPayload(rest)) {
+          // IndexedDB 경로: 타일맵 버퍼 저장은 별도 처리, stats/position만 저장
+          saveManager.save(rest);
         }
-        if (tileMapBuffer instanceof ArrayBuffer && gameDB.isAvailable) {
+
+        if (canUseIndexedDBPath) {
           gameDB.saveTileMap(tileMapBuffer).then(() => {
             // 저장 완료 후 버퍼를 워커에게 돌려줌 (Zero-Copy 재활용)
             worker.postMessage(
