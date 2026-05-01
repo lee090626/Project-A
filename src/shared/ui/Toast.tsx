@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import { ToastMessage, ToastType } from '@/shared/types/game';
+import AtlasSprite from './AtlasSprite';
+import { atlasMap } from '@/shared/config/atlasMap';
+import type { AtlasIconName } from '@/shared/config/atlasMap';
 
 interface ToastProps {
   toast: ToastMessage;
@@ -10,6 +13,7 @@ interface ToastProps {
 
 const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const hasItemChips = !!toast.items?.length;
 
   useEffect(() => {
     // Mount animation
@@ -40,6 +44,10 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
     }
   };
 
+  const isAtlasIconName = (name: string | null): name is AtlasIconName => {
+    return !!name && name in atlasMap;
+  };
+
   return (
     <div
       className={`
@@ -49,15 +57,48 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
         ${getStyleByType(toast.type)}
         ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'}
       `}
+      aria-label={
+        hasItemChips
+          ? toast.items?.map((item) => `${item.label} x${item.amount}`).join(', ')
+          : undefined
+      }
     >
-      <div className="flex flex-col">
-        <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
-          {toast.type}
-        </span>
-        <p className="text-base md:text-lg font-bold tracking-tighter text-white">
-          {toast.message}
-        </p>
-      </div>
+      {hasItemChips ? (
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
+            {toast.message}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {toast.items?.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center gap-2 rounded-xl border border-white/10 bg-zinc-950/45 px-2.5 py-2"
+                aria-label={`${item.label} x${item.amount}`}
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-black/30">
+                  {isAtlasIconName(item.image) ? (
+                    <AtlasSprite name={item.image} alt={item.label} size={30} />
+                  ) : (
+                    <span className="text-sm font-black text-white/70">?</span>
+                  )}
+                </div>
+                <span className="font-mono text-sm font-black text-white">
+                  x{item.amount.toLocaleString()}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col">
+          <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
+            {toast.type}
+          </span>
+          <p className="text-base md:text-lg font-bold tracking-tighter text-white">
+            {toast.message}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

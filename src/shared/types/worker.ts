@@ -1,4 +1,5 @@
 import { PlayerStats, Position } from './game';
+import type { ToastItem } from './game';
 
 /**
  * 메인 스레드 -> 워커 스레드 메시지 타입
@@ -97,7 +98,10 @@ export type WorkerToMainMessage =
   | { type: 'SYNC_UI'; payload: unknown }
   | { type: 'SAVE'; payload: unknown }
   | { type: 'PORTAL_TRIGGERED'; payload: { nextDepth: number; nextCircleId: number } }
-  | { type: 'SHOW_TOAST'; payload: { message: string; type?: string; duration?: number } }
+  | {
+      type: 'SHOW_TOAST';
+      payload: { message: string; type?: string; duration?: number; items?: ToastItem[] };
+    }
   | { type: 'OPEN_MODAL'; payload: { target: string } }
   | { type: 'TUTORIAL_TRIGGER'; payload: { guideId: string } };
 

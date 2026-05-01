@@ -1,5 +1,5 @@
 export default [
   {
-    ignores: ['.next/**', 'out/**', 'build/**', 'next-env.d.ts'],
+    ignores: ['.next/**', '.open-next/**', 'out/**', 'build/**', 'next-env.d.ts'],
   },
 ];

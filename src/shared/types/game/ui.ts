@@ -4,6 +4,20 @@
 export type ToastType = 'success' | 'info' | 'warning' | 'error';
 
 /**
+ * 아이템 획득 토스트에 표시할 단일 아이템 정보입니다.
+ */
+export interface ToastItem {
+  /** 아이템 또는 자원 ID */
+  id: string;
+  /** 접근성 및 fallback 표시용 이름 */
+  label: string;
+  /** 획득 수량 */
+  amount: number;
+  /** 아틀라스 이미지 ID */
+  image: string | null;
+}
+
+/**
  * 화면에 표시될 토스트 알림 메시지 정보입니다.
  */
 export interface ToastMessage {
@@ -11,6 +25,8 @@ export interface ToastMessage {
   message: string;
   type: ToastType;
   duration?: number;
+  /** 아이템 획득 토스트를 이미지 칩으로 렌더링하기 위한 목록 */
+  items?: ToastItem[];
 }
 
 /**

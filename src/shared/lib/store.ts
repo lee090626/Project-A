@@ -41,7 +41,12 @@ interface GameState {
   /** 초기 데이터 설정 */
   setStats: (stats: import('../types/game').PlayerStats) => void;
   /** 토스트 추가 */
-  addToast: (message: string, type: import('../types/game').ToastType, duration?: number) => void;
+  addToast: (
+    message: string,
+    type: import('../types/game').ToastType,
+    duration?: number,
+    items?: import('../types/game').ToastItem[],
+  ) => void;
   /** 토스트 제거 */
   removeToast: (id: string) => void;
 }
@@ -81,10 +86,10 @@ export const useGameStore = create<GameState>((set) => ({
   setStats: (stats) => set({ stats }),
 
   toasts: [],
-  addToast: (message, type, duration = 3000) =>
+  addToast: (message, type, duration = 3000, items) =>
     set((state) => {
       const id = Math.random().toString(36).substring(2, 9);
-      const newToast = { id, message, type, duration };
+      const newToast = { id, message, type, duration, items };
       return { toasts: [...state.toasts, newToast] };
     }),
   removeToast: (id) =>

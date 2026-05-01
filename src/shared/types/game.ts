@@ -27,4 +27,11 @@ export type { CraftRequirements, CraftResult } from './game/crafting';
 export type { MasteryState, ResearchEffect, ResearchNode } from './game/progress';
 
 // UI 및 시각 효과
-export type { ToastType, ToastMessage, Particle, FloatingText, GameAssets } from './game/ui';
+export type {
+  ToastType,
+  ToastItem,
+  ToastMessage,
+  Particle,
+  FloatingText,
+  GameAssets,
+} from './game/ui';

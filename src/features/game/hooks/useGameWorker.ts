@@ -144,6 +144,7 @@ export function useGameWorker(
           payload.message,
           (payload.type || 'info') as ToastType,
           payload.duration,
+          payload.items,
         );
       }
     };

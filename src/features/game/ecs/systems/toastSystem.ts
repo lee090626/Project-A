@@ -1,4 +1,5 @@
 import { ToastType } from '@/shared/types/game';
+import type { ToastItem } from '@/shared/types/game';
 
 /**
  * 워커 스레드에서 메인 스레드로 토스트 알림을 요청하는 유틸리티입니다.
@@ -6,8 +7,14 @@ import { ToastType } from '@/shared/types/game';
  * @param message 표시할 메시지
  * @param type 알림 타입 ('success' | 'info' | 'warning' | 'error')
  * @param duration 표시 지속 시간 (ms)
+ * @param items 아이템 획득 토스트에 표시할 아이템 목록
  */
-export const showToast = (message: string, type: ToastType = 'info', duration: number = 3000) => {
+export const showToast = (
+  message: string,
+  type: ToastType = 'info',
+  duration: number = 3000,
+  items?: ToastItem[],
+) => {
   if (typeof self !== 'undefined' && self.postMessage) {
     self.postMessage({
       type: 'SHOW_TOAST',
@@ -15,6 +22,7 @@ export const showToast = (message: string, type: ToastType = 'info', duration: n
         message,
         type,
         duration,
+        items,
       },
     });
   }
