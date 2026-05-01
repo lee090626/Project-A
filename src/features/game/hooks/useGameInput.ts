@@ -9,7 +9,6 @@ const SHORTCUTS: Record<string, keyof GameWorld['ui']> = {
   KeyV: 'isElevatorOpen',
   KeyR: 'isLaboratoryOpen',
   KeyH: 'isGuideOpen',
-  KeyS: 'isSettingsOpen',
 };
 
 export function useGameInput(
