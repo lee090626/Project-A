@@ -16,7 +16,7 @@ const internalRootFiles = [
   'icon.png',
   'sw.js',
 ];
-const textExtensions = new Set(['.html', '.js', '.txt']);
+const textExtensions = new Set(['.css', '.html', '.js', '.txt']);
 const markupRewriteExtensions = new Set(['.html', '.txt']);
 const coreDataFileNames = ['baseLayout.json', 'entities.json', 'game-init-data.json'];
 const adPattern =
@@ -58,6 +58,16 @@ function rewriteWebpackPublicPath(content, relPath) {
   return content;
 }
 
+/** Rewrites root-absolute CSS url() assets relative to the CSS file location. */
+function rewriteCssAssetPaths(content, relPath) {
+  const cssDir = path.posix.dirname(toPosixPath(relPath));
+
+  return content.replace(
+    /url\((["']?)\/((?:_next\/static\/media|assets)\/[^"')]+)\1\)/g,
+    (_match, quote, targetPath) => `url(${quote}${relativeUrlFrom(cssDir, targetPath)}${quote})`,
+  );
+}
+
 /** Fails the build if a CrazyGames zip requirement is violated. */
 function assertCrazyGamesOutput(files) {
   const indexPath = path.join(outDir, 'index.html');
@@ -85,6 +95,10 @@ function assertCrazyGamesOutput(files) {
       assertWorkerPublicPathIsRelativeToChunk(content, relPath);
     }
 
+    if (path.extname(filePath) === '.css') {
+      assertCssDoesNotUseRootAbsoluteAssets(content, relPath);
+    }
+
     if (path.extname(filePath) === '.html') {
       for (const match of content.matchAll(/(?:href|src)=["'](https?:\/\/[^"']+)["']/g)) {
         const url = match[1];
@@ -101,6 +115,12 @@ function assertCrazyGamesOutput(files) {
     ) {
       throw new Error(`[crazygames] root-absolute static reference found in ${relPath}.`);
     }
+  }
+}
+
+function assertCssDoesNotUseRootAbsoluteAssets(content, relPath) {
+  if (/url\((["']?)\/(?:_next|assets)\//.test(content)) {
+    throw new Error(`[crazygames] root-absolute CSS asset reference found in ${relPath}.`);
   }
 }
 
@@ -123,11 +143,11 @@ function assertWorkerPublicPathIsRelativeToChunk(content, relPath) {
 }
 
 function isNextChunk(relPath) {
-  return relPath.split(path.sep).join('/').startsWith('_next/static/chunks/');
+  return toPosixPath(relPath).startsWith('_next/static/chunks/');
 }
 
 function isNextWebpackRuntime(relPath) {
-  return /^_next\/static\/chunks\/webpack-[\w-]+\.js$/.test(relPath.split(path.sep).join('/'));
+  return /^_next\/static\/chunks\/webpack-[\w-]+\.js$/.test(toPosixPath(relPath));
 }
 
 function isWorkerRuntimeChunk(content) {
@@ -142,6 +162,15 @@ function isAllowedExternalUrl(url) {
     allowedExternalUrls.has(url) ||
     allowedExternalUrlPrefixes.some((allowedPrefix) => url.startsWith(allowedPrefix))
   );
+}
+
+function toPosixPath(filePath) {
+  return filePath.split(path.sep).join('/');
+}
+
+function relativeUrlFrom(fromDir, targetPath) {
+  const relativePath = path.posix.relative(fromDir, targetPath);
+  return relativePath.startsWith('.') ? relativePath : `./${relativePath}`;
 }
 
 function main() {
@@ -166,9 +195,12 @@ function main() {
 
     const content = fs.readFileSync(filePath, 'utf-8');
     const extension = path.extname(filePath);
+    const relPath = path.relative(outDir, filePath);
     const rewritten = markupRewriteExtensions.has(extension)
       ? rewriteStaticPaths(content)
-      : rewriteWebpackPublicPath(content, path.relative(outDir, filePath));
+      : extension === '.css'
+        ? rewriteCssAssetPaths(content, relPath)
+        : rewriteWebpackPublicPath(content, relPath);
 
     if (rewritten !== content) {
       fs.writeFileSync(filePath, rewritten, 'utf-8');

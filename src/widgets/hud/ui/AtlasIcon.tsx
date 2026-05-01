@@ -1,4 +1,5 @@
 import { atlasMap, AtlasIconName } from '@/shared/config/atlasMap';
+import { withBasePath } from '@/shared/lib/basePath';
 
 interface Props {
   name: AtlasIconName;
@@ -22,6 +23,7 @@ export const AtlasIcon: React.FC<Props> = ({ name, alt = '', size = 32, classNam
   // 배경 크기 계산 (스케일 반영)
   const bgSizeW = atlasWidth * scale;
   const bgSizeH = atlasHeight * scale;
+  const atlasImageUrl = withBasePath(`/assets/game-atlas-${atlasIndex}.webp`);
 
   // 부모 컨테이너: 외부 블리딩을 막기 위한 overflow: hidden
   const containerStyle: React.CSSProperties = {
@@ -38,7 +40,7 @@ export const AtlasIcon: React.FC<Props> = ({ name, alt = '', size = 32, classNam
   const spriteStyle: React.CSSProperties = {
     width: width * scale,
     height: height * scale,
-    backgroundImage: `url(/assets/game-atlas-${atlasIndex}.webp)`,
+    backgroundImage: `url(${atlasImageUrl})`,
     backgroundPosition: `-${x * scale}px -${y * scale}px`,
     backgroundSize: `${bgSizeW}px ${bgSizeH}px`,
     backgroundRepeat: 'no-repeat',
