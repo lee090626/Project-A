@@ -1,8 +1,45 @@
 import Link from 'next/link';
+import GameEngine from '@/features/game/GameEngine';
 
 export const dynamic = 'force-static';
 
 export default function LandingPage() {
+  if (process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames') {
+    return (
+      <main className="fixed inset-0 bg-zinc-950 overflow-hidden select-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 space-y-12 z-0 opacity-0 pointer-events-none">
+          <div className="space-y-6">
+            <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter">
+              Drilling RPG
+            </h1>
+            <h2 className="text-xl md:text-3xl font-bold text-cyan-500 max-w-3xl mx-auto tracking-widest">
+              Deep Abyss Exploration
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl text-white font-medium tracking-widest text-[10px]">
+            <div className="space-y-2">
+              <h3 className="font-black text-zinc-500">Resource Extraction</h3>
+              <p className="leading-relaxed">Diamonds, Rubies, Uranium</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-black text-zinc-500">Combat Systems</h3>
+              <p className="leading-relaxed">Abyssal Lord Encounters</p>
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-black text-zinc-500">Tech Upgrades</h3>
+              <p className="leading-relaxed">Passive Artifact Magic</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-60 w-full h-full bg-transparent">
+          <GameEngine />
+        </div>
+      </main>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-white">
       {/* Hero Section */}
@@ -78,7 +115,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Content Section for SEO & AdSense */}
+      {/* Content Section */}
       <article className="relative z-10 max-w-5xl mx-auto px-6 py-24 space-y-28">
         {/* Section 1: Story */}
         <section className="bg-white/5 border border-white/10 p-10 md:p-16 rounded-3xl backdrop-blur-sm shadow-2xl">
@@ -102,17 +139,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* AdSense Placeholder Area */}
-        <div className="w-full min-h-[150px] bg-zinc-900 border border-dashed border-zinc-700 flex flex-col items-center justify-center text-zinc-500 my-10 p-4">
-          <p className="text-sm tracking-widest font-semibold mb-2">
-            Google AdSense Area
-          </p>
-          <p className="text-xs text-center max-w-sm opacity-60">
-            This game covers server and domain costs through advertising revenue to provide
-            continuous free updates.
-          </p>
-        </div>
-
         {/* Section 2: Features */}
         <section>
           <div className="text-center mb-16">
@@ -131,10 +157,10 @@ export default function LandingPage() {
                 Progression &amp; Crafting System
               </h3>
               <p className="text-zinc-400 leading-relaxed">
-                Slay powerful bosses in the nine circles of Hell to earn unique, stackable
-                relics. These artifacts provide permanent, stacking bonuses to all your core
-                stats, from mining speed and power to critical hit rates, ensuring constant
-                progression as you descend further into the depths.
+                Slay powerful bosses in the nine circles of Hell to earn unique, stackable relics.
+                These artifacts provide permanent, stacking bonuses to all your core stats, from
+                mining speed and power to critical hit rates, ensuring constant progression as you
+                descend further into the depths.
               </p>
             </div>
 
@@ -144,7 +170,10 @@ export default function LandingPage() {
               </div>
               <h3 className="text-2xl font-bold mb-4 text-zinc-100">Equipment Upgrades</h3>
               <p className="text-zinc-400 leading-relaxed">
-                Refine the raw materials you gather into ingots and visit the Forgemaster to forge powerful new drills, helmets, armors, and boots. Each equipment piece provides unique stat boosts, allowing you to customize your build for efficient mining or tough boss battles.
+                Refine the raw materials you gather into ingots and visit the Forgemaster to forge
+                powerful new drills, helmets, armors, and boots. Each equipment piece provides
+                unique stat boosts, allowing you to customize your build for efficient mining or
+                tough boss battles.
               </p>
             </div>
 

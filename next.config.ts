@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next';
 
 const isExport = process.env.IS_EXPORT === 'true';
+const exportBasePath = process.env.BASE_PATH || '';
+const exportAssetPrefix = exportBasePath ? `${exportBasePath}/` : undefined;
 
 const nextConfig: NextConfig = {
   // Cloudflare OpenNext requires 'standalone'
@@ -8,13 +10,10 @@ const nextConfig: NextConfig = {
   output: isExport ? 'export' : 'standalone',
 
   // GitHub Pages: use /drilling-rpg
-  // Itch.io / Cloudflare: must use empty or relative paths
-  basePath: isExport ? process.env.BASE_PATH || '' : '',
-  assetPrefix: isExport
-    ? process.env.BASE_PATH
-      ? `${process.env.BASE_PATH}/`
-      : undefined
-    : undefined,
+  // Itch.io / Cloudflare: use empty paths
+  // CrazyGames: keep Next defaults here, then rewrite static export paths post-build.
+  basePath: isExport ? exportBasePath : '',
+  assetPrefix: isExport ? exportAssetPrefix : undefined,
 
   // trailingSlash: true 옵션은 Cloudflare Pages의 index 서빙과 충돌할 수 있어 비활성화합니다.
   trailingSlash: false,

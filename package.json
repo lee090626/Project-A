@@ -8,6 +8,8 @@
     "build:gh": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg next build",
     "build:itch": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
     "build:cf": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
+    "build:crazygames": "BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' npm run gen:sw && BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' next build && node scripts/prepare-crazygames-build.js",
+    "package:crazygames": "npm run build:crazygames && node scripts/zip-crazygames-build.js",
     "start": "next start",
     "lint": "eslint",
     "deploy": "npm run build:gh && touch out/.nojekyll && gh-pages -t -d out",

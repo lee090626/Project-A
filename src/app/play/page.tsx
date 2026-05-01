@@ -10,9 +10,9 @@ export default function Play() {
   return (
     <main className="fixed inset-0 bg-zinc-950 overflow-hidden select-none">
       {/* 
-          High-Visibility SEO Layer for AdSense & Crawlers:
+          High-Visibility SEO Layer for crawlers:
           자바스크립트가 실행되기 전, 서버에서 바로 내려주는 텍스트들입니다.
-          애드센스 봇이 "내용 없음"으로 판단하는 것을 방지합니다.
+          크롤러가 "내용 없음"으로 판단하는 것을 방지합니다.
       */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 space-y-12 z-0 opacity-0 pointer-events-none">
         <div className="space-y-6">

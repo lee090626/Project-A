@@ -7,6 +7,8 @@ import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs
 import { getBasePath, withBasePath } from '@/shared/lib/basePath';
 import './globals.css';
 
+const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
+
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
   variable: '--font-geist-sans',
@@ -20,7 +22,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  ...(isCrazyGamesBuild
+    ? {}
+    : { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') }),
   title: 'Drilling RPG | Web-based Deep Mining Action & Exploration',
   description:
     'Explore the endless abyss in Drilling RPG. A free-to-play web-based top-down mining action survival game. Gather minerals, craft items, upgrade your drill, and defeat giant bosses.',
@@ -37,33 +41,34 @@ export const metadata: Metadata = {
     '웹 게임',
   ],
   authors: [{ name: 'Drilling RPG Dev' }],
-  openGraph: {
-    title: 'Drilling RPG - Deep Mining Action',
-    description:
-      'Explore the endless abyss in Drilling RPG. A free-to-play web-based top-down mining game.',
-    siteName: 'Drilling RPG',
-    images: [
-      {
-        url: '/icon.png',
-        width: 512,
-        height: 512,
-        alt: 'Drilling RPG Icon',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Drilling RPG | Mining Exploration',
-    description: 'Explore the endless abyss. Play the ultimate free web-based mining RPG!',
-    images: ['/icon.png'],
-  },
+  ...(isCrazyGamesBuild
+    ? {}
+    : {
+        openGraph: {
+          title: 'Drilling RPG - Deep Mining Action',
+          description:
+            'Explore the endless abyss in Drilling RPG. A free-to-play web-based top-down mining game.',
+          siteName: 'Drilling RPG',
+          images: [
+            {
+              url: '/icon.png',
+              width: 512,
+              height: 512,
+              alt: 'Drilling RPG Icon',
+            },
+          ],
+          locale: 'en_US',
+          type: 'website',
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: 'Drilling RPG | Mining Exploration',
+          description: 'Explore the endless abyss. Play the ultimate free web-based mining RPG!',
+          images: ['/icon.png'],
+        },
+      }),
   icons: {
     icon: '/icon.png',
-  },
-  other: {
-    'google-adsense-account': 'ca-pub-8319588891960553',
   },
 };
 
@@ -116,20 +121,22 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         ))}
+
+        {isCrazyGamesBuild && (
+          <Script
+            id="crazygames-sdk"
+            src="https://sdk.crazygames.com/crazygames-sdk-v3.js"
+            strategy="beforeInteractive"
+          />
+        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
       >
         <div id="drilling-game-root">{children}</div>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8319588891960553"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-        {/* Service Worker 등록: 에셋 캐싱으로 새로고침 시 즉각 로딩 */}
-        <Script id="register-sw" strategy="afterInteractive">
-          {`
+        {!isCrazyGamesBuild && (
+          <Script id="register-sw" strategy="afterInteractive">
+            {`
             if ('serviceWorker' in navigator) {
               const swPath = '${swPath}';
               window.addEventListener('load', function() {
@@ -140,7 +147,8 @@ export default function RootLayout({
               });
             }
           `}
-        </Script>
+          </Script>
+        )}
       </body>
     </html>
   );

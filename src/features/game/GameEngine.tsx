@@ -5,6 +5,11 @@ import { createInitialWorld, GameWorld } from '@/entities/world/model';
 import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
 import { fetchBaseLayout, fetchEntities } from '@/shared/lib/dataLoader';
 import { getBasePath } from '@/shared/lib/basePath';
+import {
+  notifyCrazyGamesGameplayStart,
+  notifyCrazyGamesLoadingStart,
+  notifyCrazyGamesLoadingStop,
+} from '@/shared/lib/crazyGamesSdk';
 import { useGameStore } from '@/shared/lib/store';
 
 // Custom Hooks
@@ -53,56 +58,58 @@ export default function GameEngine() {
     setUiVersion((v) => v + 1);
   }, []);
 
-  const loadAssetsAndTransfer = useCallback(
-    async (sendWorker: SendToWorker) => {
-      const basePath = getBasePath();
-      const assetsPath = `${basePath}/assets`;
+  const loadAssetsAndTransfer = useCallback(async (sendWorker: SendToWorker) => {
+    const basePath = getBasePath();
+    const assetsPath = `${basePath}/assets`;
 
-      try {
-        const manifestRes = await fetch(`${assetsPath}/manifest.json`);
-        if (!manifestRes.ok) throw new Error('Failed to load atlas manifest');
-        const manifest = validateAtlasManifest(await manifestRes.json());
+    try {
+      notifyCrazyGamesLoadingStart();
+      const manifestRes = await fetch(`${assetsPath}/manifest.json`);
+      if (!manifestRes.ok) throw new Error('Failed to load atlas manifest');
+      const manifest = validateAtlasManifest(await manifestRes.json());
 
-        const atlasData: any[] = [];
-        const transferList: Transferable[] = [];
+      const atlasData: any[] = [];
+      const transferList: Transferable[] = [];
 
-        // [성능 측정] DevTools Console에서 로딩 시간 확인
-        const t0 = performance.now();
+      // [성능 측정] DevTools Console에서 로딩 시간 확인
+      const t0 = performance.now();
 
-        await Promise.all(
-          manifest.atlasFiles.map(async (jsonFile) => {
-            const webpFile = jsonFile.replace('.json', '.webp');
+      await Promise.all(
+        manifest.atlasFiles.map(async (jsonFile) => {
+          const webpFile = jsonFile.replace('.json', '.webp');
 
-            // JSON + WebP 동시 fetch (직렬 → 병렬)
-            const [jsonRes, webpRes] = await Promise.all([
-              fetch(`${assetsPath}/${jsonFile}`),
-              fetch(`${assetsPath}/${webpFile}`),
-            ]);
+          // JSON + WebP 동시 fetch (직렬 → 병렬)
+          const [jsonRes, webpRes] = await Promise.all([
+            fetch(`${assetsPath}/${jsonFile}`),
+            fetch(`${assetsPath}/${webpFile}`),
+          ]);
 
-            if (!jsonRes.ok) throw new Error(`[AssetLoad] Failed: ${jsonFile} (${jsonRes.status})`);
-            if (!webpRes.ok) throw new Error(`[AssetLoad] Failed: ${webpFile} (${webpRes.status})`);
+          if (!jsonRes.ok) throw new Error(`[AssetLoad] Failed: ${jsonFile} (${jsonRes.status})`);
+          if (!webpRes.ok) throw new Error(`[AssetLoad] Failed: ${webpFile} (${webpRes.status})`);
 
-            // blob → createImageBitmap: 이중 디코딩 제거 (new Image() 불필요)
-            const [jsonData, blob] = await Promise.all([jsonRes.json(), webpRes.blob()]);
-            const bitmap = await createImageBitmap(blob);
+          // blob → createImageBitmap: 이중 디코딩 제거 (new Image() 불필요)
+          const [jsonData, blob] = await Promise.all([jsonRes.json(), webpRes.blob()]);
+          const bitmap = await createImageBitmap(blob);
 
-            atlasData.push({ json: jsonData, bitmap });
-            transferList.push(bitmap);
-          }),
-        );
+          atlasData.push({ json: jsonData, bitmap });
+          transferList.push(bitmap);
+        }),
+      );
 
-        console.log(`[AssetLoad] ${atlasData.length} atlases decoded in ${(performance.now() - t0).toFixed(1)}ms`);
+      console.log(
+        `[AssetLoad] ${atlasData.length} atlases decoded in ${(performance.now() - t0).toFixed(1)}ms`,
+      );
 
-        const [layout, entities] = await Promise.all([fetchBaseLayout(), fetchEntities()]);
-        sendWorker('ASSETS_ATLAS', { atlasData, layout, entities }, transferList);
-        console.log(`[Main] Sent ${atlasData.length} atlases to worker.`);
-      } catch (err) {
-        console.error('Asset transfer failed:', err);
-        setIsEngineReady(true);
-      }
-    },
-    [],
-  );
+      const [layout, entities] = await Promise.all([fetchBaseLayout(), fetchEntities()]);
+      sendWorker('ASSETS_ATLAS', { atlasData, layout, entities }, transferList);
+      notifyCrazyGamesLoadingStop();
+      console.log(`[Main] Sent ${atlasData.length} atlases to worker.`);
+    } catch (err) {
+      notifyCrazyGamesLoadingStop();
+      console.error('Asset transfer failed:', err);
+      setIsEngineReady(true);
+    }
+  }, []);
 
   const uiActions = useGameUI(worldRef, updateUi);
   const { toggleModal, handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
@@ -129,6 +136,11 @@ export default function GameEngine() {
   useEffect(() => {
     setWorkerSender({ send: sendToWorker });
   }, [sendToWorker]);
+
+  useEffect(() => {
+    if (!isEngineReady) return;
+    notifyCrazyGamesGameplayStart();
+  }, [isEngineReady]);
 
   // 2. Input Setup (Hook)
   useGameInput(worldRef, isAnyModalOpen, closeAllModals, handleOpen, handleClose, sendToWorker);
