@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @fileoverview CrazyGames zip upload용 정적 export 결과를 검증하고 상대 경로로 정리합니다.
+ * @fileoverview CrazyGames upload용 정적 export 결과를 검증하고 상대 경로로 정리합니다.
  */
 
 const fs = require('fs');
@@ -17,6 +17,8 @@ const internalRootFiles = [
   'sw.js',
 ];
 const textExtensions = new Set(['.html', '.js', '.txt']);
+const markupRewriteExtensions = new Set(['.html', '.txt']);
+const coreDataFileNames = ['baseLayout.json', 'entities.json', 'game-init-data.json'];
 const adPattern =
   /adsbygoogle|googlesyndication|google-adsense|AdSense|ca-pub|pub-8319588891960553|google\.com,\s*pub/i;
 
@@ -41,6 +43,21 @@ function rewriteStaticPaths(content) {
   return nextContent;
 }
 
+/** Rewrites only the Next.js webpack public path used for dynamic chunk loading. */
+function rewriteWebpackPublicPath(content, relPath) {
+  const publicPathPattern = /(\.p=)"(?:\/_next\/|\.\/_next\/)"/g;
+
+  if (isWorkerRuntimeChunk(content)) {
+    return content.replace(publicPathPattern, '$1"../../"');
+  }
+
+  if (isNextWebpackRuntime(relPath)) {
+    return content.replace(publicPathPattern, '$1"./_next/"');
+  }
+
+  return content;
+}
+
 /** Fails the build if a CrazyGames zip requirement is violated. */
 function assertCrazyGamesOutput(files) {
   const indexPath = path.join(outDir, 'index.html');
@@ -63,6 +80,11 @@ function assertCrazyGamesOutput(files) {
       throw new Error(`[crazygames] ad reference found in ${relPath}.`);
     }
 
+    if (path.extname(filePath) === '.js' && isNextChunk(relPath)) {
+      assertCoreDataPathsWereNotRewritten(content, relPath);
+      assertWorkerPublicPathIsRelativeToChunk(content, relPath);
+    }
+
     if (path.extname(filePath) === '.html') {
       for (const match of content.matchAll(/(?:href|src)=["'](https?:\/\/[^"']+)["']/g)) {
         const url = match[1];
@@ -80,6 +102,39 @@ function assertCrazyGamesOutput(files) {
       throw new Error(`[crazygames] root-absolute static reference found in ${relPath}.`);
     }
   }
+}
+
+function assertCoreDataPathsWereNotRewritten(content, relPath) {
+  for (const fileName of coreDataFileNames) {
+    const escaped = fileName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const rewrittenCoreDataPattern = new RegExp(`["']\\./${escaped}["']`);
+    if (rewrittenCoreDataPattern.test(content)) {
+      throw new Error(`[crazygames] rewritten core data path found in ${relPath}: ./${fileName}`);
+    }
+  }
+}
+
+function assertWorkerPublicPathIsRelativeToChunk(content, relPath) {
+  if (!isWorkerRuntimeChunk(content)) return;
+
+  if (/\.p="\.\/_next\/"/.test(content)) {
+    throw new Error(`[crazygames] worker chunk has page-relative public path in ${relPath}.`);
+  }
+}
+
+function isNextChunk(relPath) {
+  return relPath.split(path.sep).join('/').startsWith('_next/static/chunks/');
+}
+
+function isNextWebpackRuntime(relPath) {
+  return /^_next\/static\/chunks\/webpack-[\w-]+\.js$/.test(relPath.split(path.sep).join('/'));
+}
+
+function isWorkerRuntimeChunk(content) {
+  return (
+    content.includes('importScripts') &&
+    /\.p="(?:\/_next\/|\.\/_next\/|\.\.\/\.\.\/)"/.test(content)
+  );
 }
 
 function isAllowedExternalUrl(url) {
@@ -110,14 +165,18 @@ function main() {
     if (!textExtensions.has(path.extname(filePath))) continue;
 
     const content = fs.readFileSync(filePath, 'utf-8');
-    const rewritten = rewriteStaticPaths(content);
+    const extension = path.extname(filePath);
+    const rewritten = markupRewriteExtensions.has(extension)
+      ? rewriteStaticPaths(content)
+      : rewriteWebpackPublicPath(content, path.relative(outDir, filePath));
+
     if (rewritten !== content) {
       fs.writeFileSync(filePath, rewritten, 'utf-8');
     }
   }
 
   assertCrazyGamesOutput(listFiles(outDir));
-  console.log('[crazygames] Static export prepared for zip upload.');
+  console.log('[crazygames] Static export prepared for direct file upload.');
 }
 
 main();
