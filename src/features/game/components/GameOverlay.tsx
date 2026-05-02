@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { GameWorld } from '@/entities/world/model';
 import MobileController from '@/features/input/ui/MobileController';
 import Hud from '@/widgets/hud/ui/Hud';
 import ToastContainer from '@/shared/ui/ToastContainer';
 import BossHealthBar from './BossHealthBar';
 import { useGameStore } from '@/shared/lib/store';
-import { UseGameActionsResult, UseGameUIResult, SendToWorker } from '../hooks/types';
+import { UseGameActionsResult, UseGameUIResult } from '../hooks/types';
 import { PlayerStats } from '@/shared/types/game';
 
 // 새롭게 분리된 레이어 컴포넌트들
@@ -19,28 +19,17 @@ import ModalLayer from './ModalLayer';
 interface GameOverlayProps {
   worldRef: React.MutableRefObject<GameWorld>;
   stats: PlayerStats;
-  interpolatedState: React.MutableRefObject<{
-    x: number;
-    y: number;
-    camX: number;
-    camY: number;
-    shake: number;
-    hp: number;
-  }>;
+  hudPosition: { x: number; y: number };
   uiActions: UseGameUIResult;
   gameActions: UseGameActionsResult;
-  visibleEntitiesCount: number;
-  sendToWorker: SendToWorker;
 }
 
 export default function GameOverlay({
   worldRef,
   stats,
-  interpolatedState,
+  hudPosition,
   uiActions,
   gameActions,
-  visibleEntitiesCount,
-  sendToWorker,
 }: GameOverlayProps) {
   const world = worldRef.current;
   const { ui, player } = world;
@@ -52,6 +41,12 @@ export default function GameOverlay({
   const currentStats = stats || player.stats;
   const { toggleModal, handleClose } = uiActions;
   const { handleRespawn } = gameActions;
+  const openStatus = useCallback(() => toggleModal('isStatusOpen'), [toggleModal]);
+  const openInventory = useCallback(() => toggleModal('isInventoryOpen'), [toggleModal]);
+  const openEncyclopedia = useCallback(() => toggleModal('isEncyclopediaOpen'), [toggleModal]);
+  const openElevator = useCallback(() => toggleModal('isElevatorOpen'), [toggleModal]);
+  const openSettings = useCallback(() => toggleModal('isSettingsOpen'), [toggleModal]);
+  const openGuide = useCallback(() => toggleModal('isGuideOpen'), [toggleModal]);
 
   return (
     <div className="absolute inset-0 z-20 pointer-events-none">
@@ -62,13 +57,13 @@ export default function GameOverlay({
       <div className="pointer-events-auto w-full h-full">
         <Hud
           stats={currentStats}
-          pos={{ x: interpolatedState.current.x, y: interpolatedState.current.y }}
-          onOpenStatus={() => toggleModal('isStatusOpen')}
-          onOpenInventory={() => toggleModal('isInventoryOpen')}
-          onOpenEncyclopedia={() => toggleModal('isEncyclopediaOpen')}
-          onOpenElevator={() => toggleModal('isElevatorOpen')}
-          onOpenSettings={() => toggleModal('isSettingsOpen')}
-          onOpenGuide={() => toggleModal('isGuideOpen')}
+          pos={hudPosition}
+          onOpenStatus={openStatus}
+          onOpenInventory={openInventory}
+          onOpenEncyclopedia={openEncyclopedia}
+          onOpenElevator={openElevator}
+          onOpenSettings={openSettings}
+          onOpenGuide={openGuide}
         />
       </div>
 

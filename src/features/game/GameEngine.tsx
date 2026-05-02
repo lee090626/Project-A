@@ -18,7 +18,6 @@ import { useGameActions } from './hooks/useGameActions';
 import { useGameInput } from './hooks/useGameInput';
 import { useGameWorker } from './hooks/useGameWorker';
 import { SendToWorker } from './hooks/types';
-import { WorkerMessageType } from '@/shared/types/worker';
 
 // UI Overlay
 import GameOverlay from './components/GameOverlay';
@@ -28,9 +27,10 @@ export default function GameEngine() {
   const worldRef = useRef<GameWorld>(createInitialWorld(12345));
 
   const [isClient, setIsClient] = useState(false);
-  const [uiVersion, setUiVersion] = useState(0);
+  const [, setUiVersion] = useState(0);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isEngineReady, setIsEngineReady] = useState(false);
+  const [hudPosition, setHudPosition] = useState({ x: 15, y: 8 });
 
   const isReadyRef = useRef(false);
   useEffect(() => {
@@ -51,6 +51,7 @@ export default function GameEngine() {
     shake: 0,
     hp: 0,
   });
+  const hudPositionRef = useRef(hudPosition);
 
   const TELEPORT_THRESHOLD = 5;
 
@@ -180,20 +181,31 @@ export default function GameEngine() {
         const dist = Math.sqrt(Math.pow(p1[2] - p0[2], 2) + Math.pow(p1[3] - p0[3], 2));
         const finalAlpha = dist > TELEPORT_THRESHOLD ? 1 : alpha;
 
-        interpolatedState.current = {
-          x: lerp(p0[2], p1[2], finalAlpha),
-          y: lerp(p0[3], p1[3], finalAlpha),
-          camX: lerp(p0[2], p1[2], finalAlpha),
-          camY: lerp(p0[3], p1[3], finalAlpha),
-          shake: lerp(p0[4], p1[4], finalAlpha),
-          hp: lerp(p0[5], p1[5], finalAlpha),
-        };
+        const nextX = lerp(p0[2], p1[2], finalAlpha);
+        const nextY = lerp(p0[3], p1[3], finalAlpha);
+        const nextShake = lerp(p0[4], p1[4], finalAlpha);
+        const nextHp = lerp(p0[5], p1[5], finalAlpha);
+
+        const interpolated = interpolatedState.current;
+        interpolated.x = nextX;
+        interpolated.y = nextY;
+        interpolated.camX = nextX;
+        interpolated.camY = nextY;
+        interpolated.shake = nextShake;
+        interpolated.hp = nextHp;
 
         worldRef.current.player.visualPos.x = interpolatedState.current.x;
         worldRef.current.player.visualPos.y = interpolatedState.current.y;
         worldRef.current.shake = screenShake ? interpolatedState.current.shake : 0;
 
-        updateUi();
+        const roundedX = Math.round(nextX);
+        const roundedY = Math.round(nextY);
+        const currentHudPosition = hudPositionRef.current;
+        if (currentHudPosition.x !== roundedX || currentHudPosition.y !== roundedY) {
+          const nextHudPosition = { x: roundedX, y: roundedY };
+          hudPositionRef.current = nextHudPosition;
+          setHudPosition(nextHudPosition);
+        }
       }
 
       rafId = requestAnimationFrame(renderLoop);
@@ -204,7 +216,7 @@ export default function GameEngine() {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(rafId);
     };
-  }, [sendToWorker, updateUi]);
+  }, [screenShake, sendToWorker]);
 
   // 4. Offscreen Canvas Transfer
   useEffect(() => {
@@ -235,11 +247,9 @@ export default function GameEngine() {
       <GameOverlay
         worldRef={worldRef}
         stats={stats || worldRef.current.player.stats}
-        interpolatedState={interpolatedState}
+        hudPosition={hudPosition}
         uiActions={uiActions}
         gameActions={gameActions}
-        visibleEntitiesCount={snapshots.current[0]?.data[0] || 0}
-        sendToWorker={sendToWorker}
       />
     </div>
   );
