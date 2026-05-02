@@ -16,7 +16,7 @@ export const circle2Monsters: MonsterDefinition[] = [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 3.5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 3.5 },
   },
   {
     id: 'c2_wind_soul',
@@ -33,7 +33,7 @@ export const circle2Monsters: MonsterDefinition[] = [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 4.5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 4.5 },
   },
   {
     id: 'c2_gale_bat',
@@ -50,7 +50,7 @@ export const circle2Monsters: MonsterDefinition[] = [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 4.5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 4.5 },
   },
   {
     id: 'c2_asmodeus',

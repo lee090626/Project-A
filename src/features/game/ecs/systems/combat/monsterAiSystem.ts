@@ -54,14 +54,7 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
           entities.soa.lastAttackTime[i] = now;
         }
       } else {
-        if (entities.soa.type[i] === 1 && def?.behavior.movementType === 'chase') {
-          const dist = Math.sqrt(distSq);
-          const speed = entities.soa.speed[i] || 1;
-          entities.soa.x[i] += (dx / dist) * speed;
-          entities.soa.y[i] += (dy / dist) * speed;
-          entities.soa.state[i] = 1; // 1: chase
-          entities.markDirty(i);
-        } else if (entities.soa.state[i] !== 0) {
+        if (entities.soa.state[i] !== 0) {
           entities.soa.state[i] = 0; // 0: idle
           entities.markDirty(i);
         }

@@ -44,7 +44,7 @@ export const craftableArtifacts: Record<string, ArtifactDefinition> = {
     requirements: {
       essence_gluttony: 10,
       fervorstone: 15,
-      siltstone: 15,
+      sludgestone: 15,
     },
   },
   lucky_clover: {
@@ -59,7 +59,7 @@ export const craftableArtifacts: Record<string, ArtifactDefinition> = {
     requirements: {
       essence_lust: 10,
       crimsonstone: 15,
-      gorestone: 15,
+      rotstone: 15,
     },
   },
 };

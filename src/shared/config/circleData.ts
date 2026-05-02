@@ -105,8 +105,8 @@ export const CIRCLES: CircleConfig[] = [
     depthEnd: 600,
     minerals: [
       { type: 'moldstone', threshold: 0.6, minLayer: 1, scale: 8 },
-      { type: 'siltstone', threshold: 0.4, minLayer: 2, scale: 7 },
-      { type: 'gorestone', threshold: 0.2, minLayer: 3, scale: 6 },
+      { type: 'sludgestone', threshold: 0.4, minLayer: 2, scale: 7 },
+      { type: 'rotstone', threshold: 0.2, minLayer: 3, scale: 6 },
     ],
     monsters: [
       { monsterId: 'c3_devourer', chance: 0.07, weight: 1, minLayer: 1 },

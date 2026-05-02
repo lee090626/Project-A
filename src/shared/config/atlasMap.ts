@@ -56,14 +56,14 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasIndex": 0,
     "x": 1033,
     "y": 1934,
-    "width": 227,
-    "height": 96,
+    "width": 244,
+    "height": 94,
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
   "FireBall": {
     "atlasIndex": 0,
-    "x": 1266,
+    "x": 1283,
     "y": 1934,
     "width": 170,
     "height": 80,
@@ -72,7 +72,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "CrimsonStrideBoots": {
     "atlasIndex": 0,
-    "x": 1442,
+    "x": 1459,
     "y": 1934,
     "width": 148,
     "height": 102,
@@ -81,7 +81,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "GaleStoneIcon": {
     "atlasIndex": 0,
-    "x": 1596,
+    "x": 1613,
     "y": 1934,
     "width": 88,
     "height": 92,
@@ -90,7 +90,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "CrimsonStoneIcon": {
     "atlasIndex": 0,
-    "x": 1690,
+    "x": 1707,
     "y": 1934,
     "width": 84,
     "height": 88,
@@ -99,7 +99,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "FervorStoneIcon": {
     "atlasIndex": 0,
-    "x": 1780,
+    "x": 1797,
     "y": 1934,
     "width": 80,
     "height": 86,
@@ -221,7 +221,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 906,
     "height": 913,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "StatusIcon": {
     "atlasIndex": 2,
@@ -230,7 +230,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 840,
     "height": 295,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "BaseTileset": {
     "atlasIndex": 2,
@@ -239,7 +239,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 640,
     "height": 640,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "BookIcon": {
     "atlasIndex": 2,
@@ -248,7 +248,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 835,
     "height": 562,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "Cerberus": {
     "atlasIndex": 2,
@@ -257,7 +257,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 638,
     "height": 446,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "Asmodeus": {
     "atlasIndex": 2,
@@ -266,7 +266,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 624,
     "height": 392,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "Merchant": {
     "atlasIndex": 2,
@@ -275,25 +275,25 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 354,
     "height": 512,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
+  },
+  "AsmodeusRingRelic": {
+    "atlasIndex": 2,
+    "x": 1545,
+    "y": 1371,
+    "width": 422,
+    "height": 484,
+    "atlasWidth": 2048,
+    "atlasHeight": 2018
   },
   "Mechanic": {
     "atlasIndex": 2,
-    "x": 1495,
-    "y": 1371,
+    "x": 844,
+    "y": 1568,
     "width": 512,
     "height": 418,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
-  },
-  "InventoryIcon": {
-    "atlasIndex": 2,
-    "x": 844,
-    "y": 1568,
-    "width": 481,
-    "height": 399,
-    "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "BloatedDevourer": {
     "atlasIndex": 2,
@@ -302,25 +302,25 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 254,
     "height": 136,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
+  },
+  "InventoryIcon": {
+    "atlasIndex": 2,
+    "x": 1559,
+    "y": 3,
+    "width": 481,
+    "height": 399,
+    "atlasWidth": 2048,
+    "atlasHeight": 2018
   },
   "HeresyEssence": {
     "atlasIndex": 2,
     "x": 1805,
-    "y": 455,
+    "y": 408,
     "width": 200,
     "height": 209,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
-  },
-  "WindTornSoul": {
-    "atlasIndex": 2,
-    "x": 1805,
-    "y": 670,
-    "width": 210,
-    "height": 172,
-    "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "TreacheryEssence": {
     "atlasIndex": 2,
@@ -329,87 +329,96 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 205,
     "height": 208,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "ViolenceEssence": {
+  "WindTornSoul": {
     "atlasIndex": 2,
-    "x": 1559,
-    "y": 3,
-    "width": 202,
-    "height": 200,
+    "x": 1756,
+    "y": 623,
+    "width": 210,
+    "height": 172,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "LustEssence": {
+  "LustfulWhisperer": {
     "atlasIndex": 2,
-    "x": 1767,
-    "y": 3,
-    "width": 192,
-    "height": 200,
+    "x": 1362,
+    "y": 1568,
+    "width": 176,
+    "height": 170,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "FraudEssence": {
+  "CrimsonPlateArmor": {
     "atlasIndex": 2,
-    "x": 1559,
-    "y": 209,
-    "width": 192,
-    "height": 199,
+    "x": 1362,
+    "y": 1744,
+    "width": 138,
+    "height": 120,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "WrathEssence": {
+  "GaleBat": {
     "atlasIndex": 2,
-    "x": 1757,
-    "y": 209,
-    "width": 192,
-    "height": 199,
+    "x": 1506,
+    "y": 1861,
+    "width": 178,
+    "height": 154,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "GluttoyEssence": {
     "atlasIndex": 2,
     "x": 1855,
-    "y": 848,
+    "y": 801,
     "width": 190,
     "height": 198,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
   "GreedEssence": {
     "atlasIndex": 2,
     "x": 1855,
-    "y": 1052,
+    "y": 1005,
     "width": 190,
     "height": 198,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "CrimsonPlateArmor": {
+  "ViolenceEssence": {
     "atlasIndex": 2,
-    "x": 1331,
-    "y": 1568,
-    "width": 138,
-    "height": 120,
+    "x": 3,
+    "y": 1791,
+    "width": 202,
+    "height": 200,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "GaleBat": {
+  "LustEssence": {
     "atlasIndex": 2,
-    "x": 1331,
-    "y": 1795,
-    "width": 178,
-    "height": 154,
+    "x": 211,
+    "y": 1791,
+    "width": 192,
+    "height": 200,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
   },
-  "LustfulWhisperer": {
+  "FraudEssence": {
     "atlasIndex": 2,
-    "x": 1515,
-    "y": 1795,
-    "width": 176,
-    "height": 170,
+    "x": 409,
+    "y": 1791,
+    "width": 192,
+    "height": 199,
     "atlasWidth": 2048,
-    "atlasHeight": 1970
+    "atlasHeight": 2018
+  },
+  "WrathEssence": {
+    "atlasIndex": 2,
+    "x": 607,
+    "y": 1791,
+    "width": 192,
+    "height": 199,
+    "atlasWidth": 2048,
+    "atlasHeight": 2018
   }
 };

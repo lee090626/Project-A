@@ -3,6 +3,7 @@
 
 export const ATLAS_FILE_MAPPING = {
   Asmodeus: 'Asmodeus.png',
+  AsmodeusRingRelic: 'AsmodeusRingRelic.png',
   AttackRune: 'AttackRune.png',
   BaseTileset: 'BaseTileset.png',
   BloatedDevourer: 'BloatedDevourer.png',

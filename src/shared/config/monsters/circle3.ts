@@ -18,7 +18,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_worm',
@@ -35,7 +35,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_mud_shade',
@@ -52,7 +52,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_cerberus',

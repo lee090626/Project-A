@@ -21,8 +21,8 @@ export type TileType =
   | 'fervorstone'
   // === Circle 3 — Gluttony ===
   | 'moldstone'
-  | 'siltstone'
-  | 'gorestone'
+  | 'sludgestone'
+  | 'rotstone'
   // === Circle 4 — Greed ===
   | 'goldstone'
   | 'luststone'
@@ -75,8 +75,8 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   galestone: 2,
   fervorstone: 3,
   moldstone: 4,
-  siltstone: 5,
-  gorestone: 6,
+  sludgestone: 5,
+  rotstone: 6,
   goldstone: 7,
   luststone: 8,
   midasite: 9,

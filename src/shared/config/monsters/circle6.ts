@@ -16,7 +16,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_flame',
@@ -33,7 +33,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_angel',
@@ -50,7 +50,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_lilith',

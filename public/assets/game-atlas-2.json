@@ -168,10 +168,34 @@
         "y": 0.5
       }
     },
+    "AsmodeusRingRelic.png": {
+      "frame": {
+        "x": 1545,
+        "y": 1371,
+        "w": 422,
+        "h": 484
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 45,
+        "y": 14,
+        "w": 422,
+        "h": 484
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "Mechanic.png": {
       "frame": {
-        "x": 1495,
-        "y": 1371,
+        "x": 844,
+        "y": 1568,
         "w": 512,
         "h": 418
       },
@@ -182,30 +206,6 @@
         "y": 303,
         "w": 512,
         "h": 418
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "InventoryIcon.webp": {
-      "frame": {
-        "x": 844,
-        "y": 1568,
-        "w": 481,
-        "h": 399
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 271,
-        "y": 312,
-        "w": 481,
-        "h": 399
       },
       "sourceSize": {
         "w": 1024,
@@ -240,10 +240,34 @@
         "y": 0.5
       }
     },
+    "InventoryIcon.webp": {
+      "frame": {
+        "x": 1559,
+        "y": 3,
+        "w": 481,
+        "h": 399
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 271,
+        "y": 312,
+        "w": 481,
+        "h": 399
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "HeresyEssence.png": {
       "frame": {
         "x": 1805,
-        "y": 455,
+        "y": 408,
         "w": 200,
         "h": 209
       },
@@ -254,30 +278,6 @@
         "y": 24,
         "w": 200,
         "h": 209
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "WindTornSoul.png": {
-      "frame": {
-        "x": 1805,
-        "y": 670,
-        "w": 210,
-        "h": 172
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 23,
-        "y": 42,
-        "w": 210,
-        "h": 172
       },
       "sourceSize": {
         "w": 256,
@@ -312,20 +312,20 @@
         "y": 0.5
       }
     },
-    "ViolenceEssence.png": {
+    "WindTornSoul.png": {
       "frame": {
-        "x": 1559,
-        "y": 3,
-        "w": 202,
-        "h": 200
+        "x": 1756,
+        "y": 623,
+        "w": 210,
+        "h": 172
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 25,
-        "y": 28,
-        "w": 202,
-        "h": 200
+        "x": 23,
+        "y": 42,
+        "w": 210,
+        "h": 172
       },
       "sourceSize": {
         "w": 256,
@@ -336,20 +336,20 @@
         "y": 0.5
       }
     },
-    "LustEssence.png": {
+    "LustfulWhisperer.png": {
       "frame": {
-        "x": 1767,
-        "y": 3,
-        "w": 192,
-        "h": 200
+        "x": 1362,
+        "y": 1568,
+        "w": 176,
+        "h": 170
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 32,
-        "y": 28,
-        "w": 192,
-        "h": 200
+        "x": 40,
+        "y": 43,
+        "w": 176,
+        "h": 170
       },
       "sourceSize": {
         "w": 256,
@@ -360,20 +360,20 @@
         "y": 0.5
       }
     },
-    "FraudEssence.png": {
+    "CrimsonPlateArmor.png": {
       "frame": {
-        "x": 1559,
-        "y": 209,
-        "w": 192,
-        "h": 199
+        "x": 1362,
+        "y": 1744,
+        "w": 138,
+        "h": 120
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 32,
-        "y": 30,
-        "w": 192,
-        "h": 199
+        "x": 59,
+        "y": 68,
+        "w": 138,
+        "h": 120
       },
       "sourceSize": {
         "w": 256,
@@ -384,20 +384,20 @@
         "y": 0.5
       }
     },
-    "WrathEssence.png": {
+    "GaleBat.png": {
       "frame": {
-        "x": 1757,
-        "y": 209,
-        "w": 192,
-        "h": 199
+        "x": 1506,
+        "y": 1861,
+        "w": 178,
+        "h": 154
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 32,
-        "y": 27,
-        "w": 192,
-        "h": 199
+        "x": 39,
+        "y": 51,
+        "w": 178,
+        "h": 154
       },
       "sourceSize": {
         "w": 256,
@@ -411,7 +411,7 @@
     "GluttoyEssence.png": {
       "frame": {
         "x": 1855,
-        "y": 848,
+        "y": 801,
         "w": 190,
         "h": 198
       },
@@ -435,7 +435,7 @@
     "GreedEssence.png": {
       "frame": {
         "x": 1855,
-        "y": 1052,
+        "y": 1005,
         "w": 190,
         "h": 198
       },
@@ -456,20 +456,20 @@
         "y": 0.5
       }
     },
-    "CrimsonPlateArmor.png": {
+    "ViolenceEssence.png": {
       "frame": {
-        "x": 1331,
-        "y": 1568,
-        "w": 138,
-        "h": 120
+        "x": 3,
+        "y": 1791,
+        "w": 202,
+        "h": 200
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 59,
-        "y": 68,
-        "w": 138,
-        "h": 120
+        "x": 25,
+        "y": 28,
+        "w": 202,
+        "h": 200
       },
       "sourceSize": {
         "w": 256,
@@ -480,20 +480,20 @@
         "y": 0.5
       }
     },
-    "GaleBat.png": {
+    "LustEssence.png": {
       "frame": {
-        "x": 1331,
-        "y": 1795,
-        "w": 178,
-        "h": 154
+        "x": 211,
+        "y": 1791,
+        "w": 192,
+        "h": 200
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 39,
-        "y": 51,
-        "w": 178,
-        "h": 154
+        "x": 32,
+        "y": 28,
+        "w": 192,
+        "h": 200
       },
       "sourceSize": {
         "w": 256,
@@ -504,20 +504,44 @@
         "y": 0.5
       }
     },
-    "LustfulWhisperer.png": {
+    "FraudEssence.png": {
       "frame": {
-        "x": 1515,
-        "y": 1795,
-        "w": 176,
-        "h": 170
+        "x": 409,
+        "y": 1791,
+        "w": 192,
+        "h": 199
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 40,
-        "y": 43,
-        "w": 176,
-        "h": 170
+        "x": 32,
+        "y": 30,
+        "w": 192,
+        "h": 199
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "WrathEssence.png": {
+      "frame": {
+        "x": 607,
+        "y": 1791,
+        "w": 192,
+        "h": 199
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 27,
+        "w": 192,
+        "h": 199
       },
       "sourceSize": {
         "w": 256,
@@ -536,7 +560,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2048,
-      "h": 1970
+      "h": 2018
     },
     "scale": 1
   }
