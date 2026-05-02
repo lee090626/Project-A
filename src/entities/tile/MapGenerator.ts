@@ -50,7 +50,7 @@ export class MapGenerator {
       if (spotX === x && spotY === y) {
         const roll = this.hash(x + 500, y + 600);
 
-        const valuableMinerals = config.minerals;
+        const valuableMinerals = config.minerals.filter((rule) => layer >= (rule.minLayer ?? 1));
         let totalWeight = 0;
         for (const rule of valuableMinerals) {
           totalWeight += rule.threshold;
@@ -119,6 +119,9 @@ export class MapGenerator {
             break;
           }
         }
+
+        const spawnRoll = this.hash(x + 1777, y + 1999);
+        if (spawnRoll > selectedRule.chance) return null;
 
         const mob = MONSTER_LIST.find((m) => m.id === selectedRule.monsterId);
         if (!mob) continue;

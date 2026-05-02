@@ -1,12 +1,12 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
+import { MONSTER_LIST } from '@/shared/config/monsterData';
 
 /**
  * 몬스터의 AI 행동(추격, 공격 대기 등)을 처리하는 시스템입니다.
  */
 export const monsterAiSystem = (world: GameWorld, now: number) => {
-  const { player, entities, tileMap } = world;
-  const CHASE_RANGE = 8; // 8타일 이내면 추격 시작
+  const { player, entities } = world;
 
   for (let i = 0; i < entities.soa.count; i++) {
     if (entities.soa.type[i] !== 1 && entities.soa.type[i] !== 2) continue; // 1: monster, 2: boss
@@ -31,13 +31,13 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
     // Worker 루프 내의 simple 프레임 카운터 역할 (now 값 사용)
     if (Math.floor(now / 16) % updateInterval !== 0) continue;
 
-    const ATTACK_RANGE = 1.5; // 1.2 -> 1.5 상향 (인접 타일 인식 개선)
-
     const range = entities.soa.aggroRange[i] || 8;
     const rangeSq = range * range;
+    const def = MONSTER_LIST[entities.soa.monsterDefIndex[i]];
+    const attackRange = def?.behavior.attackRange ?? 1.5;
 
     if (distSq < rangeSq) {
-      if (distSq < ATTACK_RANGE * ATTACK_RANGE) {
+      if (distSq < attackRange * attackRange) {
         // [추가] 잡몹(Type 1)은 대각선 공격 불가능
         const isDiagonal = Math.abs(dx) > 0.8 && Math.abs(dy) > 0.8;
         const canAttack = entities.soa.type[i] === 2 || !isDiagonal;
@@ -54,7 +54,14 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
           entities.soa.lastAttackTime[i] = now;
         }
       } else {
-        if (entities.soa.state[i] !== 0) {
+        if (entities.soa.type[i] === 1 && def?.behavior.movementType === 'chase') {
+          const dist = Math.sqrt(distSq);
+          const speed = entities.soa.speed[i] || 1;
+          entities.soa.x[i] += (dx / dist) * speed;
+          entities.soa.y[i] += (dy / dist) * speed;
+          entities.soa.state[i] = 1; // 1: chase
+          entities.markDirty(i);
+        } else if (entities.soa.state[i] !== 0) {
           entities.soa.state[i] = 0; // 0: idle
           entities.markDirty(i);
         }

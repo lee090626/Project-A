@@ -8,15 +8,15 @@ export const circle2Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Lust 서클의 하급 영혼입니다.',
-    stats: { maxHp: 80, power: 5, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 60, power: 2, defense: 4, speed: 0.6, attackCooldown: 1600 },
     rewards: {
       exp: 50,
-      gold: 20,
+      gold: 15,
       drops: [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 3.5 },
   },
   {
     id: 'c2_wind_soul',
@@ -25,15 +25,15 @@ export const circle2Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'WindTornSoul',
     description: 'Lust 서클의 하급 영혼입니다.',
-    stats: { maxHp: 250, power: 20, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 220, power: 10, defense: 5, speed: 0.7, attackCooldown: 1700 },
     rewards: {
       exp: 60,
-      gold: 12,
+      gold: 25,
       drops: [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 4.5 },
   },
   {
     id: 'c2_gale_bat',
@@ -42,15 +42,15 @@ export const circle2Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'GaleBat',
     description: 'Lust 서클의 하급 영혼입니다.',
-    stats: { maxHp: 150, power: 18, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 130, power: 8, defense: 5, speed: 0.8, attackCooldown: 1500 },
     rewards: {
       exp: 45,
-      gold: 9,
+      gold: 20,
       drops: [
         { itemId: 'essence_lust', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 5 },
+    behavior: { movementType: 'chase', attackRange: 1.5, aggroRange: 4.5 },
   },
   {
     id: 'c2_asmodeus',
