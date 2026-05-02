@@ -2,17 +2,14 @@ import * as PIXI from 'pixi.js';
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { TextureRegistry } from '@/shared/types/engine';
+import {
+  PLAYER_IDLE_TEXTURE_KEY,
+  PlayerAnimationDirection,
+  resolvePlayerAnimationFrame,
+  resolvePlayerWalkDirection,
+  shouldMirrorPlayerWalkFrame,
+} from './playerAnimation';
 import { updateStatusVFX } from './uiComponents';
-
-const WALK_FRAME_KEYS = [
-  'PlayerWalk01',
-  'PlayerWalk02',
-  'PlayerWalk03',
-  'PlayerWalk04',
-  'PlayerWalk05',
-  'PlayerWalk06',
-];
-const WALK_FRAME_DURATION_MS = 40;
 
 /**
  * 플레이어 전용 렌더링을 처리합니다.
@@ -60,21 +57,37 @@ export function updatePlayerRenderer(
     pContainer.lastFlip = world.intent.moveX > 0 ? 1 : -1;
   }
 
+  const nextWalkDirection = resolvePlayerWalkDirection(world.intent.moveX, world.intent.moveY);
+  if (nextWalkDirection) {
+    pContainer.walkDirection = nextWalkDirection;
+  } else if (!pContainer.walkDirection) {
+    pContainer.walkDirection = 'Down';
+  }
+
   const isInterpolating = Math.abs(entity.pos.x - entity.visualPos.x) > 0.01 ||
     Math.abs(entity.pos.y - entity.visualPos.y) > 0.01;
-  const hasMoveInput = world.intent.moveX !== 0 || world.intent.moveY !== 0;
+  const hasMoveInput = nextWalkDirection !== null;
   const isWalking = !entity.isDrilling && (hasMoveInput || isInterpolating);
-  if (isWalking && typeof pContainer.walkAnimationStartTime !== 'number') {
+  const walkDirection = pContainer.walkDirection as PlayerAnimationDirection;
+  if (
+    isWalking &&
+    (typeof pContainer.walkAnimationStartTime !== 'number' ||
+      pContainer.walkAnimationDirection !== walkDirection)
+  ) {
     pContainer.walkAnimationStartTime = now;
+    pContainer.walkAnimationDirection = walkDirection;
   } else if (!isWalking) {
     pContainer.walkAnimationStartTime = null;
+    pContainer.walkAnimationDirection = null;
   }
 
   const walkElapsed = isWalking ? now - pContainer.walkAnimationStartTime : 0;
-  const textureKey = isWalking
-    ? WALK_FRAME_KEYS[Math.floor(walkElapsed / WALK_FRAME_DURATION_MS) % WALK_FRAME_KEYS.length]
-    : 'player';
-  const nextTexture = textures[textureKey] || textures.player;
+  const textureKey = resolvePlayerAnimationFrame({
+    state: isWalking ? 'walk' : 'idle',
+    direction: walkDirection,
+    elapsedMs: walkElapsed,
+  });
+  const nextTexture = textures[textureKey] || textures[PLAYER_IDLE_TEXTURE_KEY];
   if (nextTexture && body.texture !== nextTexture) {
     body.texture = nextTexture;
   }
@@ -85,7 +98,8 @@ export function updatePlayerRenderer(
   body.alpha = 1.0;
   body.rotation = 0;
   body.position.set(TILE_SIZE / 2, TILE_SIZE);
-  body.scale.set(baseScaleX * pContainer.lastFlip, baseScaleY);
+  const animationScaleX = shouldMirrorPlayerWalkFrame(walkDirection) ? -1 : 1;
+  body.scale.set(baseScaleX * (isWalking ? animationScaleX : pContainer.lastFlip), baseScaleY);
 
   updateStatusVFX(container, entity.stats.activeEffects || [], TILE_SIZE, TILE_SIZE, now);
 }
