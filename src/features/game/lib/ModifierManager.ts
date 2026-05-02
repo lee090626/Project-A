@@ -2,28 +2,6 @@ import { PlayerStats } from '@/shared/types/game';
 import { hasArtifactEffect } from '@/shared/lib/artifactUtils';
 
 // ============================================================
-// 상수 정의
-// ============================================================
-
-/**
- * 몬스터 희귀도(Rarity) 등급별 보상 배율 상수입니다.
- * 기존 combatSystem.ts의 switch(rarity) 블록을 데이터로 전환합니다.
- *
- * @example
- * const mult = RARITY_MULTIPLIERS[monsterDef.rarity ?? 'Common']; // → 1, 2, 3 ...
- */
-export const RARITY_MULTIPLIERS: Record<string, number> = {
-  Common: 1,
-  Uncommon: 2,
-  Rare: 3,
-  Epic: 5,
-  Radiant: 7,
-  Legendary: 10,
-  Mythic: 15,
-  Ancient: 20,
-};
-
-// ============================================================
 // 타입 정의
 // ============================================================
 
@@ -39,14 +17,13 @@ export type ModifierHook = 'onKill' | 'preDamage' | 'postDamage' | 'onMining';
 /**
  * 모디파이어가 영향을 주는 스탯 카테고리입니다.
  * - exp: 경험치
- * - gold: 골드
  * - loot: 드롭 아이템 배율
  * - damage: 플레이어 → 몬스터 공격력
  * - incomingDamage: 몬스터 → 플레이어 피해량
  * - miningDamage: 채굴 공격 위력
  * - miningSpeed: 채굴 속도 (Interval 감소 배율)
  */
-export type ModifierStat = 'exp' | 'gold' | 'loot' | 'damage' | 'incomingDamage' | 'miningDamage' | 'miningSpeed';
+export type ModifierStat = 'exp' | 'loot' | 'damage' | 'incomingDamage' | 'miningDamage' | 'miningSpeed';
 
 /**
  * 모디파이어 적용 함수에 전달되는 컨텍스트 객체입니다.
@@ -187,31 +164,16 @@ const ARTIFACT_MODIFIER_REGISTRY: ArtifactModifierDef[] = [
  * 전투 시스템의 수치 변환(Modifier) 로직을 중앙 집중 관리하는 매니저입니다.
  *
  * 책임:
- * 1. 희귀도별 보상 배율 계산 (`getRarityMultiplier`)
- * 2. 특정 Hook + Stat 조합에 해당하는 유물 모디파이어를 순차 적용 (`applyAll`)
- * 3. 처치 시 발동하는 모든 부수 효과 실행 (`triggerOnKillSideEffects`)
+ * 1. 특정 Hook + Stat 조합에 해당하는 유물 모디파이어를 순차 적용 (`applyAll`)
+ * 2. 처치 시 발동하는 모든 부수 효과 실행 (`triggerOnKillSideEffects`)
  *
  * 사용 예:
  * ```ts
- * const mult = modifierManager.getRarityMultiplier(monsterDef.rarity, isBoss);
  * const finalExp = modifierManager.applyAll('onKill', 'exp', baseExp, { playerStats });
  * modifierManager.triggerOnKillSideEffects({ playerStats, sideEffect });
  * ```
  */
 class ModifierManager {
-  /**
-   * 몬스터 희귀도와 보스 여부를 고려한 최종 보상 배율을 반환합니다.
-   * 기존 `switch(rarity)` 블록을 대체합니다.
-   *
-   * @param rarity - 몬스터 희귀도 문자열 (예: 'Rare', 'Legendary')
-   * @param isBoss - 보스 여부 (보스는 추가로 x5 배율 적용)
-   * @returns 최종 배율 (1 이상의 정수)
-   */
-  public getRarityMultiplier(rarity?: string, isBoss: boolean = false): number {
-    const base = RARITY_MULTIPLIERS[rarity ?? ''] ?? 1;
-    return isBoss ? base * 5 : base;
-  }
-
   /**
    * 특정 Hook + Stat 조합에 해당하는 모든 활성 유물 모디파이어를 순차 적용합니다.
    * 각 모디파이어는 이전 모디파이어의 출력값을 입력으로 받습니다(체인 구조).

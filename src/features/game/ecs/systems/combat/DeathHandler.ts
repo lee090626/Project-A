@@ -38,18 +38,16 @@ function processDeath(world: GameWorld, index: number, now: number) {
     return;
   }
 
-  // 1. 기본 보상(Gold) 계산 및 지급
   const isBoss = type === 2;
-  const multiplier = modifierManager.getRarityMultiplier(monsterDef.rarity, isBoss);
-  const rewardGold = monsterDef.rewards?.gold ?? 0;
-  const totalGold = Math.floor(rewardGold * multiplier);
+  // 1. 설정된 기본 골드 보상 지급
+  const rewardGold = Math.floor(monsterDef.rewards?.gold ?? 0);
 
-  player.stats.goldCoins += totalGold;
+  player.stats.goldCoins += rewardGold;
   createFloatingText(
     world,
     entities.soa.x[index],
     entities.soa.y[index] - 60,
-    `+${totalGold} G`,
+    `+${rewardGold} G`,
     '#fde047',
     1.5
   );
