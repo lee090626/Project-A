@@ -53,7 +53,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     artifactCooldowns: {},
     hp: 200,
     maxHp: 200,
-    power: 20,
+    power: 30,
     moveSpeed: 100,
     defense: 0,
     luck: 0,
@@ -105,6 +105,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     unlockedResearchIds: ['root'],
     unlockedMasteryPerks: [],
     bossRespawnTimers: {},
+    collectionHistory: {},
   },
   pos: { x: 15, y: 8 }, // 보스 센터(x=15) 근처에서 시작
   velocity: { x: 0, y: 0 },

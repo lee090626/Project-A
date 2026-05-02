@@ -1,4 +1,4 @@
-import { GameWorld } from '@/entities/world/model';
+import { GameWorld, isAnyModalOpen } from '@/entities/world/model';
 
 /**
  * 사용자의 키보드 입력을 해석하여 월드의 의도(Intent) 상태로 변환하는 시스템입니다.
@@ -11,19 +11,8 @@ export const inputSystem = (world: GameWorld) => {
   world.intent.action = 'none';
   world.intent.miningTarget = null;
 
-  // 현재 모달창(상점, 인벤토리 등)이 하나라도 열려있는지 확인
-  const { ui } = world;
-  const isAnyModalOpen =
-    ui.isShopOpen ||
-    ui.isInventoryOpen ||
-    ui.isSettingsOpen ||
-    ui.isCraftingOpen ||
-    ui.isElevatorOpen ||
-    ui.isStatusOpen ||
-    ui.isEncyclopediaOpen;
-
   // 모달이 열려있거나 사망 상태면 입력을 차단함
-  if (isAnyModalOpen || world.player.stats.hp <= 0) return;
+  if (isAnyModalOpen(world.ui) || world.player.stats.hp <= 0) return;
 
   const keys = world.keys;
   const mobile = world.mobileJoystick;

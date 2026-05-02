@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { GameWorld } from '@/entities/world/model';
+import { GameWorld, isAnyModalOpen as hasAnyModalOpen, MODAL_UI_KEYS } from '@/entities/world/model';
 import { UseGameUIResult } from './types';
 
 /**
@@ -14,17 +14,9 @@ export const useGameUI = (
   /** 모든 모달 창을 닫습니다. */
   const closeAllModals = useCallback(() => {
     const { ui } = worldRef.current;
-    ui.isShopOpen =
-      ui.isInventoryOpen =
-      ui.isSettingsOpen =
-      ui.isCraftingOpen =
-      ui.isElevatorOpen =
-      ui.isStatusOpen =
-      ui.isEncyclopediaOpen =
-      ui.isLaboratoryOpen =
-      ui.isRefineryOpen =
-      ui.isGuideOpen =
-        false;
+    MODAL_UI_KEYS.forEach((key) => {
+      ui[key] = false;
+    });
     updateUi();
   }, [worldRef, updateUi]);
 
@@ -63,19 +55,7 @@ export const useGameUI = (
 
   /** 현재 열려 있는 모달이 하나라도 있는지 확인합니다. */
   const isAnyModalOpen = useCallback(() => {
-    const { ui } = worldRef.current;
-    return (
-      ui.isShopOpen ||
-      ui.isInventoryOpen ||
-      ui.isSettingsOpen ||
-      ui.isCraftingOpen ||
-      ui.isElevatorOpen ||
-      ui.isStatusOpen ||
-      ui.isEncyclopediaOpen ||
-      ui.isLaboratoryOpen ||
-      ui.isRefineryOpen ||
-      ui.isGuideOpen
-    );
+    return hasAnyModalOpen(worldRef.current.ui);
   }, [worldRef]);
 
   return {

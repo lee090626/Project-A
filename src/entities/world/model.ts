@@ -1,5 +1,5 @@
 import { TileMap } from '../tile/TileMap';
-import { Player } from '../player/model';
+import { createInitialPlayer, Player } from '../player/model';
 import {
   Entity,
   GameAssets,
@@ -186,6 +186,31 @@ export interface GameWorld {
   aggregationBuffer: Record<string, number>;
 }
 
+export const MODAL_UI_KEYS = [
+  'isShopOpen',
+  'isInventoryOpen',
+  'isSettingsOpen',
+  'isCraftingOpen',
+  'isElevatorOpen',
+  'isStatusOpen',
+  'isEncyclopediaOpen',
+  'isLaboratoryOpen',
+  'isRefineryOpen',
+  'isGuideOpen',
+] as const satisfies readonly (keyof GameWorld['ui'])[];
+
+export type ModalUiKey = (typeof MODAL_UI_KEYS)[number];
+
+/**
+ * 현재 열려 있는 게임 모달이 하나라도 있는지 확인합니다.
+ *
+ * @param ui - 게임 월드의 UI 상태 객체
+ * @returns 모달이 하나 이상 열려 있으면 true
+ */
+export function isAnyModalOpen(ui: GameWorld['ui']): boolean {
+  return MODAL_UI_KEYS.some((key) => ui[key]);
+}
+
 /**
  * 게임 시작 시 사용할 초기 월드 상태를 생성합니다.
  *
@@ -196,90 +221,7 @@ export const createInitialWorld = (seed: number): GameWorld => {
   const tileMap = new TileMap(seed, 0);
   const result: GameWorld = {
     tileMap,
-    player: {
-      stats: {
-        depth: 0,
-        equipment: {
-          drillId: null,
-          helmetId: null,
-          armorId: null,
-          bootsId: null,
-        },
-        ownedEquipmentIds: [],
-        activeSmeltingJobs: [],
-        refinerySlots: 1,
-        maxDepthReached: 0,
-        unlockedWaypoints: [0],
-        artifacts: [],
-        equippedArtifactId: null,
-        artifactCooldowns: {},
-        hp: 200,
-        maxHp: 200,
-        power: 30,
-        moveSpeed: 100,
-        inventory: {
-          crimsonstone: 0,
-          galestone: 0,
-          fervorstone: 0,
-          moldstone: 0,
-          siltstone: 0,
-          gorestone: 0,
-          goldstone: 0,
-          luststone: 0,
-          midasite: 0,
-          ragestone: 0,
-          cinderstone: 0,
-          furystone: 0,
-          ashstone: 0,
-          blightstone: 0,
-          vexite: 0,
-          thornstone: 0,
-          bloodstone: 0,
-          cruelite: 0,
-          mimicite: 0,
-          lurerstone: 0,
-          phantomite: 0,
-          froststone: 0,
-          glacialite: 0,
-          abyssstone: 0,
-          stone: 0,
-          // === 몬스터 전리품 및 정수 초기화 ===
-          essence_lust: 0,
-          essence_gluttony: 0,
-          essence_greed: 0,
-          essence_wrath: 0,
-          essence_heresy: 0,
-          essence_violence: 0,
-          essence_fraud: 0,
-          essence_treachery: 0,
-        },
-        inventoryRunes: [],
-        goldCoins: 0,
-        mapSeed: seed,
-        discoveredMinerals: [],
-        encounteredBossIds: [],
-        bossRespawnTimers: {},
-        dimension: 0,
-        equipmentStates: {},
-        unlockedResearchIds: ['root'],
-        tileMastery: {},
-        unlockedMasteryPerks: [],
-        collectionHistory: {},
-        defense: 0,
-        luck: 0,
-      },
-      pos: { x: 15, y: 8 },
-      velocity: { x: 0, y: 0 },
-      visualPos: { x: 15, y: 8 },
-      isDrilling: false,
-      lastHitTime: 0,
-      lastAttackTime: 0,
-      buffs: {
-        speedBoostUntil: 0,
-        speedBoostMultiplier: 1.0,
-      },
-      _statsSynced: false,
-    },
+    player: createInitialPlayer(seed),
     entities: new EntityManager(5000),
     staticEntities: [],
     particlePool: new ObjectPool<Particle>(
