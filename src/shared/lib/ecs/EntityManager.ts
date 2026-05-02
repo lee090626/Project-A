@@ -63,6 +63,7 @@ export type EntityHandle = number;
 export class EntityManager {
   public soa: EntitySoA;
   private idMap: Map<string, EntityHandle> = new Map();
+  private idByIndex: Array<string | undefined>;
   private nextInstanceId: number = 1;
 
   /** 자동화를 위한 컴포넌트 배열 레지스트리 (instanceId, generation 제외) */
@@ -70,6 +71,7 @@ export class EntityManager {
   private componentArrays: (Uint8Array | Uint16Array | Uint32Array | Float32Array | Float64Array)[];
 
   constructor(capacity: number = 5000) {
+    this.idByIndex = new Array<string | undefined>(capacity);
     this.soa = {
       capacity,
       count: 0,
@@ -143,6 +145,8 @@ export class EntityManager {
     const index = this.soa.count++;
     const handle = (this.soa.generation[index] << 16) | index;
 
+    this.idByIndex[index] = id;
+
     // ID 매핑 등록
     if (id) {
       this.idMap.set(id, handle);
@@ -174,10 +178,18 @@ export class EntityManager {
   public destroy(index: number) {
     if (index < 0 || index >= this.soa.count) return;
 
+    const removedId = this.idByIndex[index];
+    const lastIndex = this.soa.count - 1;
+    const movedId = this.idByIndex[lastIndex];
+    const removedHandle = (this.soa.generation[index] << 16) | index;
+
+    if (removedId && this.idMap.get(removedId) === removedHandle) {
+      this.idMap.delete(removedId);
+    }
+
     // 세대 증가 (기존 핸들 무효화)
     this.soa.generation[index]++;
 
-    const lastIndex = --this.soa.count;
     if (index !== lastIndex) {
       // 레지스트리에 등록된 모든 컴포넌트 배열에 대해 Swap-and-Pop 수행
       for (let i = 0; i < this.componentArrays.length; i++) {
@@ -185,10 +197,18 @@ export class EntityManager {
         arr[index] = arr[lastIndex];
       }
 
-      // Generation 정보도 함께 Swap (인덱스 연속성 유지)
-      this.soa.generation[index] = this.soa.generation[lastIndex];
+      this.idByIndex[index] = movedId;
+      if (movedId) {
+        this.idMap.set(movedId, (this.soa.generation[index] << 16) | index);
+      }
       this.soa.dirtyFlags[index] = 1; // Mark as dirty when swapped
+
+      // 비워진 마지막 슬롯의 이전 핸들도 무효화합니다.
+      this.soa.generation[lastIndex]++;
     }
+
+    this.idByIndex[lastIndex] = undefined;
+    this.soa.count = lastIndex;
   }
 
   /** Dirty flag 관리 */
@@ -231,6 +251,7 @@ export class EntityManager {
     this.nextInstanceId = 1;
     this.soa.count = 0;
     this.soa.generation.fill(0);
+    this.idByIndex.fill(undefined);
 
     // 레지스트리에 등록된 모든 컴포넌트 배열 초기화
     for (let i = 0; i < this.componentArrays.length; i++) {

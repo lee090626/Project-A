@@ -48,6 +48,13 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
 
   const instanceId = soa.instanceId[bossIdx].toString();
 
+  // 현재 보스 시스템은 단일 활성 보스를 처리하므로 이전 인스턴스의 UI 상태를 정리합니다.
+  for (const key of Object.keys(world.bossCombatStatus)) {
+    if (key !== instanceId) {
+      delete world.bossCombatStatus[key];
+    }
+  }
+
   // --- 2. 데이터 조회 및 보스 고정/이동 처리 ---
   const defIndex = soa.monsterDefIndex[bossIdx];
   const bossDef: MonsterDefinition | undefined = MONSTER_LIST[defIndex];

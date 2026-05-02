@@ -7,7 +7,7 @@ import { MONSTER_LIST } from '@/shared/config/monsterData';
  * 특정 서클(Circle)의 보스 소환 및 라이프사이클을 관리합니다.
  */
 export const bossDirector = (world: GameWorld) => {
-  const { player, tileMap, entities } = world;
+  const { player, entities } = world;
   const config = getCircleConfig(player.stats.depth);
 
   if (!config.boss) return;
@@ -16,6 +16,12 @@ export const bossDirector = (world: GameWorld) => {
   const isKilled = player.stats.killedMonsterIds?.includes(bossId);
   const respawnTime = player.stats.bossRespawnTimers?.[bossId] || 0;
   const canSpawn = !isKilled || Date.now() >= respawnTime;
+  const existingBossIndex = findActiveBossIndex(world, bossId);
+
+  if (existingBossIndex !== -1) {
+    removeDuplicateBosses(world, bossId, existingBossIndex);
+    return;
+  }
 
   // 이미 소환되어 있거나 소환 조건이 안 맞으면 종료
   if (!canSpawn || entities.hasId(bossId)) return;
@@ -92,5 +98,42 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
   // 최초 조우 기록
   if (!player.stats.encounteredBossIds.includes(bossId)) {
     player.stats.encounteredBossIds.push(bossId);
+  }
+}
+
+/**
+ * 현재 월드에서 지정한 보스 정의 ID를 가진 활성 보스 엔티티 인덱스를 찾습니다.
+ *
+ * @param world - 현재 게임 월드 상태
+ * @param bossId - 몬스터 데이터에 정의된 보스 ID
+ * @returns 활성 보스 인덱스. 존재하지 않으면 -1을 반환합니다.
+ */
+function findActiveBossIndex(world: GameWorld, bossId: string): number {
+  const { entities } = world;
+  for (let i = 0; i < entities.soa.count; i++) {
+    if (entities.soa.type[i] !== 2 || entities.soa.hp[i] <= 0) continue;
+    const def = MONSTER_LIST[entities.soa.monsterDefIndex[i]];
+    if (def?.id === bossId) return i;
+  }
+  return -1;
+}
+
+/**
+ * 같은 보스 ID로 중복 생성된 보스 엔티티와 UI 상태를 제거합니다.
+ *
+ * @param world - 현재 게임 월드 상태
+ * @param bossId - 중복 여부를 검사할 보스 ID
+ * @param keepIndex - 유지할 대표 보스 엔티티 인덱스
+ */
+function removeDuplicateBosses(world: GameWorld, bossId: string, keepIndex: number): void {
+  const { entities } = world;
+  for (let i = entities.soa.count - 1; i >= 0; i--) {
+    if (i === keepIndex || entities.soa.type[i] !== 2) continue;
+    const def = MONSTER_LIST[entities.soa.monsterDefIndex[i]];
+    if (def?.id !== bossId) continue;
+
+    const instanceId = entities.soa.instanceId[i].toString();
+    delete world.bossCombatStatus[instanceId];
+    entities.destroy(i);
   }
 }

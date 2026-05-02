@@ -9,9 +9,9 @@ const BossHealthBar: React.FC = () => {
   const bossMap = useGameStore((state) => state.boss);
   
   // 현재 활성화된 보스들만 필터링
-  const activeBosses = Object.values(bossMap || {}).filter((b) => b && b.active);
+  const activeBossEntries = Object.entries(bossMap || {}).filter(([, boss]) => boss && boss.active);
 
-  if (activeBosses.length === 0) return null;
+  if (activeBossEntries.length === 0) return null;
 
   // 페이즈별 색상 테마 정의
   const getPhaseColor = (phase: number) => {
@@ -29,13 +29,13 @@ const BossHealthBar: React.FC = () => {
 
   return (
     <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-50 pointer-events-none flex flex-col gap-6">
-      {activeBosses.map((boss, idx) => {
+      {activeBossEntries.map(([instanceId, boss]) => {
         const hpPercent = Math.max(0, (boss.hp / boss.maxHp) * 100);
         const circleMatch = boss.id?.match(/c(\d+)_/);
         const circleNumber = circleMatch ? circleMatch[1] : '?';
 
         return (
-          <div key={boss.id || idx} className="animate-in slide-in-from-top-10 duration-700">
+          <div key={instanceId} className="animate-in slide-in-from-top-10 duration-700">
             {/* 보스 이름 및 정보 */}
             <div className="flex justify-between items-end mb-1.5 px-2">
               <div className="flex flex-col">
