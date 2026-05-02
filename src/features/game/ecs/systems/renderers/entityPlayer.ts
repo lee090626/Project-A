@@ -59,8 +59,9 @@ export function updatePlayerRenderer(
   if (pContainer.lastFlip === undefined) pContainer.lastFlip = 1;
 
   if (isDrilling) {
-    const jitterX = (Math.random() - 0.5) * 4;
-    const jitterY = (Math.random() - 0.5) * 4;
+    const drillPhase = now / 28;
+    const jitterX = Math.sin(drillPhase) * 2.2;
+    const jitterY = Math.cos(drillPhase * 1.37) * 1.6;
     body.position.set(TILE_SIZE / 2 + jitterX, TILE_SIZE + jitterY);
     const sX = 1.05 + Math.sin(now / 30) * 0.05;
     const sY = 0.95 + Math.sin(now / 30) * 0.05;

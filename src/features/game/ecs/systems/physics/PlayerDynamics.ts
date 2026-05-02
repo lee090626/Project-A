@@ -49,8 +49,6 @@ export const playerDynamics = (
     player.stats.maxDepthReached = player.stats.depth;
     syncUnlockedWaypoints(world, true);
   }
-  // 기존 세이브(이미 100m+ 도달) 보정: maxDepth 기반으로 웨이포인트를 항상 동기화
-  syncUnlockedWaypoints(world, false);
 
   // 3. 시각적 위치 보간 (Renderer를 위한 Lerp)
   player.visualPos.x += (player.pos.x - player.visualPos.x) * lerpFactor;

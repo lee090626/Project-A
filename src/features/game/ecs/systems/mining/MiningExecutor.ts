@@ -43,12 +43,6 @@ export const miningExecutor = (
   if (finalDamage > 0) {
     player.lastHitTime = now;
 
-    // [Juice: 역경직] 타일 파괴 시 순간적인 멈춤은 핵심 타격감이므로 물리 상태로 유지
-    if (destroyed) {
-      const isRare = targetTile.type !== 'stone';
-      world.hitStopUntil = now + (isRare ? 100 : 50);
-    }
-
     // [SoC: 이벤트 발행] 시각 효과(흔들림, 파편, 텍스트)는 VfxSystem에서 처리하도록 위임
     messageBus.emit('game:tile_hit', {
       x,

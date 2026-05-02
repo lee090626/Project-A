@@ -13,7 +13,16 @@ import { masteryService } from './MasteryService';
 export const miningSystem = (world: GameWorld, now: number) => {
   const { player } = world;
 
-  // 1. 공통 보너스 및 캐시 연산 (전략적으로 필요한 데이터만 계산)
+  // 1. [SoC: 타겟팅] 무엇을 조준할 것인가?
+  const { hasMonsterTarget } = miningTargeter(world);
+  const miningTarget = world.intent.miningTarget;
+  if (!player.isDrilling || !miningTarget || hasMonsterTarget) return;
+
+  // 2. [SoC: 실행] 타격 및 파괴 수행
+  const result = miningExecutor(world, now, false);
+  if (!result || !result.destroyed) return;
+
+  // 3. [SoC: 보상] 파괴 성공 시 필요한 보너스만 계산
   const masteryBonuses = getMasteryBonuses(player.stats);
   const artifactBonuses = calculateArtifactBonuses(player.stats);
 
@@ -31,22 +40,12 @@ export const miningSystem = (world: GameWorld, now: number) => {
   );
   const masteryExpGain = Math.floor(10 * masteryExpMultiplier);
 
-  // 2. [SoC: 타겟팅] 무엇을 조준할 것인가?
-  const { hasMonsterTarget } = miningTargeter(world);
-
-  // 3. [SoC: 실행] 타격 및 파괴 수행
-  const result = miningExecutor(world, now, hasMonsterTarget);
-
-  // 4. [SoC: 보상] 파괴 성공 시 아이템 및 숙련도 처리
-  if (result && result.destroyed) {
-    masteryService(
-      world,
-      world.intent.miningTarget!.x,
-      world.intent.miningTarget!.y,
-      result.targetType,
-      luck,
-      masteryExpGain
-    );
-  }
+  masteryService(
+    world,
+    miningTarget.x,
+    miningTarget.y,
+    result.targetType,
+    luck,
+    masteryExpGain
+  );
 };
-

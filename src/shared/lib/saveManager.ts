@@ -24,6 +24,36 @@ export interface SaveData {
 }
 
 const SAVE_KEY = 'drilling-game-save';
+const WAYPOINT_INTERVAL = 100;
+
+/**
+ * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
+ * 구버전 세이브 보정은 프레임 루프가 아니라 로드 시점에 한 번만 수행합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function normalizeUnlockedWaypoints(stats: PlayerStats): void {
+  const source = Array.isArray(stats.unlockedWaypoints) ? stats.unlockedWaypoints : [0];
+  const waypointSet = new Set<number>();
+
+  for (const depth of source) {
+    if (typeof depth === 'number' && Number.isFinite(depth) && depth >= 0) {
+      waypointSet.add(depth);
+    }
+  }
+
+  waypointSet.add(0);
+
+  const maxDepthReached = Number.isFinite(stats.maxDepthReached)
+    ? Math.max(0, stats.maxDepthReached)
+    : 0;
+  const maxUnlockDepth = Math.floor(maxDepthReached / WAYPOINT_INTERVAL) * WAYPOINT_INTERVAL;
+  for (let depth = WAYPOINT_INTERVAL; depth <= maxUnlockDepth; depth += WAYPOINT_INTERVAL) {
+    waypointSet.add(depth);
+  }
+
+  stats.unlockedWaypoints = Array.from(waypointSet).sort((a, b) => a - b);
+}
 
 /**
  * 브라우저 로컬 저장소에 저장하기 전 데이터를 난독화합니다.
@@ -144,17 +174,7 @@ export const saveManager = {
         if (!s.unlockedMasteryPerks) s.unlockedMasteryPerks = [];
         if (!s.collectionHistory) s.collectionHistory = {};
         if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
-        if (!Array.isArray(s.unlockedWaypoints)) {
-          s.unlockedWaypoints = [0];
-        }
-        if (!s.unlockedWaypoints.includes(0)) {
-          s.unlockedWaypoints.push(0);
-        }
-        const validWaypoints = s.unlockedWaypoints.filter(
-          (depth: unknown): depth is number =>
-            typeof depth === 'number' && Number.isFinite(depth) && depth >= 0,
-        );
-        s.unlockedWaypoints = Array.from(new Set<number>(validWaypoints)).sort((a, b) => a - b);
+        normalizeUnlockedWaypoints(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
         if (s.inventory) {
