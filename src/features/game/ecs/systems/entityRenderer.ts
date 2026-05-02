@@ -42,7 +42,7 @@ export const renderEntities = (
     entityLayer.addChild(playerContainer);
     entityContainerMap.set('player', playerContainer);
   }
-  updatePlayerRenderer(world, player, playerContainer, now);
+  updatePlayerRenderer(world, player, playerContainer, now, textures);
 
   // 2. SoA 엔티티 렌더링 (Culling & Pool 관리)
   const visibleIndices = world.spatialHash.query(
@@ -111,5 +111,4 @@ function updateEntitySpriteFromSoA(
 }
 
 import { createEntityFactory as createEntityContainer } from './renderers/factory';
-
 

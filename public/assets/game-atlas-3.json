@@ -1,0 +1,183 @@
+{
+  "frames": {
+    "InventoryIcon.webp": {
+      "frame": {
+        "x": 3,
+        "y": 3,
+        "w": 481,
+        "h": 399
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 271,
+        "y": 312,
+        "w": 481,
+        "h": 399
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk01.png": {
+      "frame": {
+        "x": 3,
+        "y": 408,
+        "w": 426,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 44,
+        "y": 24,
+        "w": 426,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk02.png": {
+      "frame": {
+        "x": 435,
+        "y": 408,
+        "w": 430,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 42,
+        "y": 24,
+        "w": 430,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk03.png": {
+      "frame": {
+        "x": 3,
+        "y": 895,
+        "w": 429,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 42,
+        "y": 24,
+        "w": 429,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk04.png": {
+      "frame": {
+        "x": 438,
+        "y": 895,
+        "w": 424,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 44,
+        "y": 24,
+        "w": 424,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk05.png": {
+      "frame": {
+        "x": 868,
+        "y": 895,
+        "w": 417,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 48,
+        "y": 24,
+        "w": 417,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalk06.png": {
+      "frame": {
+        "x": 871,
+        "y": 3,
+        "w": 430,
+        "h": 481
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 41,
+        "y": 24,
+        "w": 430,
+        "h": 481
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://github.com/odrick/free-tex-packer-core",
+    "version": "0.3.5",
+    "image": "game-atlas-3.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1304,
+      "h": 1379
+    },
+    "scale": 1
+  }
+}
