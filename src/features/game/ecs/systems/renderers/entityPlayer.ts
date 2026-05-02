@@ -12,7 +12,7 @@ const WALK_FRAME_KEYS = [
   'PlayerWalk05',
   'PlayerWalk06',
 ];
-const WALK_FRAME_DURATION_MS = 90;
+const WALK_FRAME_DURATION_MS = 40;
 
 /**
  * 플레이어 전용 렌더링을 처리합니다.
@@ -60,10 +60,19 @@ export function updatePlayerRenderer(
     pContainer.lastFlip = world.intent.moveX > 0 ? 1 : -1;
   }
 
-  const isMoving = Math.abs(entity.pos.x - entity.visualPos.x) > 0.01 ||
+  const isInterpolating = Math.abs(entity.pos.x - entity.visualPos.x) > 0.01 ||
     Math.abs(entity.pos.y - entity.visualPos.y) > 0.01;
-  const textureKey = isMoving
-    ? WALK_FRAME_KEYS[Math.floor(now / WALK_FRAME_DURATION_MS) % WALK_FRAME_KEYS.length]
+  const hasMoveInput = world.intent.moveX !== 0 || world.intent.moveY !== 0;
+  const isWalking = !entity.isDrilling && (hasMoveInput || isInterpolating);
+  if (isWalking && typeof pContainer.walkAnimationStartTime !== 'number') {
+    pContainer.walkAnimationStartTime = now;
+  } else if (!isWalking) {
+    pContainer.walkAnimationStartTime = null;
+  }
+
+  const walkElapsed = isWalking ? now - pContainer.walkAnimationStartTime : 0;
+  const textureKey = isWalking
+    ? WALK_FRAME_KEYS[Math.floor(walkElapsed / WALK_FRAME_DURATION_MS) % WALK_FRAME_KEYS.length]
     : 'player';
   const nextTexture = textures[textureKey] || textures.player;
   if (nextTexture && body.texture !== nextTexture) {
