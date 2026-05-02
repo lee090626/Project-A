@@ -1,6 +1,12 @@
 import { TileType } from '../types/game';
 
 /**
+ * 몬스터 스폰 규칙이 바뀌었을 때 런타임 스폰 캐시를 갱신하기 위한 버전입니다.
+ * 스폰 density, weight, layer 범위를 조정하면 값을 올려 기존 세이브의 주변 스폰을 재평가합니다.
+ */
+export const SPAWN_RULE_VERSION = 3;
+
+/**
  * 광물 생성 규칙을 정의하는 인터페이스입니다.
  * 각 Circle(지옥의 원)마다 광물이 생성되는 방식을 제어합니다.
  */
@@ -26,8 +32,8 @@ export interface MineralRule {
 export interface MonsterSpawnRule {
   /** 몬스터 ID (monsterData.ts 참조) */
   monsterId: string;
-  /** 스폰 확률 (0~1 범위) */
-  chance: number;
+  /** @deprecated CircleConfig.monsterDensityByLayer로 밀도를 제어하고, 이 값은 레거시 fallback에만 사용합니다. */
+  chance?: number;
   /** 가중치 (다른 몬스터와 비교한 상대적 생성 빈도) */
   weight: number;
   /** 최소 생성 층 */
@@ -57,6 +63,8 @@ export interface CircleConfig {
   bgType?: TileType;
   /** 광물 생성 규칙 목록 */
   minerals: MineralRule[];
+  /** 층별 몬스터 스폰 후보 슬롯의 생성 확률. 통과 후 monsters의 weight로 종류를 선택합니다. */
+  monsterDensityByLayer?: Record<number, number>;
   /** 몬스터 스폰 규칙 목록 */
   monsters: MonsterSpawnRule[];
   /** 보스 정보 (해당 Circle의 최종 보스) */
@@ -88,10 +96,15 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'galestone', threshold: 0.25, minLayer: 2 },
       { type: 'fervorstone', threshold: 0.1, minLayer: 3 },
     ],
+    monsterDensityByLayer: {
+      1: 0.3,
+      2: 0.4,
+      3: 0.5,
+    },
     monsters: [
-      { monsterId: 'c2_whisperer', chance: 0.12, weight: 10, minLayer: 1 },
-      { monsterId: 'c2_gale_bat', chance: 0.1, weight: 6, minLayer: 2 },
-      { monsterId: 'c2_wind_soul', chance: 0.08, weight: 5, minLayer: 2 },
+      { monsterId: 'c2_whisperer', weight: 10, minLayer: 1 },
+      { monsterId: 'c2_gale_bat', weight: 6, minLayer: 2 },
+      { monsterId: 'c2_wind_soul', weight: 5, minLayer: 2 },
     ],
     boss: { id: 'c2_asmodeus', spawnLayer: 4 },
   },

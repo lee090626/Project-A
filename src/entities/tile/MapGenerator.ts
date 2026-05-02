@@ -1,7 +1,12 @@
- import { Tile, TileType, Entity } from '@/shared/types/game';
+import { Tile, TileType, Entity } from '@/shared/types/game';
 import { getMineralStats } from '@/shared/lib/tileUtils';
 import { BASE_DEPTH } from '@/shared/config/constants';
-import { getCircleConfig, getLayerFromDepth } from '@/shared/config/circleData';
+import {
+  CircleConfig,
+  getCircleConfig,
+  getLayerFromDepth,
+  MonsterSpawnRule,
+} from '@/shared/config/circleData';
 import { MONSTER_LIST } from '@/shared/config/monsterData';
 
 export class MapGenerator {
@@ -105,6 +110,10 @@ export class MapGenerator {
       const spotY = sectorY * MONSTER_SECTOR_SIZE + ry;
 
       if (spotX === x && spotY === y) {
+        const spawnDensity = this.getMonsterDensity(config, layer, available);
+        const spawnRoll = this.hash(x + 1777, y + 1999);
+        if (spawnRoll > spawnDensity) return null;
+
         let totalWeight = 0;
         for (const rule of available) totalWeight += rule.weight;
         
@@ -119,9 +128,6 @@ export class MapGenerator {
             break;
           }
         }
-
-        const spawnRoll = this.hash(x + 1777, y + 1999);
-        if (spawnRoll > selectedRule.chance) return null;
 
         const mob = MONSTER_LIST.find((m) => m.id === selectedRule.monsterId);
         if (!mob) continue;
@@ -147,5 +153,44 @@ export class MapGenerator {
       }
     }
     return null;
+  }
+
+  /**
+   * 현재 서클/층에서 스폰 후보 슬롯이 실제 몬스터로 채워질 확률을 계산합니다.
+   * 명시적인 density 설정이 있으면 우선 사용하고, 아직 이전 chance 구조를 쓰는 서클은 가중 평균 chance로 호환합니다.
+   *
+   * @param config - 현재 서클 설정
+   * @param layer - 현재 서클 내부 층
+   * @param available - 현재 층에서 선택 가능한 몬스터 규칙 목록
+   * @returns 0~1 범위의 스폰 밀도
+   */
+  private getMonsterDensity(
+    config: CircleConfig,
+    layer: number,
+    available: MonsterSpawnRule[],
+  ): number {
+    const explicitDensity = config.monsterDensityByLayer?.[layer];
+    if (explicitDensity !== undefined) return this.clampChance(explicitDensity);
+
+    let weightedChance = 0;
+    let totalWeight = 0;
+    for (const rule of available) {
+      weightedChance += (rule.chance ?? 0) * rule.weight;
+      totalWeight += rule.weight;
+    }
+
+    if (totalWeight <= 0) return 0;
+    return this.clampChance(weightedChance / totalWeight);
+  }
+
+  /**
+   * 확률 값을 안전한 0~1 범위로 제한합니다.
+   *
+   * @param value - 제한할 확률 값
+   * @returns 0~1 범위로 보정된 값
+   */
+  private clampChance(value: number): number {
+    if (!Number.isFinite(value)) return 0;
+    return Math.max(0, Math.min(1, value));
   }
 }

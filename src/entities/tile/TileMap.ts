@@ -53,6 +53,43 @@ export class TileMap {
     return this.generator.getInitialMonster(x, y);
   }
 
+  /**
+   * 지정 영역 안에서 플레이어가 직접 수정하지 않은 생성 타일만 무효화합니다.
+   * 스폰 규칙 변경 후 몬스터 자리로 재판정될 수 있는 기존 주변 타일을 새 규칙으로 다시 생성하기 위해 사용합니다.
+   *
+   * @param startX - 무효화 시작 X 좌표
+   * @param startY - 무효화 시작 Y 좌표
+   * @param width - 무효화할 타일 가로 길이
+   * @param height - 무효화할 타일 세로 길이
+   */
+  public invalidateGeneratedUnmodifiedArea(
+    startX: number,
+    startY: number,
+    width: number,
+    height: number,
+  ): void {
+    let changed = false;
+
+    for (let y = startY; y < startY + height; y++) {
+      if (y < 0 || y >= MAP_HEIGHT) continue;
+
+      for (let x = startX; x < startX + width; x++) {
+        const { chunkX, localX } = this.getChunkInfo(x);
+        const chunk = this.chunks.get(chunkX);
+        if (!chunk) continue;
+
+        const idx = y * CHUNK_WIDTH + localX;
+        const packed = chunk[idx];
+        if ((packed & GEN_FLAG) && !(packed & MOD_FLAG)) {
+          chunk[idx] = 0;
+          changed = true;
+        }
+      }
+    }
+
+    if (changed) this.renderRevision++;
+  }
+
   getTile(x: number, y: number): Tile | null {
     if (y < 0 || y >= MAP_HEIGHT) return null;
 

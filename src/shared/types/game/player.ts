@@ -74,6 +74,8 @@ export interface PlayerStats {
   goldCoins: number;
   /** 월드 생성을 위한 맵 시드 번호 */
   mapSeed: number;
+  /** 현재 저장 데이터가 반영한 몬스터 스폰 규칙 버전 */
+  spawnRulesVersion: number;
 
   /** 발견한 광물 종류 목록 (도감용) */
   discoveredMinerals: string[];

@@ -143,6 +143,7 @@ export const saveManager = {
         if (!s.tileMastery) s.tileMastery = {};
         if (!s.unlockedMasteryPerks) s.unlockedMasteryPerks = [];
         if (!s.collectionHistory) s.collectionHistory = {};
+        if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
         if (!Array.isArray(s.unlockedWaypoints)) {
           s.unlockedWaypoints = [0];
         }

@@ -1,4 +1,5 @@
 import { PlayerStats, Position } from '@/shared/types/game';
+import { SPAWN_RULE_VERSION } from '@/shared/config/circleData';
 
 /**
  * 게임 내 플레이어 캐릭터의 상태를 나타내는 인터페이스입니다.
@@ -97,6 +98,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     inventoryRunes: [],
     goldCoins: 0,
     mapSeed: seed,
+    spawnRulesVersion: SPAWN_RULE_VERSION,
     discoveredMinerals: [],
     encounteredBossIds: [],
     dimension: 0,
