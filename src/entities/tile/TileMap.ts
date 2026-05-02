@@ -25,6 +25,8 @@ export class TileMap {
   public seed: number;
   public dimension: number;
   public modifiedCoords: Set<string> = new Set();
+  /** 타일 렌더러가 지형 변경 여부를 빠르게 감지하기 위한 버전 값입니다. */
+  public renderRevision: number = 0;
 
   constructor(seed: number = 12345, dimension: number = 0) {
     this.seed = seed;
@@ -109,6 +111,7 @@ export class TileMap {
 
     if (health <= 0) {
       packed = (packed & ~TYPE_MASK) | (TILE_TYPE_TO_ID['empty'] & TYPE_MASK);
+      this.renderRevision++;
     }
 
     chunk[idx] = packed;
@@ -118,6 +121,7 @@ export class TileMap {
 
   clearArea(startX: number, startY: number, width: number, height: number): void {
     const emptyId = TILE_TYPE_TO_ID['empty'] & TYPE_MASK;
+    let changed = false;
 
     for (let cy = startY; cy < startY + height; cy++) {
       if (cy < 0 || cy >= MAP_HEIGHT) continue;
@@ -130,8 +134,11 @@ export class TileMap {
         // 타입 0(empty), HP 0, GEN/MOD 플래그 설정
         chunk[idx] = emptyId | GEN_FLAG | MOD_FLAG;
         this.modifiedCoords.add(`${cx},${cy}`);
+        changed = true;
       }
     }
+
+    if (changed) this.renderRevision++;
   }
 
   serializeToBuffer(): Uint32Array {
@@ -155,6 +162,7 @@ export class TileMap {
       this.getChunkInfo.bind(this),
       this.getChunk.bind(this)
     );
+    this.renderRevision++;
   }
 
   deserialize(data: any, seed?: number, dimension?: number): void {
@@ -174,6 +182,7 @@ export class TileMap {
       this.getChunkInfo.bind(this),
       this.getChunk.bind(this)
     );
+    this.renderRevision++;
   }
 
   reset(newSeed?: number, newDimension?: number): void {
@@ -184,5 +193,6 @@ export class TileMap {
     if (newDimension !== undefined) this.dimension = newDimension;
     this.chunks.clear();
     this.modifiedCoords.clear();
+    this.renderRevision++;
   }
 }

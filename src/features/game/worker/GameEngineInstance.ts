@@ -28,7 +28,7 @@ export class GameEngineInstance {
   textures: TextureRegistry = {};
   lightingFilter: LightingFilter | null = null;
 
-  private readonly BUFFER_SIZE = (16 + 5000 * 8) * 4;
+  private readonly BUFFER_SIZE = 16 * 4;
   bufferPool: ArrayBuffer[] = [];
 
   private gameLoop: GameLoop | null = null;

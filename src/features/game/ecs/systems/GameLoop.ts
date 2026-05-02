@@ -43,7 +43,7 @@ export class GameLoop {
   private lastSaveTime: number = 0;
   private lastStatsSyncTime: number = 0;
   private readonly STATS_SYNC_FALLBACK_INTERVAL: number = 2000; // 2초 안전망
-  public readonly syncInterval: number = 16.66; // 60Hz Target
+  public readonly syncInterval: number = 66.66; // HUD interpolation sync target (~15Hz)
 
   // 의존성 주입(DI) 데이터
   private world: GameWorld;

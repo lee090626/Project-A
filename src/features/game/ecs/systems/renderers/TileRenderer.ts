@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE, BASE_DEPTH } from '@/shared/config/constants';
-import { MINERALS } from '@/shared/config/mineralData';
+import { MINERAL_MAP } from '@/shared/config/mineralData';
 import { getSafeTexture } from '@/shared/lib/assetUtils';
 
 // ============================================================
@@ -20,6 +20,14 @@ const tileSpriteCache = new Map<string, PIXI.Sprite>();
  * 가비지 컬렉션 압박을 최소화합니다.
  */
 const tilePool: PIXI.Sprite[] = [];
+const visibleTileKeys = new Set<string>();
+let lastTileLayer: PIXI.Container | null = null;
+let lastStartTileX = Number.NaN;
+let lastEndTileX = Number.NaN;
+let lastStartTileY = Number.NaN;
+let lastEndTileY = Number.NaN;
+let lastRenderRevision = -1;
+let lastBaseLayout: number[][] | null = null;
 
 // ============================================================
 // TileRenderer
@@ -52,7 +60,31 @@ export function renderTiles(
   const startTileY = Math.floor(player.visualPos.y - 15);
   const endTileY   = Math.ceil(player.visualPos.y + 15);
 
-  const visibleTileKeys = new Set<string>();
+  const shouldReuseTiles =
+    tileLayer === lastTileLayer &&
+    startTileX === lastStartTileX &&
+    endTileX === lastEndTileX &&
+    startTileY === lastStartTileY &&
+    endTileY === lastEndTileY &&
+    tileMap.renderRevision === lastRenderRevision &&
+    world.baseLayout === lastBaseLayout;
+
+  if (shouldReuseTiles) return;
+
+  if (tileLayer !== lastTileLayer) {
+    tileSpriteCache.clear();
+    tilePool.length = 0;
+    lastTileLayer = tileLayer;
+  }
+
+  lastStartTileX = startTileX;
+  lastEndTileX = endTileX;
+  lastStartTileY = startTileY;
+  lastEndTileY = endTileY;
+  lastRenderRevision = tileMap.renderRevision;
+  lastBaseLayout = world.baseLayout;
+
+  visibleTileKeys.clear();
 
   for (let y = startTileY; y <= endTileY; y++) {
     for (let x = startTileX; x <= endTileX; x++) {
@@ -76,7 +108,7 @@ export function renderTiles(
       // mineralData.tileImage 우선, 없으면 StoneTile 폴백
       const renderKey = isBaseTile
         ? textureKey
-        : MINERALS.find((m) => m.key === tile!.type)?.tileImage || 'StoneTile';
+        : MINERAL_MAP[tile!.type]?.tileImage || 'StoneTile';
 
       const key = `${x},${y}_${renderKey}`;
       visibleTileKeys.add(key);
