@@ -67,7 +67,6 @@ export const circle2Monsters: MonsterDefinition[] = [
       gold: 1500,
       drops: [
         { itemId: 'essence_lust', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_asmodeus_ring', chance: 1.0, minAmount: 1, maxAmount: 1 },
       ],
     },
