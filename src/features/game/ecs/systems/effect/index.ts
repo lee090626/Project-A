@@ -86,7 +86,7 @@ export const effectSystem = (world: GameWorld, deltaTime: number) => {
   updateFloatingTexts(world, deltaTime);
 
   // 5. [Specialist] 드롭 아이템 물리 및 수집 업데이트
-  updateLootCollection(world, deltaTime);
+  updateLootCollection(world);
 
   // 6. Specialist가 수집한 데이터를 UI Toast용 버퍼로 전이
   const buffer = world.aggregationBuffer || {};

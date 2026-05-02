@@ -1,64 +1,56 @@
 import { GameWorld } from '@/entities/world/model';
-import { TILE_SIZE } from '@/shared/config/constants';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { addArtifactStack, isArtifactId } from '@/shared/lib/artifactUtils';
 
 
 /**
- * 드롭된 아이템의 물리(중력, 마그넷) 및 플레이어의 획득 로직을 관리합니다.
+ * 드롭된 아이템의 즉시 획득 로직을 관리합니다.
+ *
+ * 드롭 아이템을 장시간 물리 시뮬레이션하거나 렌더링하지 않고 같은 틱에서 정산하여
+ * 드롭 스프라이트 누적, 자석 이동 계산, 아이템 렌더링 비용을 줄입니다.
+ *
  * @param world - 게임 월드
- * @param deltaTime - 프레임 델타 시간 (ms)
  */
-export const updateLootCollection = (world: GameWorld, deltaTime: number) => {
-  const { player, droppedItemPool: dp } = world;
-  const dtFactor = deltaTime / 16.6;
+export const updateLootCollection = (world: GameWorld) => {
+  const { droppedItemPool: dp } = world;
 
   for (let i = 0; i < dp.active.length; i++) {
     if (!dp.active[i]) continue;
 
-    // 1. 물리 업데이트
-    dp.x[i] += dp.vx[i] * dtFactor;
-    dp.y[i] += dp.vy[i] * dtFactor;
-    dp.vy[i] += 0.2 * dtFactor; // 중력
-    dp.vx[i] *= 0.95; // 공기 저항
-
-    // 2. 플레이어 자석 효과 (Magnet): 거리와 상관없이 항상 끌어당김
-    const dx = player.pos.x * TILE_SIZE + TILE_SIZE / 2 - dp.x[i];
-    const dy = player.pos.y * TILE_SIZE + TILE_SIZE / 2 - dp.y[i];
-    const distSq = dx * dx + dy * dy;
-    const dist = Math.sqrt(distSq);
-
-    if (dist > 0) {
-      const force = 0.6 * dtFactor;
-      dp.vx[i] += (dx / dist) * force;
-      dp.vy[i] += (dy / dist) * force;
-    }
-
-      // 3. 획득 판정 (Collision)
-    const pickupRange = 20;
-    if (distSq < pickupRange * pickupRange) {
-      const id = ID_TO_TILE_TYPE[dp.typeId[i]];
-      const amount = dp.amount[i];
-
-      // 인벤토리 및 수집 기록 가산
-      if (isArtifactId(id)) {
-        const gained = addArtifactStack(player.stats, id, amount);
-        if (gained > 0) {
-          world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
-        }
-      } else if (id.includes('stone') || id.includes('ite')) {
-        // Mineral
-        player.stats.inventory[id] = (player.stats.inventory[id] || 0) + amount;
-        world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
-      } else {
-        // Artifacts or other collectables
-        if (!player.stats.collectionHistory) player.stats.collectionHistory = {};
-        player.stats.collectionHistory[id] = (player.stats.collectionHistory[id] || 0) + amount;
-        world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
-      }
-
-      // 아이템 제거 (비활성화)
-      dp.active[i] = 0;
-    }
+    collectDroppedItem(world, i);
+    dp.kill(i);
   }
 };
+
+/**
+ * 드롭 아이템 풀의 특정 슬롯을 플레이어 보상으로 정산합니다.
+ *
+ * @param world - 게임 월드
+ * @param index - 드롭 아이템 풀 슬롯 인덱스
+ */
+function collectDroppedItem(world: GameWorld, index: number): void {
+  const { player, droppedItemPool: dp } = world;
+  const id = ID_TO_TILE_TYPE[dp.typeId[index]];
+  const amount = dp.amount[index];
+
+  if (!id || amount <= 0) return;
+
+  // 인벤토리 및 수집 기록 가산
+  if (isArtifactId(id)) {
+    const gained = addArtifactStack(player.stats, id, amount);
+    if (gained > 0) {
+      world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
+    }
+    return;
+  }
+
+  if (id.includes('stone') || id.includes('ite')) {
+    player.stats.inventory[id] = (player.stats.inventory[id] || 0) + amount;
+    world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
+    return;
+  }
+
+  if (!player.stats.collectionHistory) player.stats.collectionHistory = {};
+  player.stats.collectionHistory[id] = (player.stats.collectionHistory[id] || 0) + amount;
+  world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
+}
