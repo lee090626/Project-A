@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
+import { WindowFrame } from '@/shared/ui/window';
 import RecipeDetail from './RecipeDetail';
 import { useCrafting } from './useCrafting';
 
@@ -43,17 +44,7 @@ function Crafting({ stats, onCraft, onSynthesizeRelic, onClose }: CraftingProps)
   } = useCrafting(stats);
 
   return (
-    <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      {/* 배경 장식 요소 */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, #ffffff 1px, transparent 0)',
-          backgroundSize: '24px 24px',
-        }}
-      />
-      <div className="absolute top-0 left-0 w-full h-64 bg-linear-to-b from-rose-500/5 to-transparent pointer-events-none" />
-
+    <WindowFrame showPattern topGlowClassName="from-rose-500/5">
       {/* HEADER SECTION */}
       <ForgeHeader goldCoins={stats.goldCoins} onClose={onClose} />
 
@@ -97,7 +88,7 @@ function Crafting({ stats, onCraft, onSynthesizeRelic, onClose }: CraftingProps)
           />
         </div>
       </div>
-    </div>
+    </WindowFrame>
   );
 }
 
