@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import { AtlasIcon } from '../AtlasIcon';
 import { atlasMap } from '@/shared/config/atlasMap';
 
@@ -21,27 +20,27 @@ interface QuickNavProps {
  */
 export const QuickNav: React.FC<QuickNavProps> = React.memo(({ items }) => {
   return (
-    <div className="absolute left-1/2 bottom-2 md:bottom-6 lg:bottom-10 -translate-x-1/2 flex gap-1.5 md:gap-4 lg:gap-6 pointer-events-auto z-20">
+    <div className="absolute left-1/2 bottom-3 md:bottom-5 lg:bottom-6 -translate-x-1/2 flex gap-1.5 md:gap-2.5 lg:gap-3 pointer-events-auto z-20">
       {items.map((item) => (
         <button
           key={item.label}
           onClick={item.onClick}
-          className="group relative flex flex-col items-center gap-1 md:gap-2 focus:outline-none focus:ring-4 focus:ring-white/70 rounded-2xl md:rounded-3xl p-1 shadow-2xl transition-all"
+          className="group relative flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-white/60 rounded-xl p-0.5 transition-all"
         >
-          <div className="absolute -top-10 md:-top-12 left-1/2 -translate-x-1/2 px-2 py-1 md:px-3 md:py-1.5 bg-zinc-900/95 text-white text-[10px] md:text-xs font-black rounded-md md:rounded-lg opacity-0 md:group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap border border-white/20 shadow-2xl backdrop-blur-md">
+          <div className="absolute -top-8 md:-top-9 left-1/2 -translate-x-1/2 px-2 py-1 bg-zinc-950/90 text-white text-[10px] font-bold rounded-md opacity-0 md:group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap border border-white/15 shadow-lg backdrop-blur-md">
             {item.label}
           </div>
-          <div className="w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20 bg-zinc-900/90 backdrop-blur-3xl border border-white/20 rounded-lg md:rounded-2xl lg:rounded-3xl flex items-center justify-center transition-all duration-300 group-hover:border-white/50 group-hover:bg-zinc-800/95 active:scale-90 relative overflow-hidden shadow-[0_12px_40px_-8px_rgba(0,0,0,0.7)]">
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-zinc-950/75 backdrop-blur-xl border border-white/15 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:border-white/35 group-hover:bg-zinc-900/85 active:scale-95 relative overflow-hidden shadow-[0_10px_24px_-12px_rgba(0,0,0,0.75)]">
             <div
-              className="absolute inset-0 opacity-0 transition-opacity duration-300"
+              className="absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-10"
               style={{ backgroundColor: item.color }}
             />
 
-            <div className="relative w-20 h-20 md:w-20 md:h-20 lg:w-20 lg:h-20 z-10 transition-all duration-300 flex items-center justify-center">
+            <div className="relative w-12 h-12 md:w-14 md:h-14 z-10 transition-all duration-200 flex items-center justify-center">
               {item.iconKey ? (
-                <AtlasIcon name={item.iconKey as any} alt={item.label} size={48} />
+                <AtlasIcon name={item.iconKey as any} alt={item.label} size={38} />
               ) : (
-                <span className="text-3xl md:text-4xl lg:text-5xl drop-shadow-lg">{item.icon}</span>
+                <span className="text-2xl md:text-3xl drop-shadow-lg">{item.icon}</span>
               )}
             </div>
           </div>
