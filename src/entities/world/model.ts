@@ -5,11 +5,8 @@ import {
   GameAssets,
   Particle,
   FloatingText,
-  DroppedItem,
   InteractionType,
   TILE_TYPE_TO_ID,
-  ID_TO_TILE_TYPE,
-  TileType,
 } from '@/shared/types/game';
 import { ObjectPool } from '@/shared/lib/effectPool';
 import { EntityManager } from '@/shared/lib/ecs/EntityManager';
@@ -30,6 +27,8 @@ export class DroppedItemManager {
   public vy: Float32Array;
   public amount: Uint32Array;
   public life: Float32Array;
+  /** 유물처럼 TileType 매핑에 없는 드롭의 원본 ID를 보존합니다. */
+  public itemIds: string[];
 
   public blockedDropCount: number = 0;
   private nextIdx: number = 0;
@@ -45,11 +44,12 @@ export class DroppedItemManager {
     this.vy = new Float32Array(capacity);
     this.amount = new Uint32Array(capacity);
     this.life = new Float32Array(capacity);
+    this.itemIds = new Array(capacity).fill('');
   }
 
   /** 새로운 아이템을 풀에서 활성화 (generation-based ID 반환) */
   public spawn(
-    type: TileType,
+    itemId: string,
     x: number,
     y: number,
     vx: number,
@@ -63,7 +63,8 @@ export class DroppedItemManager {
 
       if (!this.active[idx]) {
         this.active[idx] = 1;
-        this.typeId[idx] = TILE_TYPE_TO_ID[type] || 0;
+        this.typeId[idx] = TILE_TYPE_TO_ID[itemId] || 0;
+        this.itemIds[idx] = itemId;
         this.x[idx] = x;
         this.y[idx] = y;
         this.vx[idx] = vx;
@@ -86,12 +87,14 @@ export class DroppedItemManager {
   public kill(index: number) {
     if (index >= 0 && index < this.capacity) {
       this.active[index] = 0;
+      this.itemIds[index] = '';
     }
   }
 
   /** 모든 아이템 초기화 (차원 이동 시) */
   public clear() {
     this.active.fill(0);
+    this.itemIds.fill('');
     this.blockedDropCount = 0;
     this.nextIdx = 0;
   }

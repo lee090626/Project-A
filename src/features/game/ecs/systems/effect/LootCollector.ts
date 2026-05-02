@@ -30,7 +30,7 @@ export const updateLootCollection = (world: GameWorld) => {
  */
 function collectDroppedItem(world: GameWorld, index: number): void {
   const { player, droppedItemPool: dp } = world;
-  const id = ID_TO_TILE_TYPE[dp.typeId[index]];
+  const id = dp.itemIds[index] || ID_TO_TILE_TYPE[dp.typeId[index]];
   const amount = dp.amount[index];
 
   if (!id || amount <= 0) return;
