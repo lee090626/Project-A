@@ -79,9 +79,18 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
-  "GaleStoneIcon": {
+  "MoldstoneIcon": {
     "atlasIndex": 0,
     "x": 1613,
+    "y": 1934,
+    "width": 108,
+    "height": 102,
+    "atlasWidth": 2046,
+    "atlasHeight": 2039
+  },
+  "GaleStoneIcon": {
+    "atlasIndex": 0,
+    "x": 1727,
     "y": 1934,
     "width": 88,
     "height": 92,
@@ -90,7 +99,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "CrimsonStoneIcon": {
     "atlasIndex": 0,
-    "x": 1707,
+    "x": 1821,
     "y": 1934,
     "width": 84,
     "height": 88,
@@ -99,7 +108,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
   },
   "FervorStoneIcon": {
     "atlasIndex": 0,
-    "x": 1797,
+    "x": 1911,
     "y": 1934,
     "width": 80,
     "height": 86,
@@ -124,7 +133,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
-  "DirtTile": {
+  "FervorStoneTile": {
     "atlasIndex": 0,
     "x": 1915,
     "y": 271,
@@ -133,7 +142,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
-  "FervorStoneTile": {
+  "GaleStoneTile": {
     "atlasIndex": 0,
     "x": 1915,
     "y": 405,
@@ -142,7 +151,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
-  "GaleStoneTile": {
+  "StoneTile": {
     "atlasIndex": 0,
     "x": 1915,
     "y": 539,
@@ -151,30 +160,12 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },
-  "StoneTile": {
+  "MoldstoneTile": {
     "atlasIndex": 0,
     "x": 1915,
     "y": 673,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2046,
-    "atlasHeight": 2039
-  },
-  "BossCoreTile": {
-    "atlasIndex": 0,
-    "x": 1915,
-    "y": 807,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 2046,
-    "atlasHeight": 2039
-  },
-  "BossSkinTile": {
-    "atlasIndex": 0,
-    "x": 1915,
-    "y": 807,
-    "width": 128,
-    "height": 128,
+    "width": 124,
+    "height": 122,
     "atlasWidth": 2046,
     "atlasHeight": 2039
   },

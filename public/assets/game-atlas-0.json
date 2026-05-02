@@ -168,9 +168,33 @@
         "y": 0.5
       }
     },
-    "GaleStoneIcon.png": {
+    "MoldstoneIcon.png": {
       "frame": {
         "x": 1613,
+        "y": 1934,
+        "w": 108,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 13,
+        "w": 108,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GaleStoneIcon.png": {
+      "frame": {
+        "x": 1727,
         "y": 1934,
         "w": 88,
         "h": 92
@@ -194,7 +218,7 @@
     },
     "CrimsonStoneIcon.png": {
       "frame": {
-        "x": 1707,
+        "x": 1821,
         "y": 1934,
         "w": 84,
         "h": 88
@@ -218,7 +242,7 @@
     },
     "FervorStoneIcon.png": {
       "frame": {
-        "x": 1797,
+        "x": 1911,
         "y": 1934,
         "w": 80,
         "h": 86
@@ -240,34 +264,10 @@
         "y": 0.5
       }
     },
-    "CrimsonStoneTile.png": {
-      "frame": {
-        "x": 1915,
-        "y": 3,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "CrimsonVeilHelmet.png": {
       "frame": {
         "x": 1915,
-        "y": 137,
+        "y": 3,
         "w": 128,
         "h": 128
       },
@@ -288,20 +288,20 @@
         "y": 0.5
       }
     },
-    "DirtTile.png": {
+    "CrimsonStoneTile.png": {
       "frame": {
         "x": 1915,
-        "y": 271,
+        "y": 137,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -315,17 +315,17 @@
     "FervorStoneTile.png": {
       "frame": {
         "x": 1915,
-        "y": 405,
+        "y": 270,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -339,17 +339,17 @@
     "GaleStoneTile.png": {
       "frame": {
         "x": 1915,
-        "y": 539,
+        "y": 403,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -363,17 +363,17 @@
     "StoneTile.png": {
       "frame": {
         "x": 1915,
-        "y": 673,
+        "y": 536,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
         "w": 128,
-        "h": 128
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -384,44 +384,20 @@
         "y": 0.5
       }
     },
-    "boss_core.png": {
+    "MoldstoneTile.png": {
       "frame": {
         "x": 1915,
-        "y": 807,
-        "w": 128,
-        "h": 128
+        "y": 669,
+        "w": 124,
+        "h": 122
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "boss_skin.png": {
-      "frame": {
-        "x": 1915,
-        "y": 807,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
+        "x": 2,
+        "y": 3,
+        "w": 124,
+        "h": 122
       },
       "sourceSize": {
         "w": 128,
