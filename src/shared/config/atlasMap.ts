@@ -23,7 +23,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 1024,
     "height": 1024,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "MoveSpeedRune": {
     "atlasIndex": 0,
@@ -32,7 +32,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 1024,
     "height": 938,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "AttackRune": {
     "atlasIndex": 0,
@@ -41,7 +41,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 1011,
     "height": 926,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "LuckRune": {
     "atlasIndex": 0,
@@ -50,7 +50,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 1008,
     "height": 924,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "CrimsonFangDrill": {
     "atlasIndex": 0,
@@ -59,7 +59,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 244,
     "height": 94,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "CrimsonStrideBoots": {
     "atlasIndex": 0,
@@ -68,7 +68,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 148,
     "height": 102,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "FireBall": {
     "atlasIndex": 0,
@@ -77,43 +77,52 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 170,
     "height": 80,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
-  "MoldstoneIcon": {
+  "FilthStoneIcon": {
     "atlasIndex": 0,
     "x": 1613,
     "y": 1865,
-    "width": 108,
-    "height": 102,
+    "width": 97,
+    "height": 91,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "GaleStoneIcon": {
     "atlasIndex": 0,
-    "x": 1727,
+    "x": 1716,
     "y": 1865,
     "width": 88,
     "height": 92,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
   "CrimsonStoneIcon": {
     "atlasIndex": 0,
-    "x": 1821,
+    "x": 1810,
     "y": 1865,
     "width": 84,
     "height": 88,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
   },
-  "FervorStoneIcon": {
+  "SludgeStoneIcon": {
     "atlasIndex": 0,
-    "x": 1911,
+    "x": 1900,
     "y": 1865,
-    "width": 80,
-    "height": 86,
+    "width": 94,
+    "height": 78,
     "atlasWidth": 2047,
-    "atlasHeight": 1974
+    "atlasHeight": 2016
+  },
+  "MoldStoneIcon": {
+    "atlasIndex": 0,
+    "x": 1900,
+    "y": 1949,
+    "width": 80,
+    "height": 64,
+    "atlasWidth": 2047,
+    "atlasHeight": 2016
   },
   "CritRateRune": {
     "atlasIndex": 1,
@@ -151,12 +160,57 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 2044,
     "atlasHeight": 1963
   },
-  "MoldstoneTile": {
+  "C3Tile": {
     "atlasIndex": 1,
     "x": 1915,
     "y": 933,
-    "width": 124,
-    "height": 122,
+    "width": 126,
+    "height": 126,
+    "atlasWidth": 2044,
+    "atlasHeight": 1963
+  },
+  "MoldStoneTile": {
+    "atlasIndex": 1,
+    "x": 1915,
+    "y": 1065,
+    "width": 126,
+    "height": 126,
+    "atlasWidth": 2044,
+    "atlasHeight": 1963
+  },
+  "RotStoneTile": {
+    "atlasIndex": 1,
+    "x": 1915,
+    "y": 1197,
+    "width": 126,
+    "height": 126,
+    "atlasWidth": 2044,
+    "atlasHeight": 1963
+  },
+  "SludgeStoneTile": {
+    "atlasIndex": 1,
+    "x": 1915,
+    "y": 1329,
+    "width": 126,
+    "height": 126,
+    "atlasWidth": 2044,
+    "atlasHeight": 1963
+  },
+  "FervorStoneIcon": {
+    "atlasIndex": 1,
+    "x": 1915,
+    "y": 1461,
+    "width": 80,
+    "height": 86,
+    "atlasWidth": 2044,
+    "atlasHeight": 1963
+  },
+  "RotStoneIcon": {
+    "atlasIndex": 1,
+    "x": 1915,
+    "y": 1553,
+    "width": 81,
+    "height": 73,
     "atlasWidth": 2044,
     "atlasHeight": 1963
   },
@@ -376,7 +430,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 1956,
     "atlasHeight": 1939
   },
-  "GaleStoneTile": {
+  "FilthStoneTile": {
     "atlasIndex": 2,
     "x": 187,
     "y": 1772,
@@ -385,9 +439,18 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 1956,
     "atlasHeight": 1939
   },
-  "StoneTile": {
+  "GaleStoneTile": {
     "atlasIndex": 2,
     "x": 321,
+    "y": 1772,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1956,
+    "atlasHeight": 1939
+  },
+  "StoneTile": {
+    "atlasIndex": 2,
+    "x": 455,
     "y": 1772,
     "width": 128,
     "height": 127,

@@ -168,20 +168,20 @@
         "y": 0.5
       }
     },
-    "MoldstoneIcon.png": {
+    "FilthStoneIcon.png": {
       "frame": {
         "x": 1613,
         "y": 1865,
-        "w": 108,
-        "h": 102
+        "w": 97,
+        "h": 91
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 10,
-        "y": 13,
-        "w": 108,
-        "h": 102
+        "x": 15,
+        "y": 18,
+        "w": 97,
+        "h": 91
       },
       "sourceSize": {
         "w": 128,
@@ -194,7 +194,7 @@
     },
     "GaleStoneIcon.png": {
       "frame": {
-        "x": 1727,
+        "x": 1716,
         "y": 1865,
         "w": 88,
         "h": 92
@@ -218,7 +218,7 @@
     },
     "CrimsonStoneIcon.png": {
       "frame": {
-        "x": 1821,
+        "x": 1810,
         "y": 1865,
         "w": 84,
         "h": 88
@@ -240,20 +240,44 @@
         "y": 0.5
       }
     },
-    "FervorStoneIcon.png": {
+    "SludgeStoneIcon.png": {
       "frame": {
-        "x": 1911,
+        "x": 1900,
         "y": 1865,
+        "w": 94,
+        "h": 78
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 17,
+        "y": 25,
+        "w": 94,
+        "h": 78
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "MoldStoneIcon.png": {
+      "frame": {
+        "x": 1900,
+        "y": 1949,
         "w": 80,
-        "h": 86
+        "h": 64
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 24,
-        "y": 21,
+        "y": 32,
         "w": 80,
-        "h": 86
+        "h": 64
       },
       "sourceSize": {
         "w": 128,
@@ -272,7 +296,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2047,
-      "h": 1974
+      "h": 2016
     },
     "scale": 1
   }

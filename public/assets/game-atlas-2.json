@@ -576,7 +576,7 @@
         "y": 0.5
       }
     },
-    "GaleStoneTile.png": {
+    "FilthStoneTile.png": {
       "frame": {
         "x": 187,
         "y": 1772,
@@ -600,9 +600,33 @@
         "y": 0.5
       }
     },
-    "StoneTile.png": {
+    "GaleStoneTile.png": {
       "frame": {
         "x": 321,
+        "y": 1772,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "StoneTile.png": {
+      "frame": {
+        "x": 455,
         "y": 1772,
         "w": 128,
         "h": 127
