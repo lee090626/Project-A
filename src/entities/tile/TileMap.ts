@@ -1,5 +1,7 @@
 import { Tile, Entity, TILE_TYPE_TO_ID, ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { getMineralStats } from '@/shared/lib/tileUtils';
+import { BASE_DEPTH } from '@/shared/config/constants';
+import { CIRCLES } from '@/shared/config/circleData';
 import {
   MAP_HEIGHT,
   CHUNK_WIDTH,
@@ -88,6 +90,62 @@ export class TileMap {
     }
 
     if (changed) this.renderRevision++;
+  }
+
+  /**
+   * 저장된 수정 타일 중 특정 깊이 범위와 타입이 일치하는 타일만 다른 타입으로 교체합니다.
+   * HP와 GEN/MOD/SPOT 플래그는 유지하여 기존 파손 상태와 저장 상태를 보존합니다.
+   *
+   * @param fromType - 교체 전 타일 타입
+   * @param toType - 교체 후 타일 타입
+   * @param startY - 포함되는 시작 Y 좌표
+   * @param endY - 제외되는 종료 Y 좌표
+   */
+  public replaceModifiedTileTypeInDepthRange(
+    fromType: Tile['type'],
+    toType: Tile['type'],
+    startY: number,
+    endY: number,
+  ): void {
+    const fromTypeId = TILE_TYPE_TO_ID[fromType];
+    const toTypeId = TILE_TYPE_TO_ID[toType];
+    if (fromTypeId === undefined || toTypeId === undefined) return;
+
+    let changed = false;
+
+    for (const coordStr of this.modifiedCoords) {
+      const [x, y] = coordStr.split(',').map(Number);
+      if (y < startY || y >= endY) continue;
+
+      const { chunkX, localX } = this.getChunkInfo(x);
+      const chunk = this.chunks.get(chunkX);
+      if (!chunk) continue;
+
+      const idx = y * CHUNK_WIDTH + localX;
+      const packed = chunk[idx];
+      if (!(packed & MOD_FLAG)) continue;
+      if ((packed & TYPE_MASK) !== fromTypeId) continue;
+
+      chunk[idx] = (packed & ~TYPE_MASK) | (toTypeId & TYPE_MASK);
+      changed = true;
+    }
+
+    if (changed) this.renderRevision++;
+  }
+
+  /**
+   * C3 전용 배경 타입 도입 이전 세이브의 수정된 일반 stone 배경을 탐식 지층으로 승격합니다.
+   */
+  private migrateGluttonyBackgroundTiles(): void {
+    const gluttonyCircle = CIRCLES.find((circle) => circle.id === 3);
+    if (!gluttonyCircle) return;
+
+    this.replaceModifiedTileTypeInDepthRange(
+      'stone',
+      'gluttony_stone',
+      BASE_DEPTH + gluttonyCircle.depthStart,
+      BASE_DEPTH + gluttonyCircle.depthEnd,
+    );
   }
 
   getTile(x: number, y: number): Tile | null {
@@ -199,6 +257,7 @@ export class TileMap {
       this.getChunkInfo.bind(this),
       this.getChunk.bind(this)
     );
+    this.migrateGluttonyBackgroundTiles();
     this.renderRevision++;
   }
 
@@ -219,6 +278,7 @@ export class TileMap {
       this.getChunkInfo.bind(this),
       this.getChunk.bind(this)
     );
+    this.migrateGluttonyBackgroundTiles();
     this.renderRevision++;
   }
 

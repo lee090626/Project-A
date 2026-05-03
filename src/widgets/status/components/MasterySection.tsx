@@ -4,6 +4,9 @@ import { MINERALS } from '@/shared/config/mineralData';
 import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
 import TileMasteryCard from '../TileMasteryCard';
 
+const MINERAL_KEY_SET = new Set<string>(MINERALS.map((m) => m.key as string));
+const MINERAL_ORDER = new Map<string, number>(MINERALS.map((m, index) => [m.key as string, index]));
+
 interface MasterySectionProps {
   stats: PlayerStats;
   hoveredTooltipId?: string;
@@ -12,6 +15,10 @@ interface MasterySectionProps {
 }
 
 const MasterySection = ({ stats, hoveredTooltipId, onHoverPerk, onLeavePerk }: MasterySectionProps) => {
+  const discoveredMineralKeys = stats.discoveredMinerals
+    .filter((tileKey) => MINERAL_KEY_SET.has(tileKey))
+    .sort((a, b) => (MINERAL_ORDER.get(a) ?? 0) - (MINERAL_ORDER.get(b) ?? 0));
+
   return (
     <div className="bg-[#1e1e1f] p-4 md:p-8 rounded-2xl md:rounded-4xl border border-zinc-800 shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0" />
@@ -24,33 +31,26 @@ const MasterySection = ({ stats, hoveredTooltipId, onHoverPerk, onLeavePerk }: M
           </h3>
         </div>
         <div className="px-4 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] font-black text-emerald-400 tracking-widest">
-          DISCOVERED: {stats.discoveredMinerals.length}
+          DISCOVERED: {discoveredMineralKeys.length}
         </div>
       </div>
 
-      {stats.discoveredMinerals.length > 0 ? (
+      {discoveredMineralKeys.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {stats.discoveredMinerals
-            .filter((tileKey) => MINERALS.some((m) => m.key === tileKey))
-            .sort((a, b) => {
-              const idxA = MINERALS.findIndex((m) => m.key === a);
-              const idxB = MINERALS.findIndex((m) => m.key === b);
-              return idxA - idxB;
-            })
-            .map((tileKey) => (
-              <TileMasteryCard
-                key={tileKey}
-                tileKey={tileKey}
-                mastery={
-                  (stats.tileMastery && stats.tileMastery[tileKey]) ||
-                  createInitialMasteryState(tileKey)
-                }
-                unlockedPerks={stats.unlockedMasteryPerks}
-                hoveredTooltipId={hoveredTooltipId}
-                onHoverPerk={onHoverPerk}
-                onLeavePerk={onLeavePerk}
-              />
-            ))}
+          {discoveredMineralKeys.map((tileKey) => (
+            <TileMasteryCard
+              key={tileKey}
+              tileKey={tileKey}
+              mastery={
+                (stats.tileMastery && stats.tileMastery[tileKey]) ||
+                createInitialMasteryState(tileKey)
+              }
+              unlockedPerks={stats.unlockedMasteryPerks}
+              hoveredTooltipId={hoveredTooltipId}
+              onHoverPerk={onHoverPerk}
+              onLeavePerk={onLeavePerk}
+            />
+          ))}
         </div>
       ) : (
         <div className="py-20 flex flex-col items-center justify-center bg-zinc-950/50 rounded-3xl border border-dashed border-zinc-800 opacity-30">

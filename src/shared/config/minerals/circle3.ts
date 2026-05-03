@@ -15,8 +15,8 @@ export const circle3Minerals: MineralDefinition[] = [
     basePrice: 10,
     baseHealth: 250,
     defense: 30,
-    image: 'GoldIcon',
-    tileImage: 'StoneTile',
+    image: 'MoldStoneIcon',
+    tileImage: 'MoldStoneTile',
   },
   {
     key: 'sludgestone',
@@ -32,8 +32,8 @@ export const circle3Minerals: MineralDefinition[] = [
     basePrice: 20,
     baseHealth: 500,
     defense: 35,
-    image: 'GoldIcon',
-    tileImage: 'StoneTile',
+    image: 'SludgeStoneIcon',
+    tileImage: 'SludgeStoneTile',
   },
   {
     key: 'rotstone',
@@ -49,7 +49,7 @@ export const circle3Minerals: MineralDefinition[] = [
     basePrice: 30,
     baseHealth: 750,
     defense: 40,
-    image: 'GoldIcon',
-    tileImage: 'StoneTile',
+    image: 'RotStoneIcon',
+    tileImage: 'RotStoneTile',
   },
 ];

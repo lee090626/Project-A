@@ -36,7 +36,10 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
     });
   }, []);
 
-  const discoveredCount = stats.discoveredMinerals.length;
+  const discoveredCount = useMemo(() => {
+    const discoveredMineralKeys = new Set(stats.discoveredMinerals);
+    return MINERALS.filter((m) => discoveredMineralKeys.has(m.key)).length;
+  }, [stats.discoveredMinerals]);
   const totalMinerals = MINERALS.length;
   const encounteredBossCount = stats.encounteredBossIds.length;
   const totalBosses = bossesData.length;

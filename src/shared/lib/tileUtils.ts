@@ -1,6 +1,6 @@
 import { TileType } from '../types/game';
 
-import { MINERALS } from '../config/mineralData';
+import { TILE_DEFINITIONS } from '../config/mineralData';
 
 /**
  * 특정 타일 타입에 해당하는 렌더링 색상을 반환합니다.
@@ -28,7 +28,7 @@ export function getTileColor(type: TileType): string {
   }
 
   // 2. 광물 데이터 테이블에서 조회
-  const mineral = MINERALS.find((m) => m.key === type);
+  const mineral = TILE_DEFINITIONS.find((m) => m.key === type);
   if (mineral && mineral.color) return mineral.color;
 
   return '#455a64'; // fallback string
@@ -64,7 +64,7 @@ export function getTileIndex(type: string): number {
 
 /**
  * 타일 타입에 따른 기본 스탯(내구도 등)을 조회합니다.
- * 광물의 경우 MINERALS 설정(SSOT)에서 가져오며, 특수 타일은 직접 계산합니다.
+ * 광물과 배경 타일은 전체 타일 정의(SSOT)에서 가져오며, 특수 타일은 직접 계산합니다.
  * @param type 조회할 타일의 종류
  * @returns 타일의 체력 정보를 포함한 객체
  */
@@ -88,8 +88,8 @@ export function getMineralStats(type: TileType): { health: number } {
       return { health: Infinity };
   }
 
-  // 2. 광물 데이터 테이블에서 조회 (단일 진실 공급원 전술)
-  const mineral = MINERALS.find((m) => m.key === type);
+  // 2. 전체 타일 정의 테이블에서 조회 (단일 진실 공급원 전술)
+  const mineral = TILE_DEFINITIONS.find((m) => m.key === type);
   if (mineral) {
     return {
       health: mineral.baseHealth,

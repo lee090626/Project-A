@@ -113,7 +113,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Gluttony',
     nameKo: '탐식',
     theme: '부패, 진흙, 공허',
-    bgType: 'stone',
+    bgType: 'gluttony_stone',
     depthStart: 300,
     depthEnd: 600,
     minerals: [

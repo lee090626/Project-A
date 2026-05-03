@@ -20,6 +20,8 @@ export interface MineralDefinition {
   basePrice: number;
   baseHealth: number;
   defense: number;
+  /** 인벤토리, 드롭, 판매, 도감, 숙련도 대상으로 취급되는 수집 가능 광물 여부입니다. */
+  collectible?: boolean;
   image?: AtlasIconName | null | any;
   tileImage?: AtlasIconName | null | any;
 }

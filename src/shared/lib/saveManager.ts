@@ -1,6 +1,6 @@
 import { PlayerStats, Position, Inventory } from '../types/game';
 import { DRILLING_SECRET_KEY } from '../config/constants';
-import { MINERALS } from '../config/mineralData';
+import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
 import { gameDB } from './db';
 
 /**
@@ -25,6 +25,8 @@ export interface SaveData {
 
 const SAVE_KEY = 'drilling-game-save';
 const WAYPOINT_INTERVAL = 100;
+const COLLECTIBLE_MINERAL_KEYS = new Set(MINERALS.map((m) => m.key as string));
+const KNOWN_TILE_DEFINITION_KEYS = new Set(TILE_DEFINITIONS.map((m) => m.key as string));
 
 /**
  * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
@@ -53,6 +55,33 @@ function normalizeUnlockedWaypoints(stats: PlayerStats): void {
   }
 
   stats.unlockedWaypoints = Array.from(waypointSet).sort((a, b) => a - b);
+}
+
+/**
+ * 세이브에 남아 있는 비수집 배경 타일 진행 데이터를 제거합니다.
+ * 타일 정의와 수집 광물 목록이 분리되기 전 저장된 오염 데이터를 로드 시점에 정리합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function normalizeCollectibleMineralProgress(stats: PlayerStats): void {
+  if (Array.isArray(stats.discoveredMinerals)) {
+    stats.discoveredMinerals = stats.discoveredMinerals.filter((key) =>
+      COLLECTIBLE_MINERAL_KEYS.has(key),
+    );
+  } else {
+    stats.discoveredMinerals = [];
+  }
+
+  if (!stats.tileMastery) {
+    stats.tileMastery = {};
+    return;
+  }
+
+  Object.keys(stats.tileMastery).forEach((key) => {
+    if (!COLLECTIBLE_MINERAL_KEYS.has(key)) {
+      delete stats.tileMastery[key];
+    }
+  });
 }
 
 /**
@@ -175,43 +204,44 @@ export const saveManager = {
         if (!s.collectionHistory) s.collectionHistory = {};
         if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
         normalizeUnlockedWaypoints(s as PlayerStats);
+        normalizeCollectibleMineralProgress(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
-        if (s.inventory) {
-          const validMineralKeys: Set<string> = new Set(MINERALS.map((m) => m.key as string));
-          const oldInv = s.inventory as any;
-          s.inventory = {} as Inventory;
+        const oldInv = (s.inventory || {}) as any;
+        s.inventory = {} as Inventory;
 
-          let compensationGold = 0;
-          for (const key of Object.keys(oldInv)) {
-            // 명시적 마이그레이션: veinstone -> crimsonstone
-            if (key === 'veinstone') {
-              (s.inventory as any).crimsonstone =
-                ((s.inventory as any).crimsonstone || 0) + oldInv[key];
-              console.log(`[SaveManager] migrated 'veinstone' to 'crimsonstone'`);
-              continue;
-            }
-
-            if (validMineralKeys.has(key)) {
-              (s.inventory as any)[key] = oldInv[key];
-            } else if (typeof oldInv[key] === 'number' && oldInv[key] > 0) {
-              // 사용되지 않는 구형 광물(dirt, stone 등)은 1개당 10G로 환산
-              compensationGold += oldInv[key] * 10;
-            }
+        let compensationGold = 0;
+        for (const key of Object.keys(oldInv)) {
+          // 명시적 마이그레이션: veinstone -> crimsonstone
+          if (key === 'veinstone') {
+            (s.inventory as any).crimsonstone =
+              ((s.inventory as any).crimsonstone || 0) + oldInv[key];
+            console.log(`[SaveManager] migrated 'veinstone' to 'crimsonstone'`);
+            continue;
           }
 
-          if (compensationGold > 0) {
-            s.goldCoins = (s.goldCoins || 0) + compensationGold;
-            console.log(`[SaveManager] Legacy items converted to ${compensationGold} Gold Coins.`);
+          if (COLLECTIBLE_MINERAL_KEYS.has(key)) {
+            (s.inventory as any)[key] = oldInv[key];
+          } else if (KNOWN_TILE_DEFINITION_KEYS.has(key)) {
+            // stone, gluttony_stone 같은 배경 타일 잔여 데이터는 보상 없이 제거합니다.
+            continue;
+          } else if (typeof oldInv[key] === 'number' && oldInv[key] > 0) {
+            // 더 이상 정의되지 않는 구형 광물은 1개당 10G로 환산
+            compensationGold += oldInv[key] * 10;
           }
-
-          // 신규 광물 초기화
-          MINERALS.forEach((m) => {
-            if ((s.inventory as any)[m.key] === undefined) {
-              (s.inventory as any)[m.key] = 0;
-            }
-          });
         }
+
+        if (compensationGold > 0) {
+          s.goldCoins = (s.goldCoins || 0) + compensationGold;
+          console.log(`[SaveManager] Legacy items converted to ${compensationGold} Gold Coins.`);
+        }
+
+        // 신규 광물 초기화
+        MINERALS.forEach((m) => {
+          if ((s.inventory as any)[m.key] === undefined) {
+            (s.inventory as any)[m.key] = 0;
+          }
+        });
       }
 
       return data;

@@ -51,6 +51,7 @@ export type TileType =
   | 'stone'
   | 'lava'
   | 'dungeon_bricks'
+  | 'gluttony_stone'
   | 'boss_core'
   | 'boss_skin'
   | 'monster_nest'
@@ -104,6 +105,7 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   portal: 31,
   boss_skin: 32,
   stone: 33,
+  gluttony_stone: 34,
   // === 몬스터 전리품 및 정수 (100+) ===
   essence_lust: 100,
   essence_gluttony: 101,

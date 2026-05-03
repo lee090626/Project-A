@@ -13,10 +13,10 @@ import { circle9Minerals } from './minerals/circle9';
 export type { MineralDefinition } from './minerals/types';
 
 /**
- * 게임 내 광물(Mineral) 데이터베이스입니다.
- * 각 서클별 모듈에서 가져온 데이터를 하나로 통합합니다.
+ * 게임 내 채굴 가능한 타일 정의 전체입니다.
+ * 배경 타일과 수집 가능한 광물을 모두 포함합니다.
  */
-export const MINERALS: MineralDefinition[] = [
+export const TILE_DEFINITIONS: MineralDefinition[] = [
   ...stoneMinerals,
   ...circle2Minerals,
   ...circle3Minerals,
@@ -29,12 +29,29 @@ export const MINERALS: MineralDefinition[] = [
 ];
 
 /**
- * 빠른 조회(O(1))를 위한 광물 맵입니다.
+ * 인벤토리, 판매, 도감, 숙련도에 노출되는 수집 가능 광물 목록입니다.
  */
-export const MINERAL_MAP: Record<string, MineralDefinition> = MINERALS.reduce(
+export const MINERALS: MineralDefinition[] = TILE_DEFINITIONS.filter(
+  (mineral) => mineral.collectible !== false,
+);
+
+/**
+ * 빠른 조회(O(1))를 위한 전체 타일 정의 맵입니다.
+ */
+export const MINERAL_MAP: Record<string, MineralDefinition> = TILE_DEFINITIONS.reduce(
   (acc, mineral) => {
     acc[mineral.key] = mineral;
     return acc;
   },
   {} as Record<string, MineralDefinition>
 );
+
+/**
+ * 수집 가능 광물인지 판정합니다.
+ *
+ * @param key - 검사할 타일 또는 아이템 키
+ * @returns 인벤토리/드롭/마스터리 대상이면 true
+ */
+export const isCollectibleMineral = (key: string): boolean => {
+  return MINERAL_MAP[key]?.collectible !== false && MINERAL_MAP[key] !== undefined;
+};

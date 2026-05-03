@@ -19,8 +19,10 @@ export type Inventory = {
     | 'boss_skin'
     | 'monster_nest'
     | 'monster'
+    | 'stone'
     | 'lava'
     | 'dungeon_bricks'
+    | 'gluttony_stone'
   >]: number;
 } & {
   [key: string]: number;

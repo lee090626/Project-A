@@ -10,6 +10,7 @@ import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
 import { showToast } from '../toastSystem';
 import { MASTERY_PERKS } from '@/shared/config/masteryPerks';
 import { toPascalCase } from '@/shared/lib/textCase';
+import { isCollectibleMineral } from '@/shared/config/mineralData';
 
 /**
  * 타일 파괴 시 보상(아이템 드롭) 및 숙련도 성장을 처리합니다.
@@ -28,7 +29,7 @@ export const masteryService = (
   createParticles(world, x * TILE_SIZE, y * TILE_SIZE, getTileColor(type as any), 8);
 
   // 2. 아이템 드롭 처리
-  if (player.stats.inventory[type as any] !== undefined && type !== 'stone') {
+  if (isCollectibleMineral(type) && player.stats.inventory[type as any] !== undefined) {
     // 드롭 개수 계산 (Luck 기반 전용 공식)
     const currentLuck = Math.max(1, luck);
     let dropCount = 1;

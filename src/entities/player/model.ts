@@ -83,7 +83,6 @@ export const createInitialPlayer = (seed: number): Player => ({
       froststone: 0,
       glacialite: 0,
       abyssstone: 0,
-      stone: 0,
       essence_lust: 0,
       essence_gluttony: 0,
       essence_greed: 0,
