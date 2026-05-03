@@ -8,6 +8,7 @@ import { getBasePath, withBasePath } from '@/shared/lib/basePath';
 import './globals.css';
 
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
+const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !isCrazyGamesBuild;
 
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
@@ -134,7 +135,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
       >
         <div id="drilling-game-root">{children}</div>
-        {!isCrazyGamesBuild && (
+        {shouldRegisterServiceWorker ? (
           <Script id="register-sw" strategy="afterInteractive">
             {`
             if ('serviceWorker' in navigator) {
@@ -144,6 +145,25 @@ export default function RootLayout({
                   // 등록 실패 시 게임은 정상 동작 (HTTP 캐시로 폴백)
                   console.warn('[SW] Registration failed, falling back to HTTP cache:', err);
                 });
+              });
+            }
+          `}
+          </Script>
+        ) : (
+          <Script id="unregister-sw-dev" strategy="afterInteractive">
+            {`
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                registrations.forEach(function(registration) {
+                  registration.unregister();
+                });
+              });
+            }
+            if ('caches' in window) {
+              caches.keys().then(function(keys) {
+                keys
+                  .filter(function(key) { return key.indexOf('game-assets-') === 0; })
+                  .forEach(function(key) { caches.delete(key); });
               });
             }
           `}

@@ -28,7 +28,9 @@ export interface PlayerAnimationFrameRequest {
   readonly elapsedMs: number;
 }
 
-export const PLAYER_IDLE_TEXTURE_KEY = 'player';
+const PLAYER_FRONT_IDLE_TEXTURE_KEY = 'PlayerWalkDown03';
+
+export const PLAYER_IDLE_TEXTURE_KEY = PLAYER_FRONT_IDLE_TEXTURE_KEY;
 
 const WALK_FRAME_DURATION_MS = 40;
 
@@ -41,12 +43,12 @@ const PLAYER_WALK_CLIPS: Record<PlayerWalkClipDirection, PlayerAnimationClip> = 
     frameDurationMs: WALK_FRAME_DURATION_MS,
     loop: true,
     frames: [
-      'PlayerWalkDown01',
-      'PlayerWalkDown02',
-      'PlayerWalkDown03',
+      PLAYER_FRONT_IDLE_TEXTURE_KEY,
       'PlayerWalkDown04',
       'PlayerWalkDown05',
       'PlayerWalkDown06',
+      'PlayerWalkDown01',
+      'PlayerWalkDown02',
     ],
   },
   Up: {

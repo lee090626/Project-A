@@ -51,11 +51,6 @@ export function updatePlayerRenderer(
   }
 
   const pContainer = container as any;
-  if (pContainer.lastFlip === undefined) pContainer.lastFlip = 1;
-
-  if (world.intent.moveX !== 0) {
-    pContainer.lastFlip = world.intent.moveX > 0 ? 1 : -1;
-  }
 
   const nextWalkDirection = resolvePlayerWalkDirection(world.intent.moveX, world.intent.moveY);
   if (nextWalkDirection) {
@@ -99,7 +94,7 @@ export function updatePlayerRenderer(
   body.rotation = 0;
   body.position.set(TILE_SIZE / 2, TILE_SIZE);
   const animationScaleX = shouldMirrorPlayerWalkFrame(walkDirection) ? -1 : 1;
-  body.scale.set(baseScaleX * (isWalking ? animationScaleX : pContainer.lastFlip), baseScaleY);
+  body.scale.set(baseScaleX * (isWalking ? animationScaleX : 1), baseScaleY);
 
   updateStatusVFX(container, entity.stats.activeEffects || [], TILE_SIZE, TILE_SIZE, now);
 }

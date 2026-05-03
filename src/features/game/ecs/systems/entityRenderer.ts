@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { updatePlayerRenderer } from './renderers/entityPlayer';
+import { PLAYER_IDLE_TEXTURE_KEY } from './renderers/playerAnimation';
 import { updateMobRenderer } from './renderers/entityMob';
 import { updateProjectileRenderer } from './renderers/entityProjectile';
 import { GameLayers, TextureRegistry } from '@/shared/types/engine';
@@ -37,7 +38,7 @@ export const renderEntities = (
     playerContainer = createEntityContainer(
       { type: 'player', width: 1, height: 1 },
       textures,
-      'player',
+      PLAYER_IDLE_TEXTURE_KEY,
     );
     entityLayer.addChild(playerContainer);
     entityContainerMap.set('player', playerContainer);
@@ -111,4 +112,3 @@ function updateEntitySpriteFromSoA(
 }
 
 import { createEntityFactory as createEntityContainer } from './renderers/factory';
-
