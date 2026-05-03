@@ -24,20 +24,20 @@
         "y": 0.5
       }
     },
-    "Player.png": {
+    "MoveSpeedRune.png": {
       "frame": {
         "x": 3,
         "y": 1033,
-        "w": 876,
-        "h": 992
+        "w": 1024,
+        "h": 938
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 148,
-        "y": 32,
-        "w": 876,
-        "h": 992
+        "x": 0,
+        "y": 43,
+        "w": 1024,
+        "h": 938
       },
       "sourceSize": {
         "w": 1024,
@@ -72,20 +72,20 @@
         "y": 0.5
       }
     },
-    "MoveSpeedRune.png": {
+    "LuckRune.png": {
       "frame": {
-        "x": 885,
-        "y": 1033,
-        "w": 1024,
-        "h": 938
+        "x": 1033,
+        "y": 935,
+        "w": 1008,
+        "h": 924
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 0,
-        "y": 43,
-        "w": 1024,
-        "h": 938
+        "x": 8,
+        "y": 50,
+        "w": 1008,
+        "h": 924
       },
       "sourceSize": {
         "w": 1024,
@@ -96,68 +96,20 @@
         "y": 0.5
       }
     },
-    "GaleStoneIcon.png": {
+    "CrimsonFangDrill.png": {
       "frame": {
         "x": 1033,
-        "y": 935,
-        "w": 88,
-        "h": 92
+        "y": 1865,
+        "w": 244,
+        "h": 94
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 20,
-        "y": 18,
-        "w": 88,
-        "h": 92
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonStoneTile.png": {
-      "frame": {
-        "x": 1915,
-        "y": 935,
-        "w": 128,
-        "h": 127
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 127
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonVeilHelmet.png": {
-      "frame": {
-        "x": 1915,
-        "y": 1068,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 64,
-        "y": 64,
-        "w": 128,
-        "h": 128
+        "x": 6,
+        "y": 81,
+        "w": 244,
+        "h": 94
       },
       "sourceSize": {
         "w": 256,
@@ -168,144 +120,24 @@
         "y": 0.5
       }
     },
-    "FervorStoneTile.png": {
+    "CrimsonStrideBoots.png": {
       "frame": {
-        "x": 1915,
-        "y": 1202,
-        "w": 128,
-        "h": 127
+        "x": 1283,
+        "y": 1865,
+        "w": 148,
+        "h": 102
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 127
+        "x": 54,
+        "y": 77,
+        "w": 148,
+        "h": 102
       },
       "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "GaleStoneTile.png": {
-      "frame": {
-        "x": 1915,
-        "y": 1335,
-        "w": 128,
-        "h": 127
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 127
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "StoneTile.png": {
-      "frame": {
-        "x": 1915,
-        "y": 1468,
-        "w": 128,
-        "h": 127
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 127
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonStoneIcon.png": {
-      "frame": {
-        "x": 1127,
-        "y": 935,
-        "w": 84,
-        "h": 88
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 22,
-        "y": 20,
-        "w": 84,
-        "h": 88
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "MoldstoneTile.png": {
-      "frame": {
-        "x": 1915,
-        "y": 1601,
-        "w": 124,
-        "h": 122
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 2,
-        "y": 3,
-        "w": 124,
-        "h": 122
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "FervorStoneIcon.png": {
-      "frame": {
-        "x": 1217,
-        "y": 935,
-        "w": 80,
-        "h": 86
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 24,
-        "y": 21,
-        "w": 80,
-        "h": 86
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
+        "w": 256,
+        "h": 256
       },
       "pivot": {
         "x": 0.5,
@@ -314,8 +146,8 @@
     },
     "FireBall.png": {
       "frame": {
-        "x": 1303,
-        "y": 935,
+        "x": 1437,
+        "y": 1865,
         "w": 170,
         "h": 80
       },
@@ -338,8 +170,8 @@
     },
     "MoldstoneIcon.png": {
       "frame": {
-        "x": 1915,
-        "y": 1729,
+        "x": 1613,
+        "y": 1865,
         "w": 108,
         "h": 102
       },
@@ -359,6 +191,78 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    "GaleStoneIcon.png": {
+      "frame": {
+        "x": 1727,
+        "y": 1865,
+        "w": 88,
+        "h": 92
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 18,
+        "w": 88,
+        "h": 92
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "CrimsonStoneIcon.png": {
+      "frame": {
+        "x": 1821,
+        "y": 1865,
+        "w": 84,
+        "h": 88
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 22,
+        "y": 20,
+        "w": 84,
+        "h": 88
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "FervorStoneIcon.png": {
+      "frame": {
+        "x": 1911,
+        "y": 1865,
+        "w": 80,
+        "h": 86
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 24,
+        "y": 21,
+        "w": 80,
+        "h": 86
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   },
   "meta": {
@@ -368,7 +272,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2047,
-      "h": 2028
+      "h": 1974
     },
     "scale": 1
   }

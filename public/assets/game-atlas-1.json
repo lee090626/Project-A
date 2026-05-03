@@ -24,6 +24,54 @@
         "y": 0.5
       }
     },
+    "MiningSpeedRune.png": {
+      "frame": {
+        "x": 1033,
+        "y": 3,
+        "w": 1008,
+        "h": 924
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 8,
+        "y": 50,
+        "w": 1008,
+        "h": 924
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Player.png": {
+      "frame": {
+        "x": 1033,
+        "y": 933,
+        "w": 876,
+        "h": 992
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 148,
+        "y": 32,
+        "w": 876,
+        "h": 992
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "MoneyIcon.webp": {
       "frame": {
         "x": 3,
@@ -48,72 +96,24 @@
         "y": 0.5
       }
     },
-    "LuckRune.png": {
+    "MoldstoneTile.png": {
       "frame": {
-        "x": 1033,
-        "y": 3,
-        "w": 1008,
-        "h": 924
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 8,
-        "y": 50,
-        "w": 1008,
-        "h": 924
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "MiningSpeedRune.png": {
-      "frame": {
-        "x": 944,
-        "y": 1033,
-        "w": 1008,
-        "h": 924
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 8,
-        "y": 50,
-        "w": 1008,
-        "h": 924
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "CrimsonFangDrill.png": {
-      "frame": {
-        "x": 1033,
+        "x": 1915,
         "y": 933,
-        "w": 244,
-        "h": 94
+        "w": 124,
+        "h": 122
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 6,
-        "y": 81,
-        "w": 244,
-        "h": 94
+        "x": 2,
+        "y": 3,
+        "w": 124,
+        "h": 122
       },
       "sourceSize": {
-        "w": 256,
-        "h": 256
+        "w": 128,
+        "h": 128
       },
       "pivot": {
         "x": 0.5,
