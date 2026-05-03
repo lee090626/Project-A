@@ -7,7 +7,7 @@ import {
   PlayerAnimationDirection,
   resolvePlayerAnimationFrame,
   resolvePlayerWalkDirection,
-  shouldMirrorPlayerWalkFrame,
+  shouldMirrorPlayerAnimationFrame,
 } from './playerAnimation';
 import { updateStatusVFX } from './uiComponents';
 
@@ -93,8 +93,8 @@ export function updatePlayerRenderer(
   body.alpha = 1.0;
   body.rotation = 0;
   body.position.set(TILE_SIZE / 2, TILE_SIZE);
-  const animationScaleX = shouldMirrorPlayerWalkFrame(walkDirection) ? -1 : 1;
-  body.scale.set(baseScaleX * (isWalking ? animationScaleX : 1), baseScaleY);
+  const animationScaleX = shouldMirrorPlayerAnimationFrame(walkDirection) ? -1 : 1;
+  body.scale.set(baseScaleX * animationScaleX, baseScaleY);
 
   updateStatusVFX(container, entity.stats.activeEffects || [], TILE_SIZE, TILE_SIZE, now);
 }

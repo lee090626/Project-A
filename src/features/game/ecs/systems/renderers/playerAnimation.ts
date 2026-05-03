@@ -29,12 +29,21 @@ export interface PlayerAnimationFrameRequest {
 }
 
 const PLAYER_FRONT_IDLE_TEXTURE_KEY = 'PlayerWalkDown03';
+const PLAYER_BACK_IDLE_TEXTURE_KEY = 'PlayerWalkUp03';
+const PLAYER_SIDE_IDLE_TEXTURE_KEY = 'PlayerWalkLeft01';
 
 export const PLAYER_IDLE_TEXTURE_KEY = PLAYER_FRONT_IDLE_TEXTURE_KEY;
 
 const WALK_FRAME_DURATION_MS = 40;
 
 type PlayerWalkClipDirection = Exclude<PlayerAnimationDirection, 'Right'>;
+
+const PLAYER_IDLE_FRAMES: Record<PlayerAnimationDirection, string> = {
+  Down: PLAYER_FRONT_IDLE_TEXTURE_KEY,
+  Up: PLAYER_BACK_IDLE_TEXTURE_KEY,
+  Left: PLAYER_SIDE_IDLE_TEXTURE_KEY,
+  Right: PLAYER_SIDE_IDLE_TEXTURE_KEY,
+};
 
 const PLAYER_WALK_CLIPS: Record<PlayerWalkClipDirection, PlayerAnimationClip> = {
   Down: {
@@ -100,12 +109,12 @@ export function resolvePlayerWalkDirection(
 }
 
 /**
- * 현재 걷기 방향에서 스프라이트 좌우 반전이 필요한지 반환합니다.
+ * 현재 방향에서 스프라이트 좌우 반전이 필요한지 반환합니다.
  *
  * @param direction - 플레이어 걷기 애니메이션 방향
  * @returns 왼쪽 프레임을 오른쪽 이동에 재사용해야 하면 true
  */
-export function shouldMirrorPlayerWalkFrame(direction: PlayerAnimationDirection): boolean {
+export function shouldMirrorPlayerAnimationFrame(direction: PlayerAnimationDirection): boolean {
   return direction === 'Right';
 }
 
@@ -117,7 +126,7 @@ export function shouldMirrorPlayerWalkFrame(direction: PlayerAnimationDirection)
  */
 export function resolvePlayerAnimationFrame(request: PlayerAnimationFrameRequest): string {
   if (request.state === 'idle') {
-    return PLAYER_IDLE_TEXTURE_KEY;
+    return PLAYER_IDLE_FRAMES[request.direction];
   }
 
   const clipDirection: PlayerWalkClipDirection = request.direction === 'Right'
