@@ -266,8 +266,8 @@
     }
   },
   "meta": {
-    "app": "http://github.com/odrick/free-tex-packer-core",
-    "version": "0.3.5",
+    "app": "drilling-game atlas generator",
+    "version": "1.0.0",
     "image": "game-atlas-1.png",
     "format": "RGBA8888",
     "size": {

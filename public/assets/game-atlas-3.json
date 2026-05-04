@@ -480,34 +480,10 @@
         "y": 0.5
       }
     },
-    "CrimsonStoneTile.png": {
-      "frame": {
-        "x": 695,
-        "y": 557,
-        "w": 128,
-        "h": 127
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 127
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "CrimsonVeilHelmet.png": {
       "frame": {
         "x": 695,
-        "y": 690,
+        "y": 557,
         "w": 128,
         "h": 128
       },
@@ -522,6 +498,30 @@
       "sourceSize": {
         "w": 256,
         "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "CrimsonStoneTile.png": {
+      "frame": {
+        "x": 695,
+        "y": 691,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
       },
       "pivot": {
         "x": 0.5,
@@ -722,8 +722,8 @@
     }
   },
   "meta": {
-    "app": "http://github.com/odrick/free-tex-packer-core",
-    "version": "0.3.5",
+    "app": "drilling-game atlas generator",
+    "version": "1.0.0",
     "image": "game-atlas-3.png",
     "format": "RGBA8888",
     "size": {

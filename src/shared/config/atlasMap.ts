@@ -601,21 +601,21 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "atlasWidth": 1851,
     "atlasHeight": 1681
   },
-  "CrimsonStoneTile": {
+  "CrimsonVeilHelmet": {
     "atlasIndex": 3,
     "x": 695,
     "y": 557,
     "width": 128,
-    "height": 127,
+    "height": 128,
     "atlasWidth": 1851,
     "atlasHeight": 1681
   },
-  "CrimsonVeilHelmet": {
+  "CrimsonStoneTile": {
     "atlasIndex": 3,
     "x": 695,
-    "y": 690,
+    "y": 691,
     "width": 128,
-    "height": 128,
+    "height": 127,
     "atlasWidth": 1851,
     "atlasHeight": 1681
   },
