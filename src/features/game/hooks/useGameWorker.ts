@@ -31,6 +31,7 @@ export function useGameWorker(
     sendToWorker: SendToWorker,
   ) => void,
   handleTravelDimension: (targetDepth: number) => void,
+  handleTutorialTrigger: (guideId: string) => void,
   handleOpenModal: (target: keyof (import('@/entities/world/model').GameWorld)['ui']) => void,
 ) {
   const workerRef = useRef<Worker | null>(null);
@@ -133,8 +134,11 @@ export function useGameWorker(
       } else if (type === 'DIMENSION_TRAVEL_COMPLETE') {
         alert(`원하는 Circle에 도착했습니다!`);
       } else if (type === 'TUTORIAL_TRIGGER') {
-        // 워커로부터 튜토리얼 발생 신호를 받으면 가이드 창을 엶
-        handleOpenModal('isGuideOpen');
+        const guideId =
+          isObjectPayload(payload) && typeof payload.guideId === 'string'
+            ? payload.guideId
+            : 'guide_welcome';
+        handleTutorialTrigger(guideId);
       } else if (type === 'OPEN_MODAL' && isObjectPayload(payload)) {
         // 워커에서 상호작용 성공 시 모달 오픈 신호를 보냄
         handleOpenModal(payload.target as keyof (import('@/entities/world/model').GameWorld)['ui']);
@@ -207,7 +211,14 @@ export function useGameWorker(
       globalWorker = null; // 다음 Mount 시 새 Worker가 생성되도록 초기화
       clearTimeout(timeoutId);
     };
-  }, [isClient, loadAssetsAndTransfer, sendToWorker, handleTravelDimension, handleOpenModal]);
+  }, [
+    isClient,
+    loadAssetsAndTransfer,
+    sendToWorker,
+    handleTravelDimension,
+    handleTutorialTrigger,
+    handleOpenModal,
+  ]);
 
   return { sendToWorker, globalWorker };
 }

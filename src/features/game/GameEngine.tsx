@@ -31,6 +31,7 @@ export default function GameEngine() {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isEngineReady, setIsEngineReady] = useState(false);
   const [hudPosition, setHudPosition] = useState({ x: 15, y: 8 });
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
   const isReadyRef = useRef(false);
   useEffect(() => {
@@ -115,6 +116,22 @@ export default function GameEngine() {
   const uiActions = useGameUI(worldRef, updateUi);
   const { toggleModal, handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
 
+  const handleCloseOnboarding = useCallback(() => {
+    setIsOnboardingOpen(false);
+  }, []);
+
+  const handleTutorialTrigger = useCallback(
+    (guideId: string) => {
+      if (guideId === 'guide_welcome') {
+        setIsOnboardingOpen(true);
+        return;
+      }
+
+      handleOpen('isGuideOpen');
+    },
+    [handleOpen],
+  );
+
   // Need to provide a throwaway `sendToWorker` for `useGameActions` initially, or properly wrap
   const [workerSender, setWorkerSender] = useState<{ send: SendToWorker }>({
     send: () => {},
@@ -131,8 +148,27 @@ export default function GameEngine() {
     isReadyRef,
     loadAssetsAndTransfer,
     handleTravelDimension,
+    handleTutorialTrigger,
     handleOpen,
   );
+
+  const handleMobileJoystickMove = useCallback(
+    (data: { x: number; y: number; active: boolean }) => {
+      worldRef.current.mobileJoystick = data;
+      sendToWorker('INPUT', { mobileJoystick: data });
+    },
+    [sendToWorker],
+  );
+
+  const handleMobileActionPress = useCallback(() => {
+    worldRef.current.keys['Space'] = true;
+    sendToWorker('INPUT', { keys: { Space: true } });
+
+    window.setTimeout(() => {
+      worldRef.current.keys['Space'] = false;
+      sendToWorker('INPUT', { keys: { Space: false } });
+    }, 100);
+  }, [sendToWorker]);
 
   useEffect(() => {
     setWorkerSender({ send: sendToWorker });
@@ -248,6 +284,10 @@ export default function GameEngine() {
         worldRef={worldRef}
         stats={stats || worldRef.current.player.stats}
         hudPosition={hudPosition}
+        isOnboardingOpen={isOnboardingOpen}
+        onCloseOnboarding={handleCloseOnboarding}
+        onMobileJoystickMove={handleMobileJoystickMove}
+        onMobileActionPress={handleMobileActionPress}
         uiActions={uiActions}
         gameActions={gameActions}
       />
