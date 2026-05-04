@@ -16,6 +16,7 @@ import { useGameStore } from '@/shared/lib/store';
 import { useGameUI } from './hooks/useGameUI';
 import { useGameActions } from './hooks/useGameActions';
 import { useGameInput } from './hooks/useGameInput';
+import { useGameSfx } from './hooks/useGameSfx';
 import { useGameWorker } from './hooks/useGameWorker';
 import { SendToWorker } from './hooks/types';
 
@@ -40,7 +41,8 @@ export default function GameEngine() {
 
   // Zustand 스토어 상태 구독
   const stats = useGameStore((state) => state.stats);
-  const { screenShake } = useGameStore((state) => state.settings);
+  const { screenShake, soundEffects } = useGameStore((state) => state.settings);
+  useGameSfx(soundEffects);
 
   // 트리플 버퍼링 및 보간(Lerp) 관련 Ref
   const snapshots = useRef<{ time: number; data: Float32Array }[]>([]);

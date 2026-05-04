@@ -1,4 +1,6 @@
 import { PlayerStats, Position } from './game';
+import { isGameSfxId } from './game/audio';
+import type { PlaySfxPayload } from './game/audio';
 import type { ToastItem } from './game';
 
 /**
@@ -84,6 +86,7 @@ export type EngineMessageType =
   | 'SAVE'
   | 'PORTAL_TRIGGERED'
   | 'SHOW_TOAST'
+  | 'PLAY_SFX'
   | 'OPEN_MODAL'
   | 'TUTORIAL_TRIGGER';
 
@@ -102,6 +105,7 @@ export type WorkerToMainMessage =
       type: 'SHOW_TOAST';
       payload: { message: string; type?: string; duration?: number; items?: ToastItem[] };
     }
+  | { type: 'PLAY_SFX'; payload: PlaySfxPayload }
   | { type: 'OPEN_MODAL'; payload: { target: string } }
   | { type: 'TUTORIAL_TRIGGER'; payload: { guideId: string } };
 
@@ -127,6 +131,7 @@ const workerToMainTypes = new Set<EngineMessageType>([
   'SAVE',
   'PORTAL_TRIGGERED',
   'SHOW_TOAST',
+  'PLAY_SFX',
   'OPEN_MODAL',
   'TUTORIAL_TRIGGER',
 ]);
@@ -184,6 +189,12 @@ export function isWorkerToMainMessage(value: unknown): value is WorkerToMainMess
       return isRecord(payload) && typeof payload.nextDepth === 'number' && typeof payload.nextCircleId === 'number';
     case 'SHOW_TOAST':
       return isRecord(payload) && typeof payload.message === 'string';
+    case 'PLAY_SFX':
+      return (
+        isRecord(payload) &&
+        isGameSfxId(payload.id) &&
+        (payload.intensity === undefined || typeof payload.intensity === 'number')
+      );
     case 'OPEN_MODAL':
       return isRecord(payload) && typeof payload.target === 'string';
     case 'TUTORIAL_TRIGGER':

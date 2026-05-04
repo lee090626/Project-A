@@ -13,6 +13,7 @@ interface GameState {
   settings: {
     screenShake: boolean;
     highPerformance: boolean;
+    soundEffects: boolean;
   };
   /** 토스트 알림 큐 */
   toasts: import('../types/game').ToastMessage[];
@@ -56,6 +57,7 @@ export const useGameStore = create<GameState>((set) => ({
   settings: {
     screenShake: true,
     highPerformance: false,
+    soundEffects: true,
   },
   ui: {
     showInteractionPrompt: false,

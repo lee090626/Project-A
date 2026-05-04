@@ -2,7 +2,8 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { saveManager, SaveData } from '@/shared/lib/saveManager';
 import { gameDB } from '@/shared/lib/db';
 import { useGameStore } from '@/shared/lib/store';
-import { ToastType } from '@/shared/types/game';
+import { playGameSfx } from '@/shared/lib/sfxManager';
+import { isGameSfxId, ToastType } from '@/shared/types/game';
 import { SendToWorker } from './types';
 import {
   MainToWorkerMessage,
@@ -150,6 +151,8 @@ export function useGameWorker(
           payload.duration,
           payload.items,
         );
+      } else if (type === 'PLAY_SFX' && isObjectPayload(payload) && isGameSfxId(payload.id)) {
+        playGameSfx(payload.id, typeof payload.intensity === 'number' ? payload.intensity : 1);
       }
     };
 

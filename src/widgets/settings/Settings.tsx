@@ -25,13 +25,15 @@ interface GameSettings {
   screenShake: boolean;
   /** 고성능 모드(프레임 제한 해제 등) 활성화 여부 */
   highPerformance: boolean;
+  /** 효과음 활성화 여부 */
+  soundEffects: boolean;
 }
 
 /**
  * 게임의 각종 환경 설정을 관리하고 표시하는 모달 컴포넌트입니다.
  */
 export default function Settings({ onReset, onClose, onExport, onImport }: SettingsProps) {
-  const { screenShake, highPerformance } = useGameStore((state) => state.settings);
+  const { screenShake, highPerformance, soundEffects } = useGameStore((state) => state.settings);
   const updateSettings = useGameStore((state) => state.updateSettings);
 
   // 로컬 스토리지에서 처음 설정 로드 (Store 초기화)
@@ -52,7 +54,7 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
    */
   const saveAndSync = (updates: Partial<GameSettings>) => {
     updateSettings(updates);
-    const current = { screenShake, highPerformance, ...updates };
+    const current = { screenShake, highPerformance, soundEffects, ...updates };
     localStorage.setItem('drilling-game-settings', JSON.stringify(current));
   };
 
@@ -148,6 +150,14 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
                 active={screenShake}
                 onToggle={() => {
                   saveAndSync({ screenShake: !screenShake });
+                }}
+              />
+              <Toggle
+                label="Sound Effects"
+                subLabel="Mining, pickup, and combat feedback"
+                active={soundEffects}
+                onToggle={() => {
+                  saveAndSync({ soundEffects: !soundEffects });
                 }}
               />
               <Toggle

@@ -35,3 +35,7 @@ export type {
   FloatingText,
   GameAssets,
 } from './game/ui';
+
+// 오디오
+export type { GameSfxId, PlaySfxPayload } from './game/audio';
+export { GAME_SFX_IDS, isGameSfxId } from './game/audio';

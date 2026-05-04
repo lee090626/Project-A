@@ -18,6 +18,7 @@ import { spatialHashUpdateSystem } from '@/features/game/ecs/systems/spatialHash
 import { syncUiSystem } from '@/features/game/ecs/systems/syncSystem';
 import { autoSaveSystem } from '@/features/game/ecs/systems/storageSystem';
 import { vfxSystem } from '@/features/game/ecs/systems/VfxSystem';
+import { sfxSystem } from '@/features/game/ecs/systems/sfxSystem';
 import * as PIXI from 'pixi.js';
 import {
   TILE_SIZE,
@@ -142,6 +143,7 @@ export class GameLoop {
 
     // [STEP 9] 시각 효과(VFX) 시스템 초기화 및 이벤트 리스너 등록
     vfxSystem.init(this.world);
+    sfxSystem.init();
   }
 
   public updateDependencies(

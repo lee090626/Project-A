@@ -1,6 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { addArtifactStack, isArtifactId } from '@/shared/lib/artifactUtils';
+import { messageBus } from '@/shared/lib/MessageBus';
 
 
 /**
@@ -40,6 +41,7 @@ function collectDroppedItem(world: GameWorld, index: number): void {
     const gained = addArtifactStack(player.stats, id, amount);
     if (gained > 0) {
       world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
+      messageBus.emit('game:item_collected', { id, amount: gained });
     }
     return;
   }
@@ -47,10 +49,12 @@ function collectDroppedItem(world: GameWorld, index: number): void {
   if (id.includes('stone') || id.includes('ite')) {
     player.stats.inventory[id] = (player.stats.inventory[id] || 0) + amount;
     world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
+    messageBus.emit('game:item_collected', { id, amount });
     return;
   }
 
   if (!player.stats.collectionHistory) player.stats.collectionHistory = {};
   player.stats.collectionHistory[id] = (player.stats.collectionHistory[id] || 0) + amount;
   world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + amount;
+  messageBus.emit('game:item_collected', { id, amount });
 }
