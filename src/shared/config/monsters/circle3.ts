@@ -10,7 +10,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     description: 'Gluttony 서클의 하급 영혼입니다.',
     width: 2,
     height: 2,
-    stats: { maxHp: 1500, power: 60, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 1000, power: 40, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: {
       exp: 150,
       gold: 30,
@@ -25,9 +25,9 @@ export const circle3Monsters: MonsterDefinition[] = [
     name: 'Starving Wraith',
     nameKo: '굶주린 망령',
     type: 'monster',
-    imagePath: 'LustfulWhisperer',
+    imagePath: 'StarvingWraith',
     description: 'Gluttony 서클의 하급 영혼입니다.',
-    stats: { maxHp: 1200, power: 70, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 850, power: 45, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: {
       exp: 120,
       gold: 24,
@@ -42,9 +42,9 @@ export const circle3Monsters: MonsterDefinition[] = [
     name: 'Greedy slaughter',
     nameKo: '탐식의 도살자',
     type: 'monster',
-    imagePath: 'LustfulWhisperer',
+    imagePath: 'GreedySlaughter',
     description: 'Gluttony 서클의 하급 영혼입니다.',
-    stats: { maxHp: 1800, power: 50, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 1250, power: 38, defense: 5, speed: 2, attackCooldown: 1000 },
     rewards: {
       exp: 180,
       gold: 36,
@@ -64,7 +64,7 @@ export const circle3Monsters: MonsterDefinition[] = [
       '음침한 비가 쏟아지의 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발기며 탐식의 죄를 처단합니다.',
     width: 7,
     height: 7,
-    stats: { maxHp: 100000, power: 350, defense: 30, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 80000, power: 280, defense: 25, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 22500,
       gold: 4500,

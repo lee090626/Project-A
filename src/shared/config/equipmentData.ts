@@ -80,8 +80,8 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '🌑',
     image: 'VoidCrusher',
-    stats: { power: 30 },
-    price: { moldstone: 30, goldCoins: 3000 },
+    stats: { power: 40 },
+    price: { moldstone: 24, sludgestone: 8, goldCoins: 3000 },
     maxSkillSlots: 2
   },
   'void_mask': {
@@ -92,8 +92,8 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '🎭',
     image: 'VoidMask',
-    stats: { defense: 12 },
-    price: { moldstone: 20, goldCoins: 2500 }
+    stats: { maxHp: 80, defense: 12 },
+    price: { moldstone: 16, sludgestone: 6, goldCoins: 2200 }
   },
   'void_mantle': {
     id: 'void_mantle',
@@ -103,8 +103,8 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '🧥',
     image: 'VoidMantle',
-    stats: { maxHp: 250 },
-    price: { moldstone: 40, goldCoins: 4000 }
+    stats: { maxHp: 380, defense: 8 },
+    price: { moldstone: 24, sludgestone: 14, rotstone: 6, goldCoins: 3600 }
   },
   'void_step': {
     id: 'void_step',
@@ -114,8 +114,8 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '👣',
     image: 'VoidStep',
-    stats: { moveSpeed: 20, defense: 5, maxHp: 80 },
-    price: { moldstone: 20, goldCoins: 3000 }
+    stats: { moveSpeed: 22, defense: 6, maxHp: 80 },
+    price: { moldstone: 16, sludgestone: 8, rotstone: 4, goldCoins: 2700 }
   },
 
   // === Circle 4 — Greed (탐욕) ===

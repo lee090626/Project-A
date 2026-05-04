@@ -4,7 +4,7 @@ import { TileType } from '../types/game';
  * 몬스터 스폰 규칙이 바뀌었을 때 런타임 스폰 캐시를 갱신하기 위한 버전입니다.
  * 스폰 density, weight, layer 범위를 조정하면 값을 올려 기존 세이브의 주변 스폰을 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 4;
+export const SPAWN_RULE_VERSION = 5;
 
 /**
  * 광물 생성 규칙을 정의하는 인터페이스입니다.
@@ -117,14 +117,19 @@ export const CIRCLES: CircleConfig[] = [
     depthStart: 300,
     depthEnd: 600,
     minerals: [
-      { type: 'moldstone', threshold: 0.6, minLayer: 1, scale: 8 },
-      { type: 'sludgestone', threshold: 0.4, minLayer: 2, scale: 7 },
-      { type: 'rotstone', threshold: 0.2, minLayer: 3, scale: 6 },
+      { type: 'moldstone', threshold: 0.5, minLayer: 1, scale: 8 },
+      { type: 'sludgestone', threshold: 0.35, minLayer: 2, scale: 7 },
+      { type: 'rotstone', threshold: 0.25, minLayer: 3, scale: 6 },
     ],
+    monsterDensityByLayer: {
+      1: 0.22,
+      2: 0.26,
+      3: 0.3,
+    },
     monsters: [
-      { monsterId: 'c3_devourer', chance: 0.07, weight: 1, minLayer: 1 },
-      { monsterId: 'c3_worm', chance: 0.04, weight: 1, minLayer: 2 },
-      { monsterId: 'c3_mud_shade', chance: 0.03, weight: 1, minLayer: 3 },
+      { monsterId: 'c3_devourer', weight: 5, minLayer: 1 },
+      { monsterId: 'c3_worm', weight: 4, minLayer: 2 },
+      { monsterId: 'c3_mud_shade', weight: 3, minLayer: 3 },
     ],
     boss: { id: 'c3_cerberus', spawnLayer: 4 },
   },
