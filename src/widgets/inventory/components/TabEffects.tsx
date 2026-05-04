@@ -87,11 +87,12 @@ const TabEffects = ({ stats, ownedArtifacts, selectedKey, onSelectKey, selectedA
                       critRate: 'Crit Rate',
                       critDamage: 'Crit Damage',
                       defense: 'Defense',
-                      miningSpeed: 'Mining Speed'
+                      miningSpeed: 'Mining Speed',
+                      masteryExp: 'Mastery Gain'
                     };
                     const stacks = stats.collectionHistory?.[selectedArtifact.id] || 0;
                     const totalValue = selectedArtifact.bonus.value * stacks;
-                    const percentStats = ['critRate', 'critDamage', 'miningSpeed'];
+                    const percentStats = ['critRate', 'critDamage', 'miningSpeed', 'masteryExp'];
                     const isPercent = percentStats.includes(selectedArtifact.bonus.stat);
                     const formattedValue = isPercent ? `${(totalValue * 100).toFixed(1)}%` : totalValue.toLocaleString();
                     

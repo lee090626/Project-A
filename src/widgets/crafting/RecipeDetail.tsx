@@ -24,7 +24,8 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
       critRate: 'Crit Rate',
       critDamage: 'Crit DMG',
       defense: 'Defense',
-      miningSpeed: 'Mine Speed'
+      miningSpeed: 'Mine Speed',
+      masteryExp: 'Mastery Gain'
     };
     return map[stat] || stat;
   };
@@ -71,7 +72,13 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
             {isPossessionEffectItem ? (
               <div className="flex flex-col items-center justify-center gap-2 w-full text-center py-2 px-4">
                 <span className="text-lg md:text-xl font-black text-rose-400 tracking-tighter leading-tight drop-shadow-md">
-                  {selectedRecipe.bonus ? `+${selectedRecipe.bonus.value} ${getStatName(selectedRecipe.bonus.stat)}` : ''}
+                  {selectedRecipe.bonus ? (() => {
+                    const percentStats = ['critRate', 'critDamage', 'miningSpeed', 'masteryExp'];
+                    const value = percentStats.includes(selectedRecipe.bonus.stat)
+                      ? `${(selectedRecipe.bonus.value * 100).toFixed(1)}%`
+                      : selectedRecipe.bonus.value;
+                    return `+${value} ${getStatName(selectedRecipe.bonus.stat)}`;
+                  })() : ''}
                   {selectedRecipe.effectDescription && (
                     <>
                       {selectedRecipe.bonus && <br />}

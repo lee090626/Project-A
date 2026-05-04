@@ -26,7 +26,7 @@ export const miningSystem = (world: GameWorld, now: number) => {
   const masteryBonuses = getMasteryBonuses(player.stats);
   const artifactBonuses = calculateArtifactBonuses(player.stats);
 
-  let masteryExpMultiplier = 1.0 + masteryBonuses.masteryExpMult;
+  let masteryExpMultiplier = 1.0 + masteryBonuses.masteryExpMult + artifactBonuses.masteryExp;
   if (hasArtifactEffect(player.stats, 'MASTERY_BOOST')) {
     masteryExpMultiplier += 3.0;
   }
