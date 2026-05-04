@@ -120,33 +120,9 @@
         "y": 0.5
       }
     },
-    "CrimsonStrideBoots.png": {
-      "frame": {
-        "x": 1283,
-        "y": 1865,
-        "w": 148,
-        "h": 102
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 54,
-        "y": 77,
-        "w": 148,
-        "h": 102
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "FireBall.png": {
       "frame": {
-        "x": 1437,
+        "x": 1283,
         "y": 1865,
         "w": 170,
         "h": 80
@@ -158,6 +134,30 @@
         "y": 88,
         "w": 170,
         "h": 80
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "CrimsonStrideBoots.png": {
+      "frame": {
+        "x": 1459,
+        "y": 1865,
+        "w": 148,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 54,
+        "y": 77,
+        "w": 148,
+        "h": 102
       },
       "sourceSize": {
         "w": 256,
@@ -192,9 +192,33 @@
         "y": 0.5
       }
     },
-    "GaleStoneIcon.png": {
+    "SludgeStoneIcon.png": {
       "frame": {
         "x": 1716,
+        "y": 1865,
+        "w": 94,
+        "h": 78
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 17,
+        "y": 25,
+        "w": 94,
+        "h": 78
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GaleStoneIcon.png": {
+      "frame": {
+        "x": 1816,
         "y": 1865,
         "w": 88,
         "h": 92
@@ -218,7 +242,7 @@
     },
     "CrimsonStoneIcon.png": {
       "frame": {
-        "x": 1810,
+        "x": 1910,
         "y": 1865,
         "w": 84,
         "h": 88
@@ -240,34 +264,10 @@
         "y": 0.5
       }
     },
-    "SludgeStoneIcon.png": {
-      "frame": {
-        "x": 1900,
-        "y": 1865,
-        "w": 94,
-        "h": 78
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 17,
-        "y": 25,
-        "w": 94,
-        "h": 78
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "MoldStoneIcon.png": {
       "frame": {
-        "x": 1900,
-        "y": 1949,
+        "x": 3,
+        "y": 1977,
         "w": 80,
         "h": 64
       },
@@ -296,7 +296,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2047,
-      "h": 2016
+      "h": 2044
     },
     "scale": 1
   }

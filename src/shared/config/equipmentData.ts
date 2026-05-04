@@ -79,6 +79,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Drill',
     circle: 3,
     icon: '🌑',
+    image: 'VoidCrusher',
     stats: { power: 30 },
     price: { moldstone: 30, goldCoins: 3000 },
     maxSkillSlots: 2
@@ -90,6 +91,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Helmet',
     circle: 3,
     icon: '🎭',
+    image: 'VoidMask',
     stats: { defense: 12 },
     price: { moldstone: 20, goldCoins: 2500 }
   },
@@ -100,6 +102,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Armor',
     circle: 3,
     icon: '🧥',
+    image: 'VoidMantle',
     stats: { maxHp: 250 },
     price: { moldstone: 40, goldCoins: 4000 }
   },
@@ -110,6 +113,7 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Boots',
     circle: 3,
     icon: '👣',
+    image: 'VoidStep',
     stats: { moveSpeed: 20, defense: 5, maxHp: 80 },
     price: { moldstone: 20, goldCoins: 3000 }
   },
