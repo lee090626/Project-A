@@ -124,10 +124,9 @@ export default function RootLayout({
         ))}
 
         {isCrazyGamesBuild && (
-          <Script
+          <script
             id="crazygames-sdk"
             src="https://sdk.crazygames.com/crazygames-sdk-v3.js"
-            strategy="beforeInteractive"
           />
         )}
       </head>

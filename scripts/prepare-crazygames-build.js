@@ -8,6 +8,10 @@ const path = require('path');
 
 const outDir = path.join(__dirname, '../out');
 const allowedExternalUrls = new Set(['https://sdk.crazygames.com/crazygames-sdk-v3.js']);
+const crazyGamesSdkScript =
+  '<script id="crazygames-sdk" src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>';
+const turbopackChunkPrefix = './_next/static/chunks/';
+const rootTurbopackChunkPrefix = '/_next/static/chunks/';
 const allowedExternalUrlPrefixes = ['http://www.w3.org/'];
 const internalRootFiles = [
   'baseLayout.json',
@@ -43,19 +47,42 @@ function rewriteStaticPaths(content) {
   return nextContent;
 }
 
-/** Rewrites only the Next.js webpack public path used for dynamic chunk loading. */
+/** Rewrites Next.js runtime public paths used for dynamic chunk loading. */
 function rewriteWebpackPublicPath(content, relPath) {
+  let nextContent = rewriteTurbopackRuntimePaths(content);
   const publicPathPattern = /(\.p=)"(?:\/_next\/|\.\/_next\/)"/g;
 
-  if (isWorkerRuntimeChunk(content)) {
-    return content.replace(publicPathPattern, '$1"../../"');
+  if (isWorkerRuntimeChunk(nextContent)) {
+    return nextContent.replace(publicPathPattern, '$1"../../"');
   }
 
   if (isNextWebpackRuntime(relPath)) {
-    return content.replace(publicPathPattern, '$1"./_next/"');
+    return nextContent.replace(publicPathPattern, '$1"./_next/"');
   }
 
-  return content;
+  return nextContent;
+}
+
+/** Rewrites Turbopack runtime paths so static uploads can boot from any host path. */
+function rewriteTurbopackRuntimePaths(content) {
+  let nextContent = content.replace(
+    'var l=new URL(s[a],location.origin);',
+    `var c=s[a];c.startsWith("${turbopackChunkPrefix}")?c=c.slice("${turbopackChunkPrefix}".length):c.startsWith("${rootTurbopackChunkPrefix}")&&(c=c.slice("${rootTurbopackChunkPrefix}".length));var l=new URL(c,location.href);`,
+  );
+
+  if (!nextContent.includes('globalThis.TURBOPACK')) return nextContent;
+
+  nextContent = nextContent.replace(/let t="\/_next\/"/g, 'let t="./_next/"');
+  nextContent = nextContent.replace(
+    /new URL\((\w+)\((\w+)\),location\.origin\)/g,
+    'new URL($1($2),location.href)',
+  );
+  nextContent = nextContent.replace(
+    'self.TURBOPACK_NEXT_CHUNK_URLS.push(t),importScripts(t)',
+    `self.TURBOPACK_NEXT_CHUNK_URLS.push(t),importScripts(t.startsWith("${turbopackChunkPrefix}")?t.slice("${turbopackChunkPrefix}".length):t)`,
+  );
+
+  return nextContent;
 }
 
 /** Rewrites root-absolute CSS url() assets relative to the CSS file location. */
@@ -80,6 +107,10 @@ function assertCrazyGamesOutput(files) {
     throw new Error('[crazygames] index.html does not look like the playable game entry.');
   }
 
+  if (!indexHtml.includes(crazyGamesSdkScript)) {
+    throw new Error('[crazygames] CrazyGames SDK script tag is missing from index.html.');
+  }
+
   for (const filePath of files) {
     if (!textExtensions.has(path.extname(filePath))) continue;
 
@@ -91,6 +122,7 @@ function assertCrazyGamesOutput(files) {
     }
 
     if (path.extname(filePath) === '.js' && isNextChunk(relPath)) {
+      assertTurbopackRuntimePathsWereRewritten(content, relPath);
       assertCoreDataPathsWereNotRewritten(content, relPath);
       assertWorkerPublicPathIsRelativeToChunk(content, relPath);
     }
@@ -131,6 +163,16 @@ function assertCoreDataPathsWereNotRewritten(content, relPath) {
     if (rewrittenCoreDataPattern.test(content)) {
       throw new Error(`[crazygames] rewritten core data path found in ${relPath}: ./${fileName}`);
     }
+  }
+}
+
+function assertTurbopackRuntimePathsWereRewritten(content, relPath) {
+  if (content.includes('let t="/_next/"')) {
+    throw new Error(`[crazygames] root-absolute Turbopack public path found in ${relPath}.`);
+  }
+
+  if (content.includes('var l=new URL(s[a],location.origin);')) {
+    throw new Error(`[crazygames] root-origin Turbopack worker bootstrap path found in ${relPath}.`);
   }
 }
 
