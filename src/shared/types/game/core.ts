@@ -49,10 +49,8 @@ export type TileType =
   | 'abyssstone'
   // === 시스템 타일 ===
   | 'stone'
-  | 'lava'
   | 'dungeon_bricks'
   | 'gluttony_stone'
-  | 'boss_core'
   | 'boss_skin'
   | 'monster_nest'
   | 'monster'
@@ -96,9 +94,7 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   froststone: 22,
   glacialite: 23,
   abyssstone: 24,
-  lava: 25,
   dungeon_bricks: 26,
-  boss_core: 27,
   monster_nest: 28,
   monster: 29,
   wall: 30,
@@ -117,13 +113,21 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   essence_treachery: 107,
 };
 
+/**
+ * 제거된 레거시 타일 ID를 현재 안전한 타입으로 치환합니다.
+ */
+const LEGACY_TILE_ID_FALLBACKS: Record<number, TileType> = {
+  25: 'empty',
+  27: 'empty',
+};
+
 /** ID-타일 타입 역매핑 */
 export const ID_TO_TILE_TYPE: Record<number, TileType> = Object.entries(TILE_TYPE_TO_ID).reduce(
   (acc, [key, value]) => {
     acc[value] = key as TileType;
     return acc;
   },
-  {} as Record<number, TileType>,
+  { ...LEGACY_TILE_ID_FALLBACKS } as Record<number, TileType>,
 );
 
 /**

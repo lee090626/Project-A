@@ -67,7 +67,6 @@ export const circle7Monsters: MonsterDefinition[] = [
       gold: 300000,
       drops: [
         { itemId: 'essence_violence', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_leviathan_mirror', chance: 0.15, minAmount: 1, maxAmount: 1 },
       ],
     },

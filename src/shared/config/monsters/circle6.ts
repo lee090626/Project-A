@@ -67,7 +67,6 @@ export const circle6Monsters: MonsterDefinition[] = [
       gold: 90000,
       drops: [
         { itemId: 'essence_heresy', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_belphegor_eye', chance: 0.2, minAmount: 1, maxAmount: 1 },
       ],
     },

@@ -68,7 +68,6 @@ export const circle9Monsters: MonsterDefinition[] = [
       gold: 10000000,
       drops: [
         { itemId: 'essence_treachery', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_lucifer_ice', chance: 0.02, minAmount: 1, maxAmount: 1 },
       ],
     },

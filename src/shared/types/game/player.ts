@@ -15,12 +15,10 @@ export type Inventory = {
     | 'empty'
     | 'wall'
     | 'portal'
-    | 'boss_core'
     | 'boss_skin'
     | 'monster_nest'
     | 'monster'
     | 'stone'
-    | 'lava'
     | 'dungeon_bricks'
     | 'gluttony_stone'
   >]: number;

@@ -67,7 +67,6 @@ export const circle8Monsters: MonsterDefinition[] = [
       gold: 1200000,
       drops: [
         { itemId: 'essence_fraud', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_abaddon_blade', chance: 0.1, minAmount: 1, maxAmount: 1 },
       ],
     },

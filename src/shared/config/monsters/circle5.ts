@@ -67,7 +67,6 @@ export const circle5Monsters: MonsterDefinition[] = [
       gold: 35000,
       drops: [
         { itemId: 'essence_wrath', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'boss_core', chance: 1.0, minAmount: 1, maxAmount: 1 },
         { itemId: 'relic_satan_heart', chance: 0.3, minAmount: 1, maxAmount: 1 },
       ],
     },
