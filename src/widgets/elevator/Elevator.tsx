@@ -20,7 +20,6 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
         title="Waypoints"
         subtitle="Fast Travel Network"
         titleClassName="text-amber-500"
-        gold={stats.goldCoins}
         onClose={onClose}
         closeButtonClassName="hover:bg-amber-400 hover:text-black hover:border-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400/50"
       />

@@ -69,6 +69,7 @@ export default function GameOverlay({
         <Hud
           stats={currentStats}
           pos={hudPosition}
+          isMobile={isMobile}
           onOpenStatus={openStatus}
           onOpenInventory={openInventory}
           onOpenEncyclopedia={openEncyclopedia}

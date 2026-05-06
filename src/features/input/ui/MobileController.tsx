@@ -16,12 +16,12 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
   return (
     <div className="absolute inset-0 z-40 pointer-events-none select-none touch-none">
       {/* 좌측 조이스틱 영역 */}
-      <div className="absolute bottom-4 left-4 md:bottom-12 md:left-12 pointer-events-auto">
+      <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+1rem)] left-[calc(env(safe-area-inset-left)+1rem)] md:bottom-[calc(env(safe-area-inset-bottom)+3rem)] md:left-[calc(env(safe-area-inset-left)+3rem)] pointer-events-auto">
         <Joystick onMove={onJoystickMove} size={100} stickSize={45} />
       </div>
 
       {/* 우측 액션 버튼 영역 */}
-      <div className="absolute bottom-6 right-6 md:bottom-12 md:right-12 pointer-events-auto flex flex-col gap-4">
+      <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] right-[calc(env(safe-area-inset-right)+1.5rem)] md:bottom-[calc(env(safe-area-inset-bottom)+3rem)] md:right-[calc(env(safe-area-inset-right)+3rem)] pointer-events-auto flex flex-col gap-4">
         {onActionPress && (
           <button
             type="button"

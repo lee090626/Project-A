@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { getCircleConfig, getLayerFromDepth } from '@/shared/config/circleData';
 import { PlayerStats } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { ElevatorIcon } from '@/shared/ui/icons';
 
 import { HpBar } from './components/HpBar';
 import { GoldDisplay } from './components/GoldDisplay';
@@ -12,6 +13,7 @@ import { WorldInfo } from './components/WorldInfo';
 interface HudProps {
   stats: PlayerStats;
   pos: { x: number; y: number };
+  isMobile?: boolean;
   onOpenStatus?: () => void;
   onOpenInventory?: () => void;
   onOpenEncyclopedia?: () => void;
@@ -28,6 +30,7 @@ const Hud: React.FC<HudProps> = React.memo(
   ({
     stats,
     pos,
+    isMobile = false,
     onOpenStatus,
     onOpenInventory,
     onOpenEncyclopedia,
@@ -96,6 +99,22 @@ const Hud: React.FC<HudProps> = React.memo(
       [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenSettings, onOpenGuide],
     );
 
+    const mobileNavItems = useMemo(
+      () => [
+        ...navItems,
+        ...(onOpenElevator
+          ? [{
+            label: 'Waypoints',
+            key: 'V',
+            iconNode: <ElevatorIcon size={30} />,
+            onClick: onOpenElevator,
+            color: '#34d399',
+          }]
+          : []),
+      ],
+      [navItems, onOpenElevator],
+    );
+
     return (
       <div className="absolute top-0 left-0 w-full h-full p-4 md:p-6 pointer-events-none select-none flex flex-col justify-between overflow-hidden">
         {/* 상단 섹션: 생존 상태 및 자산 */}
@@ -104,13 +123,15 @@ const Hud: React.FC<HudProps> = React.memo(
           <GoldDisplay gold={stats.goldCoins} />
         </div>
 
+        {isMobile && <QuickNav items={mobileNavItems} variant="mobile" />}
+
         {/* 하단 섹션: 장비, 네비게이션, 월드 정보 */}
         <div className="flex justify-between items-end w-full relative">
           <div className="flex gap-4 items-end">
             <EquipmentInfo pos={pos} />
           </div>
 
-          <QuickNav items={navItems} />
+          {!isMobile && <QuickNav items={navItems} variant="desktop" />}
           <WorldInfo depth={stats.depth as any} layerName={layerName} onOpenElevator={onOpenElevator} />
         </div>
       </div>

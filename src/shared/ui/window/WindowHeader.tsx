@@ -29,8 +29,8 @@ interface WindowHeaderProps {
   subtitleClassName?: string;
   /** 제목 영역 옆에 배치할 탭 또는 추가 컨트롤입니다. */
   children?: ReactNode;
-  /** 표시할 골드 수량입니다. */
-  gold: number;
+  /** 표시할 골드 수량입니다. 값이 없으면 골드 배지를 표시하지 않습니다. */
+  gold?: number;
   /** 닫기 버튼 클릭 콜백입니다. */
   onClose: () => void;
   /** 헤더 컨테이너에 추가할 클래스입니다. */
@@ -118,6 +118,8 @@ export function WindowHeader({
   goldVariant = 'compact',
   goldLabelClassName = '',
 }: WindowHeaderProps) {
+  const hasGold = typeof gold === 'number';
+
   return (
     <div
       className={[
@@ -164,13 +166,22 @@ export function WindowHeader({
         {children}
       </div>
 
-      <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end relative z-10">
-        <HeaderGoldBadge
-          gold={gold}
-          variant={goldVariant}
-          label={goldVariant === 'labeled' ? 'Gold' : undefined}
-          labelClassName={goldLabelClassName}
-        />
+      <div
+        className={[
+          'flex items-center gap-3 md:gap-6 w-full md:w-auto relative z-10',
+          hasGold ? 'justify-between md:justify-end' : 'justify-end',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {hasGold && (
+          <HeaderGoldBadge
+            gold={gold}
+            variant={goldVariant}
+            label={goldVariant === 'labeled' ? 'Gold' : undefined}
+            labelClassName={goldLabelClassName}
+          />
+        )}
         <button
           onClick={onClose}
           disabled={closeDisabled}
