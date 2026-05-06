@@ -61,7 +61,7 @@ export class LightingFilter extends PIXI.Filter {
       }),
       resources: {
         uLightingUniforms: {
-          uDarkness: { value: 0.8, type: 'f32' },
+          uDarkness: { value: 0.0, type: 'f32' },
           uZoom: { value: 1.0, type: 'f32' },
           uCameraPos: { value: new Float32Array([0, 0]), type: 'vec2<f32>' },
           uResolution: { value: new Float32Array([800, 600]), type: 'vec2<f32>' },

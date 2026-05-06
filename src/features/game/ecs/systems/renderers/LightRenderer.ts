@@ -1,6 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
-import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 
 // ============================================================
 // LightRenderer
@@ -10,9 +9,7 @@ import { ID_TO_TILE_TYPE } from '@/shared/types/game';
  * [렌더러] 조명 마스크 및 셰이더 파라미터 제어를 전담하는 서브 렌더러입니다.
  *
  * 주요 책임:
- * - 플레이어 위치 기반 광원(flickering) 생성
- * - 드롭 아이템(goldstone/luststone) 주변 소형 광원 추가
- * - 깊이(depth)에 따른 어둠 강도 계산
+ * - 화면 암전 효과를 비활성화한 상태로 조명 필터 파라미터 유지
  * - lightingFilter에 최종 파라미터 전달
  *
  * 호출 주체: `renderSystem.ts` 오케스트레이터
@@ -36,48 +33,14 @@ export function renderLighting(
 
   const { player } = world;
 
-  /**
-   * 광원 배열 포맷: [x, y, radius, intensity, ...]
-   * 최대 16개 광원까지 지원합니다 (셰이더 유니폼 제한).
-   */
-  const lights: number[] = [];
-
-  // ─── 1. 플레이어 광원 (flickering 효과 포함) ─────────────────
-  const flicker = Math.sin(now / 150) * 3;
-  lights.push(
-    player.visualPos.x * TILE_SIZE + TILE_SIZE / 2,
-    player.visualPos.y * TILE_SIZE + TILE_SIZE / 2,
-    TILE_SIZE * 5.5 + flicker,
-    1.0,
-  );
-
-  // ─── 2. 빛나는 드롭 아이템 광원 ─────────────────────────────
-  const GLOWING_TILE_TYPES = new Set(['goldstone', 'luststone']);
-  const dp = world.droppedItemPool;
-
-  for (let i = 0; i < dp.capacity; i++) {
-    if (!dp.active[i]) continue;
-    if (lights.length >= 64) break; // 셰이더 유니폼 한도 64 (4 floats × 16개)
-
-    const type = ID_TO_TILE_TYPE[dp.typeId[i]];
-    if (GLOWING_TILE_TYPES.has(type)) {
-      lights.push(dp.x[i], dp.y[i], TILE_SIZE * 2, 0.5);
-    }
-  }
-
-  // ─── 3. 깊이 기반 어둠 강도 계산 ────────────────────────────
-  // depth 0 → 어둠 0.45, depth 800 이상 → 최대 어둠 0.95
-  const depthFactor = Math.min(1.0, player.stats.depth / 800);
-  const darkness    = 0.45 + depthFactor * 0.5;
-
-  // ─── 4. 셰이더 유니폼 갱신 ─────────────────────────────────
+  // ─── 1. 셰이더 유니폼 갱신 ─────────────────────────────────
   lightingFilter.updateUniforms(
-    darkness,
+    0,
     stage.scale.x,
     player.visualPos.x * TILE_SIZE + TILE_SIZE / 2,
     player.visualPos.y * TILE_SIZE + TILE_SIZE / 2,
     screenWidth,
     screenHeight,
-    lights,
+    [],
   );
 }
