@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { PlayerStats, Equipment } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
+import { calculateCriticalStats } from '@/features/game/lib/playerCombatStats';
 import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
@@ -36,8 +37,6 @@ export interface StatusStatsResult {
   // Rune bonuses (for display)
   runePowerBonus: number;
   runeSpeedBonus: number;
-  runeCritRate: number;
-  runeCritDmg: number;
   runeLuck: number;
   runeMoveSpeed: number;
 
@@ -64,8 +63,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const drillBasePower = equipped.drill?.stats.power || 0;
     const runePowerBonus = Math.floor(getTotalRuneStat(stats, 'power'));
     const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
-    const runeCritRate = getTotalRuneStat(stats, 'critRate');
-    const runeCritDmg = getTotalRuneStat(stats, 'critDmg');
     const runeLuck = getTotalRuneStat(stats, 'luck');
     const runeMoveSpeed = getTotalRuneStat(stats, 'moveSpeed');
 
@@ -75,8 +72,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const finalMaxHp = stats.maxHp;
     const finalLuck = (stats.luck || 0) + Math.floor(runeLuck * 100);
 
-    const finalCritRate = runeCritRate + (artifactBonuses.critRate || 0) + (stats.luck || 0) * 0.01;
-    const finalCritDmg = 1.5 + runeCritDmg + (artifactBonuses.critDamage || 0);
+    const { critRate: finalCritRate, critDamage: finalCritDmg } = calculateCriticalStats(stats);
     
     // 공격 속도: 전역 전투 상수 기준
     const baseMiningInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
@@ -137,8 +133,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
       finalLuck,
       runePowerBonus,
       runeSpeedBonus,
-      runeCritRate,
-      runeCritDmg,
       runeLuck,
       runeMoveSpeed,
       statBreakdowns,

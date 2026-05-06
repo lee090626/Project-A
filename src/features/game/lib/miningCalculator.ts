@@ -10,6 +10,7 @@ import {
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
 import { modifierManager } from './ModifierManager';
+import { calculateCriticalStats } from './playerCombatStats';
 
 /**
  * 채굴 대미지 계산 결과 인터페이스
@@ -58,9 +59,7 @@ export const calculateMiningDamage = (
 
   // 3. 룬 보너스 및 치명타 계산
   const runeAttackBonus = getTotalRuneStat(stats, 'power');
-  const baseCritRate = 0; // 행운은 크리티컬 확률에 영향을 주지 않음
-  const critRate = Math.min(COMBAT_CONSTANTS.MAX_CRIT_RATE_CAP, baseCritRate + getTotalRuneStat(stats, 'critRate'));
-  const critDamage = COMBAT_CONSTANTS.BASE_CRIT_DAMAGE + getTotalRuneStat(stats, 'critDmg');
+  const { critRate, critDamage } = calculateCriticalStats(stats);
 
   // stats.power는 이미 statsSyncSystem에서 (기본20 + 장비파워)가 합산된 결과입니다.
   // 숙련도는 '기초 드릴 파워'에 비례하여 추가 보너스를 줍니다.
@@ -112,4 +111,3 @@ export const calculateMiningDamage = (
     attackInterval,
   };
 };
-
