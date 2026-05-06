@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { PlayerStats, Equipment } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
 import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
@@ -77,12 +78,13 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const finalCritRate = runeCritRate + (artifactBonuses.critRate || 0) + (stats.luck || 0) * 0.01;
     const finalCritDmg = 1.5 + runeCritDmg + (artifactBonuses.critDamage || 0);
     
-    // 공격 속도: 기본 500ms 기준
+    // 공격 속도: 전역 전투 상수 기준
+    const baseMiningInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
     const totalSpeedBonusMult = Math.min(
       0.95,
       (artifactBonuses.miningSpeed || 0) + runeSpeedBonus + masteryBonuses.miningSpeedMult,
     );
-    const finalMiningInterval = Math.round(500 * (1 - totalSpeedBonusMult));
+    const finalMiningInterval = Math.round(baseMiningInterval * (1 - totalSpeedBonusMult));
 
     // 이동 속도 배율
     const finalMoveSpeedMult = stats.moveSpeed / 100;
@@ -110,7 +112,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'HP Multiplier', value: `x${(1 + masteryBonuses.maxHpMult).toFixed(2)}`, color: 'text-blue-400' },
       ],
       miningSpeed: [
-        { label: 'System Baseline', value: '500ms' },
+        { label: 'System Baseline', value: `${baseMiningInterval}ms` },
         { label: 'Mastery Speed', value: `-${(masteryBonuses.miningSpeedMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
         { label: 'Rune Reduction', value: `-${(runeSpeedBonus * 100).toFixed(0)}%`, color: 'text-purple-400' },
         { label: 'Artifact', value: `-${((artifactBonuses.miningSpeed || 0) * 100).toFixed(0)}%`, color: 'text-orange-400' },
