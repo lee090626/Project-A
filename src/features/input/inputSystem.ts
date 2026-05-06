@@ -17,8 +17,8 @@ export const inputSystem = (world: GameWorld) => {
   const keys = world.keys;
   const mobile = world.mobileJoystick;
 
-  // 1. Vertical Movement (e.code)
-  if (keys['ArrowUp'] || keys['KeyW']) {
+  // 1. Vertical Movement (e.code; supports WASD and AZERTY ZQSD)
+  if (keys['ArrowUp'] || keys['KeyW'] || keys['KeyZ']) {
     world.intent.moveY = -1;
   } else if (keys['ArrowDown'] || keys['KeyS']) {
     world.intent.moveY = 1;
@@ -28,8 +28,8 @@ export const inputSystem = (world: GameWorld) => {
     world.intent.moveY = mobile.y > 0 ? 1 : -1;
   }
 
-  // 2. Horizontal Movement (e.code)
-  if (keys['ArrowLeft'] || keys['KeyA']) {
+  // 2. Horizontal Movement (e.code; supports WASD and AZERTY ZQSD)
+  if (keys['ArrowLeft'] || keys['KeyA'] || keys['KeyQ']) {
     world.intent.moveX = -1;
   } else if (keys['ArrowRight'] || keys['KeyD']) {
     world.intent.moveX = 1;
@@ -44,10 +44,8 @@ export const inputSystem = (world: GameWorld) => {
     world.intent.moveX = 0;
   }
 
-  // 3. Action intent (Space) and Artifact usage (KeyQ)
+  // 3. Action intent (Space)
   if (keys['Space']) {
     world.intent.action = 'interact';
-  } else if (keys['KeyQ']) {
-    world.intent.action = 'artifact';
   }
 };

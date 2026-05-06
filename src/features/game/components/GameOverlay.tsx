@@ -21,6 +21,7 @@ interface GameOverlayProps {
   worldRef: React.MutableRefObject<GameWorld>;
   stats: PlayerStats;
   hudPosition: { x: number; y: number };
+  isMobile: boolean;
   isOnboardingOpen: boolean;
   onCloseOnboarding: () => void;
   onMobileJoystickMove: (data: { x: number; y: number; active: boolean }) => void;
@@ -33,6 +34,7 @@ export default function GameOverlay({
   worldRef,
   stats,
   hudPosition,
+  isMobile,
   isOnboardingOpen,
   onCloseOnboarding,
   onMobileJoystickMove,
@@ -89,16 +91,17 @@ export default function GameOverlay({
         currentStats={currentStats}
         showInteractionPrompt={showInteractionPrompt}
         activeInteractionType={activeInteractionType}
+        isMobile={isMobile}
         handleRespawn={handleRespawn}
       />
 
       {/* 5. 첫 실행 온보딩 레이어 */}
       {isOnboardingOpen && currentStats.hp > 0 && (
-        <OnboardingOverlay isMobile={world.ui.isMobile} onClose={onCloseOnboarding} />
+        <OnboardingOverlay isMobile={isMobile} onClose={onCloseOnboarding} />
       )}
 
       {/* 6. 모바일 컨트롤러 레이어 */}
-      {currentStats.hp > 0 && world.ui.isMobile && (
+      {currentStats.hp > 0 && isMobile && (
         <MobileController
           onJoystickMove={onMobileJoystickMove}
           onActionPress={onMobileActionPress}

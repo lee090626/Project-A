@@ -68,11 +68,6 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       break;
     }
 
-    case 'useArtifact': {
-      world.intent.action = 'artifact';
-      break;
-    }
-
     case 'equip': {
       const { id, part } = data;
       if (part === 'Drill') stats.equipment.drillId = id;

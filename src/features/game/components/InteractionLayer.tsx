@@ -6,6 +6,7 @@ interface InteractionLayerProps {
   currentStats: PlayerStats;
   showInteractionPrompt: boolean;
   activeInteractionType: GameWorld['ui']['activeInteractionType'];
+  isMobile: boolean;
   handleRespawn: () => void;
 }
 
@@ -13,6 +14,7 @@ const InteractionLayer = ({
   currentStats,
   showInteractionPrompt,
   activeInteractionType,
+  isMobile,
   handleRespawn,
 }: InteractionLayerProps) => {
   return (
@@ -50,7 +52,7 @@ const InteractionLayer = ({
       {showInteractionPrompt && activeInteractionType && currentStats.hp > 0 && (
         <div className="absolute left-1/2 bottom-32 md:bottom-40 lg:bottom-44 -translate-x-1/2 z-30 animate-in slide-in-from-bottom-4 fade-in duration-300 pointer-events-none">
           <div className="flex items-center px-10 justify-center w-15 h-10 bg-emerald-500 text-black font-black rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-            <span className="text-base">Space</span>
+            <span className="text-base">{isMobile ? 'Action' : 'Space'}</span>
           </div>
         </div>
       )}

@@ -41,8 +41,8 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
         <div className="grid gap-3 px-4 py-3 sm:grid-cols-[1fr_1fr_1.2fr] sm:px-5 sm:py-4">
           <ControlHint
             title="Move"
-            primary={isMobile ? 'Joystick' : 'Arrow Keys'}
-            detail={isMobile ? 'Drag the left pad.' : 'WASD also works.'}
+            primary={isMobile ? 'Joystick' : 'Arrows / WASD / ZQSD'}
+            detail={isMobile ? 'Drag the left pad.' : 'Move through the mine.'}
           >
             {isMobile ? <JoystickGlyph /> : <ArrowKeyGlyph />}
           </ControlHint>
@@ -59,7 +59,7 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
             <p className="text-xs font-bold text-amber-300">Goal</p>
             <p className="mt-1 text-sm font-black text-white">Reach the next circle</p>
             <p className="mt-1 text-xs leading-5 text-zinc-400">
-              Mine ore, upgrade equipment, and challenge the boss when ready.
+              Mine ore, craft gear, then challenge the boss.
             </p>
           </div>
         </div>

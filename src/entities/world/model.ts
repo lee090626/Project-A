@@ -132,7 +132,7 @@ export interface GameWorld {
   intent: {
     moveX: number;
     moveY: number;
-    action: 'none' | 'interact' | 'artifact';
+    action: 'none' | 'interact';
     /** 현재 채굴 조준 중인 타일의 좌표 */
     miningTarget: { x: number; y: number } | null;
   };

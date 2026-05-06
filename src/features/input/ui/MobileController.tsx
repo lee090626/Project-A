@@ -24,7 +24,9 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
       <div className="absolute bottom-6 right-6 md:bottom-12 md:right-12 pointer-events-auto flex flex-col gap-4">
         {onActionPress && (
           <button
-            onTouchStart={(e) => {
+            type="button"
+            aria-label="Use action"
+            onPointerDown={(e) => {
               if (e.cancelable) e.preventDefault();
               onActionPress();
             }}
@@ -41,7 +43,7 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
       {/* 상단 중앙 설명 (터치 힌트) */}
       <div className="absolute top-24 left-1/2 -translate-x-1/2 opacity-20 hidden md:block">
         <span className="text-white text-[8px] font-bold tracking-[0.3em]">
-          Joystick to move • Space if needed
+          Joystick to move • Action to drill
         </span>
       </div>
     </div>

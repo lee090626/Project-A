@@ -29,8 +29,10 @@ export function useGameInput(
       const code = e.code;
 
       if (code === 'Escape') {
-        if (isAnyModalOpen()) closeAllModals();
-        else handleOpen('isSettingsOpen');
+        if (isAnyModalOpen()) {
+          e.preventDefault();
+          closeAllModals();
+        }
         return;
       }
 

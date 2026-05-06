@@ -23,6 +23,22 @@ import { SendToWorker } from './hooks/types';
 // UI Overlay
 import GameOverlay from './components/GameOverlay';
 
+const MOBILE_CONTROL_MAX_WIDTH = 768;
+
+/**
+ * 현재 브라우저 환경이 터치 우선 컨트롤을 필요로 하는지 판정합니다.
+ */
+function shouldUseMobileControls(win: Window): boolean {
+  const matchesMedia = (query: string) =>
+    typeof win.matchMedia === 'function' && win.matchMedia(query).matches;
+
+  return (
+    win.innerWidth <= MOBILE_CONTROL_MAX_WIDTH ||
+    matchesMedia('(pointer: coarse)') ||
+    matchesMedia('(hover: none)')
+  );
+}
+
 export default function GameEngine() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worldRef = useRef<GameWorld>(createInitialWorld(12345));
@@ -33,6 +49,7 @@ export default function GameEngine() {
   const [isEngineReady, setIsEngineReady] = useState(false);
   const [hudPosition, setHudPosition] = useState({ x: 15, y: 8 });
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const isReadyRef = useRef(false);
   useEffect(() => {
@@ -192,7 +209,11 @@ export default function GameEngine() {
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
+      const nextIsMobile = shouldUseMobileControls(window);
+
       setWindowSize({ width, height });
+      setIsMobile(nextIsMobile);
+      worldRef.current.ui.isMobile = nextIsMobile;
       sendToWorker('RESIZE', { width, height });
     };
     handleResize();
@@ -286,6 +307,7 @@ export default function GameEngine() {
         worldRef={worldRef}
         stats={stats || worldRef.current.player.stats}
         hudPosition={hudPosition}
+        isMobile={isMobile}
         isOnboardingOpen={isOnboardingOpen}
         onCloseOnboarding={handleCloseOnboarding}
         onMobileJoystickMove={handleMobileJoystickMove}
