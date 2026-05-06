@@ -40,17 +40,21 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
 
         <div className="grid gap-3 px-4 py-3 sm:grid-cols-[1fr_1fr_1.2fr] sm:px-5 sm:py-4">
           <ControlHint
-            title="Move"
+            title={isMobile ? 'Move / Mine' : 'Move / Mine / Attack'}
             primary={isMobile ? 'Joystick' : 'Arrows / WASD / ZQSD'}
-            detail={isMobile ? 'Drag the left pad.' : 'Move through the mine.'}
+            detail={
+              isMobile
+                ? 'Push into rock or enemies.'
+                : 'Move, mine, and attack by pushing into targets.'
+            }
           >
             {isMobile ? <JoystickGlyph /> : <ArrowKeyGlyph />}
           </ControlHint>
 
           <ControlHint
-            title="Drill"
+            title="Interact"
             primary={isMobile ? 'Action' : 'Space'}
-            detail="Use near rock or objects."
+            detail="Use near NPCs, stations, or portals."
           >
             <SpaceKeyGlyph label={isMobile ? 'Action' : 'Space'} />
           </ControlHint>

@@ -31,9 +31,9 @@ const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
                   </div>
                   <div>
                     <p className="text-zinc-400 text-sm font-bold mb-1 tracking-widest">
-                      Walk / Drill
+                      Move / Mine / Attack
                     </p>
-                    <p className="text-white text-lg font-black">WASD / Arrow Keys</p>
+                    <p className="text-white text-lg font-black">WASD / Arrow Keys / ZQSD</p>
                   </div>
                 </div>
                 <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50 flex items-center gap-6 group hover:bg-zinc-900/50 transition-all">
@@ -41,8 +41,8 @@ const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
                     🖱️
                   </div>
                   <div>
-                    <p className="text-zinc-400 text-sm font-bold mb-1 tracking-widest">Mining</p>
-                    <p className="text-white text-lg font-black">Space or Auto-Mine</p>
+                    <p className="text-zinc-400 text-sm font-bold mb-1 tracking-widest">Interact</p>
+                    <p className="text-white text-lg font-black">Press Space near objects</p>
                   </div>
                 </div>
                 <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50 flex items-center gap-6 group hover:bg-zinc-900/50 transition-all col-span-full">
@@ -50,9 +50,9 @@ const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
                     ✨
                   </div>
                   <div>
-                    <p className="text-zinc-400 text-sm font-bold mb-1 tracking-widest">Interact</p>
+                    <p className="text-zinc-400 text-sm font-bold mb-1 tracking-widest">Mobile</p>
                     <p className="text-white text-lg font-black">
-                      Hover near object & press Space
+                      Joystick mines and attacks, Action interacts
                     </p>
                   </div>
                 </div>

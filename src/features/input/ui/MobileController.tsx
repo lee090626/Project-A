@@ -43,7 +43,7 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
       {/* 상단 중앙 설명 (터치 힌트) */}
       <div className="absolute top-24 left-1/2 -translate-x-1/2 opacity-20 hidden md:block">
         <span className="text-white text-[8px] font-bold tracking-[0.3em]">
-          Joystick to move • Action to drill
+          Joystick to move and mine • Action to interact
         </span>
       </div>
     </div>
