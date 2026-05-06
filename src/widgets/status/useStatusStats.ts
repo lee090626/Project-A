@@ -1,13 +1,15 @@
 import { useMemo } from 'react';
 import { PlayerStats, Equipment } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
-import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
 import {
   BASE_PLAYER_MAX_HP,
   BASE_PLAYER_MOVE_SPEED,
   BASE_PLAYER_POWER,
 } from '@/shared/config/playerConstants';
-import { calculateCriticalStats } from '@/features/game/lib/playerCombatStats';
+import {
+  calculateCriticalStats,
+  calculateMiningSpeedStats,
+} from '@/features/game/lib/playerCombatStats';
 import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
@@ -78,14 +80,8 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const finalLuck = (stats.luck || 0) + Math.floor(runeLuck * 100);
 
     const { critRate: finalCritRate, critDamage: finalCritDmg } = calculateCriticalStats(stats);
-    
-    // 공격 속도: 전역 전투 상수 기준
-    const baseMiningInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
-    const totalSpeedBonusMult = Math.min(
-      0.95,
-      (artifactBonuses.miningSpeed || 0) + runeSpeedBonus + masteryBonuses.miningSpeedMult,
-    );
-    const finalMiningInterval = Math.round(baseMiningInterval * (1 - totalSpeedBonusMult));
+    const miningSpeedStats = calculateMiningSpeedStats(stats);
+    const finalMiningInterval = Math.round(miningSpeedStats.attackInterval);
 
     // 이동 속도 배율
     const finalMoveSpeedMult = stats.moveSpeed / BASE_PLAYER_MOVE_SPEED;
@@ -113,10 +109,11 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'HP Multiplier', value: `x${(1 + masteryBonuses.maxHpMult).toFixed(2)}`, color: 'text-blue-400' },
       ],
       miningSpeed: [
-        { label: 'System Baseline', value: `${baseMiningInterval}ms` },
-        { label: 'Mastery Speed', value: `-${(masteryBonuses.miningSpeedMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
+        { label: 'System Baseline', value: `${miningSpeedStats.baseInterval}ms` },
+        { label: 'Mastery Speed', value: `-${(miningSpeedStats.masterySpeedBonusMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
         { label: 'Rune Reduction', value: `-${(runeSpeedBonus * 100).toFixed(0)}%`, color: 'text-purple-400' },
-        { label: 'Artifact', value: `-${((artifactBonuses.miningSpeed || 0) * 100).toFixed(0)}%`, color: 'text-orange-400' },
+        { label: 'Artifact', value: `-${(miningSpeedStats.artifactSpeedBonus * 100).toFixed(0)}%`, color: 'text-orange-400' },
+        { label: 'Modifier Effect', value: `-${(miningSpeedStats.modifierSpeedBonus * 100).toFixed(0)}%`, color: 'text-cyan-400' },
       ],
       moveSpeed: [
         { label: 'Base Speed', value: `${BASE_PLAYER_MOVE_SPEED}%` },
