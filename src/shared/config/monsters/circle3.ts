@@ -64,7 +64,7 @@ export const circle3Monsters: MonsterDefinition[] = [
       '음침한 비가 쏟아지의 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발기며 탐식의 죄를 처단합니다.',
     width: 7,
     height: 7,
-    stats: { maxHp: 80000, power: 280, defense: 25, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 50000, power: 180, defense: 25, speed: 1.5, attackCooldown: 2000 },
     rewards: {
       exp: 22500,
       gold: 4500,

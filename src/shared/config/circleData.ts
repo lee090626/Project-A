@@ -4,7 +4,7 @@ import { TileType } from '../types/game';
  * 몬스터 스폰 규칙이 바뀌었을 때 런타임 스폰 캐시를 갱신하기 위한 버전입니다.
  * 스폰 density, weight, layer 범위를 조정하면 값을 올려 기존 세이브의 주변 스폰을 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 5;
+export const SPAWN_RULE_VERSION = 7;
 
 /**
  * 광물 생성 규칙을 정의하는 인터페이스입니다.
@@ -97,9 +97,9 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'fervorstone', threshold: 0.1, minLayer: 3 },
     ],
     monsterDensityByLayer: {
-      1: 0.5,
-      2: 0.5,
-      3: 0.5,
+      1: 0.55,
+      2: 0.6,
+      3: 0.65,
     },
     monsters: [
       { monsterId: 'c2_whisperer', weight: 10, minLayer: 1 },
@@ -122,9 +122,9 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'rotstone', threshold: 0.25, minLayer: 3, scale: 6 },
     ],
     monsterDensityByLayer: {
-      1: 0.22,
-      2: 0.26,
-      3: 0.3,
+      1: 0.6,
+      2: 0.65,
+      3: 0.7,
     },
     monsters: [
       { monsterId: 'c3_devourer', weight: 5, minLayer: 1 },

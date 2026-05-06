@@ -61,7 +61,7 @@ export const circle2Monsters: MonsterDefinition[] = [
     description: 'Circle 2 색욕의 지옥을 지배하는 위대한 악마. 치명적인 유혹과 갈망의 힘으로 침입자를 파멸시킵니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 12000, power: 85, defense: 20, speed: 0, attackCooldown: 2500 },
+    stats: { maxHp: 14000, power: 85, defense: 20, speed: 0, attackCooldown: 2500 },
     rewards: {
       exp: 7500,
       gold: 1500,
