@@ -2,6 +2,11 @@ import { useMemo } from 'react';
 import { PlayerStats, Equipment } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
+import {
+  BASE_PLAYER_MAX_HP,
+  BASE_PLAYER_MOVE_SPEED,
+  BASE_PLAYER_POWER,
+} from '@/shared/config/playerConstants';
 import { calculateCriticalStats } from '@/features/game/lib/playerCombatStats';
 import {
   getMasteryBonuses,
@@ -83,12 +88,12 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const finalMiningInterval = Math.round(baseMiningInterval * (1 - totalSpeedBonusMult));
 
     // 이동 속도 배율
-    const finalMoveSpeedMult = stats.moveSpeed / 100;
+    const finalMoveSpeedMult = stats.moveSpeed / BASE_PLAYER_MOVE_SPEED;
 
     // 5. Stat Breakdown Definitions
     const statBreakdowns: Record<string, StatBreakdownItem[]> = {
       power: [
-        { label: 'Base Hero Power', value: 20 },
+        { label: 'Base Hero Power', value: BASE_PLAYER_POWER },
         { label: `Drill (${equipped.drill?.name || 'Hand'})`, value: drillBasePower },
         { label: 'Mastery Perks', value: `+${masteryBonuses.miningPower}`, color: 'text-emerald-500' },
         { label: 'Skill Rune', value: `+${runePowerBonus}`, color: 'text-purple-400' },
@@ -100,7 +105,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'Artifact', value: artifactBonuses?.defense || 0, color: 'text-orange-400' },
       ],
       hp: [
-        { label: 'Base Energy', value: 200 },
+        { label: 'Base Energy', value: BASE_PLAYER_MAX_HP },
         { label: 'Armor HP', value: `+${equipped.armor?.stats.maxHp || 0}` },
         { label: 'Boots Sub-HP', value: `+${equipped.boots?.stats.maxHp || 0}` },
         { label: 'Mastery Perks', value: `+${masteryBonuses.maxHp}`, color: 'text-emerald-500' },
@@ -114,7 +119,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'Artifact', value: `-${((artifactBonuses.miningSpeed || 0) * 100).toFixed(0)}%`, color: 'text-orange-400' },
       ],
       moveSpeed: [
-        { label: 'Base Speed', value: '100%' },
+        { label: 'Base Speed', value: `${BASE_PLAYER_MOVE_SPEED}%` },
         { label: 'Boots Additive', value: `+${equipped.boots?.stats.moveSpeed || 0}%`, color: 'text-amber-400' },
         { label: 'Mastery Multiplier', value: `x${(1 + masteryBonuses.moveSpeedMult).toFixed(2)}`, color: 'text-blue-400' },
         { label: 'Artifact', value: `+${(artifactBonuses.moveSpeed || 0).toFixed(0)}%`, color: 'text-orange-400' },

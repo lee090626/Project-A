@@ -1,4 +1,9 @@
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import {
+  BASE_PLAYER_MAX_HP,
+  BASE_PLAYER_MOVE_SPEED,
+  BASE_PLAYER_POWER,
+} from '@/shared/config/playerConstants';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
 
@@ -59,8 +64,8 @@ export function syncPermanentStats(player: any) {
     if (eq.stats.defense) eqDefense += eq.stats.defense;
   });
 
-  // 2. 최대 체력 동기화: (기본 200 + 장비HP + 마스터리고정 + 유물고정) * (1 + 마스터리배율)
-  const baseHp = 200 + eqMaxHp + masteryBonuses.maxHp + (artifactBonuses?.maxHp || 0);
+  // 2. 최대 체력 동기화: (기본 체력 + 장비HP + 마스터리고정 + 유물고정) * (1 + 마스터리배율)
+  const baseHp = BASE_PLAYER_MAX_HP + eqMaxHp + masteryBonuses.maxHp + (artifactBonuses?.maxHp || 0);
   const finalMaxHp = Math.floor(baseHp * (1 + masteryBonuses.maxHpMult));
 
   // Max HP가 변경되었을 때만 현재 HP를 비율에 맞춰 조정 (매 프레임 재계산 시 정밀도 문제로 회복이 씹히는 현상 방지)
@@ -70,13 +75,15 @@ export function syncPermanentStats(player: any) {
     player.stats.hp = Math.floor(finalMaxHp * hpRatio);
   }
 
-  // 3. 이동 속도 동기화: (기본 100 + 장비이속 + 유물 이속) * (기본 배율 1.0 + 마스터리 배율)
-  const baseMoveSpeed = 100 + eqMoveSpeed + (artifactBonuses?.moveSpeed || 0) + masteryBonuses.moveSpeed;
+  // 3. 이동 속도 동기화: (기본 이속 + 장비이속 + 유물 이속) * (기본 배율 1.0 + 마스터리 배율)
+  const baseMoveSpeed =
+    BASE_PLAYER_MOVE_SPEED + eqMoveSpeed + (artifactBonuses?.moveSpeed || 0) + masteryBonuses.moveSpeed;
   const totalMoveSpeedMult = 1.0 + masteryBonuses.moveSpeedMult;
   player.stats.moveSpeed = Math.floor(baseMoveSpeed * totalMoveSpeedMult);
 
-  // 4. 공격력(Power) 동기화: (기본 20 + 장비Power + 숙련도 공격력) + 유물 공격력
-  player.stats.power = 20 + eqPower + (masteryBonuses.miningPower || 0) + (artifactBonuses?.power || 0);
+  // 4. 공격력(Power) 동기화: (기본 위력 + 장비Power + 숙련도 공격력) + 유물 공격력
+  player.stats.power =
+    BASE_PLAYER_POWER + eqPower + (masteryBonuses.miningPower || 0) + (artifactBonuses?.power || 0);
 
   // 5. 방어력 적용 (장비방어 + 유물방어)
   player.stats.defense = eqDefense + (artifactBonuses?.defense || 0);

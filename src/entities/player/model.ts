@@ -1,5 +1,10 @@
 import { PlayerStats, Position } from '@/shared/types/game';
 import { SPAWN_RULE_VERSION } from '@/shared/config/circleData';
+import {
+  BASE_PLAYER_MAX_HP,
+  BASE_PLAYER_MOVE_SPEED,
+  BASE_PLAYER_POWER,
+} from '@/shared/config/playerConstants';
 
 /**
  * 게임 내 플레이어 캐릭터의 상태를 나타내는 인터페이스입니다.
@@ -52,10 +57,10 @@ export const createInitialPlayer = (seed: number): Player => ({
     artifacts: [],
     equippedArtifactId: null,
     artifactCooldowns: {},
-    hp: 200,
-    maxHp: 200,
-    power: 30,
-    moveSpeed: 100,
+    hp: BASE_PLAYER_MAX_HP,
+    maxHp: BASE_PLAYER_MAX_HP,
+    power: BASE_PLAYER_POWER,
+    moveSpeed: BASE_PLAYER_MOVE_SPEED,
     defense: 0,
     luck: 0,
     inventory: {
