@@ -100,8 +100,8 @@ export default function LandingPage() {
             </p>
             <p>
               Discover dungeons and caves that have been asleep for ages, and travel through
-              mysterious Dimension portals to uncover lost technologies and magic. The deeper you
-              dig into the underground world, the greater the danger, but immense rewards await you.
+              ever more dangerous strata to uncover lost technologies and magic. The deeper you dig
+              into the underground world, the greater the danger, but immense rewards await you.
               Become the ultimate miner and warrior in this mesmerizing RPG universe.
             </p>
           </div>
@@ -167,9 +167,8 @@ export default function LandingPage() {
               <p className="text-zinc-400 leading-relaxed">
                 Terrifying ancient bosses govern dimensions deep within the underground world. They
                 possess overwhelming size and destructive special patterns unmatched by regular
-                monsters, requiring evasive maneuvers and precise strikes. Defeating them opens a
-                portal to the next Dimension, revealing completely new minerals and fantastic
-                ancient artifacts.
+                monsters, requiring evasive maneuvers and precise strikes. Defeating them marks the
+                path deeper into the underground world and unlocks the next stage of progression.
               </p>
             </div>
           </div>

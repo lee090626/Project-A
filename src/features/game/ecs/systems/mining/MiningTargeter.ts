@@ -45,8 +45,7 @@ export const miningTargeter = (world: GameWorld): { hasMonsterTarget: boolean } 
   // 2. 채굴 대상 확정 (몬스터가 있거나, 파괴 가능한 타일인 경우)
   const isValidTile = targetTile && 
                      targetTile.type !== 'empty' && 
-                     targetTile.type !== 'wall' && 
-                     targetTile.type !== 'portal';
+                     targetTile.type !== 'wall';
 
   if (hasMonsterTarget || isValidTile) {
     intent.miningTarget = { x: targetX, y: targetY };

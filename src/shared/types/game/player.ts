@@ -14,7 +14,6 @@ export type Inventory = {
     TileType,
     | 'empty'
     | 'wall'
-    | 'portal'
     | 'boss_skin'
     | 'monster_nest'
     | 'monster'

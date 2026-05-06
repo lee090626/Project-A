@@ -56,7 +56,6 @@ export type TileType =
   | 'monster'
   | 'empty'
   | 'wall'
-  | 'portal'
   // === 몬스터 전리품 및 정수 (Loot & Essences) ===
   | 'essence_lust'
   | 'essence_gluttony'
@@ -98,7 +97,6 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   monster_nest: 28,
   monster: 29,
   wall: 30,
-  portal: 31,
   boss_skin: 32,
   stone: 33,
   gluttony_stone: 34,
@@ -119,6 +117,7 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
 const LEGACY_TILE_ID_FALLBACKS: Record<number, TileType> = {
   25: 'empty',
   27: 'empty',
+  31: 'empty',
 };
 
 /** ID-타일 타입 역매핑 */

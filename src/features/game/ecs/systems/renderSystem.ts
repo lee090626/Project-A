@@ -76,8 +76,7 @@ function updateMiningTarget(world: GameWorld, layers: GameLayers) {
       tile &&
       tile.maxHealth > 0 &&
       tile.type !== 'empty' &&
-      tile.type !== 'wall' &&
-      tile.type !== 'portal';
+      tile.type !== 'wall';
 
     const entIdx = world.spatialHash.query(tx + TILE_SIZE / 2, ty + TILE_SIZE / 2, TILE_SIZE * 0.5)[0];
     const isBoss = entIdx !== undefined && world.entities.soa.type[entIdx] === 2;
@@ -120,5 +119,4 @@ function updateMiningTarget(world: GameWorld, layers: GameLayers) {
     targetRect.visible = false;
   }
 }
-
 

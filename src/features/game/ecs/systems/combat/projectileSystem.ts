@@ -61,7 +61,7 @@ export const projectileSystem = (world: GameWorld, deltaTime: number, now: numbe
     }
 
     const tile = tileMap.getTile(tx, ty);
-    if (tile && tile.type !== 'empty' && tile.type !== 'portal') {
+    if (tile && tile.type !== 'empty') {
       // 벽에 부딪힘
       entities.destroy(i);
       continue;

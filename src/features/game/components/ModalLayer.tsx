@@ -32,7 +32,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleResetGame,
     handleExportSave,
     handleImportSave,
-    handleTravelDimension,
     handleRespawn,
   } = gameActions;
 

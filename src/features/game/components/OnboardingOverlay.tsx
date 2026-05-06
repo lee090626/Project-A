@@ -54,7 +54,7 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
           <ControlHint
             title="Interact"
             primary={isMobile ? 'Action' : 'Space'}
-            detail="Use near NPCs, stations, or portals."
+            detail="Use near NPCs or stations."
           >
             <SpaceKeyGlyph label={isMobile ? 'Action' : 'Space'} />
           </ControlHint>

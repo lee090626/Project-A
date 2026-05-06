@@ -157,7 +157,6 @@ export default function GameEngine() {
   });
 
   const gameActions = useGameActions(worldRef, updateUi, workerSender.send);
-  const { handleTravelDimension } = gameActions;
 
   // 1. Worker Lifecycle (Hook)
   const { sendToWorker, globalWorker } = useGameWorker(
@@ -166,7 +165,6 @@ export default function GameEngine() {
     setIsEngineReady,
     isReadyRef,
     loadAssetsAndTransfer,
-    handleTravelDimension,
     handleTutorialTrigger,
     handleOpen,
   );

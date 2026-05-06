@@ -1,14 +1,13 @@
 import { GameWorld } from '@/entities/world/model';
 import { Entity } from '@/shared/types/game';
-import { getCircleConfig, CIRCLES } from '@/shared/config/circleData';
 
 /**
- * 플레이어와 NPC(엔티티) 또는 포탈 간의 상호작용을 관리하는 시스템입니다.
+ * 플레이어와 NPC(엔티티)의 상호작용을 관리하는 시스템입니다.
  *
  * @param world - 게임 월드 상태 객체
  */
 export const interactionSystem = (world: GameWorld) => {
-  const { player, entities, tileMap, intent } = world;
+  const { player, intent } = world;
 
   // 0. 필수 데이터 안전성 확인
   if (!world.staticEntities || !player || !player.pos) return;
@@ -61,13 +60,6 @@ export const interactionSystem = (world: GameWorld) => {
       world.ui.activeInteractionType = null;
     }
 
-    // 2. 포탈 상호작용 확인 (포탈 위에 서 있는 경우)
-    const currentTileX = Math.floor(player.pos.x + 0.5);
-    const currentTileY = Math.floor(player.pos.y + 0.5);
-    const currentTile = tileMap.getTile(currentTileX, currentTileY);
-    if (currentTile && currentTile.type === 'portal') {
-      handlePortalInteraction(world);
-    }
   } catch (err) {
     console.error('[InteractionSystem Error]', err);
   }
@@ -86,28 +78,5 @@ const handleEntityInteraction = (world: GameWorld, entity: Entity) => {
     self.postMessage({ type: 'OPEN_MODAL', payload: { target: 'isCraftingOpen' } });
   } else if (entity.interactionType === 'refinery') {
     self.postMessage({ type: 'OPEN_MODAL', payload: { target: 'isRefineryOpen' } });
-  }
-};
-
-/**
- * 포탈 상호작용을 처리하여 다음 차원으로 이동시킵니다.
- */
-const handlePortalInteraction = (world: GameWorld) => {
-  const { player } = world;
-
-  if (world.intent.action === 'interact') {
-    const currentCircle = getCircleConfig(player.stats.depth);
-    const nextCircle = CIRCLES.find((c) => c.id === currentCircle.id + 1);
-
-    if (nextCircle) {
-      // 워커에서는 confirm/alert을 사용할 수 없으므로 메인 스레드에 이벤트를 보냅니다.
-      self.postMessage({
-        type: 'PORTAL_TRIGGERED',
-        payload: { nextDepth: nextCircle.depthStart, nextCircleId: nextCircle.id },
-      });
-    }
-
-    // 즉시 재발생 방지를 위해 의도 초기화
-    world.intent.action = 'none';
   }
 };

@@ -31,7 +31,6 @@ export function useGameWorker(
   loadAssetsAndTransfer: (
     sendToWorker: SendToWorker,
   ) => void,
-  handleTravelDimension: (targetDepth: number) => void,
   handleTutorialTrigger: (guideId: string) => void,
   handleOpenModal: (target: keyof (import('@/entities/world/model').GameWorld)['ui']) => void,
 ) {
@@ -123,15 +122,6 @@ export function useGameWorker(
           navigator.clipboard.writeText(exported);
           alert('Save code copied to clipboard!');
         }
-      } else if (type === 'PORTAL_TRIGGERED') {
-        if (!isObjectPayload(payload)) return;
-        if (
-          confirm(
-            `Circle ${payload.nextCircleId}로 하강하시겠습니까?\n새로운 심연 탐험이 시작됩니다!`,
-          )
-        ) {
-          handleTravelDimension(payload.nextDepth);
-        }
       } else if (type === 'DIMENSION_TRAVEL_COMPLETE') {
         alert(`원하는 Circle에 도착했습니다!`);
       } else if (type === 'TUTORIAL_TRIGGER') {
@@ -218,7 +208,6 @@ export function useGameWorker(
     isClient,
     loadAssetsAndTransfer,
     sendToWorker,
-    handleTravelDimension,
     handleTutorialTrigger,
     handleOpenModal,
   ]);

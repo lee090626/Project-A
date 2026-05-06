@@ -84,7 +84,6 @@ export type EngineMessageType =
   | 'DIMENSION_TRAVEL_COMPLETE'
   | 'SYNC_UI'
   | 'SAVE'
-  | 'PORTAL_TRIGGERED'
   | 'SHOW_TOAST'
   | 'PLAY_SFX'
   | 'OPEN_MODAL'
@@ -100,7 +99,6 @@ export type WorkerToMainMessage =
   | { type: 'DIMENSION_TRAVEL_COMPLETE' }
   | { type: 'SYNC_UI'; payload: unknown }
   | { type: 'SAVE'; payload: unknown }
-  | { type: 'PORTAL_TRIGGERED'; payload: { nextDepth: number; nextCircleId: number } }
   | {
       type: 'SHOW_TOAST';
       payload: { message: string; type?: string; duration?: number; items?: ToastItem[] };
@@ -129,7 +127,6 @@ const workerToMainTypes = new Set<EngineMessageType>([
   'DIMENSION_TRAVEL_COMPLETE',
   'SYNC_UI',
   'SAVE',
-  'PORTAL_TRIGGERED',
   'SHOW_TOAST',
   'PLAY_SFX',
   'OPEN_MODAL',
@@ -185,8 +182,6 @@ export function isWorkerToMainMessage(value: unknown): value is WorkerToMainMess
     case 'DIMENSION_TRAVEL_COMPLETE':
     case 'ENGINE_READY':
       return true;
-    case 'PORTAL_TRIGGERED':
-      return isRecord(payload) && typeof payload.nextDepth === 'number' && typeof payload.nextCircleId === 'number';
     case 'SHOW_TOAST':
       return isRecord(payload) && typeof payload.message === 'string';
     case 'PLAY_SFX':
