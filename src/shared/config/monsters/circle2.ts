@@ -79,27 +79,10 @@ export const circle2Monsters: MonsterDefinition[] = [
     },
     patterns: [
       {
-        type: 'shot',
-        cooldown: 5500,
-        warningLeadTime: 1000,
-        projectileCount: 3, // 단일 페이즈용 밸런스 조정 (3발 고정)
-        projectileSpeed: 8,
-        projectilePower: 20,
-        projectileSize: 128,
-      },
-      {
-        type: 'cross',
-        cooldown: 4000,
-        warningLeadTime: 1000,
-        projectileSpeed: 7,
-        projectilePower: 23,
-        projectileSize: 128,
-      },
-      {
         type: 'lure',
-        cooldown: 5000,
-        lureDuration: 2000,
-        lureCycle: 5000,
+        cooldown: 8000,
+        lureDuration: 1000,
+        lureCycle: 8000,
       },
     ],
   },
