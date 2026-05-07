@@ -1,14 +1,21 @@
-import { PlayerStats, EquipmentPart } from '@/shared/types/game';
+import { PlayerStats } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { MINERAL_MAP } from '@/shared/config/mineralData';
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
+import { CIRCLES } from '@/shared/config/circleData';
+import {
+  ASMODEUS_RING_DEFENSE_IGNORE_CAP,
+  ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK,
+  ASMODEUS_RING_EFFECT_ID,
+  ASMODEUS_RING_TARGET_CIRCLE_ID,
+} from '@/shared/config/artifacts/relics';
 import {
   getMasteryMultiplier,
   createInitialMasteryState,
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { calculateArtifactBonuses, getArtifactEffectStack } from '@/shared/lib/artifactUtils';
 import { modifierManager } from './ModifierManager';
 import { calculateCriticalStats, calculateMiningSpeedStats } from './playerCombatStats';
 
@@ -20,6 +27,37 @@ export interface DamageResult {
   totalPower: number;
   isCrit: boolean;
   attackInterval: number;
+}
+
+const asmodeusRingTargetMinerals = new Set<string>(
+  CIRCLES.find((circle) => circle.id === ASMODEUS_RING_TARGET_CIRCLE_ID)?.minerals.map(
+    (rule) => rule.type,
+  ) ?? [],
+);
+
+/**
+ * 아스모데우스의 반지 중첩에 따라 C3 광물 방어력 무시 효과를 적용합니다.
+ *
+ * @param stats - 현재 플레이어 스탯
+ * @param targetTileType - 현재 채굴 대상 타일 타입
+ * @param defense - 보정 전 대상 방어력
+ * @returns 반지 효과가 반영된 최종 방어력
+ */
+function applyAsmodeusRingDefenseIgnore(
+  stats: PlayerStats,
+  targetTileType: string,
+  defense: number,
+): number {
+  if (!asmodeusRingTargetMinerals.has(targetTileType)) return defense;
+
+  const stacks = getArtifactEffectStack(stats, ASMODEUS_RING_EFFECT_ID);
+  if (stacks <= 0) return defense;
+
+  const ignoreRate = Math.min(
+    stacks * ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK,
+    ASMODEUS_RING_DEFENSE_IGNORE_CAP,
+  );
+  return defense * (1 - ignoreRate);
 }
 
 /**
@@ -84,6 +122,7 @@ export const calculateMiningDamage = (
   if (customDefense === undefined) {
     const mineralDef = MINERAL_MAP[targetTileType];
     defense = mineralDef ? mineralDef.defense : 0;
+    defense = applyAsmodeusRingDefenseIgnore(stats, targetTileType, defense);
   }
 
   const netPower = Math.max(0, totalPower - defense);

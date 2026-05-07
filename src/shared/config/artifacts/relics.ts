@@ -1,18 +1,25 @@
 import { ArtifactDefinition } from './types';
 
+export const ASMODEUS_RING_EFFECT_ID = 'CIRCLE3_MINERAL_DEFENSE_IGNORE';
+export const ASMODEUS_RING_TARGET_CIRCLE_ID = 3;
+export const ASMODEUS_RING_MAX_STACK = 10;
+export const ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK = 0.05;
+export const ASMODEUS_RING_DEFENSE_IGNORE_CAP =
+  ASMODEUS_RING_MAX_STACK * ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK;
+
 export const relicArtifacts: Record<string, ArtifactDefinition> = {
   relic_asmodeus_ring: {
     id: 'relic_asmodeus_ring',
     name: "Asmodeus's Ring",
     nameKo: '아스모데우스의 반지',
     type: 'stackable',
-    maxStack: 50,
+    maxStack: ASMODEUS_RING_MAX_STACK,
     image: 'AsmodeusRingRelic',
-    description: 'Increases mastery gain per stack.',
-    descriptionKo: '보유량에 따라 숙련도 획득량이 중첩 증가합니다.',
-    bonus: { stat: 'masteryExp', value: 0.2 },
-    effectDescription: 'Increases Mastery Gain',
-    effectDescriptionKo: '숙련도 획득량 증가',
+    description: 'Ignores Circle 3 mineral defense per stack.',
+    descriptionKo: '보유량에 따라 제3원 광물의 방어력을 일부 무시합니다.',
+    effectId: ASMODEUS_RING_EFFECT_ID,
+    effectDescription: 'Ignores C3 mineral defense by 5% per stack',
+    effectDescriptionKo: '중첩당 C3 광물 방어력 5% 무시',
   },
   relic_beelzebub_needle: {
     id: 'relic_beelzebub_needle',
