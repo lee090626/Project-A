@@ -31,6 +31,12 @@ export const createPlayerContainer = (
 ): PIXI.Container => {
   const texture = textures[forceTextureKey || 'player'] || PIXI.Texture.WHITE;
   const { container } = createBaseContainer(1, 1, texture);
+
+  const castBar = new PIXI.Graphics();
+  castBar.label = 'playerCastBar';
+  castBar.visible = false;
+  container.addChild(castBar);
+
   return container;
 };
 

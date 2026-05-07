@@ -4,8 +4,9 @@ import { TILE_SIZE } from '@/shared/config/constants';
 /**
  * 플레이어의 현재 위치와 입력 방향을 기반으로 채굴 대상을 계산합니다.
  */
-export const miningTargeter = (world: GameWorld): { hasMonsterTarget: boolean } => {
+export const miningTargeter = (world: GameWorld, now: number): { hasMonsterTarget: boolean } => {
   const { player, tileMap, intent } = world;
+  const previousTarget = intent.miningTarget;
   
   // 현재 위치 및 입력 방향을 고려한 타겟 좌표 계산
   const targetX = Math.floor(player.pos.x + (intent.moveX !== 0 ? intent.moveX * 1.0 : 0) + 0.5);
@@ -47,10 +48,22 @@ export const miningTargeter = (world: GameWorld): { hasMonsterTarget: boolean } 
                      targetTile.type !== 'empty' && 
                      targetTile.type !== 'wall';
 
-  if (hasMonsterTarget || isValidTile) {
-    intent.miningTarget = { x: targetX, y: targetY };
-  } else {
-    intent.miningTarget = null;
+  const nextTarget =
+    hasMonsterTarget || isValidTile
+      ? { x: targetX, y: targetY }
+      : null;
+
+  const shouldRestartCast =
+    player.isDrilling &&
+    !!nextTarget &&
+    (!previousTarget ||
+      previousTarget.x !== nextTarget.x ||
+      previousTarget.y !== nextTarget.y);
+
+  intent.miningTarget = nextTarget;
+
+  if (shouldRestartCast) {
+    player.lastAttackTime = now;
   }
 
   return { hasMonsterTarget };

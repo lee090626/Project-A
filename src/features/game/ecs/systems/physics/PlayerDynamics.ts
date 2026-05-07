@@ -107,14 +107,12 @@ function processGridMovement(world: GameWorld, now: number) {
 
       if (monsterAtTarget !== undefined) {
         drilling = true;
-        intent.miningTarget = { x: targetX, y: targetY };
       } else if (tile && tile.type === 'empty') {
         player.pos.x = targetX;
         player.pos.y = targetY;
         moved = true;
       } else if (tile && tile.type !== 'wall') {
         drilling = true;
-        intent.miningTarget = { x: targetX, y: targetY };
       }
     }
   }

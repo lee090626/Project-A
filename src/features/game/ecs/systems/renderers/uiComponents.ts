@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { TILE_SIZE } from '@/shared/config/constants';
+import { calculateMiningSpeedStats } from '@/features/game/lib/playerCombatStats';
 
 /**
  * 렌더링 메모리 최적화를 위한 정적 스타일 상수
@@ -15,47 +16,6 @@ const STYLES = {
   CAST_BOSS: { color: 0xef4444 },
   CAST_READY: { color: 0xffffff },
 } as const;
-
-/**
- * 상태 이상 시각 효과(VFX) 렌더링 (STUN 등)
- */
-export function updateStatusVFX(
-  container: PIXI.Container,
-  effects: any[],
-  width: number,
-  height: number,
-  now: number,
-) {
-  const isStunned = effects.some((e) => e.type === 'STUN');
-  let stunVFX = container.getChildByLabel('stunVFX') as PIXI.Container;
-
-  if (isStunned) {
-    if (!stunVFX) {
-      stunVFX = new PIXI.Container();
-      stunVFX.label = 'stunVFX';
-      stunVFX.y = -TILE_SIZE * 0.4;
-
-      for (let i = 0; i < 3; i++) {
-        const star = new PIXI.Text({ text: '⭐', style: { fontSize: 14 } });
-        star.anchor.set(0.5, 0.5);
-        star.label = `star_${i}`;
-        stunVFX.addChild(star);
-      }
-      container.addChild(stunVFX);
-    }
-    stunVFX.visible = true;
-
-    const count = stunVFX.children.length;
-    for (let i = 0; i < count; i++) {
-      const star = stunVFX.children[i];
-      const angle = now / 200 + i * ((Math.PI * 2) / 3);
-      star.x = width / 2 + Math.cos(angle) * 20;
-      star.y = Math.sin(angle) * 8;
-    }
-  } else if (stunVFX) {
-    stunVFX.visible = false;
-  }
-}
 
 /**
  * 하이엔드 캐스팅 바 (Cast Bar) 업데이트
@@ -108,6 +68,49 @@ export function updateCastBarFromSoA(
     castBar
       .roundRect(barX, barY, barW * ratio, barH, 2)
       .fill(fillColor);
+  }
+}
+
+/**
+ * 플레이어의 드릴 공격 캐스팅 바를 머리 위에 렌더링합니다.
+ */
+export function updatePlayerCastBar(
+  container: PIXI.Container,
+  player: any,
+  now: number,
+) {
+  const castBar = container.getChildByLabel('playerCastBar') as PIXI.Graphics;
+  if (!castBar) return;
+
+  const shouldShow = player.stats.hp > 0;
+  castBar.visible = shouldShow;
+  if (!shouldShow) return;
+
+  const { attackInterval } = calculateMiningSpeedStats(player.stats);
+  const barW = TILE_SIZE * 0.9;
+  const barH = 6;
+  const barX = (TILE_SIZE - barW) / 2;
+  const barY = -12;
+
+  castBar.clear();
+  castBar
+    .roundRect(barX, barY, barW, barH, 3)
+    .fill(STYLES.CAST_BG)
+    .stroke({ color: 0xffffff, alpha: 0.22, width: 1, alignment: 0 });
+
+  if (!player.isDrilling) {
+    return;
+  }
+
+  const elapsed = player.lastAttackTime
+    ? Math.max(0, now - player.lastAttackTime)
+    : 0;
+  const ratio = Math.max(0, Math.min(1, elapsed / attackInterval));
+  const isReady = ratio >= 0.92;
+  const fillColor = isReady ? STYLES.CAST_READY : STYLES.CAST_FILL;
+
+  if (ratio > 0) {
+    castBar.roundRect(barX, barY, barW * ratio, barH, 3).fill(fillColor);
   }
 }
 

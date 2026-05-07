@@ -11,7 +11,7 @@ import {
  * [ECS] 보스 AI 및 패턴 제어 시스템 (Data-Driven 리팩토링)
  *
  * 동작 원리:
- * 1. SOA에서 type=2(보스) 엔티티를 탐색합니다.
+ * 1. SOA에서 살아 있는 type=2(보스) 엔티티를 탐색합니다.
  * 2. 보스의 monsterDefIndex로 `MONSTERS` 데이터를 조회합니다.
  * 3. 보스 데이터의 `phases` 배열로 현재 HP %에 따라 페이즈를 결정합니다.
  * 4. `patterns` 배열을 순회하며 `minPhase`, 개별 쿨타임을 체크합니다.
@@ -25,10 +25,10 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
   const { entities, player } = world;
   const { soa } = entities;
 
-  // --- 1. 보스 엔티티 탐색 (type === 2) ---
+  // --- 1. 보스 엔티티 탐색 (type === 2 && hp > 0) ---
   let bossIdx = -1;
   for (let i = 0; i < soa.count; i++) {
-    if (soa.type[i] === 2) {
+    if (soa.type[i] === 2 && soa.hp[i] > 0) {
       bossIdx = i;
       break;
     }
@@ -69,26 +69,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
   const distToPlayer = Math.sqrt(Math.pow(bx - px, 2) + Math.pow(by - py, 2));
   const attackRange = (bossDef.behavior.attackRange || 2) * TILE_SIZE;
 
-  // 플레이어가 너무 멀어지면 전투 해제 (약 20타일)
-  if (distToPlayer > TILE_SIZE * 20) {
-    if (world.bossCombatStatus[instanceId]) {
-      delete world.bossCombatStatus[instanceId];
-      world.environmentalForce = { vx: 0, vy: 0 };
-    }
-    return;
-  }
-
-  // --- 4. 리싱(Leash) 시스템 ---
-  const ox = soa.originX[bossIdx];
-  const oy = soa.originY[bossIdx];
-  const distFromOrigin = Math.sqrt(Math.pow(bx - ox, 2) + Math.pow(by - oy, 2));
-
-  let isReturning = false;
-  if (distFromOrigin > BOSS_LEASH_RANGE * TILE_SIZE) {
-    isReturning = true;
-  }
-
-  // --- 5. 페이즈 결정 ---
+  // --- 4. 페이즈 결정 ---
   const hpPercent = (soa.hp[bossIdx] / soa.maxHp[bossIdx]) * 100;
   let phase = 1;
 
@@ -106,7 +87,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     else if (hpPercent <= 70) phase = 2;
   }
 
-  // --- 6. UI 동기화 ---
+  // --- 5. UI 동기화 ---
   world.bossCombatStatus[instanceId] = {
     active: true,
     id: bossDef.id,
@@ -115,6 +96,25 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     maxHp: soa.maxHp[bossIdx],
     phase,
   };
+
+  // 플레이어가 너무 멀어지면 보스 HUD는 유지하고, AI/패턴만 비활성화합니다.
+  if (distToPlayer > TILE_SIZE * 20) {
+    world.environmentalForce = { vx: 0, vy: 0 };
+    soa.vx[bossIdx] = 0;
+    soa.vy[bossIdx] = 0;
+    soa.state[bossIdx] = 0;
+    return;
+  }
+
+  // --- 6. 리싱(Leash) 시스템 ---
+  const ox = soa.originX[bossIdx];
+  const oy = soa.originY[bossIdx];
+  const distFromOrigin = Math.sqrt(Math.pow(bx - ox, 2) + Math.pow(by - oy, 2));
+
+  let isReturning = false;
+  if (distFromOrigin > BOSS_LEASH_RANGE * TILE_SIZE) {
+    isReturning = true;
+  }
 
   // --- 7. 패턴 루프 및 전조(Warning) 상태 체크 ---
   const patterns = bossDef.patterns ?? [];

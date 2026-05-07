@@ -139,7 +139,6 @@ export interface GameWorld {
   /** 각종 동작의 마지막 실행 시간을 관리하는 타임스탬프 객체 */
   timestamp: {
     lastMove: number;
-    lastMiningTime: number; // 채굴 전용 타임스탬프 추가
     lastUiUpdate: number;
     lastGlobalRegen: number;
     lastLoop: number;
@@ -272,7 +271,6 @@ export const createInitialWorld = (seed: number): GameWorld => {
     },
     timestamp: {
       lastMove: 0,
-      lastMiningTime: 0,
       lastUiUpdate: 0,
       lastGlobalRegen: Date.now(),
       lastLoop: 0,

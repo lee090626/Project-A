@@ -9,7 +9,6 @@ export const inputSystem = (world: GameWorld) => {
   world.intent.moveX = 0;
   world.intent.moveY = 0;
   world.intent.action = 'none';
-  world.intent.miningTarget = null;
 
   // 모달이 열려있거나 사망 상태면 입력을 차단함
   if (isAnyModalOpen(world.ui) || world.player.stats.hp <= 0) return;

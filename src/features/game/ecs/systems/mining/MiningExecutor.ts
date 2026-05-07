@@ -34,11 +34,11 @@ export const miningExecutor = (
   );
 
   // 2. 쿨타임 체크 (연사 속도 제어)
-  if (now - world.timestamp.lastMiningTime < attackInterval) return null;
+  if (now - player.lastAttackTime < attackInterval) return null;
 
   // 3. 타격 실행
   const destroyed = finalDamage > 0 ? tileMap.damageTile(x, y, finalDamage) : false;
-  world.timestamp.lastMiningTime = now;
+  player.lastAttackTime = now;
 
   if (finalDamage > 0) {
     player.lastHitTime = now;

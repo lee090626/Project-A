@@ -9,7 +9,7 @@ import {
   resolvePlayerWalkDirection,
   shouldMirrorPlayerAnimationFrame,
 } from './playerAnimation';
-import { updateStatusVFX } from './uiComponents';
+import { updatePlayerCastBar } from './uiComponents';
 
 /**
  * 플레이어 전용 렌더링을 처리합니다.
@@ -96,5 +96,5 @@ export function updatePlayerRenderer(
   const animationScaleX = shouldMirrorPlayerAnimationFrame(walkDirection) ? -1 : 1;
   body.scale.set(baseScaleX * animationScaleX, baseScaleY);
 
-  updateStatusVFX(container, entity.stats.activeEffects || [], TILE_SIZE, TILE_SIZE, now);
+  updatePlayerCastBar(container, entity, now);
 }

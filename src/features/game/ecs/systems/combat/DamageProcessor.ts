@@ -144,7 +144,7 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
         monsterDefense
       );
 
-      if (now - player.lastAttackTime > attackInterval) {
+      if (now - player.lastAttackTime >= attackInterval) {
         // [Multi-Hit] 중첩 타일 수만큼 대미지 배수 적용
         const actualDamage = finalDamage * multiplier;
         let text = isCrit ? `Crit! -${actualDamage}` : `-${actualDamage}`;
@@ -159,10 +159,6 @@ function processPlayerToMonsterDamage(world: GameWorld, now: number) {
         if (monsterDef?.mechanic === 'critical_only' && !isCrit) {
           text = 'Block!';
           color = '#3b82f6';
-          
-          if (now - player.lastAttackTime > attackInterval) {
-            entities.soa.hp[idx] -= 0;
-          }
         } else if (actualDamage > 0) {
           entities.soa.hp[idx] -= actualDamage;
           entities.markDirty(idx);

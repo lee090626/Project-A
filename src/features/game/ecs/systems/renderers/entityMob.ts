@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { MONSTER_DEFINITIONS } from '@/shared/config/monsterData';
 import { getSafeTexture } from '@/shared/lib/assetUtils';
 import { TILE_SIZE } from '@/shared/config/constants';
-import { updateHPBarFromSoA, updateCastBarFromSoA, updateStatusVFX } from './uiComponents';
+import { updateHPBarFromSoA, updateCastBarFromSoA } from './uiComponents';
 
 /**
  * SoA 엔티티(몬스터, 보스) 렌더링을 처리합니다.
@@ -50,7 +50,6 @@ export function updateMobRenderer(
     body.y = 0;
   }
 
-  updateStatusVFX(container, player.stats.activeEffects || [], ew, eh, now);
   updateHPBarFromSoA(idx, soa, player, container);
   updateCastBarFromSoA(idx, soa, container, now);
 

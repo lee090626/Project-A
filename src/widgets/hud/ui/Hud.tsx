@@ -119,7 +119,7 @@ const Hud: React.FC<HudProps> = React.memo(
       <div className="absolute top-0 left-0 w-full h-full p-4 md:p-6 pointer-events-none select-none flex flex-col justify-between overflow-hidden">
         {/* 상단 섹션: 생존 상태 및 자산 */}
         <div className="flex justify-between items-start w-full">
-          <HpBar hp={stats.hp} maxHp={stats.maxHp} />
+          <HpBar hp={stats.hp} maxHp={stats.maxHp} activeEffects={stats.activeEffects} />
           <GoldDisplay gold={stats.goldCoins} />
         </div>
 

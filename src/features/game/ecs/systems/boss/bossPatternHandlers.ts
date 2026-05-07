@@ -139,17 +139,9 @@ const handleAoe: PatternHandler = (ctx) => {
 
 const handleLure: PatternHandler = (ctx) => {
   const { world, now, pattern } = ctx;
-  const { player } = world;
-
   const lureDuration = pattern.lureDuration ?? 2000;
-  const lureCycle = pattern.lureCycle ?? 5000;
-  const cycleTime = now % lureCycle;
-
-  if (cycleTime < lureDuration) {
-    applyStatusEffect(world, { type: 'CONFUSION' }, lureDuration, now);
-    return true;
-  }
-  return false;
+  applyStatusEffect(world, { type: 'CONFUSION' }, lureDuration, now);
+  return true;
 };
 
 const handleSwarm: PatternHandler = (ctx) => {

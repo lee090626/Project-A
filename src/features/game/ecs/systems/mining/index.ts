@@ -14,7 +14,7 @@ export const miningSystem = (world: GameWorld, now: number) => {
   const { player } = world;
 
   // 1. [SoC: 타겟팅] 무엇을 조준할 것인가?
-  const { hasMonsterTarget } = miningTargeter(world);
+  const { hasMonsterTarget } = miningTargeter(world, now);
   const miningTarget = world.intent.miningTarget;
   if (!player.isDrilling || !miningTarget || hasMonsterTarget) return;
 
