@@ -56,7 +56,6 @@ export interface InputPayload {
 export interface ActionPayload {
   action: string;
   data?: unknown;
-  targetDepth?: number;
 }
 
 /**
@@ -81,7 +80,6 @@ export type EngineMessageType =
   | 'ENGINE_READY'
   | 'RENDER_SYNC'
   | 'EXPORT_DATA'
-  | 'DIMENSION_TRAVEL_COMPLETE'
   | 'SYNC_UI'
   | 'SAVE'
   | 'SHOW_TOAST'
@@ -96,7 +94,6 @@ export type WorkerToMainMessage =
   | { type: 'ENGINE_READY' }
   | { type: 'RENDER_SYNC'; buffer: ArrayBuffer }
   | { type: 'EXPORT_DATA'; payload?: unknown }
-  | { type: 'DIMENSION_TRAVEL_COMPLETE' }
   | { type: 'SYNC_UI'; payload: unknown }
   | { type: 'SAVE'; payload: unknown }
   | {
@@ -124,7 +121,6 @@ const workerToMainTypes = new Set<EngineMessageType>([
   'ENGINE_READY',
   'RENDER_SYNC',
   'EXPORT_DATA',
-  'DIMENSION_TRAVEL_COMPLETE',
   'SYNC_UI',
   'SAVE',
   'SHOW_TOAST',
@@ -179,7 +175,6 @@ export function isWorkerToMainMessage(value: unknown): value is WorkerToMainMess
     case 'SYNC_UI':
     case 'SAVE':
     case 'EXPORT_DATA':
-    case 'DIMENSION_TRAVEL_COMPLETE':
     case 'ENGINE_READY':
       return true;
     case 'SHOW_TOAST':

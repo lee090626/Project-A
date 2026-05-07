@@ -2,24 +2,56 @@ import { TileType } from '../types/game';
 
 import { TILE_DEFINITIONS } from '../config/mineralData';
 
+type SpecialTileType =
+  | 'dungeon_bricks'
+  | 'monster_nest'
+  | 'boss_skin'
+  | 'wall'
+  | 'empty';
+
+interface SpecialTileDefinition {
+  color: string;
+  index: number;
+  health: number;
+}
+
+const SPECIAL_TILE_DEFINITIONS: Record<SpecialTileType, SpecialTileDefinition> = {
+  dungeon_bricks: {
+    color: '#374151',
+    index: 9,
+    health: 1000,
+  },
+  monster_nest: {
+    color: '#b91c1c',
+    index: 31,
+    health: 200,
+  },
+  boss_skin: {
+    color: '#064e3b',
+    index: 33,
+    health: 40000,
+  },
+  wall: {
+    color: '#1a1a1b',
+    index: 4,
+    health: 1000,
+  },
+  empty: {
+    color: '#000000',
+    index: -1,
+    health: 0,
+  },
+};
+
 /**
  * 특정 타일 타입에 해당하는 렌더링 색상을 반환합니다.
  * @param type 타일의 종류
  * @returns 헥사코드 색상 문자열
  */
 export function getTileColor(type: TileType): string {
-  // 1. 특수 타일 등 하드코딩
-  switch (type) {
-    case 'dungeon_bricks':
-      return '#374151';
-    case 'monster_nest':
-      return '#b91c1c';
-    case 'boss_skin':
-      return '#064e3b';
-    case 'wall':
-      return '#1a1a1b';
-    case 'empty':
-      return '#000000';
+  const specialTile = SPECIAL_TILE_DEFINITIONS[type as SpecialTileType];
+  if (specialTile) {
+    return specialTile.color;
   }
 
   // 2. 광물 데이터 테이블에서 조회
@@ -35,20 +67,12 @@ export function getTileColor(type: TileType): string {
  * @returns 타일셋에서의 0-기반 인덱스
  */
 export function getTileIndex(type: string): number {
-  switch (type) {
-    case 'empty':
-      return -1;
-    case 'dungeon_bricks':
-      return 9;
-    case 'monster_nest':
-      return 31;
-    case 'wall':
-      return 4;
-    case 'boss_skin':
-      return 33;
-    default:
-      return 0; // 광물은 개별 아이콘이나 stone으로 렌더링됨
+  const specialTile = SPECIAL_TILE_DEFINITIONS[type as SpecialTileType];
+  if (specialTile) {
+    return specialTile.index;
   }
+
+  return 0; // 광물은 개별 아이콘이나 stone으로 렌더링됨
 }
 
 /**
@@ -58,17 +82,9 @@ export function getTileIndex(type: string): number {
  * @returns 타일의 체력 정보를 포함한 객체
  */
 export function getMineralStats(type: TileType): { health: number } {
-  // 1. 특수 타일 및 비광물 처리 (하드코딩된 규칙)
-  switch (type) {
-    case 'wall':
-    case 'dungeon_bricks':
-      return { health: 1000 };
-    case 'boss_skin':
-      return { health: 40000 };
-    case 'monster_nest':
-      return { health: 200 };
-    case 'empty':
-      return { health: 0 };
+  const specialTile = SPECIAL_TILE_DEFINITIONS[type as SpecialTileType];
+  if (specialTile) {
+    return { health: specialTile.health };
   }
 
   // 2. 전체 타일 정의 테이블에서 조회 (단일 진실 공급원 전술)

@@ -122,8 +122,6 @@ export function useGameWorker(
           navigator.clipboard.writeText(exported);
           alert('Save code copied to clipboard!');
         }
-      } else if (type === 'DIMENSION_TRAVEL_COMPLETE') {
-        alert(`원하는 Circle에 도착했습니다!`);
       } else if (type === 'TUTORIAL_TRIGGER') {
         const guideId =
           isObjectPayload(payload) && typeof payload.guideId === 'string'

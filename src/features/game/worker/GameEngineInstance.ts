@@ -250,20 +250,6 @@ export class GameEngineInstance {
    * @param payload 액션 데이터
    */
   handleAction(payload: ActionPayload) {
-    const { action } = payload;
-
-    if (action === 'travelDimension') {
-      const targetDepth = payload.targetDepth || 0;
-      this.world.player.pos.x = 15;
-      this.world.player.pos.y = targetDepth;
-      this.world.player.visualPos.x = 15;
-      this.world.player.visualPos.y = targetDepth;
-      this.world.player.stats.depth = targetDepth;
-
-      (self as any).postMessage({ type: 'DIMENSION_TRAVEL_COMPLETE' });
-      return;
-    }
-
     handlePlayerAction(this.world, payload);
   }
 
