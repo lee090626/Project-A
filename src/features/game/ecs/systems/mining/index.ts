@@ -1,10 +1,10 @@
 import { GameWorld } from '@/entities/world/model';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
-import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { calculateArtifactBonuses, hasArtifactEffect } from '@/shared/lib/artifactUtils';
 import { miningTargeter } from './MiningTargeter';
 import { miningExecutor } from './MiningExecutor';
 import { masteryService } from './MasteryService';
+import { calculateLuckStats } from '@/features/game/lib/playerCombatStats';
 
 /**
  * 플레이어의 채굴 로직을 관리하는 메인 시스템(오케스트레이터)입니다.
@@ -31,13 +31,7 @@ export const miningSystem = (world: GameWorld, now: number) => {
     masteryExpMultiplier += 3.0;
   }
 
-  const luck = Math.max(
-    0,
-    (getTotalRuneStat(player.stats, 'luck') * 100 +
-      masteryBonuses.luck +
-      artifactBonuses.luck * 100) *
-      (1 + masteryBonuses.luckMult),
-  );
+  const { finalLuck: luck } = calculateLuckStats(player.stats);
   const masteryExpGain = Math.floor(10 * masteryExpMultiplier);
 
   masteryService(

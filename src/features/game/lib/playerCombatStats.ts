@@ -36,6 +36,18 @@ export interface MiningSpeedStats {
 }
 
 /**
+ * 플레이어의 현재 행운 관련 최종 수치를 나타냅니다.
+ */
+export interface LuckStats {
+  /** 룬 및 고정 보너스를 합산한 배율 적용 전 행운 */
+  flatLuck: number;
+  /** 마스터리로 얻는 행운 배율 */
+  luckMultiplier: number;
+  /** 최종 행운 */
+  finalLuck: number;
+}
+
+/**
  * 플레이어 스탯을 기준으로 실제 전투에 사용되는 치명타 수치를 계산합니다.
  *
  * @param stats - 현재 플레이어 스탯
@@ -101,5 +113,27 @@ export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats 
     modifierSpeedBonus: modifiedSpeedBonusMult - rawSpeedBonusMult,
     totalSpeedBonusMult,
     attackInterval,
+  };
+}
+
+/**
+ * 플레이어 스탯을 기준으로 실제 보상 계산에 사용되는 최종 행운을 계산합니다.
+ *
+ * @param stats - 현재 플레이어 스탯
+ * @returns 행운 계산 상세 정보
+ */
+export function calculateLuckStats(stats: PlayerStats): LuckStats {
+  const artifactBonuses = calculateArtifactBonuses(stats);
+  const masteryBonuses = getMasteryBonuses(stats);
+  const runeLuck = getTotalRuneStat(stats, 'luck') * 100;
+
+  const flatLuck = runeLuck + masteryBonuses.luck + artifactBonuses.luck * 100;
+  const luckMultiplier = 1 + masteryBonuses.luckMult;
+  const finalLuck = Math.max(0, flatLuck * luckMultiplier);
+
+  return {
+    flatLuck,
+    luckMultiplier,
+    finalLuck,
   };
 }
