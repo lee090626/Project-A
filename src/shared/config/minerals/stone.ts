@@ -27,7 +27,7 @@ export const stoneMinerals: MineralDefinition[] = [
     color: '#4b5248',
     minDepth: 610,
     basePrice: 0,
-    baseHealth: 20,
+    baseHealth: 200,
     defense: 0,
     collectible: false,
     image: null,
