@@ -11,6 +11,13 @@ import {
 } from './playerAnimation';
 import { updatePlayerCastBar } from './uiComponents';
 
+const PLAYER_VISUAL_CENTER_OFFSET: Record<PlayerAnimationDirection, { x: number; y: number }> = {
+  Down: { x: 3, y: 4 },
+  Up: { x: -3, y: 4 },
+  Left: { x: -3, y: 4 },
+  Right: { x: 3, y: 4 },
+};
+
 /**
  * 플레이어 전용 렌더링을 처리합니다.
  * 플레이어 스프라이트는 이동 중 프레임 애니메이션을 사용하고, 절차적 바디 변형은 적용하지 않습니다.
@@ -92,7 +99,8 @@ export function updatePlayerRenderer(
 
   body.alpha = 1.0;
   body.rotation = 0;
-  body.position.set(TILE_SIZE / 2, TILE_SIZE);
+  const visualOffset = PLAYER_VISUAL_CENTER_OFFSET[walkDirection];
+  body.position.set(TILE_SIZE / 2 + visualOffset.x, TILE_SIZE + visualOffset.y);
   const animationScaleX = shouldMirrorPlayerAnimationFrame(walkDirection) ? -1 : 1;
   body.scale.set(baseScaleX * animationScaleX, baseScaleY);
 

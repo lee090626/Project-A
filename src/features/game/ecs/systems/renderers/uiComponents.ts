@@ -90,7 +90,7 @@ export function updatePlayerCastBar(
   const barW = TILE_SIZE * 0.9;
   const barH = 6;
   const barX = (TILE_SIZE - barW) / 2;
-  const barY = -12;
+  const barY = 3;
 
   castBar.clear();
   castBar
