@@ -22,6 +22,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
   const {
     handleUpgrade,
     handleCraft,
+    handleSynthesizeRelic,
     handleSell,
     handleSummonRune,
     handleSynthesizeRunes,
@@ -34,10 +35,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleImportSave,
     handleRespawn,
   } = gameActions;
-
-  // FIXME: Missing handlers in useGameActions. Adding placeholders to avoid build error.
-  const handleEquipArtifact = (gameActions as any).handleEquipArtifact;
-  const handleSynthesizeRelic = (gameActions as any).handleSynthesizeRelic;
 
   return (
     <>
@@ -60,7 +57,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
             stats={currentStats}
             onClose={() => handleClose('isStatusOpen')}
             onUnequipRune={handleUnequipRune}
-            onEquipArtifact={handleEquipArtifact}
           />
         </Overlay>
       )}

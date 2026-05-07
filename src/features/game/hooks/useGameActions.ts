@@ -43,6 +43,18 @@ export const useGameActions = (
     [sendToWorker, updateUi],
   );
 
+  /** 제작 유물 합성 처리 */
+  const handleSynthesizeRelic = useCallback(
+    (relicId: string) => {
+      sendToWorker('ACTION', {
+        action: 'synthesizeRelic',
+        data: { relicId },
+      });
+      updateUi();
+    },
+    [sendToWorker, updateUi],
+  );
+
   /** 수집한 자원 판매 처리 */
   const handleSell = useCallback(
     (resource: string, amount: number, price: number) => {
@@ -141,6 +153,7 @@ export const useGameActions = (
   return {
     handleUpgrade,
     handleCraft,
+    handleSynthesizeRelic,
     handleSell,
     handleSummonRune,
     handleSynthesizeRunes,
@@ -151,13 +164,6 @@ export const useGameActions = (
     handleResetGame,
     handleExportSave,
     handleImportSave,
-    handleTravelDimension: useCallback(
-      (targetDepth: number) => {
-        sendToWorker('ACTION', { action: 'travelDimension', targetDepth });
-        updateUi();
-      },
-      [sendToWorker, updateUi],
-    ),
     handleRespawn: useCallback(() => {
       sendToWorker('ACTION', { action: 'respawn' });
       updateUi();

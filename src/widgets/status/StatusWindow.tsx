@@ -14,7 +14,6 @@ interface StatusWindowProps {
   stats: PlayerStats;
   onClose: () => void;
   onUnequipRune?: (drillId: string, slotIndex: number) => void;
-  onEquipArtifact?: (id: string) => void;
 }
 
 /**
