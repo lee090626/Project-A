@@ -88,7 +88,8 @@ const TabEffects = ({ stats, ownedArtifacts, selectedKey, onSelectKey, selectedA
                       critDamage: 'Crit Damage',
                       defense: 'Defense',
                       miningSpeed: 'Mining Speed',
-                      masteryExp: 'Mastery Gain'
+                      masteryExp: 'Mastery Gain',
+                      masteryExpFlat: 'Mastery Gain'
                     };
                     const stacks = stats.collectionHistory?.[selectedArtifact.id] || 0;
                     const totalValue = selectedArtifact.bonus.value * stacks;

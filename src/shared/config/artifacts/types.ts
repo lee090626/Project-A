@@ -23,7 +23,8 @@ export interface ArtifactDefinition {
       | 'critDamage'
       | 'defense'
       | 'miningSpeed'
-      | 'masteryExp';
+      | 'masteryExp'
+      | 'masteryExpFlat';
     value: number;
   };
 

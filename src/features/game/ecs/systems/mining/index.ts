@@ -32,7 +32,7 @@ export const miningSystem = (world: GameWorld, now: number) => {
   }
 
   const { finalLuck: luck } = calculateLuckStats(player.stats);
-  const masteryExpGain = Math.floor(10 * masteryExpMultiplier);
+  const masteryExpGain = Math.floor((10 + artifactBonuses.masteryExpFlat) * masteryExpMultiplier);
 
   masteryService(
     world,

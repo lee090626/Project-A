@@ -25,7 +25,8 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
       critDamage: 'Crit DMG',
       defense: 'Defense',
       miningSpeed: 'Mine Speed',
-      masteryExp: 'Mastery Gain'
+      masteryExp: 'Mastery Gain',
+      masteryExpFlat: 'Mastery Gain'
     };
     return map[stat] || stat;
   };

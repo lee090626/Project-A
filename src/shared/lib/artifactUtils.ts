@@ -14,6 +14,7 @@ export interface ArtifactBonuses {
   defense: number;
   miningSpeed: number;
   masteryExp: number;
+  masteryExpFlat: number;
   speedMultiplier: number;
   damageMultiplier: number;
 }
@@ -96,6 +97,7 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
     defense: 0,
     miningSpeed: 0,
     masteryExp: 0,
+    masteryExpFlat: 0,
     speedMultiplier: 0,
     damageMultiplier: 0,
   };
