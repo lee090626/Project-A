@@ -28,17 +28,6 @@ export interface SkillRuneItem {
 }
 
 /**
- * 유물의 기본 데이터를 정의합니다. (단순 상호작용용 레거시 타입)
- */
-export interface Artifact {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  cooldownMs: number;
-}
-
-/**
  * 자원 가공소(용광로)에서 진행 중인 가공 작업 정보입니다.
  */
 export interface SmeltingJob {

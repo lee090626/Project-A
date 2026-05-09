@@ -49,6 +49,8 @@ export interface PlayerStats {
   maxDepthReached: number;
   /** 해금된 웨이포인트 깊이 목록 (0m은 베이스 캠프) */
   unlockedWaypoints: number[];
+  /** 처치 완료한 보스 서클 ID 목록 */
+  clearedCircleIds: number[];
 
   /** 전투 및 기본 스탯 */
   /** 현재 체력 */

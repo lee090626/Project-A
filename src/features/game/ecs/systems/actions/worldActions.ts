@@ -76,7 +76,6 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       else if (part === 'Helmet') stats.equipment.helmetId = id;
       else if (part === 'Armor') stats.equipment.armorId = id;
       else if (part === 'Boots') stats.equipment.bootsId = id;
-      else if (part === 'artifact') stats.equippedArtifactId = id;
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }

@@ -28,6 +28,7 @@ const SAVE_KEY = 'drilling-game-save';
 const WAYPOINT_INTERVAL = 100;
 const COLLECTIBLE_MINERAL_KEYS = new Set(MINERALS.map((m) => m.key as string));
 const KNOWN_TILE_DEFINITION_KEYS = new Set(TILE_DEFINITIONS.map((m) => m.key as string));
+const LEGACY_BOSS_CORE_PATTERN = /^circle_(\d+)_core$/;
 
 /**
  * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
@@ -127,6 +128,44 @@ function normalizeEffectStacks(stats: PlayerStats): void {
 }
 
 /**
+ * 구버전 보스 코어 기록을 보스 클리어 진행도 필드로 이전합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function normalizeClearedCircleIds(stats: PlayerStats): void {
+  const clearedCircleIds = new Set<number>();
+  const existingIds = Array.isArray(stats.clearedCircleIds) ? stats.clearedCircleIds : [];
+
+  for (const circleId of existingIds) {
+    if (typeof circleId === 'number' && Number.isFinite(circleId) && circleId > 0) {
+      clearedCircleIds.add(Math.floor(circleId));
+    }
+  }
+
+  const legacyCoreItems = Array.isArray(stats.artifacts) ? stats.artifacts : [];
+  for (const itemId of legacyCoreItems) {
+    if (typeof itemId !== 'string') continue;
+
+    const match = itemId.match(LEGACY_BOSS_CORE_PATTERN);
+    if (match) {
+      clearedCircleIds.add(Number(match[1]));
+    }
+  }
+
+  if (typeof stats.equippedArtifactId === 'string') {
+    const match = stats.equippedArtifactId.match(LEGACY_BOSS_CORE_PATTERN);
+    if (match) {
+      clearedCircleIds.add(Number(match[1]));
+    }
+  }
+
+  stats.clearedCircleIds = Array.from(clearedCircleIds).sort((a, b) => a - b);
+  delete stats.artifacts;
+  delete stats.equippedArtifactId;
+  delete stats.artifactCooldowns;
+}
+
+/**
  * 난독화된 저장 데이터를 다시 읽기 가능한 JSON 문자열로 복구합니다.
  * @param encoded 난독화된 Base64 문자열
  * @returns 복구된 원본 JSON 문자열
@@ -213,9 +252,6 @@ export const saveManager = {
         if (!s.equipmentStates) s.equipmentStates = {};
         if (!s.unlockedResearchIds) s.unlockedResearchIds = ['root'];
         if (!s.killedMonsterIds) s.killedMonsterIds = [];
-        if (s.artifacts === undefined) s.artifacts = [];
-        if (s.equippedArtifactId === undefined) s.equippedArtifactId = null;
-        if (!s.artifactCooldowns) s.artifactCooldowns = {};
         if (!s.refinerySlots) s.refinerySlots = 1;
         if (!s.activeSmeltingJobs) s.activeSmeltingJobs = [];
         if (!s.inventoryRunes) s.inventoryRunes = [];
@@ -225,6 +261,7 @@ export const saveManager = {
         if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
         normalizeUnlockedWaypoints(s as PlayerStats);
         normalizeCollectibleMineralProgress(s as PlayerStats);
+        normalizeClearedCircleIds(s as PlayerStats);
         normalizeEffectStacks(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
