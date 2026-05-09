@@ -1,10 +1,10 @@
-export type ArtifactType = 'stackable';
+export type EffectItemType = 'stackable';
 
-export interface ArtifactDefinition {
+export interface EffectDefinition {
   id: string;
   name: string;
   nameKo: string;
-  type: ArtifactType;
+  type: EffectItemType;
   /** 최대 중첩 수량 (미지정 시 기본값 1000) */
   maxStack?: number;
   description: string;

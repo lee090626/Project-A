@@ -1,10 +1,10 @@
 import { PlayerStats } from '../types/game';
-import { EFFECT_DATA } from '../config/artifactData';
+import { EFFECT_DATA } from '../config/effectData';
 
 /**
  * 보유형 Effect 시스템에 의해 계산된 보너스 스탯 인터페이스입니다.
  */
-export interface ArtifactBonuses {
+export interface EffectBonuses {
   maxHp: number;
   power: number;
   moveSpeed: number;
@@ -19,12 +19,12 @@ export interface ArtifactBonuses {
   damageMultiplier: number;
 }
 
-const DEFAULT_ARTIFACT_STACK_LIMIT = 1000;
+const DEFAULT_EFFECT_STACK_LIMIT = 1000;
 
 /**
  * 특정 특수 효과의 총 중첩(Stack) 수를 반환합니다.
  */
-export function getArtifactEffectStack(stats: PlayerStats, effectId: string): number {
+export function getEffectStackByEffectId(stats: PlayerStats, effectId: string): number {
   if (!stats.collectionHistory) return 0;
 
   let totalStack = 0;
@@ -40,54 +40,54 @@ export function getArtifactEffectStack(stats: PlayerStats, effectId: string): nu
 /**
  * 특정 특수 효과가 활성화되어 있는지 확인합니다.
  */
-export function hasArtifactEffect(stats: PlayerStats, effectId: string): boolean {
-  return getArtifactEffectStack(stats, effectId) > 0;
+export function hasEffectItemEffect(stats: PlayerStats, effectId: string): boolean {
+  return getEffectStackByEffectId(stats, effectId) > 0;
 }
 
 /**
- * 특정 아이템 ID가 유물 데이터에 존재하는지 확인합니다.
+ * 특정 아이템 ID가 Effect 데이터에 존재하는지 확인합니다.
  */
-export function isArtifactId(itemId: string): boolean {
+export function isEffectItemId(itemId: string): boolean {
   return !!EFFECT_DATA[itemId];
 }
 
 /**
- * 유물의 최대 중첩 수량을 반환합니다.
+ * Effect 아이템의 최대 중첩 수량을 반환합니다.
  */
-export function getArtifactStackLimit(artifactId: string): number {
-  const effect = EFFECT_DATA[artifactId];
+export function getEffectItemStackLimit(effectItemId: string): number {
+  const effect = EFFECT_DATA[effectItemId];
   if (!effect) return Number.POSITIVE_INFINITY;
-  return effect.maxStack ?? DEFAULT_ARTIFACT_STACK_LIMIT;
+  return effect.maxStack ?? DEFAULT_EFFECT_STACK_LIMIT;
 }
 
 /**
- * 유물 스택을 상한선까지 안전하게 누적합니다.
+ * Effect 아이템 스택을 상한선까지 안전하게 누적합니다.
  * @returns 실제로 증가한 스택 수량
  */
-export function addArtifactStack(stats: PlayerStats, artifactId: string, amount: number): number {
+export function addEffectStack(stats: PlayerStats, effectItemId: string, amount: number): number {
   if (amount <= 0) return 0;
-  if (!isArtifactId(artifactId)) return 0;
+  if (!isEffectItemId(effectItemId)) return 0;
 
   if (!stats.collectionHistory) stats.collectionHistory = {};
-  const current = stats.collectionHistory[artifactId] || 0;
-  const limit = getArtifactStackLimit(artifactId);
+  const current = stats.collectionHistory[effectItemId] || 0;
+  const limit = getEffectItemStackLimit(effectItemId);
   const next = Math.min(limit, current + amount);
   const gained = Math.max(0, next - current);
 
   if (gained > 0) {
-    stats.collectionHistory[artifactId] = next;
+    stats.collectionHistory[effectItemId] = next;
   }
 
   return gained;
 }
 
 /**
- * 인벤토리 및 수집 기록을 기반으로 현재 적용 중인 총 유물 보너스를 계산합니다.
+ * 인벤토리 및 수집 기록을 기반으로 현재 적용 중인 총 Effect 보너스를 계산합니다.
  * @param stats 플레이어 정보
  * @returns 합산된 보너스 수치
  */
-export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
-  const bonuses: ArtifactBonuses = {
+export function calculateEffectBonuses(stats: PlayerStats): EffectBonuses {
+  const bonuses: EffectBonuses = {
     maxHp: 0,
     power: 0,
     moveSpeed: 0,
@@ -115,11 +115,11 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
   }
 
   // 2. 루시퍼의 영겁 서리 (INFINITE_SCALING) 효과 적용
-  const luciferStacks = getArtifactEffectStack(stats, 'INFINITE_SCALING');
+  const luciferStacks = getEffectStackByEffectId(stats, 'INFINITE_SCALING');
   if (luciferStacks > 0) {
     const depth = stats.maxDepthReached || 0;
     const itemStack = luciferStacks; 
-    const stacks = Math.floor(depth / 100) * itemStack; // 유물 스택 수만큼 배율 강화
+    const stacks = Math.floor(depth / 100) * itemStack; // Effect 스택 수만큼 배율 강화
     
     if (stacks > 0) {
       const multiplier = Math.pow(1.01, stacks);
@@ -130,13 +130,13 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
   }
 
   // 3. 사탄의 타오르는 열정 (MINING_SPEED_BOOST)
-  const speedStacks = getArtifactEffectStack(stats, 'MINING_SPEED_BOOST');
+  const speedStacks = getEffectStackByEffectId(stats, 'MINING_SPEED_BOOST');
   if (speedStacks > 0) {
     bonuses.speedMultiplier += 0.25 * speedStacks;
   }
 
   // 4. 레비아탄의 뒤틀린 투영 (TWISTED_PROJECTION)
-  const twistedStacks = getArtifactEffectStack(stats, 'TWISTED_PROJECTION');
+  const twistedStacks = getEffectStackByEffectId(stats, 'TWISTED_PROJECTION');
   if (twistedStacks > 0) {
     const safeHp = stats.hp !== undefined ? stats.hp : stats.maxHp;
     const missingHpPercent = Math.max(0, (stats.maxHp - safeHp) / stats.maxHp);
@@ -150,9 +150,9 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
 }
 
 /**
- * 특정 스탯 명칭에 해당하는 유물 보너스 값을 가져옵니다.
+ * 특정 스탯 명칭에 해당하는 Effect 보너스 값을 가져옵니다.
  */
-export function getArtifactStat(stats: PlayerStats, statName: keyof ArtifactBonuses): number {
-  const allBonuses = calculateArtifactBonuses(stats);
+export function getEffectStat(stats: PlayerStats, statName: keyof EffectBonuses): number {
+  const allBonuses = calculateEffectBonuses(stats);
   return allBonuses[statName] || 0;
 }

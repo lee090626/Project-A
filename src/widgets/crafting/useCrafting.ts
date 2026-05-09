@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 
 export type CraftType = 'Equipment' | 'Effects';
 

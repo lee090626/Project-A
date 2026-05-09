@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
-import { EffectDefinition } from '@/shared/config/artifactData';
+import { EffectDefinition } from '@/shared/config/effectData';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 import { atlasMap } from '@/shared/config/atlasMap';
 

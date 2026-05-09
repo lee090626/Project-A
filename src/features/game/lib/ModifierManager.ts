@@ -1,5 +1,5 @@
 import { PlayerStats } from '@/shared/types/game';
-import { hasArtifactEffect } from '@/shared/lib/artifactUtils';
+import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
 
 // ============================================================
 // 타입 정의
@@ -42,11 +42,11 @@ export interface ModifierContext {
 }
 
 /**
- * 단일 유물 효과(Artifact Effect) 기반 모디파이어 정의입니다.
+ * 단일 Effect 기반 모디파이어 정의입니다.
  * `ModifierManager`의 내부 레지스트리에 등록됩니다.
  */
-interface ArtifactModifierDef {
-  /** 이 모디파이어가 발동되는 유물 effectId (artifactUtils.hasArtifactEffect 키와 동일) */
+interface EffectModifierDef {
+  /** 이 모디파이어가 발동되는 Effect effectId (`hasEffectItemEffect` 키와 동일) */
   effectId: string;
   /** 발동 시점 */
   hook: ModifierHook;
@@ -65,15 +65,15 @@ interface ArtifactModifierDef {
 }
 
 // ============================================================
-// 유물 모디파이어 레지스트리
+// Effect 모디파이어 레지스트리
 // ============================================================
 
 /**
- * 게임 내 모든 유물 특수 효과(effectId)의 전투 모디파이어 정의 목록입니다.
- * 새 유물 효과를 추가할 때 이 배열에만 항목을 추가하면 됩니다.
+ * 게임 내 모든 Effect 특수 효과(effectId)의 전투 모디파이어 정의 목록입니다.
+ * 새 Effect 효과를 추가할 때 이 배열에만 항목을 추가하면 됩니다.
  * combatSystem.ts를 수정할 필요가 없습니다.
  */
-const ARTIFACT_MODIFIER_REGISTRY: ArtifactModifierDef[] = [
+const EFFECT_MODIFIER_REGISTRY: EffectModifierDef[] = [
   // ─── onKill ───────────────────────────────────────────────
 
   /**
@@ -164,7 +164,7 @@ const ARTIFACT_MODIFIER_REGISTRY: ArtifactModifierDef[] = [
  * 전투 시스템의 수치 변환(Modifier) 로직을 중앙 집중 관리하는 매니저입니다.
  *
  * 책임:
- * 1. 특정 Hook + Stat 조합에 해당하는 유물 모디파이어를 순차 적용 (`applyAll`)
+ * 1. 특정 Hook + Stat 조합에 해당하는 Effect 모디파이어를 순차 적용 (`applyAll`)
  * 2. 처치 시 발동하는 모든 부수 효과 실행 (`triggerOnKillSideEffects`)
  *
  * 사용 예:
@@ -175,7 +175,7 @@ const ARTIFACT_MODIFIER_REGISTRY: ArtifactModifierDef[] = [
  */
 class ModifierManager {
   /**
-   * 특정 Hook + Stat 조합에 해당하는 모든 활성 유물 모디파이어를 순차 적용합니다.
+   * 특정 Hook + Stat 조합에 해당하는 모든 활성 Effect 모디파이어를 순차 적용합니다.
    * 각 모디파이어는 이전 모디파이어의 출력값을 입력으로 받습니다(체인 구조).
    *
    * @param hook - 모디파이어 발동 시점
@@ -192,9 +192,9 @@ class ModifierManager {
   ): number {
     let value = baseValue;
 
-    for (const mod of ARTIFACT_MODIFIER_REGISTRY) {
+    for (const mod of EFFECT_MODIFIER_REGISTRY) {
       if (mod.hook !== hook || mod.stat !== stat) continue;
-      if (!hasArtifactEffect(ctx.playerStats, mod.effectId)) continue;
+      if (!hasEffectItemEffect(ctx.playerStats, mod.effectId)) continue;
 
       value = mod.transform(value, ctx);
     }
@@ -203,15 +203,15 @@ class ModifierManager {
   }
 
   /**
-   * 처치(onKill) 시점에 발동되는 모든 부수 효과 유물을 실행합니다.
+   * 처치(onKill) 시점에 발동되는 모든 부수 Effect를 실행합니다.
    * 순수 값 변환이 아닌 힐, 텍스트 출력 등의 사이드 이펙트 전용 모디파이어를 처리합니다.
    *
    * @param ctx - 플레이어 스탯 및 부수 효과 콜백
    */
   public triggerOnKillSideEffects(ctx: ModifierContext): void {
-    for (const mod of ARTIFACT_MODIFIER_REGISTRY) {
+    for (const mod of EFFECT_MODIFIER_REGISTRY) {
       if (mod.hook !== 'onKill') continue;
-      if (!hasArtifactEffect(ctx.playerStats, mod.effectId)) continue;
+      if (!hasEffectItemEffect(ctx.playerStats, mod.effectId)) continue;
 
       // transform을 호출하되 반환값은 무시 (부수 효과만 발동)
       mod.transform(0, ctx);

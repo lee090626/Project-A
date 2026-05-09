@@ -1,4 +1,4 @@
-import { ArtifactDefinition } from './types';
+import { EffectDefinition } from './types';
 
 export const ASMODEUS_RING_EFFECT_ID = 'CIRCLE3_MINERAL_DEFENSE_IGNORE';
 export const ASMODEUS_RING_TARGET_CIRCLE_ID = 3;
@@ -7,7 +7,7 @@ export const ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK = 0.05;
 export const ASMODEUS_RING_DEFENSE_IGNORE_CAP =
   ASMODEUS_RING_MAX_STACK * ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK;
 
-export const relicArtifacts: Record<string, ArtifactDefinition> = {
+export const relicEffects: Record<string, EffectDefinition> = {
   relic_asmodeus_ring: {
     id: 'relic_asmodeus_ring',
     name: "Asmodeus's Ring",

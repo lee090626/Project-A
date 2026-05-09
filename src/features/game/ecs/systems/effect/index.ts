@@ -5,7 +5,7 @@ import { updateFloatingTexts } from './FloatingTextPhysics';
 import { updateLootCollection } from './LootCollector';
 import { toPascalCase } from '@/shared/lib/textCase';
 import { MINERAL_MAP } from '@/shared/config/mineralData';
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 import type { ToastItem } from '@/shared/types/game';
 
 // Buffer for item pickup aggregation

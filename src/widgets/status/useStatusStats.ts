@@ -15,7 +15,7 @@ import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 
 export interface StatBreakdownItem {
   label: string;
@@ -66,7 +66,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     };
 
     // 2. 통합 보너스 수합
-    const artifactBonuses = calculateArtifactBonuses(stats);
+    const effectBonuses = calculateEffectBonuses(stats);
     const masteryBonuses = getMasteryBonuses(stats);
     const drillBasePower = equipped.drill?.stats.power || 0;
     const runePowerBonus = Math.floor(getTotalRuneStat(stats, 'power'));
@@ -94,33 +94,33 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: `Drill (${equipped.drill?.name || 'Hand'})`, value: drillBasePower },
         { label: 'Mastery Perks', value: `+${masteryBonuses.miningPower}`, color: 'text-emerald-500' },
         { label: 'Skill Rune', value: `+${runePowerBonus}`, color: 'text-purple-400' },
-        { label: 'Artifact', value: `+${artifactBonuses?.power || 0}`, color: 'text-orange-400' },
+        { label: 'Effect', value: `+${effectBonuses?.power || 0}`, color: 'text-orange-400' },
       ],
       defense: [
         { label: 'Helmet DEF', value: equipped.helmet?.stats.defense || 0 },
         { label: 'Boots Sub-DEF', value: equipped.boots?.stats.defense || 0 },
-        { label: 'Artifact', value: artifactBonuses?.defense || 0, color: 'text-orange-400' },
+        { label: 'Effect', value: effectBonuses?.defense || 0, color: 'text-orange-400' },
       ],
       hp: [
         { label: 'Base Energy', value: BASE_PLAYER_MAX_HP },
         { label: 'Armor HP', value: `+${equipped.armor?.stats.maxHp || 0}` },
         { label: 'Boots Sub-HP', value: `+${equipped.boots?.stats.maxHp || 0}` },
         { label: 'Mastery Perks', value: `+${masteryBonuses.maxHp}`, color: 'text-emerald-500' },
-        { label: 'Artifact', value: `+${artifactBonuses.maxHp || 0}`, color: 'text-orange-400' },
+        { label: 'Effect', value: `+${effectBonuses.maxHp || 0}`, color: 'text-orange-400' },
         { label: 'HP Multiplier', value: `x${(1 + masteryBonuses.maxHpMult).toFixed(2)}`, color: 'text-blue-400' },
       ],
       miningSpeed: [
         { label: 'System Baseline', value: `${miningSpeedStats.baseInterval}ms` },
         { label: 'Mastery Speed', value: `-${(miningSpeedStats.masterySpeedBonusMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
         { label: 'Rune Reduction', value: `-${(runeSpeedBonus * 100).toFixed(0)}%`, color: 'text-purple-400' },
-        { label: 'Artifact', value: `-${(miningSpeedStats.artifactSpeedBonus * 100).toFixed(0)}%`, color: 'text-orange-400' },
+        { label: 'Effect', value: `-${(miningSpeedStats.effectSpeedBonus * 100).toFixed(0)}%`, color: 'text-orange-400' },
         { label: 'Modifier Effect', value: `-${(miningSpeedStats.modifierSpeedBonus * 100).toFixed(0)}%`, color: 'text-cyan-400' },
       ],
       moveSpeed: [
         { label: 'Base Speed', value: `${BASE_PLAYER_MOVE_SPEED}%` },
         { label: 'Boots Additive', value: `+${equipped.boots?.stats.moveSpeed || 0}%`, color: 'text-amber-400' },
         { label: 'Mastery Multiplier', value: `x${(1 + masteryBonuses.moveSpeedMult).toFixed(2)}`, color: 'text-blue-400' },
-        { label: 'Artifact', value: `+${(artifactBonuses.moveSpeed || 0).toFixed(0)}%`, color: 'text-orange-400' },
+        { label: 'Effect', value: `+${(effectBonuses.moveSpeed || 0).toFixed(0)}%`, color: 'text-orange-400' },
       ],
     };
 

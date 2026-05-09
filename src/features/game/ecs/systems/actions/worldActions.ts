@@ -1,11 +1,11 @@
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
-import { addArtifactStack } from '@/shared/lib/artifactUtils';
+import { addEffectStack } from '@/shared/lib/effectItemUtils';
 import { showToast } from '../toastSystem';
 
 /**
- * 부활, 웨이포인트 이동, 유물 합성 등 월드 관련 액션을 처리합니다.
+ * 부활, 웨이포인트 이동, Effect 합성 등 월드 관련 액션을 처리합니다.
  */
 export const handleWorldAction = (world: GameWorld, action: string, data: any) => {
   const stats = world.player.stats;
@@ -64,7 +64,7 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
         });
 
         // 결과 반영: 모든 Effect 아이템은 스택 누적 규칙을 따릅니다.
-        addArtifactStack(stats, effectId, 1);
+        addEffectStack(stats, effectId, 1);
       }
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;

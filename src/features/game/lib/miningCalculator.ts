@@ -8,14 +8,14 @@ import {
   ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK,
   ASMODEUS_RING_EFFECT_ID,
   ASMODEUS_RING_TARGET_CIRCLE_ID,
-} from '@/shared/config/artifacts/relics';
+} from '@/shared/config/effects/relics';
 import {
   getMasteryMultiplier,
   createInitialMasteryState,
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
-import { calculateArtifactBonuses, getArtifactEffectStack } from '@/shared/lib/artifactUtils';
+import { getEffectStackByEffectId } from '@/shared/lib/effectItemUtils';
 import { modifierManager } from './ModifierManager';
 import { calculateCriticalStats, calculateMiningSpeedStats } from './playerCombatStats';
 
@@ -50,7 +50,7 @@ function applyAsmodeusRingDefenseIgnore(
 ): number {
   if (!asmodeusRingTargetMinerals.has(targetTileType)) return defense;
 
-  const stacks = getArtifactEffectStack(stats, ASMODEUS_RING_EFFECT_ID);
+  const stacks = getEffectStackByEffectId(stats, ASMODEUS_RING_EFFECT_ID);
   if (stacks <= 0) return defense;
 
   const ignoreRate = Math.min(
@@ -69,7 +69,6 @@ export const calculateMiningDamage = (
   customDefense?: number,
 ): DamageResult => {
   const currentDrill = stats.equipment.drillId ? EQUIPMENTS[stats.equipment.drillId] : null;
-  const artifactBonuses = calculateArtifactBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
 
   // 1. 공격 속도 배율 계산

@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
-import { calculateArtifactBonuses, hasArtifactEffect } from '@/shared/lib/artifactUtils';
+import { calculateEffectBonuses, hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
 import { miningTargeter } from './MiningTargeter';
 import { miningExecutor } from './MiningExecutor';
 import { masteryService } from './MasteryService';
@@ -24,15 +24,17 @@ export const miningSystem = (world: GameWorld, now: number) => {
 
   // 3. [SoC: 보상] 파괴 성공 시 필요한 보너스만 계산
   const masteryBonuses = getMasteryBonuses(player.stats);
-  const artifactBonuses = calculateArtifactBonuses(player.stats);
+  const effectBonuses = calculateEffectBonuses(player.stats);
 
-  let masteryExpMultiplier = 1.0 + masteryBonuses.masteryExpMult + artifactBonuses.masteryExp;
-  if (hasArtifactEffect(player.stats, 'MASTERY_BOOST')) {
+  let masteryExpMultiplier = 1.0 + masteryBonuses.masteryExpMult + effectBonuses.masteryExp;
+  if (hasEffectItemEffect(player.stats, 'MASTERY_BOOST')) {
     masteryExpMultiplier += 3.0;
   }
 
   const { finalLuck: luck } = calculateLuckStats(player.stats);
-  const masteryExpGain = Math.floor((10 + artifactBonuses.masteryExpFlat) * masteryExpMultiplier);
+  const masteryExpGain = Math.floor(
+    (10 + effectBonuses.masteryExpFlat) * masteryExpMultiplier,
+  );
 
   masteryService(
     world,

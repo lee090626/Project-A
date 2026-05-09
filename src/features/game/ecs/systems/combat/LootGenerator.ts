@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 import { modifierManager } from '@/features/game/lib/ModifierManager';
 import { messageBus } from '@/shared/lib/MessageBus';
 
@@ -26,10 +26,10 @@ export class LootGenerator {
     const { player, entities } = world;
     if (!monsterDef.rewards.drops) return;
 
-    const artifactBonuses = calculateArtifactBonuses(player.stats);
-    const luckBonus = artifactBonuses.luck; // 0.01 = 1% 증가
+    const effectBonuses = calculateEffectBonuses(player.stats);
+    const luckBonus = effectBonuses.luck; // 0.01 = 1% 증가
 
-    // 유물 효과 적용 (수량 보너스 등)
+    // Effect 적용 (수량 보너스 등)
     const lootMultiplier = modifierManager.applyAll(
       'onKill',
       'loot',
@@ -43,7 +43,7 @@ export class LootGenerator {
         // 기본 수량 결정
         const baseAmount = Math.floor(Math.random() * (drop.maxAmount - drop.minAmount + 1)) + drop.minAmount;
         
-        // 행운 및 유물 보너스 적용
+        // 행운 및 Effect 보너스 적용
         const finalAmount = Math.max(
           1,
           Math.floor(baseAmount * (1 + luckBonus) * lootMultiplier)

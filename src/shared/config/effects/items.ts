@@ -1,6 +1,6 @@
-import { ArtifactDefinition } from './types';
+import { EffectDefinition } from './types';
 
-export const craftedEffects: Record<string, ArtifactDefinition> = {
+export const craftedEffects: Record<string, EffectDefinition> = {
   mastery_seal: {
     id: 'mastery_seal',
     name: 'Mastery Seal',
@@ -19,5 +19,3 @@ export const craftedEffects: Record<string, ArtifactDefinition> = {
     },
   },
 };
-
-export const craftableArtifacts = craftedEffects;

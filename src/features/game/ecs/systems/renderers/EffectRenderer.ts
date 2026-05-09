@@ -3,7 +3,7 @@ import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { MINERAL_MAP } from '@/shared/config/mineralData';
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 import { getSafeTexture } from '@/shared/lib/assetUtils';
 
 // ============================================================

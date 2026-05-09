@@ -5,14 +5,14 @@ import {
   BASE_PLAYER_POWER,
 } from '@/shared/config/playerConstants';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 
 /**
- * 플레이어의 영구 스탯(체력, 이속 등)을 장비, 마스터리 및 유물 보너스에 맞춰 동기화합니다.
+ * 플레이어의 영구 스탯(체력, 이속 등)을 장비, 마스터리 및 Effect 보너스에 맞춰 동기화합니다.
  */
 export function syncPermanentStats(player: any) {
   const masteryBonuses = getMasteryBonuses(player.stats);
-  const artifactBonuses = calculateArtifactBonuses(player.stats);
+  const effectBonuses = calculateEffectBonuses(player.stats);
 
   // 1. 장착 데이터 안전 추출 (레거시 데이터 대응)
   let { equipment } = player.stats;
@@ -64,8 +64,8 @@ export function syncPermanentStats(player: any) {
     if (eq.stats.defense) eqDefense += eq.stats.defense;
   });
 
-  // 2. 최대 체력 동기화: (기본 체력 + 장비HP + 마스터리고정 + 유물고정) * (1 + 마스터리배율)
-  const baseHp = BASE_PLAYER_MAX_HP + eqMaxHp + masteryBonuses.maxHp + (artifactBonuses?.maxHp || 0);
+  // 2. 최대 체력 동기화: (기본 체력 + 장비HP + 마스터리고정 + Effect 고정) * (1 + 마스터리배율)
+  const baseHp = BASE_PLAYER_MAX_HP + eqMaxHp + masteryBonuses.maxHp + (effectBonuses?.maxHp || 0);
   const finalMaxHp = Math.floor(baseHp * (1 + masteryBonuses.maxHpMult));
 
   // Max HP가 변경되었을 때만 현재 HP를 비율에 맞춰 조정 (매 프레임 재계산 시 정밀도 문제로 회복이 씹히는 현상 방지)
@@ -75,21 +75,21 @@ export function syncPermanentStats(player: any) {
     player.stats.hp = Math.floor(finalMaxHp * hpRatio);
   }
 
-  // 3. 이동 속도 동기화: (기본 이속 + 장비이속 + 유물 이속) * (기본 배율 1.0 + 마스터리 배율)
+  // 3. 이동 속도 동기화: (기본 이속 + 장비이속 + Effect 이속) * (기본 배율 1.0 + 마스터리 배율)
   const baseMoveSpeed =
-    BASE_PLAYER_MOVE_SPEED + eqMoveSpeed + (artifactBonuses?.moveSpeed || 0) + masteryBonuses.moveSpeed;
+    BASE_PLAYER_MOVE_SPEED + eqMoveSpeed + (effectBonuses?.moveSpeed || 0) + masteryBonuses.moveSpeed;
   const totalMoveSpeedMult = 1.0 + masteryBonuses.moveSpeedMult;
   player.stats.moveSpeed = Math.floor(baseMoveSpeed * totalMoveSpeedMult);
 
-  // 4. 공격력(Power) 동기화: (기본 위력 + 장비Power + 숙련도 공격력) + 유물 공격력
+  // 4. 공격력(Power) 동기화: (기본 위력 + 장비Power + 숙련도 공격력) + Effect 공격력
   player.stats.power =
-    BASE_PLAYER_POWER + eqPower + (masteryBonuses.miningPower || 0) + (artifactBonuses?.power || 0);
+    BASE_PLAYER_POWER + eqPower + (masteryBonuses.miningPower || 0) + (effectBonuses?.power || 0);
 
-  // 5. 방어력 적용 (장비방어 + 유물방어)
-  player.stats.defense = eqDefense + (artifactBonuses?.defense || 0);
+  // 5. 방어력 적용 (장비방어 + Effect 방어)
+  player.stats.defense = eqDefense + (effectBonuses?.defense || 0);
 
   // 6. 행운(Luck) 적용 (장기적으로 장비 행운도 여기 합산)
-  player.stats.luck = (artifactBonuses?.luck || 0);
+  player.stats.luck = (effectBonuses?.luck || 0);
 }
 
 /**

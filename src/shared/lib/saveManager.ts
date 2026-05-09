@@ -1,7 +1,7 @@
 import { PlayerStats, Position, Inventory } from '../types/game';
 import { DRILLING_SECRET_KEY } from '../config/constants';
 import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
-import { EFFECT_DATA } from '../config/artifactData';
+import { EFFECT_DATA } from '../config/effectData';
 import { gameDB } from './db';
 
 /**
@@ -108,11 +108,11 @@ function obfuscate(jsonStr: string): string {
 }
 
 /**
- * 유물 데이터의 maxStack 설정에 맞춰 기존 세이브의 초과 중첩을 정리합니다.
+ * Effect 데이터의 maxStack 설정에 맞춰 기존 세이브의 초과 중첩을 정리합니다.
  *
  * @param stats 플레이어 스탯
  */
-function normalizeArtifactStacks(stats: PlayerStats): void {
+function normalizeEffectStacks(stats: PlayerStats): void {
   if (!stats.collectionHistory) {
     stats.collectionHistory = {};
     return;
@@ -225,7 +225,7 @@ export const saveManager = {
         if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
         normalizeUnlockedWaypoints(s as PlayerStats);
         normalizeCollectibleMineralProgress(s as PlayerStats);
-        normalizeArtifactStacks(s as PlayerStats);
+        normalizeEffectStacks(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
         const oldInv = (s.inventory || {}) as any;

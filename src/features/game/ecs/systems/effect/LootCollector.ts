@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
-import { addArtifactStack, isArtifactId } from '@/shared/lib/artifactUtils';
+import { addEffectStack, isEffectItemId } from '@/shared/lib/effectItemUtils';
 import { messageBus } from '@/shared/lib/MessageBus';
 
 
@@ -37,8 +37,8 @@ function collectDroppedItem(world: GameWorld, index: number): void {
   if (!id || amount <= 0) return;
 
   // 인벤토리 및 수집 기록 가산
-  if (isArtifactId(id)) {
-    const gained = addArtifactStack(player.stats, id, amount);
+  if (isEffectItemId(id)) {
+    const gained = addEffectStack(player.stats, id, amount);
     if (gained > 0) {
       world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
       messageBus.emit('game:item_collected', { id, amount: gained });

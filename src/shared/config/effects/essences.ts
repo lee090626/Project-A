@@ -1,10 +1,10 @@
-import { ArtifactDefinition } from './types';
+import { EffectDefinition } from './types';
 
-export const essenceArtifacts: Record<string, ArtifactDefinition> = {
+export const essenceEffects: Record<string, EffectDefinition> = {
   essence_lust: {
     id: 'essence_lust',
     name: 'Essence of Lust',
-    nameKo: '정욕의 유물',
+    nameKo: '정욕의 정수',
     type: 'stackable',
     description: 'Increases Power slightly.',
     descriptionKo: '채굴 위력이 미세하게 증가합니다.',
@@ -14,7 +14,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_gluttony: {
     id: 'essence_gluttony',
     name: 'Essence of Gluttony',
-    nameKo: '폭식의 유물',
+    nameKo: '폭식의 정수',
     type: 'stackable',
     description: 'Increases Max HP.',
     descriptionKo: '최대 체력이 증가합니다.',
@@ -24,7 +24,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_greed: {
     id: 'essence_greed',
     name: 'Essence of Greed',
-    nameKo: '탐욕의 유물',
+    nameKo: '탐욕의 정수',
     type: 'stackable',
     description: 'Increases Luck slightly.',
     descriptionKo: '행운이 극히 미세하게 증가합니다.',
@@ -34,7 +34,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_wrath: {
     id: 'essence_wrath',
     name: 'Essence of Wrath',
-    nameKo: '분노의 유물',
+    nameKo: '분노의 정수',
     type: 'stackable',
     description: 'Increases Critical Damage.',
     descriptionKo: '치명타 피해량이 증가합니다.',
@@ -44,7 +44,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_heresy: {
     id: 'essence_heresy',
     name: 'Essence of Heresy',
-    nameKo: '이단의 유물',
+    nameKo: '이단의 정수',
     type: 'stackable',
     description: 'Increases Mining Speed.',
     descriptionKo: '채굴 속도가 미세하게 증가합니다.',
@@ -54,7 +54,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_violence: {
     id: 'essence_violence',
     name: 'Essence of Violence',
-    nameKo: '폭력의 유물',
+    nameKo: '폭력의 정수',
     type: 'stackable',
     description: 'Increases Critical Rate.',
     descriptionKo: '치명타 확률이 미세하게 증가합니다.',
@@ -64,7 +64,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_fraud: {
     id: 'essence_fraud',
     name: 'Essence of Fraud',
-    nameKo: '기만의 유물',
+    nameKo: '기만의 정수',
     type: 'stackable',
     description: 'Increases Movement Speed.',
     descriptionKo: '이동 속도가 증가합니다.',
@@ -74,7 +74,7 @@ export const essenceArtifacts: Record<string, ArtifactDefinition> = {
   essence_treachery: {
     id: 'essence_treachery',
     name: 'Essence of Treachery',
-    nameKo: '배신의 유물',
+    nameKo: '배신의 정수',
     type: 'stackable',
     description: 'Increases Defense.',
     descriptionKo: '방어력이 증가합니다.',

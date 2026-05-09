@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 
 interface VitalityRelicSectionProps {
   stats: PlayerStats;

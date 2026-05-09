@@ -240,8 +240,8 @@ soa.height[idx] = 24; // 높이 (px)
 | **투구** | `helmets/` | `PascalCaseHelmet.png` | `equipmentData.ts` - `image` |
 | **갑옷** | `armors/` | `PascalCaseArmor.png` | `equipmentData.ts` - `image` |
 | **신발** | `boots/` | `PascalCaseBoots.png` | `equipmentData.ts` - `image` |
-| **정수 Effect** | `essences/` | `PascalCaseEssence.png` | `artifactData.ts` / `EFFECT_DATA` - `image` |
-| **성물/제작 Effect** | `relics/` | `PascalCaseRelic.png` | `artifactData.ts` / `EFFECT_DATA` - `image` |
+| **정수 Effect** | `essences/` | `PascalCaseEssence.png` | `effectData.ts` / `EFFECT_DATA` - `image` |
+| **성물/제작 Effect** | `relics/` | `PascalCaseRelic.png` | `effectData.ts` / `EFFECT_DATA` - `image` |
 
 | **UI 아이콘** | `ui/icons/` | `PascalCaseIcon.webp` | 컴포넌트에서 직접 사용 |
 
@@ -267,6 +267,5 @@ npm run optimize:atlas && npm run update:atlas-map
 
 **최종 갱신일**: 2026-04-14  
 **갱신 내용**: 장비(드릴/투구/갑옷/신발) 폴더 구조 및 명명 규칙 추가, 에셋 가이드 전면 개정
-
 
 

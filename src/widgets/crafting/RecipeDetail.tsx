@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import { EFFECT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/effectData';
 import { formatNumber } from '@/shared/lib/numberUtils';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 

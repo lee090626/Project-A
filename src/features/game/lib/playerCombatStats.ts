@@ -1,5 +1,5 @@
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
-import { calculateArtifactBonuses } from '@/shared/lib/artifactUtils';
+import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { PlayerStats } from '@/shared/types/game';
@@ -25,8 +25,8 @@ export interface MiningSpeedStats {
   masterySpeedBonusMult: number;
   /** 룬에서 오는 채굴 속도 배율 */
   runeSpeedBonus: number;
-  /** 유물 기본 보너스에서 오는 채굴 속도 배율 */
-  artifactSpeedBonus: number;
+  /** Effect 기본 보너스에서 오는 채굴 속도 배율 */
+  effectSpeedBonus: number;
   /** 모디파이어가 추가로 더한 채굴 속도 배율 */
   modifierSpeedBonus: number;
   /** 상한 적용 후 최종 채굴 속도 배율 */
@@ -54,20 +54,20 @@ export interface LuckStats {
  * @returns 최종 치명타 확률과 피해 배율
  */
 export function calculateCriticalStats(stats: PlayerStats): CriticalStats {
-  const artifactBonuses = calculateArtifactBonuses(stats);
+  const effectBonuses = calculateEffectBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
   const runeCritRate = getTotalRuneStat(stats, 'critRate');
   const runeCritDmg = getTotalRuneStat(stats, 'critDmg');
 
   const critRate = Math.min(
     COMBAT_CONSTANTS.MAX_CRIT_RATE_CAP,
-    runeCritRate + masteryBonuses.critRate + artifactBonuses.critRate,
+    runeCritRate + masteryBonuses.critRate + effectBonuses.critRate,
   );
   const critDamage =
     COMBAT_CONSTANTS.BASE_CRIT_DAMAGE +
     runeCritDmg +
     masteryBonuses.critDmg +
-    artifactBonuses.critDamage;
+    effectBonuses.critDamage;
 
   return {
     critRate,
@@ -82,13 +82,13 @@ export function calculateCriticalStats(stats: PlayerStats): CriticalStats {
  * @returns 채굴 속도 계산 상세 정보
  */
 export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats {
-  const artifactBonuses = calculateArtifactBonuses(stats);
+  const effectBonuses = calculateEffectBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
   const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
   const baseInterval = COMBAT_CONSTANTS.BASE_MINING_INTERVAL;
 
   const rawSpeedBonusMult =
-    artifactBonuses.miningSpeed + runeSpeedBonus + masteryBonuses.miningSpeedMult;
+    effectBonuses.miningSpeed + runeSpeedBonus + masteryBonuses.miningSpeedMult;
   const modifiedSpeedBonusMult = modifierManager.applyAll(
     'onMining',
     'miningSpeed',
@@ -109,7 +109,7 @@ export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats 
     baseInterval,
     masterySpeedBonusMult: masteryBonuses.miningSpeedMult,
     runeSpeedBonus,
-    artifactSpeedBonus: artifactBonuses.miningSpeed,
+    effectSpeedBonus: effectBonuses.miningSpeed,
     modifierSpeedBonus: modifiedSpeedBonusMult - rawSpeedBonusMult,
     totalSpeedBonusMult,
     attackInterval,
@@ -123,11 +123,11 @@ export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats 
  * @returns 행운 계산 상세 정보
  */
 export function calculateLuckStats(stats: PlayerStats): LuckStats {
-  const artifactBonuses = calculateArtifactBonuses(stats);
+  const effectBonuses = calculateEffectBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
   const runeLuck = getTotalRuneStat(stats, 'luck') * 100;
 
-  const flatLuck = runeLuck + masteryBonuses.luck + artifactBonuses.luck * 100;
+  const flatLuck = runeLuck + masteryBonuses.luck + effectBonuses.luck * 100;
   const luckMultiplier = 1 + masteryBonuses.luckMult;
   const finalLuck = Math.max(0, flatLuck * luckMultiplier);
 

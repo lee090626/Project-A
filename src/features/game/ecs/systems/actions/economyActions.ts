@@ -1,7 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
-import { hasArtifactEffect } from '@/shared/lib/artifactUtils';
+import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
 
 /**
  * 업그레이드, 판매, 제작 등 경제 관련 액션을 처리합니다.
@@ -28,8 +28,8 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
     case 'sell':
       if (stats.inventory[data.resource] >= data.amount) {
         stats.inventory[data.resource] -= data.amount;
-        // [유물] 마몬의 황금 주화 (GOLD_SELL_BOOST): 판매가 2배
-        const priceMultiplier = hasArtifactEffect(stats, 'GOLD_SELL_BOOST') ? 2.0 : 1.0;
+        // [Effect] 마몬의 황금 주화 (GOLD_SELL_BOOST): 판매가 2배
+        const priceMultiplier = hasEffectItemEffect(stats, 'GOLD_SELL_BOOST') ? 2.0 : 1.0;
         stats.goldCoins += Math.floor(data.price * priceMultiplier);
       }
       break;

@@ -52,7 +52,7 @@ function processDeath(world: GameWorld, index: number, now: number) {
     1.5
   );
 
-  // 2. 경험치 정산 (유물 효과 적용)
+  // 2. 경험치 정산 (Effect 적용)
   let expAmount = monsterDef.rewards.exp;
   expAmount = modifierManager.applyAll('onKill', 'exp', expAmount, { playerStats: player.stats });
   

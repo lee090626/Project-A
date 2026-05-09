@@ -6,7 +6,7 @@ import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { MINERALS } from '@/shared/config/mineralData';
 import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 import { WindowFrame, WindowHeader } from '@/shared/ui/window';
-import { EFFECT_DATA, EFFECT_LIST } from '@/shared/config/artifactData';
+import { EFFECT_DATA, EFFECT_LIST } from '@/shared/config/effectData';
 import RuneEquipOverlay from './RuneEquipOverlay';
 
 // 새롭게 분리된 하위 컴포넌트들
