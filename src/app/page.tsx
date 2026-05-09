@@ -125,9 +125,9 @@ export default function LandingPage() {
                 Progression &amp; Crafting System
               </h3>
               <p className="text-zinc-400 leading-relaxed">
-                Slay powerful bosses in the nine circles of Hell to earn unique, stackable relics.
-                These artifacts provide permanent, stacking bonuses to all your core stats, from
-                mining speed and power to critical hit rates, ensuring constant progression as you
+                Slay powerful bosses in the nine circles of Hell to earn unique, stackable effects.
+                These effect items provide permanent, stacking bonuses to all your core stats, from
+                mining speed and power to critical hit rates, ensuring steady progression as you
                 descend further into the depths.
               </p>
             </div>

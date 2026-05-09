@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/artifactData';
 import { formatNumber } from '@/shared/lib/numberUtils';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 
@@ -13,7 +13,7 @@ interface RecipeDetailProps {
 }
 
 export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: RecipeDetailProps) {
-  const isPossessionEffectItem = !!selectedRecipe?.result?.relicId;
+  const isPossessionEffectItem = !!selectedRecipe?.result?.effectId;
 
   const getStatName = (stat: string) => {
     const map: Record<string, string> = {
@@ -137,15 +137,15 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
                   : (stats.inventory as any)[key] || 0;
               const met = currentVal >= (val as number);
               
-              // 재료의 메타데이터 탐색 (광물 또는 유물/정수)
+              // 재료의 메타데이터 탐색 (광물 또는 Effect)
               const mineral = MINERALS.find((m) => m.key === key);
-              const artifact = ARTIFACT_DATA[key];
+              const effect = EFFECT_DATA[key];
               
               const progress = Math.min(100, (currentVal / (val as number)) * 100);
 
-              const itemImage = mineral?.image || artifact?.image;
-              const itemIcon = mineral?.icon || artifact?.icon;
-              const itemName = mineral?.name || artifact?.name || key;
+              const itemImage = mineral?.image || effect?.image;
+              const itemIcon = mineral?.icon || effect?.icon;
+              const itemName = mineral?.name || effect?.name || key;
 
               return (
                 <div key={key} className="group/req">

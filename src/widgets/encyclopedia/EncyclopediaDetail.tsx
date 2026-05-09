@@ -1,7 +1,6 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import AtlasIcon from '../hud/ui/AtlasIcon';
 
 interface EncyclopediaDetailProps {

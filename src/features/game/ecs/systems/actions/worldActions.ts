@@ -1,4 +1,4 @@
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/artifactData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { addArtifactStack } from '@/shared/lib/artifactUtils';
@@ -45,10 +45,12 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       break;
     }
 
-    case 'synthesizeRelic': {
-      const artifact = ARTIFACT_DATA[data.relicId];
-      if (artifact && artifact.requirements) {
-        const hasEnough = Object.entries(artifact.requirements).every(([res, amt]) => {
+    case 'synthesizeRelic':
+    case 'synthesizeEffect': {
+      const effectId = data.effectId ?? data.relicId;
+      const effect = EFFECT_DATA[effectId];
+      if (effect && effect.requirements) {
+        const hasEnough = Object.entries(effect.requirements).every(([res, amt]) => {
           const owned = res === 'goldCoins' ? stats.goldCoins : stats.inventory[res as any] || 0;
           return owned >= (amt as number);
         });
@@ -56,13 +58,13 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
         if (!hasEnough) break;
 
         // 자원 소모
-        Object.entries(artifact.requirements).forEach(([res, amt]) => {
+        Object.entries(effect.requirements).forEach(([res, amt]) => {
           if (res === 'goldCoins') stats.goldCoins -= amt as number;
           else (stats.inventory[res as any] as number) -= amt as number;
         });
 
-        // 결과 반영: 모든 보유효과형 아이템은 스택 누적 규칙을 따릅니다.
-        addArtifactStack(stats, data.relicId, 1);
+        // 결과 반영: 모든 Effect 아이템은 스택 누적 규칙을 따릅니다.
+        addArtifactStack(stats, effectId, 1);
       }
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;

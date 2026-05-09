@@ -19,8 +19,8 @@ interface CraftingProps {
   stats: PlayerStats;
   /** 아이템 제작 실행 콜백 */
   onCraft: (requirements: any, result: any) => void;
-  /** 특수 아이템(Relic/Effect) 제작 콜백 */
-  onSynthesizeRelic: (relicId: string) => void;
+  /** 보유형 효과 아이템 제작 콜백 */
+  onSynthesizeEffect: (effectId: string) => void;
   /** 제작 창 닫기 콜백 */
   onClose: () => void;
 }
@@ -29,7 +29,7 @@ interface CraftingProps {
  * 플레이어가 수집한 광물을 사용하여 4부위 장비를 제작할 수 있는 대장간(Forge) 컴포넌트입니다.
  * 비즈니스 로직은 useCrafting 훅으로, UI는 도메인별 컴포넌트로 분리되었습니다.
  */
-function Crafting({ stats, onCraft, onSynthesizeRelic, onClose }: CraftingProps) {
+function Crafting({ stats, onCraft, onSynthesizeEffect, onClose }: CraftingProps) {
   const {
     craftType,
     selectedPart,
@@ -82,7 +82,7 @@ function Crafting({ stats, onCraft, onSynthesizeRelic, onClose }: CraftingProps)
               if (craftType === 'Equipment') {
                 onCraft(reqs, result);
               } else {
-                onSynthesizeRelic(result.relicId);
+                onSynthesizeEffect(result.effectId);
               }
             }}
           />

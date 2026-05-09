@@ -1,7 +1,7 @@
 import { PlayerStats, Position, Inventory } from '../types/game';
 import { DRILLING_SECRET_KEY } from '../config/constants';
 import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
-import { ARTIFACT_DATA } from '../config/artifactData';
+import { EFFECT_DATA } from '../config/artifactData';
 import { gameDB } from './db';
 
 /**
@@ -119,10 +119,10 @@ function normalizeArtifactStacks(stats: PlayerStats): void {
   }
 
   for (const [itemId, count] of Object.entries(stats.collectionHistory)) {
-    const artifact = ARTIFACT_DATA[itemId];
-    if (!artifact?.maxStack) continue;
+    const effect = EFFECT_DATA[itemId];
+    if (!effect?.maxStack) continue;
 
-    stats.collectionHistory[itemId] = Math.min(count, artifact.maxStack);
+    stats.collectionHistory[itemId] = Math.min(count, effect.maxStack);
   }
 }
 

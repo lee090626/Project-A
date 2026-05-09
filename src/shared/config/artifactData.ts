@@ -1,21 +1,26 @@
 import { ArtifactDefinition } from './artifacts/types';
 import { essenceArtifacts } from './artifacts/essences';
 import { relicArtifacts } from './artifacts/relics';
-import { craftableArtifacts } from './artifacts/items';
+import { craftedEffects } from './artifacts/items';
 
 // 타입 재내보내기 (하위 호환성 유지)
 export type { ArtifactType, ArtifactDefinition } from './artifacts/types';
+export type EffectDefinition = ArtifactDefinition;
 
 /**
- * 모든 유물 데이터 통합 정의 (구 정수 + 구 성물 + 제작 아이템)
+ * 보유만으로 패시브 효과를 제공하는 모든 Effect 데이터 통합 정의입니다.
+ * Essence, Relic, Crafted Effect는 모두 이 컬렉션에 포함됩니다.
  */
-export const ARTIFACT_DATA: Record<string, ArtifactDefinition> = {
+export const EFFECT_DATA: Record<string, EffectDefinition> = {
   ...essenceArtifacts,
   ...relicArtifacts,
-  ...craftableArtifacts,
+  ...craftedEffects,
 };
 
 /**
- * 도감이나 UI 렌더링에 사용할 유물 리스트 배열
+ * 도감이나 UI 렌더링에 사용할 Effect 리스트 배열입니다.
  */
-export const ARTIFACT_LIST = Object.values(ARTIFACT_DATA);
+export const EFFECT_LIST = Object.values(EFFECT_DATA);
+
+export const ARTIFACT_DATA = EFFECT_DATA;
+export const ARTIFACT_LIST = EFFECT_LIST;

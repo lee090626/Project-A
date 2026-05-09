@@ -1,9 +1,9 @@
 import { useState, useMemo, useCallback } from 'react';
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/artifactData';
 
-export type CraftType = 'Equipment' | 'Specials';
+export type CraftType = 'Equipment' | 'Effects';
 
 export function useCrafting(stats: PlayerStats) {
   const [craftType, setCraftType] = useState<CraftType>('Equipment');
@@ -29,11 +29,11 @@ export function useCrafting(stats: PlayerStats) {
           type: eq.part,
         }));
     } else {
-      return Object.values(ARTIFACT_DATA)
+      return Object.values(EFFECT_DATA)
         .filter((art) => art.requirements)
         .map((art) => ({
           ...art,
-          result: { relicId: art.id },
+          result: { effectId: art.id },
           power: 0,
           defense: 0,
           maxHp: 0,

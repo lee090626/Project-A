@@ -1,8 +1,8 @@
 import { PlayerStats } from '../types/game';
-import { ARTIFACT_DATA } from '../config/artifactData';
+import { EFFECT_DATA } from '../config/artifactData';
 
 /**
- * 유물(Artifact) 시스템에 의해 계산된 보너스 스탯 인터페이스입니다.
+ * 보유형 Effect 시스템에 의해 계산된 보너스 스탯 인터페이스입니다.
  */
 export interface ArtifactBonuses {
   maxHp: number;
@@ -29,7 +29,7 @@ export function getArtifactEffectStack(stats: PlayerStats, effectId: string): nu
 
   let totalStack = 0;
   for (const [id, count] of Object.entries(stats.collectionHistory)) {
-    const data = ARTIFACT_DATA[id];
+    const data = EFFECT_DATA[id];
     if (data && data.effectId === effectId) {
       totalStack += count;
     }
@@ -48,16 +48,16 @@ export function hasArtifactEffect(stats: PlayerStats, effectId: string): boolean
  * 특정 아이템 ID가 유물 데이터에 존재하는지 확인합니다.
  */
 export function isArtifactId(itemId: string): boolean {
-  return !!ARTIFACT_DATA[itemId];
+  return !!EFFECT_DATA[itemId];
 }
 
 /**
  * 유물의 최대 중첩 수량을 반환합니다.
  */
 export function getArtifactStackLimit(artifactId: string): number {
-  const artifact = ARTIFACT_DATA[artifactId];
-  if (!artifact) return Number.POSITIVE_INFINITY;
-  return artifact.maxStack ?? DEFAULT_ARTIFACT_STACK_LIMIT;
+  const effect = EFFECT_DATA[artifactId];
+  if (!effect) return Number.POSITIVE_INFINITY;
+  return effect.maxStack ?? DEFAULT_ARTIFACT_STACK_LIMIT;
 }
 
 /**
@@ -104,10 +104,10 @@ export function calculateArtifactBonuses(stats: PlayerStats): ArtifactBonuses {
 
   if (!stats.collectionHistory) return bonuses;
 
-  // 1. 모든 유물 (Essence & Relic) 보너스 통합 계산
+  // 1. 모든 Effect (Essence, Relic, Crafted) 보너스 통합 계산
   for (const [itemId, count] of Object.entries(stats.collectionHistory)) {
-    const data = ARTIFACT_DATA[itemId];
-    // 모든 유물은 이제 stackable 타입을 전제로 함
+    const data = EFFECT_DATA[itemId];
+    // 모든 Effect는 이제 stackable 타입을 전제로 함
     if (data && data.bonus) {
       const totalBonus = count * data.bonus.value;
       bonuses[data.bonus.stat] += totalBonus;

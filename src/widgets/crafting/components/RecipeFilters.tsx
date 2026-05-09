@@ -22,7 +22,7 @@ const RecipeFilters = ({
   return (
     <>
       <div className="flex bg-black/40 p-1 rounded-2xl mb-6 shadow-inner border border-white/5 mx-auto max-w-sm">
-        {(['Equipment', 'Specials'] as const).map((tab) => (
+        {(['Equipment', 'Effects'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => onSelectTab(tab)}

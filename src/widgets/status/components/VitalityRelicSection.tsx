@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/artifactData';
 
 interface VitalityRelicSectionProps {
   stats: PlayerStats;
@@ -9,7 +9,7 @@ interface VitalityRelicSectionProps {
 
 const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) => {
   const possessionEffectItems = Object.entries(stats.collectionHistory || {})
-    .filter(([id, stack]) => !!ARTIFACT_DATA[id] && stack > 0)
+    .filter(([id, stack]) => !!EFFECT_DATA[id] && stack > 0)
     .map(([id, stack]) => ({ id, stack }));
 
   return (
@@ -52,7 +52,7 @@ const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) 
         </div>
       </div>
 
-      {/* ARTIFACTS SECTION */}
+      {/* EFFECTS SECTION */}
       <div className="bg-[#252526] p-4 md:p-6 rounded-xl md:rounded-2xl border border-zinc-800 flex flex-col min-h-[300px] flex-1">
         <h4 className="text-[10px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2 flex justify-between items-center">
           <span>Possession Effects</span>
@@ -61,7 +61,7 @@ const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) 
         <div className="space-y-3 overflow-y-auto custom-scrollbar pr-2 flex-1">
           {possessionEffectItems.length > 0 ? (
             possessionEffectItems.map(({ id, stack }, idx) => {
-              const info = ARTIFACT_DATA[id];
+              const info = EFFECT_DATA[id];
               return (
                 <div
                   key={idx}

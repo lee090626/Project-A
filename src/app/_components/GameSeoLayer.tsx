@@ -24,7 +24,7 @@ export function GameSeoLayer() {
         </div>
         <div className="space-y-2">
           <h3 className="font-black text-zinc-500">Tech Upgrades</h3>
-          <p className="leading-relaxed">Passive Artifact Magic</p>
+          <p className="leading-relaxed">Passive Effect Items</p>
         </div>
       </div>
     </div>

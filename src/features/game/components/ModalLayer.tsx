@@ -22,7 +22,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
   const {
     handleUpgrade,
     handleCraft,
-    handleSynthesizeRelic,
+    handleSynthesizeEffect,
     handleSell,
     handleSummonRune,
     handleSynthesizeRunes,
@@ -78,7 +78,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
             stats={currentStats}
             onClose={() => handleClose('isCraftingOpen')}
             onCraft={handleCraft}
-            onSynthesizeRelic={handleSynthesizeRelic}
+            onSynthesizeEffect={handleSynthesizeEffect}
           />
         </Overlay>
       )}

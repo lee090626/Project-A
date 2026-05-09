@@ -6,7 +6,7 @@ import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { MINERALS } from '@/shared/config/mineralData';
 import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 import { WindowFrame, WindowHeader } from '@/shared/ui/window';
-import { ARTIFACT_DATA, ARTIFACT_LIST } from '@/shared/config/artifactData';
+import { EFFECT_DATA, EFFECT_LIST } from '@/shared/config/artifactData';
 import RuneEquipOverlay from './RuneEquipOverlay';
 
 // 새롭게 분리된 하위 컴포넌트들
@@ -30,16 +30,16 @@ interface InventoryProps {
  * 플레이어의 소지품(재료, 장비, 스킬젬)을 관리하고 장착할 수 있는 인벤토리 컴포넌트입니다.
  */
 function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
-  // 상태 관리: 선택된 광물/유물 키, 선택된 룬 ID, 현재 활성화된 탭
+  // 상태 관리: 선택된 광물/Effect 키, 선택된 룬 ID, 현재 활성화된 탭
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [selectedRuneId, setSelectedRuneId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<InventoryTab>('ingredients');
   const [isEquippingRune, setIsEquippingRune] = useState(false);
   const [selectedPart, setSelectedPart] = useState<EquipmentPart>('Drill');
 
-  /** 현재 선택된 유물 정보 계산 */
-  const selectedArtifact = useMemo(
-    () => (selectedKey ? ARTIFACT_DATA[selectedKey] || null : null),
+  /** 현재 선택된 Effect 정보 계산 */
+  const selectedEffect = useMemo(
+    () => (selectedKey ? EFFECT_DATA[selectedKey] || null : null),
     [selectedKey],
   );
 
@@ -77,9 +77,9 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
     return (stats.inventoryRunes || []).filter((r) => !equippedRuneIds.has(r.id));
   }, [stats.inventoryRunes, stats.equipmentStates]);
 
-  /** 효과 아이템 (정수 & 성유물) 필터링 (보유한 것만 표시) */
-  const ownedArtifacts = useMemo(() => {
-    return ARTIFACT_LIST.filter((item) => (stats.collectionHistory?.[item.id] || 0) > 0);
+  /** Effect 아이템 필터링 (보유한 것만 표시) */
+  const ownedEffects = useMemo(() => {
+    return EFFECT_LIST.filter((item) => (stats.collectionHistory?.[item.id] || 0) > 0);
   }, [stats.collectionHistory]);
 
   /** 보유한 광물만 필터링 */
@@ -130,10 +130,10 @@ function Inventory({ stats, onClose, onEquip, onEquipRune }: InventoryProps) {
         {activeTab === 'effects' && (
           <TabEffects 
             stats={stats}
-            ownedArtifacts={ownedArtifacts}
+            ownedEffects={ownedEffects}
             selectedKey={selectedKey}
             onSelectKey={handleSelectKey}
-            selectedArtifact={selectedArtifact}
+            selectedEffect={selectedEffect}
           />
         )}
         

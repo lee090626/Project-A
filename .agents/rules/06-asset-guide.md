@@ -20,12 +20,22 @@
 | `armors/` | 갑옷 장비 | `PascalCaseArmor.png` | **256x256** | PNG (투명) |
 | `boots/` | 신발 장비 | `PascalCaseBoots.png` | **256x256** | PNG (투명) |
 | `vfx/` | 투사체/이펙트 | `PascalCaseProjectile.png` | **256x256** | PNG (투명) |
-| `essences/` | 정수 (기본 제작 재료/드롭템) | `PascalCaseEssence.png` | **256x256** | PNG (투명) |
-| `relics/` | 성물 (고유 유물) | `PascalCaseRelic.png` | **512x512** | PNG (투명) |
+| `essences/` | Effect 하위 타입: 정수 (기본 제작 재료/드롭템) | `PascalCaseEssence.png` | **256x256** | PNG (투명) |
+| `relics/` | Effect 하위 타입: 성물/제작 효과 아이템 | `PascalCaseRelic.png` | **512x512** | PNG (투명) |
 | `ui/icons/` | UI 시스템 | `PascalCaseIcon.webp` | **1024x1024** | **WebP** |
 
 > [!TIP]
 > **파일명이 곧 에셋 ID가 됩니다.** 예를 들어 `GoldIcon.png`는 코드에서 `GoldIcon`이라는 키로 즉시 사용 가능합니다.
+
+### Effect 아이템 분류
+
+게임 내에서 플레이어가 보유만 해도 적용되는 누적 패시브 아이템은 상위 개념으로 **Effect**라고 부릅니다.
+
+- **Essence**: 몬스터/보스 드롭 기반 내실 재료입니다. 에셋은 `essences/`에 둡니다.
+- **Relic**: 보스/특수 보상 기반 고유 효과입니다. 에셋은 `relics/`에 둡니다.
+- **Crafted Effect**: 제작으로 만드는 보유형 효과 아이템입니다. 에셋은 `relics/`에 두고 `PascalCaseRelic.png` 형식을 사용합니다.
+
+예: `숙련의 인장`은 제작형 Effect이므로 `src/shared/assets/relics/MasterySealRelic.png`에 배치하고 데이터의 `image` 값은 `MasterySealRelic`로 지정합니다.
 
 ---
 
@@ -230,8 +240,8 @@ soa.height[idx] = 24; // 높이 (px)
 | **투구** | `helmets/` | `PascalCaseHelmet.png` | `equipmentData.ts` - `image` |
 | **갑옷** | `armors/` | `PascalCaseArmor.png` | `equipmentData.ts` - `image` |
 | **신발** | `boots/` | `PascalCaseBoots.png` | `equipmentData.ts` - `image` |
-| **정수** | `essences/` | `PascalCaseEssence.png` | `artifactData.ts` - `image` |
-| **성물** | `relics/` | `PascalCaseRelic.png` | `artifactData.ts` - `image` |
+| **정수 Effect** | `essences/` | `PascalCaseEssence.png` | `artifactData.ts` / `EFFECT_DATA` - `image` |
+| **성물/제작 Effect** | `relics/` | `PascalCaseRelic.png` | `artifactData.ts` / `EFFECT_DATA` - `image` |
 
 | **UI 아이콘** | `ui/icons/` | `PascalCaseIcon.webp` | 컴포넌트에서 직접 사용 |
 
@@ -257,7 +267,6 @@ npm run optimize:atlas && npm run update:atlas-map
 
 **최종 갱신일**: 2026-04-14  
 **갱신 내용**: 장비(드릴/투구/갑옷/신발) 폴더 구조 및 명명 규칙 추가, 에셋 가이드 전면 개정
-
 
 
 

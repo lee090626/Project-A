@@ -22,6 +22,7 @@ const actionHandlers: Record<string, ActionHandler> = {
   sell: handleEconomyAction,
   craft: handleEconomyAction,
   equip: handleWorldAction,
+  synthesizeEffect: handleWorldAction,
 
   // 룬 관련 액션: 소환, 장착, 해제, 합성
   summonRune: handleRuneAction,

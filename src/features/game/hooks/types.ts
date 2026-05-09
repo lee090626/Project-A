@@ -28,7 +28,7 @@ export interface UseGameUIResult {
 export interface UseGameActionsResult {
   handleUpgrade: (type: string, requirements: CraftRequirements) => void;
   handleCraft: (req: CraftRequirements, res: any) => void;
-  handleSynthesizeRelic: (relicId: string) => void;
+  handleSynthesizeEffect: (effectId: string) => void;
   handleSell: (resource: string, amount: number, price: number) => void;
   handleSummonRune: (tier: number, count?: number) => void;
   handleSynthesizeRunes: () => void;

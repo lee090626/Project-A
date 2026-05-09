@@ -5,7 +5,7 @@ import { updateFloatingTexts } from './FloatingTextPhysics';
 import { updateLootCollection } from './LootCollector';
 import { toPascalCase } from '@/shared/lib/textCase';
 import { MINERAL_MAP } from '@/shared/config/mineralData';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
+import { EFFECT_DATA } from '@/shared/config/artifactData';
 import type { ToastItem } from '@/shared/types/game';
 
 // Buffer for item pickup aggregation
@@ -35,13 +35,13 @@ function createPickupToastItem(id: string, amount: number): ToastItem {
     };
   }
 
-  const artifact = id in ARTIFACT_DATA ? ARTIFACT_DATA[id] : undefined;
-  if (artifact) {
+  const effect = id in EFFECT_DATA ? EFFECT_DATA[id] : undefined;
+  if (effect) {
     return {
       id,
-      label: artifact.name,
+      label: effect.name,
       amount,
-      image: getAtlasImageId(artifact.image),
+      image: getAtlasImageId(effect.image),
     };
   }
 

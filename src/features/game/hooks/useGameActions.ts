@@ -5,7 +5,6 @@ import { CraftRequirements, CraftResult, Rarity } from '@/shared/types/game';
 import { SKILL_RUNES } from '@/shared/config/skillRuneData';
 
 import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
-import { ARTIFACT_DATA } from '@/shared/config/artifactData';
 import { TILE_SIZE } from '@/shared/config/constants';
 import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
 import { SendToWorker, UseGameActionsResult } from './types';
@@ -43,12 +42,12 @@ export const useGameActions = (
     [sendToWorker, updateUi],
   );
 
-  /** 제작 유물 합성 처리 */
-  const handleSynthesizeRelic = useCallback(
-    (relicId: string) => {
+  /** 제작 Effect 합성 처리 */
+  const handleSynthesizeEffect = useCallback(
+    (effectId: string) => {
       sendToWorker('ACTION', {
-        action: 'synthesizeRelic',
-        data: { relicId },
+        action: 'synthesizeEffect',
+        data: { effectId },
       });
       updateUi();
     },
@@ -153,7 +152,7 @@ export const useGameActions = (
   return {
     handleUpgrade,
     handleCraft,
-    handleSynthesizeRelic,
+    handleSynthesizeEffect,
     handleSell,
     handleSummonRune,
     handleSynthesizeRunes,
