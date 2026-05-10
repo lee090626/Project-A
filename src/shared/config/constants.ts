@@ -59,9 +59,8 @@ export const DRILLING_SECRET_KEY = 'DRILLING_SECRET_KEY!';
 export const SECRET_KEY = 'DRILL_RPG_SALT_2024';
 
 /**
- * 보스 구역 및 리싱 관련 상수
+ * 보스 리싱 관련 상수
  */
-export const BOSS_ZONE_RADIUS = 15; // 보스 아레나 크기 (반지름, 타일 단위)
 export const BOSS_LEASH_RANGE = 12; // 보스가 원점에서 벗어날 수 있는 최대 거리 (타일 단위)
 
 /**

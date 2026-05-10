@@ -8,10 +8,7 @@ import { MONSTER_LIST } from '@/shared/config/monsterData';
 export const mobSpawner = (world: GameWorld) => {
   const { player, tileMap, spawnedCoords, entities } = world;
 
-  // 1. 보스전 중에는 잡몹 소환을 차단하여 성능 및 가시성 확보
-  if (isBossPresent(world)) return;
-
-  // 2. 플레이어 주변 일정 범위(뷰포트보다 약간 넓게) 탐색 범위 설정
+  // 플레이어 주변 일정 범위(뷰포트보다 약간 넓게) 탐색 범위 설정
   const rangeX = 15;
   const rangeY = 12;
 
@@ -75,14 +72,4 @@ function trySpawnMob(world: GameWorld, monster: any) {
   entities.soa.speed[idx] = monster.stats?.speed || 50;
   entities.soa.width[idx] = monster.width || TILE_SIZE;
   entities.soa.height[idx] = monster.height || TILE_SIZE;
-}
-
-/**
- * 월드 내에 보스 엔티티가 생존해 있는지 확인
- */
-function isBossPresent(world: GameWorld): boolean {
-  for (let i = 0; i < world.entities.soa.count; i++) {
-    if (world.entities.soa.type[i] === 2) return true;
-  }
-  return false;
 }

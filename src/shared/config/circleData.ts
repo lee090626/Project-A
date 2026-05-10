@@ -1,10 +1,10 @@
 import { TileType } from '../types/game';
 
 /**
- * 몬스터 스폰 규칙이 바뀌었을 때 런타임 스폰 캐시를 갱신하기 위한 버전입니다.
- * 스폰 density, weight, layer 범위를 조정하면 값을 올려 기존 세이브의 주변 스폰을 재평가합니다.
+ * 월드 스폰/지형 보정 규칙이 바뀌었을 때 런타임 캐시와 레거시 지형을 갱신하기 위한 버전입니다.
+ * 스폰 density, weight, layer 또는 저장 지형 마이그레이션을 조정하면 값을 올려 기존 세이브를 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 7;
+export const SPAWN_RULE_VERSION = 10;
 
 /**
  * 광물 생성 규칙을 정의하는 인터페이스입니다.
@@ -245,5 +245,5 @@ export const getLayerFromDepth = (depth: number, circle: CircleConfig): number =
   if (relativeDepth < 95) return 1;
   if (relativeDepth < 190) return 2;
   if (relativeDepth < 285) return 3;
-  return 4; // Boss Zone (285~300m)
+  return 4;
 };

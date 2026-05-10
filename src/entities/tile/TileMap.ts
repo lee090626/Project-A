@@ -134,6 +134,47 @@ export class TileMap {
   }
 
   /**
+   * 지정 영역 안의 저장된 빈칸 수정을 제거하여 다음 조회 시 원본 생성 규칙으로 다시 생성되게 합니다.
+   *
+   * @param startX - 복구 시작 X 좌표
+   * @param startY - 복구 시작 Y 좌표
+   * @param width - 복구할 타일 가로 길이
+   * @param height - 복구할 타일 세로 길이
+   * @returns 복구된 타일 수
+   */
+  public restoreModifiedEmptyArea(
+    startX: number,
+    startY: number,
+    width: number,
+    height: number,
+  ): number {
+    const emptyId = TILE_TYPE_TO_ID['empty'] & TYPE_MASK;
+    let restoredCount = 0;
+
+    for (let y = startY; y < startY + height; y++) {
+      if (y < 0 || y >= MAP_HEIGHT) continue;
+
+      for (let x = startX; x < startX + width; x++) {
+        const { chunkX, localX } = this.getChunkInfo(x);
+        const chunk = this.chunks.get(chunkX);
+        if (!chunk) continue;
+
+        const idx = y * CHUNK_WIDTH + localX;
+        const packed = chunk[idx];
+        if (!(packed & MOD_FLAG)) continue;
+        if ((packed & TYPE_MASK) !== emptyId) continue;
+
+        chunk[idx] = 0;
+        this.modifiedCoords.delete(`${x},${y}`);
+        restoredCount++;
+      }
+    }
+
+    if (restoredCount > 0) this.renderRevision++;
+    return restoredCount;
+  }
+
+  /**
    * C3 전용 배경 타입 도입 이전 세이브의 수정된 일반 stone 배경을 탐식 지층으로 승격합니다.
    */
   private migrateGluttonyBackgroundTiles(): void {

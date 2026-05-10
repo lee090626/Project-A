@@ -28,8 +28,6 @@ export class MapGenerator {
     const config = getCircleConfig(y - BASE_DEPTH);
     const layer = getLayerFromDepth(y - BASE_DEPTH, config);
 
-    if (layer === 4) return { type: 'empty', health: 0, maxHealth: 0, isSpot: false };
-
     if (this.getInitialMonster(x, y))
       return { type: 'empty', health: 0, maxHealth: 0, isSpot: false };
 
