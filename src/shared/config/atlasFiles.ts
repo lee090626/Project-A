@@ -36,6 +36,7 @@ export const ATLAS_FILE_MAPPING = {
   LuckRune: 'LuckRune.png',
   LustEssence: 'LustEssence.png',
   LustfulWhisperer: 'LustfulWhisperer.png',
+  MasterySealRelic: 'MasterySealRelic.png',
   Mechanic: 'Mechanic.png',
   Merchant: 'Merchant.png',
   MiningSpeedRune: 'MiningSpeedRune.png',
