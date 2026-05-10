@@ -27,7 +27,6 @@ export interface Entity {
     hp: number;
     maxHp: number;
     attack: number;
-    speed: number;
     defense: number;
     /** 공격 쿨타임 (ms) */
     attackCooldown?: number;

@@ -8,7 +8,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
-    stats: { maxHp: 35000, power: 800, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 35000, power: 800, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 3500,
       gold: 700,
@@ -16,7 +16,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_flame',
@@ -25,7 +25,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
-    stats: { maxHp: 30000, power: 1200, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 30000, power: 1200, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 3000,
       gold: 600,
@@ -33,7 +33,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_angel',
@@ -42,7 +42,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Heresy 서클의 하급 영혼입니다.',
-    stats: { maxHp: 50000, power: 900, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 50000, power: 900, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 5000,
       gold: 1000,
@@ -50,7 +50,7 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c6_lilith',
@@ -61,7 +61,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     description: '타락한 신앙의 상징. 아름다우면서도 치명적인 권능으로 이단자들을 이끕니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 900000, power: 3500, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 900000, power: 3500, defense: 20, attackCooldown: 2000 },
     rewards: {
       exp: 450000,
       gold: 90000,
@@ -70,6 +70,6 @@ export const circle6Monsters: MonsterDefinition[] = [
         { itemId: 'relic_belphegor_eye', chance: 0.2, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];

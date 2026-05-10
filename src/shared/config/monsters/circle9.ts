@@ -8,7 +8,7 @@ export const circle9Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
-    stats: { maxHp: 2500000, power: 40000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 2500000, power: 40000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 250000,
       gold: 50000,
@@ -16,7 +16,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c9_specter',
@@ -25,7 +25,7 @@ export const circle9Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
-    stats: { maxHp: 2000000, power: 55000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 2000000, power: 55000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 200000,
       gold: 40000,
@@ -33,7 +33,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c9_shadow',
@@ -42,7 +42,7 @@ export const circle9Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Treachery 서클의 하급 영혼입니다.',
-    stats: { maxHp: 3000000, power: 35000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 3000000, power: 35000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 300000,
       gold: 60000,
@@ -50,7 +50,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c9_lucifer',
@@ -62,7 +62,7 @@ export const circle9Monsters: MonsterDefinition[] = [
       '3개의 얼굴, 거대한 얼음에 하반신이 갇혀있음. 6개의 날개는 부러지고 검게 타있음. 눈물이 얼어붙어 있음',
     width: 5,
     height: 5,
-    stats: { maxHp: 100000000, power: 250000, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 100000000, power: 250000, defense: 20, attackCooldown: 2000 },
     rewards: {
       exp: 50000000,
       gold: 10000000,
@@ -71,6 +71,6 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'relic_lucifer_ice', chance: 0.02, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];

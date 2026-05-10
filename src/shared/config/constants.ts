@@ -59,11 +59,6 @@ export const DRILLING_SECRET_KEY = 'DRILLING_SECRET_KEY!';
 export const SECRET_KEY = 'DRILL_RPG_SALT_2024';
 
 /**
- * 보스 리싱 관련 상수
- */
-export const BOSS_LEASH_RANGE = 12; // 보스가 원점에서 벗어날 수 있는 최대 거리 (타일 단위)
-
-/**
  * 성능 및 동기화 관련 상수
  */
 export const UI_SYNC_INTERVAL = 500; // UI 동기화 주기 (ms)

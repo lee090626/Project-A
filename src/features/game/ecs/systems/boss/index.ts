@@ -1,5 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
-import { TILE_SIZE, BOSS_LEASH_RANGE } from '@/shared/config/constants';
+import { TILE_SIZE } from '@/shared/config/constants';
 import { MONSTER_LIST, MonsterDefinition } from '@/shared/config/monsterData';
 import {
   patternTimers,
@@ -13,14 +13,14 @@ import {
  * 동작 원리:
  * 1. SOA에서 살아 있는 type=2(보스) 엔티티를 탐색합니다.
  * 2. 보스의 monsterDefIndex로 `MONSTERS` 데이터를 조회합니다.
- * 3. `patterns` 배열을 순회하며 개별 쿨타임을 체크합니다.
- * 4. 발동 조건이 충족되면 `patternRegistry`에서 핸들러를 꺼내 실행합니다.
+ * 3. AABB 거리 기준으로 전투 진입/해제를 판정합니다.
+ * 4. 전투 중일 때만 패턴과 기본 공격 전조를 처리합니다.
  *
  * @param world - 현재 게임 월드 상태
  * @param deltaTime - 이전 프레임과의 시간 차 (ms)
  * @param now - 현재 타임스탬프 (ms)
  */
-export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: number) => {
+export const bossBehaviorSystem = (world: GameWorld, _deltaTime: number, now: number) => {
   const { entities, player } = world;
   const { soa } = entities;
 
@@ -54,7 +54,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     }
   }
 
-  // --- 2. 데이터 조회 및 보스 고정/이동 처리 ---
+  // --- 2. 데이터 조회 ---
   const defIndex = soa.monsterDefIndex[bossIdx];
   const bossDef: MonsterDefinition | undefined = MONSTER_LIST[defIndex];
   if (!bossDef) return;
@@ -65,8 +65,20 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
   const px = player.pos.x * TILE_SIZE + TILE_SIZE / 2;
   const py = player.pos.y * TILE_SIZE + TILE_SIZE / 2;
 
-  const distToPlayer = Math.sqrt(Math.pow(bx - px, 2) + Math.pow(by - py, 2));
-  const attackRange = (bossDef.behavior.attackRange || 2) * TILE_SIZE;
+  const distToPlayer = getAabbDistanceToPlayerTiles(world, bossIdx);
+  const attackRange = bossDef.behavior.attackRange || 2;
+  const aggroRange = bossDef.behavior.aggroRange || soa.aggroRange[bossIdx] || 10;
+  const deaggroRange = aggroRange + 4;
+  const wasEngaged = Boolean(world.bossCombatStatus[instanceId]?.active);
+  const isEngaged = distToPlayer <= (wasEngaged ? deaggroRange : aggroRange);
+
+  if (!isEngaged) {
+    delete world.bossCombatStatus[instanceId];
+    clearPatternTimersForBoss(instanceId);
+    soa.state[bossIdx] = 0;
+    soa.lastAttackTime[bossIdx] = now;
+    return;
+  }
 
   // --- 4. UI 동기화 ---
   world.bossCombatStatus[instanceId] = {
@@ -77,26 +89,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     maxHp: soa.maxHp[bossIdx],
   };
 
-  // 플레이어가 너무 멀어지면 보스 HUD는 유지하고, AI/패턴만 비활성화합니다.
-  if (distToPlayer > TILE_SIZE * 20) {
-    world.environmentalForce = { vx: 0, vy: 0 };
-    soa.vx[bossIdx] = 0;
-    soa.vy[bossIdx] = 0;
-    soa.state[bossIdx] = 0;
-    return;
-  }
-
-  // --- 5. 리싱(Leash) 시스템 ---
-  const ox = soa.originX[bossIdx];
-  const oy = soa.originY[bossIdx];
-  const distFromOrigin = Math.sqrt(Math.pow(bx - ox, 2) + Math.pow(by - oy, 2));
-
-  let isReturning = false;
-  if (distFromOrigin > BOSS_LEASH_RANGE * TILE_SIZE) {
-    isReturning = true;
-  }
-
-  // --- 6. 패턴 루프 및 전조(Warning) 상태 체크 ---
+  // --- 5. 패턴 루프 및 전조(Warning) 상태 체크 ---
   const patterns = bossDef.patterns ?? [];
   let anyWarning = false;
 
@@ -138,45 +131,52 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     }
   }
 
-  // --- 7. 평타 차징(Basic Attack Charging) 로직 통합 ---
-  const cooldown = soa.attackCooldown[bossIdx];
+  // --- 6. 평타 차징(Basic Attack Charging) 로직 통합 ---
   const lastAttack = soa.lastAttackTime[bossIdx];
   const attackElapsed = now - lastAttack;
   
-  // 쿨타임이 '거의 다 찼고(전조 시작)' 사거리 내에 있을 때 차징 시작
-  // 공속(cooldown) 전체를 전조 시간으로 활용
+  // 사거리 내에 있을 때 기본 공격 전조를 표시합니다.
   const isBasicAttacking = distToPlayer <= attackRange && attackElapsed > 0;
   
   if (isBasicAttacking) {
     anyWarning = true;
   }
 
-  // --- 8. 이동 제어 (복귀 vs 대시 vs 추격 vs 정지) ---
-  const status = world.bossCombatStatus[instanceId] as any;
-  const isDashing = status?.dashEndTime && status.dashEndTime > now;
-
-  if (isReturning) {
-    // 원점으로 강제 복귀
-    const angle = Math.atan2(oy - by, ox - bx);
-    soa.vx[bossIdx] = Math.cos(angle) * soa.speed[bossIdx] * 1.5;
-    soa.vy[bossIdx] = Math.sin(angle) * soa.speed[bossIdx] * 1.5;
-  } else if (isDashing) {
-    // 대시 중: handleDash에서 설정한 vx, vy 유지 (이미 설정됨)
-  } else if (anyWarning) {
-    // 공격 시전 중: 정지 (단, 대시 중이 아닐 때만)
-    soa.vx[bossIdx] = 0;
-    soa.vy[bossIdx] = 0;
-  } else if (bossDef.behavior.movementType === 'chase' && distToPlayer > attackRange * 0.8) {
-    // 추격 모드
-    const angle = Math.atan2(py - by, px - bx);
-    soa.vx[bossIdx] = Math.cos(angle) * soa.speed[bossIdx];
-    soa.vy[bossIdx] = Math.sin(angle) * soa.speed[bossIdx];
-  } else {
-    // 정지 또는 위치 사수
-    soa.vx[bossIdx] = 0;
-    soa.vy[bossIdx] = 0;
-  }
-
   // 렌더러에 시전 상태 알림 (시전 바 노출)
   soa.state[bossIdx] = anyWarning ? 1 : 0;
 };
+
+/**
+ * 보스의 타일 단위 AABB와 플레이어 사이의 최단 거리를 계산합니다.
+ *
+ * @param world - 현재 게임 월드 상태
+ * @param bossIdx - 보스 엔티티 인덱스
+ * @returns 플레이어와 보스 히트박스 사이의 타일 단위 거리
+ */
+function getAabbDistanceToPlayerTiles(world: GameWorld, bossIdx: number): number {
+  const { entities, player } = world;
+  const { soa } = entities;
+  const bx = soa.x[bossIdx] / TILE_SIZE;
+  const by = soa.y[bossIdx] / TILE_SIZE;
+  const bw = (soa.width[bossIdx] || TILE_SIZE) / TILE_SIZE;
+  const bh = (soa.height[bossIdx] || TILE_SIZE) / TILE_SIZE;
+  const closestX = Math.max(bx, Math.min(player.pos.x, bx + bw - 1));
+  const closestY = Math.max(by, Math.min(player.pos.y, by + bh - 1));
+  const dx = player.pos.x - closestX;
+  const dy = player.pos.y - closestY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+/**
+ * 지정 보스 인스턴스의 패턴 쿨타임을 초기화합니다.
+ *
+ * @param instanceId - 보스 엔티티 인스턴스 ID
+ */
+function clearPatternTimersForBoss(instanceId: string): void {
+  const prefix = `${instanceId}:`;
+  for (const key of patternTimers.keys()) {
+    if (key.startsWith(prefix)) {
+      patternTimers.delete(key);
+    }
+  }
+}

@@ -8,7 +8,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 12000, power: 300, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 12000, power: 300, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 1200,
       gold: 240,
@@ -16,7 +16,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c5_fury',
@@ -25,7 +25,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 10000, power: 450, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 10000, power: 450, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 1000,
       gold: 200,
@@ -33,7 +33,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c5_golem',
@@ -42,7 +42,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 25000, power: 250, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 25000, power: 250, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 2500,
       gold: 500,
@@ -50,7 +50,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c5_azazel',
@@ -61,7 +61,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     description: 'Circle 5 분노의 지옥을 지배하는 최초의 전쟁군주. 끊임없는 증오심으로 적을 섬멸합니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 500000, power: 1200, defense: 120, speed: 0, attackCooldown: 2500 },
+    stats: { maxHp: 500000, power: 1200, defense: 120, attackCooldown: 2500 },
     rewards: {
       exp: 175000,
       gold: 35000,
@@ -70,6 +70,6 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'relic_satan_heart', chance: 0.3, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];

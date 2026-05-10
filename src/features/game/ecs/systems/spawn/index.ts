@@ -1,12 +1,19 @@
 import { GameWorld } from '@/entities/world/model';
-import { CIRCLES, SPAWN_RULE_VERSION } from '@/shared/config/circleData';
+import { BASE_DEPTH } from '@/shared/config/constants';
+import {
+  BOSS_SPAWN_X,
+  CIRCLES,
+  getBossSpawnDepth,
+  SPAWN_RULE_VERSION,
+} from '@/shared/config/circleData';
+import { MONSTER_LIST } from '@/shared/config/monsterData';
 import { bossDirector } from './BossDirector';
 import { mobSpawner } from './MobSpawner';
 import { spawnCleaner } from './SpawnCleaner';
 
 const LEGACY_BOSS_ARENA_RESTORE_VERSION = 10;
 const LEGACY_BOSS_ARENA_RADIUS = 15;
-const LEGACY_BOSS_SPAWN_X = 15;
+const BOSS_FOOTPRINT_RESTORE_VERSION = 11;
 
 /**
  * 플레이어의 위치를 기반으로 주변 서클의 보스, 일반 몬스터를 스폰하고
@@ -53,6 +60,10 @@ function refreshSpawnRulesIfNeeded(world: GameWorld): void {
     restoreLegacyBossArenaTiles(world);
   }
 
+  if (previousVersion < BOSS_FOOTPRINT_RESTORE_VERSION) {
+    restoreBossFootprintTiles(world);
+  }
+
   world.player.stats.spawnRulesVersion = SPAWN_RULE_VERSION;
 }
 
@@ -67,7 +78,7 @@ function restoreLegacyBossArenaTiles(world: GameWorld): void {
 
     // 레거시 보스 아레나는 depth 값을 월드 타일 Y처럼 사용해서 이 좌표에 저장되었습니다.
     const spawnY = circle.depthEnd - 8;
-    const startX = LEGACY_BOSS_SPAWN_X - LEGACY_BOSS_ARENA_RADIUS;
+    const startX = BOSS_SPAWN_X - LEGACY_BOSS_ARENA_RADIUS;
     const startY = spawnY - LEGACY_BOSS_ARENA_RADIUS;
     const size = LEGACY_BOSS_ARENA_RADIUS * 2;
 
@@ -78,5 +89,26 @@ function restoreLegacyBossArenaTiles(world: GameWorld): void {
       size,
     );
     world.tileMap.invalidateGeneratedUnmodifiedArea(startX, startY, size, size);
+  }
+}
+
+/**
+ * 보스가 차지하는 정확한 footprint를 원본 보스 스폰 예약 규칙으로 되돌립니다.
+ *
+ * @param world - 현재 게임 월드 상태
+ */
+function restoreBossFootprintTiles(world: GameWorld): void {
+  for (const circle of CIRCLES) {
+    if (!circle.boss) continue;
+
+    const boss = MONSTER_LIST.find((monster) => monster.id === circle.boss?.id);
+    const width = boss?.width ?? 5;
+    const height = boss?.height ?? 5;
+    const centerY = BASE_DEPTH + getBossSpawnDepth(circle);
+    const startX = BOSS_SPAWN_X - Math.floor(width / 2);
+    const startY = centerY - Math.floor(height / 2);
+
+    world.tileMap.restoreModifiedArea(startX, startY, width, height);
+    world.tileMap.invalidateGeneratedUnmodifiedArea(startX, startY, width, height);
   }
 }

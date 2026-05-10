@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { BASE_DEPTH, TILE_SIZE } from '@/shared/config/constants';
-import { getCircleConfig } from '@/shared/config/circleData';
+import { BOSS_SPAWN_X, getBossSpawnDepth, getCircleConfig } from '@/shared/config/circleData';
 import { MONSTER_LIST } from '@/shared/config/monsterData';
 
 /**
@@ -27,13 +27,12 @@ export const bossDirector = (world: GameWorld) => {
   if (!canSpawn || entities.hasId(bossId)) return;
 
   // 해당 서클의 하단 출현 구역에 거대 몬스터처럼 고정 스폰
-  const spawnDepth = config.depthEnd - 8;
-  const spawnX = 15; // 중앙
+  const spawnDepth = getBossSpawnDepth(config);
 
   // 플레이어가 출현 구역 근처(15m 이내)에 도달했을 때만 소환
   const distY = Math.abs(player.stats.depth - spawnDepth);
   if (distY < 15) {
-    spawnBoss(world, bossId, spawnX, BASE_DEPTH + spawnDepth);
+    spawnBoss(world, bossId, BOSS_SPAWN_X, BASE_DEPTH + spawnDepth);
   }
 };
 
@@ -74,10 +73,6 @@ function spawnBoss(world: GameWorld, bossId: string, x: number, y: number) {
   entities.soa.width[idx] = TILE_SIZE * width;
   entities.soa.height[idx] = TILE_SIZE * height;
   entities.soa.lastAttackTime[idx] = performance.now();
-
-  // 원점(Origin) 좌표 기록 - 복귀 및 리싱의 기준점
-  entities.soa.originX[idx] = spawnPhysX;
-  entities.soa.originY[idx] = spawnPhysY;
 
   // 최초 조우 기록
   if (!player.stats.encounteredBossIds.includes(bossId)) {

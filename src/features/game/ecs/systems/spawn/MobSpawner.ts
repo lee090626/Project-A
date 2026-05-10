@@ -69,7 +69,6 @@ function trySpawnMob(world: GameWorld, monster: any) {
   entities.soa.attack[idx] = monster.stats?.attack || 5;
   entities.soa.attackCooldown[idx] = monster.stats?.attackCooldown ?? 1000;
   entities.soa.aggroRange[idx] = config.behavior.aggroRange || 8;
-  entities.soa.speed[idx] = monster.stats?.speed || 50;
   entities.soa.width[idx] = monster.width || TILE_SIZE;
   entities.soa.height[idx] = monster.height || TILE_SIZE;
 }

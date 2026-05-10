@@ -2,7 +2,9 @@ import { Tile, TileType, Entity } from '@/shared/types/game';
 import { getMineralStats } from '@/shared/lib/tileUtils';
 import { BASE_DEPTH } from '@/shared/config/constants';
 import {
+  BOSS_SPAWN_X,
   CircleConfig,
+  getBossSpawnDepth,
   getCircleConfig,
   getLayerFromDepth,
   MonsterSpawnRule,
@@ -27,6 +29,9 @@ export class MapGenerator {
 
     const config = getCircleConfig(y - BASE_DEPTH);
     const layer = getLayerFromDepth(y - BASE_DEPTH, config);
+
+    if (this.isBossSpawnFootprint(x, y, config))
+      return { type: 'empty', health: 0, maxHealth: 0, isSpot: false };
 
     if (this.getInitialMonster(x, y))
       return { type: 'empty', health: 0, maxHealth: 0, isSpot: false };
@@ -87,6 +92,8 @@ export class MapGenerator {
   public getInitialMonster(x: number, y: number): Entity | null {
     if (y < BASE_DEPTH + 10) return null;
     const config = getCircleConfig(y - BASE_DEPTH);
+    if (this.isBossSpawnFootprint(x, y, config)) return null;
+
     const layer = getLayerFromDepth(y - BASE_DEPTH, config);
 
     const available = config.monsters.filter(
@@ -142,7 +149,6 @@ export class MapGenerator {
             hp: mob.stats.maxHp,
             maxHp: mob.stats.maxHp,
             attack: mob.stats.power,
-            speed: mob.stats.speed,
             defense: mob.stats.defense,
             attackCooldown: mob.stats.attackCooldown,
           },
@@ -151,6 +157,27 @@ export class MapGenerator {
       }
     }
     return null;
+  }
+
+  /**
+   * 보스가 스폰되는 정확한 footprint 좌표인지 판정합니다.
+   *
+   * @param x - 월드 타일 X 좌표
+   * @param y - 월드 타일 Y 좌표
+   * @param config - 현재 서클 설정
+   * @returns 좌표가 보스 스폰 footprint 안이면 true
+   */
+  private isBossSpawnFootprint(x: number, y: number, config: CircleConfig): boolean {
+    if (!config.boss) return false;
+
+    const boss = MONSTER_LIST.find((m) => m.id === config.boss?.id);
+    const width = boss?.width ?? 5;
+    const height = boss?.height ?? 5;
+    const centerY = BASE_DEPTH + getBossSpawnDepth(config);
+    const startX = BOSS_SPAWN_X - Math.floor(width / 2);
+    const startY = centerY - Math.floor(height / 2);
+
+    return x >= startX && x < startX + width && y >= startY && y < startY + height;
   }
 
   /**

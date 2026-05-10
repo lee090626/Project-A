@@ -10,7 +10,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     description: 'Gluttony 서클의 하급 영혼입니다.',
     width: 2,
     height: 2,
-    stats: { maxHp: 1000, power: 40, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 1000, power: 40, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 150,
       gold: 30,
@@ -18,7 +18,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_worm',
@@ -27,7 +27,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'StarvingWraith',
     description: 'Gluttony 서클의 하급 영혼입니다.',
-    stats: { maxHp: 850, power: 45, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 850, power: 45, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 120,
       gold: 24,
@@ -35,7 +35,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_mud_shade',
@@ -44,7 +44,7 @@ export const circle3Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'GreedySlaughter',
     description: 'Gluttony 서클의 하급 영혼입니다.',
-    stats: { maxHp: 1250, power: 38, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 1250, power: 38, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 180,
       gold: 36,
@@ -52,7 +52,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c3_cerberus',
@@ -64,7 +64,7 @@ export const circle3Monsters: MonsterDefinition[] = [
       '음침한 비가 쏟아지의 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발기며 탐식의 죄를 처단합니다.',
     width: 7,
     height: 7,
-    stats: { maxHp: 50000, power: 180, defense: 25, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 50000, power: 180, defense: 25, attackCooldown: 2000 },
     rewards: {
       exp: 22500,
       gold: 4500,
@@ -73,15 +73,8 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'relic_beelzebub_needle', chance: 0.5, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 3.5, aggroRange: 15, respawnMs: 15000 },
+    behavior: { attackRange: 3.5, aggroRange: 15, respawnMs: 15000 },
     patterns: [
-      {
-        type: 'dash',
-        cooldown: 5000,
-        warningLeadTime: 800,
-        dashDuration: 1200,
-        projectileSpeed: 10, // Dash speed
-      },
       {
         type: 'roar',
         cooldown: 7000,

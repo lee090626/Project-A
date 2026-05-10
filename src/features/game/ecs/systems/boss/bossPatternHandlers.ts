@@ -180,31 +180,6 @@ const handleGravity: PatternHandler = (ctx) => {
 };
 
 /**
- * [돌진] 플레이어 방향으로 강하게 가속합니다.
- */
-const handleDash: PatternHandler = (ctx) => {
-  const { world, entities, bossIdx, bx, by, px, py, now, pattern } = ctx;
-  const speed = pattern.projectileSpeed ?? 8;
-  const duration = pattern.dashDuration ?? 1500;
-  const instanceId = entities.soa.instanceId[bossIdx].toString();
-
-  const dx = px - bx;
-  const dy = py - by;
-  const dist = Math.sqrt(dx * dx + dy * dy);
-  if (dist <= 0) return false;
-
-  // 대시 속도 및 종료 시간 기록 (bossBehaviorSystem에서 참조)
-  entities.soa.vx[bossIdx] = (dx / dist) * speed;
-  entities.soa.vy[bossIdx] = (dy / dist) * speed;
-
-  if (world.bossCombatStatus[instanceId]) {
-    (world.bossCombatStatus[instanceId] as any).dashEndTime = now + duration;
-  }
-
-  return true;
-};
-
-/**
  * [포효] 주변 플레이어에게 피해를 주고 스턴을 부여합니다.
  */
 const handleRoar: PatternHandler = (ctx) => {
@@ -272,7 +247,6 @@ export const patternRegistry: Map<BossPatternType, PatternHandler> = new Map([
   ['lure', handleLure],
   ['swarm', handleSwarm],
   ['gravity', handleGravity],
-  ['dash', handleDash],
   ['roar', handleRoar],
   ['hellfire', handleHellfire],
 ]);

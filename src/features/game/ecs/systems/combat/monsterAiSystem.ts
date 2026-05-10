@@ -9,7 +9,7 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
   const { player, entities } = world;
 
   for (let i = 0; i < entities.soa.count; i++) {
-    if (entities.soa.type[i] !== 1 && entities.soa.type[i] !== 2) continue; // 1: monster, 2: boss
+    if (entities.soa.type[i] !== 1) continue; // 1: monster
     if (entities.soa.hp[i] <= 0) continue;
 
     // --- Logic LOD ---
@@ -38,14 +38,12 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
 
     if (distSq < rangeSq) {
       if (distSq < attackRange * attackRange) {
-        // [추가] 잡몹(Type 1)은 대각선 공격 불가능
         const isDiagonal = Math.abs(dx) > 0.8 && Math.abs(dy) > 0.8;
-        const canAttack = entities.soa.type[i] === 2 || !isDiagonal;
 
-        if (canAttack && entities.soa.state[i] !== 2) {
+        if (!isDiagonal && entities.soa.state[i] !== 2) {
           entities.soa.state[i] = 2; // 2: attack
           entities.markDirty(i);
-        } else if (!canAttack) {
+        } else if (isDiagonal) {
           if (entities.soa.state[i] !== 0) {
             entities.soa.state[i] = 0; // 대각선 잡몹은 대기 상태 유지
             entities.markDirty(i);

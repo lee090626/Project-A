@@ -21,16 +21,11 @@ export interface EntitySoA {
   y: Float32Array;
   vx: Float32Array;
   vy: Float32Array;
-  /** 스폰 시점의 초기 X 좌표 (리싱/복귀 기준점) */
-  originX: Float32Array;
-  /** 스폰 시점의 초기 Y 좌표 (리싱/복귀 기준점) */
-  originY: Float32Array;
 
   // 전투 및 스탯
   hp: Float32Array;
   maxHp: Float32Array;
   attack: Float32Array;
-  speed: Float32Array;
   lastAttackTime: Float32Array;
   /** 개별 공격 쿨타임 (ms). 모스터 정의에서 초기화. */
   attackCooldown: Float32Array;
@@ -86,7 +81,6 @@ export class EntityManager {
       hp: new Float32Array(capacity),
       maxHp: new Float32Array(capacity),
       attack: new Float32Array(capacity),
-      speed: new Float32Array(capacity),
       lastAttackTime: new Float32Array(capacity),
       attackCooldown: new Float32Array(capacity).fill(1000),
       aggroRange: new Float32Array(capacity).fill(8),
@@ -94,8 +88,6 @@ export class EntityManager {
       spriteIndex: new Uint16Array(capacity),
       width: new Float32Array(capacity),
       height: new Float32Array(capacity),
-      originX: new Float32Array(capacity),
-      originY: new Float32Array(capacity),
       createdAt: new Float64Array(capacity),
       lifespan: new Float32Array(capacity).fill(5000), // 기본 5초
       dirtyFlags: new Uint8Array(capacity),
@@ -113,7 +105,6 @@ export class EntityManager {
       this.soa.hp,
       this.soa.maxHp,
       this.soa.attack,
-      this.soa.speed,
       this.soa.lastAttackTime,
       this.soa.attackCooldown,
       this.soa.aggroRange,
@@ -121,8 +112,6 @@ export class EntityManager {
       this.soa.spriteIndex,
       this.soa.width,
       this.soa.height,
-      this.soa.originX,
-      this.soa.originY,
       this.soa.createdAt,
       this.soa.lifespan,
       this.soa.dirtyFlags,

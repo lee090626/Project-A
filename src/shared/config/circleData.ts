@@ -4,7 +4,9 @@ import { TileType } from '../types/game';
  * 월드 스폰/지형 보정 규칙이 바뀌었을 때 런타임 캐시와 레거시 지형을 갱신하기 위한 버전입니다.
  * 스폰 density, weight, layer 또는 저장 지형 마이그레이션을 조정하면 값을 올려 기존 세이브를 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 10;
+export const SPAWN_RULE_VERSION = 11;
+export const BOSS_SPAWN_X = 15;
+export const BOSS_SPAWN_DEPTH_FROM_END = 8;
 
 /**
  * 광물 생성 규칙을 정의하는 인터페이스입니다.
@@ -238,6 +240,16 @@ export const getCircleConfig = (depth: number): CircleConfig => {
     }
   }
   return CIRCLES[CIRCLES.length - 1];
+};
+
+/**
+ * 보스가 해당 서클 안에서 출현하는 전체 깊이를 계산합니다.
+ *
+ * @param circle - 보스 출현 깊이를 계산할 서클 설정
+ * @returns 전체 게임 기준 보스 출현 깊이
+ */
+export const getBossSpawnDepth = (circle: CircleConfig): number => {
+  return circle.depthEnd - BOSS_SPAWN_DEPTH_FROM_END;
 };
 
 export const getLayerFromDepth = (depth: number, circle: CircleConfig): number => {

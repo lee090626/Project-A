@@ -8,7 +8,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 600000, power: 10000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 600000, power: 10000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 60000,
       gold: 12000,
@@ -16,7 +16,7 @@ export const circle8Monsters: MonsterDefinition[] = [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c8_prophet',
@@ -25,7 +25,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 500000, power: 15000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 500000, power: 15000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 50000,
       gold: 10000,
@@ -33,7 +33,7 @@ export const circle8Monsters: MonsterDefinition[] = [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c8_illusionist',
@@ -42,7 +42,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 450000, power: 12000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 450000, power: 12000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 45000,
       gold: 9000,
@@ -50,7 +50,7 @@ export const circle8Monsters: MonsterDefinition[] = [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c8_gadreel',
@@ -61,7 +61,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     description: '신성한 심판자를 자처하지만, 사실은 기만과 부패로 영혼들을 타락시키는 서클 8의 지배자.',
     width: 5,
     height: 5,
-    stats: { maxHp: 12000000, power: 45000, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 12000000, power: 45000, defense: 20, attackCooldown: 2000 },
     rewards: {
       exp: 6000000,
       gold: 1200000,
@@ -70,6 +70,6 @@ export const circle8Monsters: MonsterDefinition[] = [
         { itemId: 'relic_abaddon_blade', chance: 0.1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];

@@ -1,7 +1,7 @@
 /**
  * 보스가 사용할 수 있는 공격 패턴의 종류를 정의합니다.
  */
-export type BossPatternType = 'shot' | 'cross' | 'lure' | 'aoe' | 'swarm' | 'gravity' | 'dash' | 'roar' | 'hellfire';
+export type BossPatternType = 'shot' | 'cross' | 'lure' | 'aoe' | 'swarm' | 'gravity' | 'roar' | 'hellfire';
 
 /**
  * 보스의 단일 공격 패턴 데이터 정의입니다.
@@ -25,8 +25,6 @@ export interface BossPattern {
   lureCycle?: number;
   /** 공격 전조 표시 시작 시간 (밀리초) */
   warningLeadTime?: number;
-  /** dash 패턴 전용: 돌진 지속 시간 (밀리초) */
-  dashDuration?: number;
   /** roar 패턴 전용: 효과 반경 (px) */
   roarRadius?: number;
 }
@@ -60,7 +58,6 @@ export interface MonsterDefinition {
     maxHp: number;
     power: number;
     defense: number;
-    speed: number;
     attackCooldown: number;
   };
   /** 보상 정보 */
@@ -76,7 +73,6 @@ export interface MonsterDefinition {
   };
   /** 행동 패턴 */
   behavior: {
-    movementType: 'chase' | 'wander' | 'stationary' | 'flee';
     attackRange: number;
     aggroRange: number;
     projectileId?: string;

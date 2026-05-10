@@ -8,7 +8,7 @@ export const circle4Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
-    stats: { maxHp: 4000, power: 120, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 4000, power: 120, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 400,
       gold: 80,
@@ -16,7 +16,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c4_sinner',
@@ -25,7 +25,7 @@ export const circle4Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
-    stats: { maxHp: 5500, power: 150, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 5500, power: 150, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 550,
       gold: 110,
@@ -33,7 +33,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c4_mimic',
@@ -42,7 +42,7 @@ export const circle4Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Greed 서클의 하급 영혼입니다.',
-    stats: { maxHp: 3500, power: 200, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 3500, power: 200, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 350,
       gold: 70,
@@ -50,7 +50,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c4_fafnir',
@@ -61,7 +61,7 @@ export const circle4Monsters: MonsterDefinition[] = [
     description: 'Circle 4 탐욕의 지옥을 지키는 황금의 수호자. 자신의 보물을 건드리는 자를 용납하지 않습니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 180000, power: 550, defense: 65, speed: 0, attackCooldown: 2500 },
+    stats: { maxHp: 180000, power: 550, defense: 65, attackCooldown: 2500 },
     rewards: {
       exp: 60000,
       gold: 12000,
@@ -70,6 +70,6 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'relic_mammon_coin', chance: 0.4, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];

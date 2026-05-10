@@ -8,7 +8,7 @@ export const circle7Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
-    stats: { maxHp: 120000, power: 2500, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 120000, power: 2500, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 12000,
       gold: 2400,
@@ -16,7 +16,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c7_guard',
@@ -25,7 +25,7 @@ export const circle7Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
-    stats: { maxHp: 180000, power: 3000, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 180000, power: 3000, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 18000,
       gold: 3600,
@@ -33,7 +33,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c7_spawn',
@@ -42,7 +42,7 @@ export const circle7Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Violence 서클의 하급 영혼입니다.',
-    stats: { maxHp: 250000, power: 4500, defense: 5, speed: 2, attackCooldown: 1000 },
+    stats: { maxHp: 250000, power: 4500, defense: 5, attackCooldown: 1000 },
     rewards: {
       exp: 25000,
       gold: 5000,
@@ -50,7 +50,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'stationary', attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1.5, aggroRange: 5 },
   },
   {
     id: 'c7_camael',
@@ -61,7 +61,7 @@ export const circle7Monsters: MonsterDefinition[] = [
     description: '폭력의 연못을 다스리는 냉혹한 처형자. 거대한 심판의 검으로 죄인들을 단죄합니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 3000000, power: 15000, defense: 20, speed: 1.5, attackCooldown: 2000 },
+    stats: { maxHp: 3000000, power: 15000, defense: 20, attackCooldown: 2000 },
     rewards: {
       exp: 1500000,
       gold: 300000,
@@ -70,6 +70,6 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'relic_leviathan_mirror', chance: 0.15, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { movementType: 'chase', attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 2.5, aggroRange: 10 },
   },
 ];
