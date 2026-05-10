@@ -56,7 +56,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 2,
     icon: '🛡️',
     image: 'CrimsonPlateArmor',
-    stats: { maxHp: 400, defense: 10 },
+    stats: { maxHp: 200, defense: 5 },
     price: { crimsonstone: 25, fervorstone: 10, goldCoins: 1200 },
   },
   'crimson_stride': {
@@ -92,7 +92,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '🎭',
     image: 'VoidMask',
-    stats: { maxHp: 80, defense: 12 },
+    stats: { maxHp: 80, defense: 6 },
     price: { moldstone: 16, sludgestone: 6, goldCoins: 2200 }
   },
   'void_mantle': {
@@ -103,7 +103,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '🧥',
     image: 'VoidMantle',
-    stats: { maxHp: 380, defense: 8 },
+    stats: { maxHp: 400, defense: 10 },
     price: { moldstone: 24, sludgestone: 14, rotstone: 6, goldCoins: 3600 }
   },
   'void_step': {
@@ -114,7 +114,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 3,
     icon: '👣',
     image: 'VoidStep',
-    stats: { moveSpeed: 22, defense: 6, maxHp: 80 },
+    stats: { moveSpeed: 25, defense: 6},
     price: { moldstone: 16, sludgestone: 8, rotstone: 4, goldCoins: 2700 }
   },
 
