@@ -1,6 +1,6 @@
 import React from 'react';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
-import { EquipmentPart } from '@/shared/types/game';
+import { Equipment, EquipmentPart } from '@/shared/types/game';
 import { AtlasIconName } from '@/shared/config/atlasMap';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
 
@@ -14,15 +14,16 @@ interface EquipmentCardProps {
  * 인벤토리 장비 탭에서 개별 장비(드릴, 투구, 갑옷, 신발)를 표시하는 카드 컴포넌트입니다.
  */
 function EquipmentCard({ equipmentId, isEquipped, onEquip }: EquipmentCardProps) {
-  const equipment = EQUIPMENTS[equipmentId];
+  const equipment = EQUIPMENTS[equipmentId] as Equipment | undefined;
   if (!equipment) return null;
 
-  const partLabels: Record<string, string> = {
-    drill: 'Weapon (Drill)',
-    helmet: 'Head (Helmet)',
-    armor: 'Body (Armor)',
-    boots: 'Legs (Boots)',
+  const partLabels: Record<EquipmentPart, string> = {
+    Drill: 'Weapon (Drill)',
+    Helmet: 'Head (Helmet)',
+    Armor: 'Body (Armor)',
+    Boots: 'Legs (Boots)',
   };
+  const statItems = getEquipmentStatItems(equipment.stats);
 
   return (
     <div
@@ -53,24 +54,15 @@ function EquipmentCard({ equipmentId, isEquipped, onEquip }: EquipmentCardProps)
       </div>
 
       <div className="grid grid-cols-2 gap-2 mb-6">
-        {equipment.part === 'drill' && (
-          <StatBox label="Power" value={equipment.stats.power || 0} color="text-rose-400" />
-        )}
-        {equipment.part === 'helmet' && (
-          <StatBox label="Defense" value={equipment.stats.defense || 0} color="text-blue-400" />
-        )}
-        {equipment.part === 'armor' && (
-          <StatBox label="Max Hp" value={equipment.stats.maxHp || 0} color="text-emerald-400" />
-        )}
-        {equipment.part === 'boots' && (
-          <>
-            <StatBox label="Speed" value={equipment.stats.moveSpeed || 0} color="text-amber-400" />
-            <div className="grid grid-cols-2 gap-1 col-span-1">
-              <StatBox label="DEF" value={equipment.stats.defense || 0} color="text-blue-400" isSmall />
-              <StatBox label="HP" value={equipment.stats.maxHp || 0} color="text-emerald-400" isSmall />
-            </div>
-          </>
-        )}
+        {statItems.map((stat) => (
+          <StatBox
+            key={stat.label}
+            label={stat.label}
+            value={stat.value}
+            color={stat.color}
+            suffix={stat.suffix}
+          />
+        ))}
       </div>
 
       <div className="mt-auto pt-4 border-t border-white/5">
@@ -91,13 +83,39 @@ function EquipmentCard({ equipmentId, isEquipped, onEquip }: EquipmentCardProps)
   );
 }
 
-const StatBox = ({ label, value, color, isSmall = false }: { label: string; value: string | number; color: string; isSmall?: boolean }) => (
-  <div className={`bg-zinc-950/50 p-2 md:p-3 rounded-xl border border-zinc-900 shadow-inner flex flex-col items-center justify-center ${isSmall ? 'py-1' : ''}`}>
-    <div className={`text-zinc-500 font-bold mb-0.5 tracking-tighter truncate w-full text-center ${isSmall ? 'text-[8px]' : 'text-[10px]'}`}>
+const getEquipmentStatItems = (stats: {
+  power?: number;
+  maxHp?: number;
+  moveSpeed?: number;
+  defense?: number;
+}) => {
+  return [
+    { label: 'Power', value: stats.power, color: 'text-rose-400' },
+    { label: 'Defense', value: stats.defense, color: 'text-blue-400' },
+    { label: 'Max HP', value: stats.maxHp, color: 'text-emerald-400' },
+    { label: 'Speed', value: stats.moveSpeed, color: 'text-amber-400', suffix: '%' },
+  ].filter((stat): stat is { label: string; value: number; color: string; suffix?: string } =>
+    typeof stat.value === 'number' && stat.value !== 0,
+  );
+};
+
+const StatBox = ({
+  label,
+  value,
+  color,
+  suffix = '',
+}: {
+  label: string;
+  value: number;
+  color: string;
+  suffix?: string;
+}) => (
+  <div className="bg-zinc-950/50 p-2 md:p-3 rounded-xl border border-zinc-900 shadow-inner flex flex-col items-center justify-center min-h-16">
+    <div className="text-zinc-500 font-bold mb-0.5 tracking-tighter truncate w-full text-center text-[10px]">
       {label}
     </div>
-    <div className={`font-black tabular-nums transition-colors ${color} ${isSmall ? 'text-xs' : 'text-base md:text-lg'}`}>
-      {typeof value === 'number' && value > 0 ? `+${value}` : value}
+    <div className={`font-black tabular-nums transition-colors text-base md:text-lg ${color}`}>
+      {value > 0 ? `+${value}${suffix}` : `${value}${suffix}`}
     </div>
   </div>
 );
