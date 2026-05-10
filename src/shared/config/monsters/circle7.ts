@@ -16,7 +16,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c7_guard',
@@ -33,7 +33,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c7_spawn',
@@ -50,7 +50,7 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'essence_violence', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c7_camael',
@@ -70,6 +70,6 @@ export const circle7Monsters: MonsterDefinition[] = [
         { itemId: 'relic_leviathan_mirror', chance: 0.15, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 1, aggroRange: 10 },
   },
 ];

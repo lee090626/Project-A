@@ -16,7 +16,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c9_specter',
@@ -33,7 +33,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c9_shadow',
@@ -50,7 +50,7 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'essence_treachery', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c9_lucifer',
@@ -71,6 +71,6 @@ export const circle9Monsters: MonsterDefinition[] = [
         { itemId: 'relic_lucifer_ice', chance: 0.02, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 1, aggroRange: 10 },
   },
 ];

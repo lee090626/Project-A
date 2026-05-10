@@ -34,22 +34,13 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
     const range = entities.soa.aggroRange[i] || 8;
     const rangeSq = range * range;
     const def = MONSTER_LIST[entities.soa.monsterDefIndex[i]];
-    const attackRange = def?.behavior.attackRange ?? 1.5;
+    const attackRange = def?.behavior.attackRange ?? 1;
 
-    if (distSq < rangeSq) {
-      if (distSq < attackRange * attackRange) {
-        const isDiagonal = Math.abs(dx) > 0.8 && Math.abs(dy) > 0.8;
-
-        if (!isDiagonal && entities.soa.state[i] !== 2) {
+    if (distSq <= rangeSq) {
+      if (distSq <= attackRange * attackRange) {
+        if (entities.soa.state[i] !== 2) {
           entities.soa.state[i] = 2; // 2: attack
           entities.markDirty(i);
-        } else if (isDiagonal) {
-          if (entities.soa.state[i] !== 0) {
-            entities.soa.state[i] = 0; // 대각선 잡몹은 대기 상태 유지
-            entities.markDirty(i);
-          }
-          // 공격 사각지대 진입 시 캐스팅 완전 리셋
-          entities.soa.lastAttackTime[i] = now;
         }
       } else {
         if (entities.soa.state[i] !== 0) {

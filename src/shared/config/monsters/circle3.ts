@@ -18,7 +18,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c3_worm',
@@ -35,7 +35,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c3_mud_shade',
@@ -52,7 +52,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c3_cerberus',
@@ -73,7 +73,7 @@ export const circle3Monsters: MonsterDefinition[] = [
         { itemId: 'relic_beelzebub_needle', chance: 0.5, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 3.5, aggroRange: 15, respawnMs: 15000 },
+    behavior: { attackRange: 1, aggroRange: 15, respawnMs: 15000 },
     patterns: [
       {
         type: 'roar',

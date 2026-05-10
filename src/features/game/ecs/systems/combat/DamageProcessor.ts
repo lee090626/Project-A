@@ -4,6 +4,13 @@ import { MONSTER_LIST } from '@/shared/config/monsterData';
 import { calculateMiningDamage } from '../../../lib/miningCalculator';
 import { messageBus } from '@/shared/lib/MessageBus';
 
+const DEFAULT_ATTACK_RANGE_TILES = 1;
+const ATTACK_QUERY_RADIUS =
+  (Math.max(
+    DEFAULT_ATTACK_RANGE_TILES,
+    ...MONSTER_LIST.map((monster) => monster.behavior.attackRange || DEFAULT_ATTACK_RANGE_TILES),
+  ) + 1) * TILE_SIZE;
+
 /**
  * 플레이어와 몬스터 간의 상호 대미지 판정 분석 및 이벤트를 발행합니다.
  */
@@ -21,7 +28,7 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
   const nearbyMonsters = world.spatialHash.query(
     player.pos.x * TILE_SIZE,
     player.pos.y * TILE_SIZE,
-    TILE_SIZE * 2,
+    ATTACK_QUERY_RADIUS,
   );
 
   nearbyMonsters.forEach((idx) => {
@@ -29,50 +36,34 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
     if (type !== 1 && type !== 2) return; // 1: monster, 2: boss
     if (entities.soa.hp[idx] <= 0) return;
 
-    const ex = entities.soa.x[idx];
-    const ey = entities.soa.y[idx];
-    const ew = entities.soa.width[idx] || TILE_SIZE;
-    const eh = entities.soa.height[idx] || TILE_SIZE;
-
     const px = player.pos.x * TILE_SIZE;
     const py = player.pos.y * TILE_SIZE;
 
-    const rangePadding = TILE_SIZE * 1.2;
-    const isInRange =
-      px >= ex - rangePadding &&
-      px < ex + ew + rangePadding &&
-      py >= ey - rangePadding &&
-      py < ey + eh + rangePadding;
+    const monsterDef = MONSTER_LIST[entities.soa.monsterDefIndex[idx]];
+    const attackRange = monsterDef?.behavior.attackRange ?? DEFAULT_ATTACK_RANGE_TILES;
+    const isInRange = getAabbDistanceToPlayerTiles(world, idx) <= attackRange;
 
     if (isInRange) {
-      // 잡몹(Type 1)은 대각선 공격 제한 기믹
-      const dx = Math.abs(px - (ex + ew / 2));
-      const dy = Math.abs(py - (ey + eh / 2));
-      const isDiagonal = dx > TILE_SIZE * 0.8 && dy > TILE_SIZE * 0.8;
-      const canDamage = type === 2 || !isDiagonal;
+      const cooldown = entities.soa.attackCooldown[idx];
+      const lastTime = entities.soa.lastAttackTime[idx];
+      const elapsed = now - lastTime;
 
-      if (canDamage) {
-        const cooldown = entities.soa.attackCooldown[idx];
-        const lastTime = entities.soa.lastAttackTime[idx];
-        const elapsed = now - lastTime;
+      // [Charging Combat 구현]
+      // 쿨타임이 완료된 시점에만 대미지를 입힘 (전조 시간 = 공속)
+      if (elapsed >= cooldown) {
+        const attack = entities.soa.attack[idx];
+        const damage = Math.max(1, attack - (player.stats.defense || 0));
 
-        // [Charging Combat 구현]
-        // 쿨타임이 완료된 시점에만 대미지를 입힘 (전조 시간 = 공속)
-        if (elapsed >= cooldown) {
-          const attack = entities.soa.attack[idx];
-          const damage = Math.max(1, attack - (player.stats.defense || 0));
-          
-          player.stats.hp -= damage;
-          player.lastHitTime = now;
-          entities.soa.lastAttackTime[idx] = now; // 다음 차징 시작
+        player.stats.hp -= damage;
+        player.lastHitTime = now;
+        entities.soa.lastAttackTime[idx] = now; // 다음 차징 시작
 
-          // [Juice: 이벤트 발행] 플레이어 피격 연출 요청
-          messageBus.emit('game:player_hit', {
-            x: px,
-            y: py,
-            damage
-          });
-        }
+        // [Juice: 이벤트 발행] 플레이어 피격 연출 요청
+        messageBus.emit('game:player_hit', {
+          x: px,
+          y: py,
+          damage
+        });
       }
     } else {
       // [Kiting 지원] 사거리 밖으로 나가면 공격 타이머를 최신화하여, 
@@ -84,6 +75,26 @@ function processMonsterToPlayerDamage(world: GameWorld, now: number) {
       }
     }
   });
+}
+
+/**
+ * 엔티티 AABB와 플레이어 사이의 최단 거리를 타일 단위로 계산합니다.
+ *
+ * @param world - 현재 게임 월드 상태
+ * @param idx - 엔티티 인덱스
+ * @returns 플레이어와 엔티티 히트박스 사이의 타일 단위 거리
+ */
+function getAabbDistanceToPlayerTiles(world: GameWorld, idx: number): number {
+  const { player, entities } = world;
+  const bx = entities.soa.x[idx] / TILE_SIZE;
+  const by = entities.soa.y[idx] / TILE_SIZE;
+  const bw = (entities.soa.width[idx] || TILE_SIZE) / TILE_SIZE;
+  const bh = (entities.soa.height[idx] || TILE_SIZE) / TILE_SIZE;
+  const closestX = Math.max(bx, Math.min(player.pos.x, bx + bw - 1));
+  const closestY = Math.max(by, Math.min(player.pos.y, by + bh - 1));
+  const dx = player.pos.x - closestX;
+  const dy = player.pos.y - closestY;
+  return Math.sqrt(dx * dx + dy * dy);
 }
 
 /**

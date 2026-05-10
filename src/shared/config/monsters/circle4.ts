@@ -16,7 +16,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c4_sinner',
@@ -33,7 +33,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c4_mimic',
@@ -50,7 +50,7 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'essence_greed', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c4_fafnir',
@@ -70,6 +70,6 @@ export const circle4Monsters: MonsterDefinition[] = [
         { itemId: 'relic_mammon_coin', chance: 0.4, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 1, aggroRange: 10 },
   },
 ];

@@ -16,7 +16,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c5_fury',
@@ -33,7 +33,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c5_golem',
@@ -50,7 +50,7 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 1.5, aggroRange: 5 },
+    behavior: { attackRange: 1, aggroRange: 5 },
   },
   {
     id: 'c5_azazel',
@@ -70,6 +70,6 @@ export const circle5Monsters: MonsterDefinition[] = [
         { itemId: 'relic_satan_heart', chance: 0.3, minAmount: 1, maxAmount: 1 },
       ],
     },
-    behavior: { attackRange: 2.5, aggroRange: 10 },
+    behavior: { attackRange: 1, aggroRange: 10 },
   },
 ];
