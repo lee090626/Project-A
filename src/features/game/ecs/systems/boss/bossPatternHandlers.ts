@@ -11,7 +11,6 @@ export interface PatternContext {
   world: GameWorld;
   entities: EntityManager;
   bossIdx: number;
-  phase: number;
   bx: number;
   by: number;
   px: number;
@@ -64,13 +63,12 @@ export const patternTimers = new Map<string, number>();
 // ============================================================
 
 const handleShot: PatternHandler = (ctx) => {
-  const { entities, phase, bx, by, px, py, now, pattern } = ctx;
+  const { entities, bx, by, px, py, now, pattern } = ctx;
   const { soa } = entities;
 
-  const override = pattern.phaseOverrides?.[phase - 1];
-  const count = override?.projectileCount ?? pattern.projectileCount ?? 1;
-  const speed = override?.projectileSpeed ?? pattern.projectileSpeed ?? 5;
-  const power = override?.projectilePower ?? pattern.projectilePower ?? 10;
+  const count = pattern.projectileCount ?? 1;
+  const speed = pattern.projectileSpeed ?? 5;
+  const power = pattern.projectilePower ?? 10;
   const size = pattern.projectileSize ?? 128;
 
   const dx = px - bx;
@@ -94,12 +92,11 @@ const handleShot: PatternHandler = (ctx) => {
 };
 
 const handleCross: PatternHandler = (ctx) => {
-  const { entities, phase, bx, by, now, pattern } = ctx;
+  const { entities, bx, by, now, pattern } = ctx;
   const { soa } = entities;
 
-  const override = pattern.phaseOverrides?.[phase - 1];
-  const speed = override?.projectileSpeed ?? pattern.projectileSpeed ?? 7;
-  const power = override?.projectilePower ?? pattern.projectilePower ?? 15;
+  const speed = pattern.projectileSpeed ?? 7;
+  const power = pattern.projectilePower ?? 15;
   const size = pattern.projectileSize ?? 128;
 
   const directions = [
@@ -116,13 +113,12 @@ const handleCross: PatternHandler = (ctx) => {
 };
 
 const handleAoe: PatternHandler = (ctx) => {
-  const { entities, phase, bx, by, now, pattern } = ctx;
+  const { entities, bx, by, now, pattern } = ctx;
   const { soa } = entities;
 
-  const override = pattern.phaseOverrides?.[phase - 1];
-  const count = override?.projectileCount ?? pattern.projectileCount ?? 12;
-  const speed = override?.projectileSpeed ?? pattern.projectileSpeed ?? 5;
-  const power = override?.projectilePower ?? pattern.projectilePower ?? 10;
+  const count = pattern.projectileCount ?? 12;
+  const speed = pattern.projectileSpeed ?? 5;
+  const power = pattern.projectilePower ?? 10;
   const size = pattern.projectileSize ?? 128;
 
   const angleStep = (Math.PI * 2) / count;
@@ -145,13 +141,12 @@ const handleLure: PatternHandler = (ctx) => {
 };
 
 const handleSwarm: PatternHandler = (ctx) => {
-  const { entities, phase, bx, by, now, pattern } = ctx;
+  const { entities, bx, by, now, pattern } = ctx;
   const { soa } = entities;
 
-  const override = pattern.phaseOverrides?.[phase - 1];
-  const count = override?.projectileCount ?? pattern.projectileCount ?? 15;
-  const baseSpeed = override?.projectileSpeed ?? pattern.projectileSpeed ?? 4;
-  const power = override?.projectilePower ?? pattern.projectilePower ?? 8;
+  const count = pattern.projectileCount ?? 15;
+  const baseSpeed = pattern.projectileSpeed ?? 4;
+  const power = pattern.projectilePower ?? 8;
   const size = pattern.projectileSize ?? 64; // 파리 떼이므로 작게 설정 가능
 
   for (let i = 0; i < count; i++) {

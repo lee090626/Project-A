@@ -13,9 +13,8 @@ import {
  * 동작 원리:
  * 1. SOA에서 살아 있는 type=2(보스) 엔티티를 탐색합니다.
  * 2. 보스의 monsterDefIndex로 `MONSTERS` 데이터를 조회합니다.
- * 3. 보스 데이터의 `phases` 배열로 현재 HP %에 따라 페이즈를 결정합니다.
- * 4. `patterns` 배열을 순회하며 `minPhase`, 개별 쿨타임을 체크합니다.
- * 5. 발동 조건이 충족되면 `patternRegistry`에서 핸들러를 꺼내 실행합니다.
+ * 3. `patterns` 배열을 순회하며 개별 쿨타임을 체크합니다.
+ * 4. 발동 조건이 충족되면 `patternRegistry`에서 핸들러를 꺼내 실행합니다.
  *
  * @param world - 현재 게임 월드 상태
  * @param deltaTime - 이전 프레임과의 시간 차 (ms)
@@ -69,32 +68,13 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
   const distToPlayer = Math.sqrt(Math.pow(bx - px, 2) + Math.pow(by - py, 2));
   const attackRange = (bossDef.behavior.attackRange || 2) * TILE_SIZE;
 
-  // --- 4. 페이즈 결정 ---
-  const hpPercent = (soa.hp[bossIdx] / soa.maxHp[bossIdx]) * 100;
-  let phase = 1;
-
-  if (bossDef.phases && bossDef.phases.length > 0) {
-    const sortedPhases = [...bossDef.phases].sort(
-      (a, b) => a.hpThreshold - b.hpThreshold,
-    );
-    for (const phaseConfig of sortedPhases) {
-      if (hpPercent <= phaseConfig.hpThreshold) {
-        phase = phaseConfig.phase;
-      }
-    }
-  } else {
-    if (hpPercent <= 40) phase = 3;
-    else if (hpPercent <= 70) phase = 2;
-  }
-
-  // --- 5. UI 동기화 ---
+  // --- 4. UI 동기화 ---
   world.bossCombatStatus[instanceId] = {
     active: true,
     id: bossDef.id,
     name: bossDef.nameKo ?? bossDef.name,
     hp: soa.hp[bossIdx],
     maxHp: soa.maxHp[bossIdx],
-    phase,
   };
 
   // 플레이어가 너무 멀어지면 보스 HUD는 유지하고, AI/패턴만 비활성화합니다.
@@ -106,7 +86,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     return;
   }
 
-  // --- 6. 리싱(Leash) 시스템 ---
+  // --- 5. 리싱(Leash) 시스템 ---
   const ox = soa.originX[bossIdx];
   const oy = soa.originY[bossIdx];
   const distFromOrigin = Math.sqrt(Math.pow(bx - ox, 2) + Math.pow(by - oy, 2));
@@ -116,15 +96,12 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     isReturning = true;
   }
 
-  // --- 7. 패턴 루프 및 전조(Warning) 상태 체크 ---
+  // --- 6. 패턴 루프 및 전조(Warning) 상태 체크 ---
   const patterns = bossDef.patterns ?? [];
   let anyWarning = false;
 
   for (let pi = 0; pi < patterns.length; pi++) {
     const pattern = patterns[pi];
-    const minPhase = pattern.minPhase ?? 1;
-    if (phase < minPhase) continue;
-
     const timerKey = `${instanceId}:${pi}`;
     const warningLead = pattern.warningLeadTime ?? 1000;
 
@@ -149,7 +126,6 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
           world,
           entities,
           bossIdx,
-          phase,
           bx,
           by,
           px,
@@ -162,7 +138,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     }
   }
 
-  // --- 8. 평타 차징(Basic Attack Charging) 로직 통합 ---
+  // --- 7. 평타 차징(Basic Attack Charging) 로직 통합 ---
   const cooldown = soa.attackCooldown[bossIdx];
   const lastAttack = soa.lastAttackTime[bossIdx];
   const attackElapsed = now - lastAttack;
@@ -175,7 +151,7 @@ export const bossBehaviorSystem = (world: GameWorld, deltaTime: number, now: num
     anyWarning = true;
   }
 
-  // --- 9. 이동 제어 (복귀 vs 대시 vs 추격 vs 정지) ---
+  // --- 8. 이동 제어 (복귀 vs 대시 vs 추격 vs 정지) ---
   const status = world.bossCombatStatus[instanceId] as any;
   const isDashing = status?.dashEndTime && status.dashEndTime > now;
 

@@ -12,7 +12,7 @@ export const monsterAiSystem = (world: GameWorld, now: number) => {
     if (entities.soa.type[i] !== 1 && entities.soa.type[i] !== 2) continue; // 1: monster, 2: boss
     if (entities.soa.hp[i] <= 0) continue;
 
-    // --- Logic LOD (Phase 4) ---
+    // --- Logic LOD ---
     const px = entities.soa.x[i] / TILE_SIZE;
     const py = entities.soa.y[i] / TILE_SIZE;
     const ew = (entities.soa.width[i] || TILE_SIZE) / TILE_SIZE;

@@ -11,8 +11,6 @@ export interface BossPattern {
   type: BossPatternType;
   /** 이 패턴의 발동 주기 (밀리초) */
   cooldown: number;
-  /** 이 패턴이 활성화되는 최소 페이즈 번호 (1-based) */
-  minPhase?: number;
   /** 발사되는 투사체의 수 */
   projectileCount?: number;
   /** 투사체 이동 속도 (픽셀/틱) */
@@ -21,12 +19,6 @@ export interface BossPattern {
   projectilePower?: number;
   /** 투사체 크기 (px) */
   projectileSize?: number;
-  /** 페이즈별 스케일 오버라이드 배열 */
-  phaseOverrides?: Array<{
-    projectileCount?: number;
-    projectileSpeed?: number;
-    projectilePower?: number;
-  }>;
   /** lure 패턴 전용: 혼란 효과 지속 시간 (밀리초) */
   lureDuration?: number;
   /** lure 패턴 전용: 혼란 효과 발동을 위한 주기 시작 시간 (밀리초) */
@@ -37,16 +29,6 @@ export interface BossPattern {
   dashDuration?: number;
   /** roar 패턴 전용: 효과 반경 (px) */
   roarRadius?: number;
-}
-
-/**
- * 보스의 특정 페이즈 설정 데이터입니다.
- */
-export interface BossPhaseConfig {
-  /** 이 페이즈의 번호 (1-based) */
-  phase: number;
-  /** 이 페이즈로 전환되는 HP 임계값 (%) */
-  hpThreshold: number;
 }
 
 /**
@@ -103,6 +85,4 @@ export interface MonsterDefinition {
   };
   /** 보스 전용 공격 패턴 */
   patterns?: BossPattern[];
-  /** 보스 전용 페이즈 전환 설정 */
-  phases?: BossPhaseConfig[];
 }

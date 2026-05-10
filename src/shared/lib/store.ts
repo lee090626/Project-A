@@ -29,7 +29,6 @@ interface GameState {
     name: string | null;
     hp: number;
     maxHp: number;
-    phase: number;
   }>;
   /** 통계 데이터 업데이트 */
   updateStats: (stats: Partial<PlayerStats>) => void;

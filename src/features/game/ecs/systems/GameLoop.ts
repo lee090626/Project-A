@@ -29,7 +29,7 @@ import { RenderSyncEncoder } from '@/features/game/lib/RenderSyncEncoder';
 import { GameLayers, TextureRegistry } from '@/shared/types/engine';
 import { LightingFilter } from '@/features/game/lib/LightingFilter';
 
-type PerfPhase =
+type PerfSection =
   | 'spatialHash'
   | 'input'
   | 'status'
@@ -58,7 +58,7 @@ interface PerfCounter {
   calls: number;
 }
 
-const PERF_PHASES: PerfPhase[] = [
+const PERF_SECTIONS: PerfSection[] = [
   'spatialHash',
   'input',
   'status',
@@ -84,13 +84,13 @@ const PERF_PHASES: PerfPhase[] = [
  *
  * @returns 모든 측정 구간이 0으로 초기화된 성능 카운터 맵
  */
-function createPerfCounters(): Record<PerfPhase, PerfCounter> {
-  return PERF_PHASES.reduce(
-    (counters, phase) => {
-      counters[phase] = { totalMs: 0, maxMs: 0, calls: 0 };
+function createPerfCounters(): Record<PerfSection, PerfCounter> {
+  return PERF_SECTIONS.reduce(
+    (counters, section) => {
+      counters[section] = { totalMs: 0, maxMs: 0, calls: 0 };
       return counters;
     },
-    {} as Record<PerfPhase, PerfCounter>,
+    {} as Record<PerfSection, PerfCounter>,
   );
 }
 
@@ -116,7 +116,7 @@ export class GameLoop {
   private readonly perfSampleInterval: number = 1000;
   private perfSampleStartTime: number = 0;
   private perfFrameCount: number = 0;
-  private perfCounters: Record<PerfPhase, PerfCounter> = createPerfCounters();
+  private perfCounters: Record<PerfSection, PerfCounter> = createPerfCounters();
 
   // 의존성 주입(DI) 데이터
   private world: GameWorld;
@@ -174,11 +174,11 @@ export class GameLoop {
   /**
    * 디버그 모드에서 특정 시스템 실행 시간을 측정합니다.
    *
-   * @param phase - 측정 대상 시스템 이름
+   * @param section - 측정 대상 시스템 이름
    * @param callback - 측정하며 실행할 작업
    * @returns callback 실행 결과
    */
-  private samplePerf<T>(phase: PerfPhase, callback: () => T): T {
+  private samplePerf<T>(section: PerfSection, callback: () => T): T {
     if (!this.perfSamplerEnabled) return callback();
 
     const start = performance.now();
@@ -186,7 +186,7 @@ export class GameLoop {
       return callback();
     } finally {
       const elapsed = performance.now() - start;
-      const counter = this.perfCounters[phase];
+      const counter = this.perfCounters[section];
       counter.totalMs += elapsed;
       counter.maxMs = Math.max(counter.maxMs, elapsed);
       counter.calls++;
@@ -209,13 +209,13 @@ export class GameLoop {
     const elapsed = now - this.perfSampleStartTime;
     if (elapsed < this.perfSampleInterval) return;
 
-    const rows = PERF_PHASES
-      .map((phase) => {
-        const counter = this.perfCounters[phase];
+    const rows = PERF_SECTIONS
+      .map((section) => {
+        const counter = this.perfCounters[section];
         if (counter.calls === 0) return null;
 
         return {
-          phase,
+          section,
           calls: counter.calls,
           avgMs: Number((counter.totalMs / counter.calls).toFixed(3)),
           maxMs: Number(counter.maxMs.toFixed(3)),

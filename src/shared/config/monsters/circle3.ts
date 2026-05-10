@@ -99,9 +99,5 @@ export const circle3Monsters: MonsterDefinition[] = [
         projectileSize: 80,
       },
     ],
-    phases: [
-      { phase: 2, hpThreshold: 70 },
-      { phase: 3, hpThreshold: 35 },
-    ],
   },
 ];

@@ -180,7 +180,6 @@ export interface GameWorld {
     name: string | null;
     hp: number;
     maxHp: number;
-    phase: number;
   }>;
   /** 역경직(Hit Stop) 종료 타임스탬프 */
   hitStopUntil: number;
