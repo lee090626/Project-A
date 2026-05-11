@@ -1,5 +1,6 @@
 import { PlayerStats, Position } from '@/shared/types/game';
 import { SPAWN_RULE_VERSION } from '@/shared/config/circleData';
+import { createInitialGuideQuestState } from '@/shared/config/guideQuestData';
 import {
   BASE_PLAYER_MAX_HP,
   BASE_PLAYER_MOVE_SPEED,
@@ -110,6 +111,7 @@ export const createInitialPlayer = (seed: number): Player => ({
     unlockedMasteryPerks: [],
     bossRespawnTimers: {},
     collectionHistory: {},
+    guideQuest: createInitialGuideQuestState(),
   },
   pos: { x: 15, y: 8 }, // 보스 센터(x=15) 근처에서 시작
   velocity: { x: 0, y: 0 },

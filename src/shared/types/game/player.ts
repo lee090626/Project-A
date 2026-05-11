@@ -26,6 +26,22 @@ export type Inventory = {
 };
 
 /**
+ * 초반 가이드 퀘스트 진행 상태입니다.
+ */
+export interface GuideQuestState {
+  /** 현재 진행 중인 목표 ID */
+  activeId: string | null;
+  /** 완료한 목표 ID 목록 */
+  completedIds: string[];
+  /** 보상을 수령한 목표 ID 목록 */
+  claimedRewardIds: string[];
+  /** 목표별 누적 진행도 */
+  counters: Record<string, number>;
+  /** 기존 진행도와 신규 증가분을 구분하기 위한 관측값 */
+  observed: Record<string, number | boolean>;
+}
+
+/**
  * 플레이어의 전체적인 통계 및 진행 상태를 저장합니다.
  */
 export interface PlayerStats {
@@ -82,6 +98,8 @@ export interface PlayerStats {
   discoveredMinerals: string[];
   /** 조우한 보스 ID 목록 */
   encounteredBossIds: string[];
+  /** 처치한 몬스터 ID 기록 */
+  killedMonsterIds?: string[];
   /** 보스별 재생성 가능 시간 (타임스탬프) */
   bossRespawnTimers: Record<string, number>;
   /** 현재 탐험 중인 차원 번호 */
@@ -106,6 +124,8 @@ export interface PlayerStats {
   activeEffects?: ActiveEffect[];
   /** [튜토리얼] 이미 트리거된 가이드 ID 목록 */
   tutorialFlags?: Record<string, boolean>;
+  /** [가이드 퀘스트] 초반 목표 체인 진행 상태 */
+  guideQuest?: GuideQuestState;
 
   /** [Type Safety Bridge] 동적 필드 참조 허용 */
   [key: string]: any;

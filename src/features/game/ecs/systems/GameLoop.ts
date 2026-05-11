@@ -11,6 +11,7 @@ import { effectSystem } from '@/features/game/ecs/systems/effect';
 import { renderSystem } from '@/features/game/ecs/systems/renderSystem';
 import { statusSystem } from '@/features/game/ecs/systems/status';
 import { tutorialSystem } from '@/features/game/ecs/systems/tutorialSystem';
+import { guideQuestSystem } from '@/features/game/ecs/systems/guideQuestSystem';
 import { bossBehaviorSystem } from '@/features/game/ecs/systems/boss';
 import { projectileSystem } from '@/features/game/ecs/systems/combat/projectileSystem';
 import { statsSyncSystem } from '@/features/game/ecs/systems/statsSyncSystem';
@@ -43,6 +44,7 @@ type PerfSection =
   | 'combat'
   | 'effect'
   | 'tutorial'
+  | 'guideQuest'
   | 'render'
   | 'uiSync'
   | 'renderSync'
@@ -72,6 +74,7 @@ const PERF_SECTIONS: PerfSection[] = [
   'combat',
   'effect',
   'tutorial',
+  'guideQuest',
   'render',
   'uiSync',
   'renderSync',
@@ -316,6 +319,7 @@ export class GameLoop {
         this.samplePerf('combat', () => combatSystem(this.world, deltaTime, now));
         this.samplePerf('effect', () => effectSystem(this.world, deltaTime));
         this.samplePerf('tutorial', () => tutorialSystem(this.world));
+        this.samplePerf('guideQuest', () => guideQuestSystem(this.world));
       } else {
         // 역경직 중에도 효과 시스템(이펙트 가시성)은 업데이트할 수도 있으나, 
         // 완벽한 멈춤을 위해 일단 모든 로직 시뮬레이션을 건너뜁니다.

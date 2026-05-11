@@ -2,6 +2,7 @@ import { PlayerStats, Position, Inventory } from '../types/game';
 import { DRILLING_SECRET_KEY } from '../config/constants';
 import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
 import { EFFECT_DATA } from '../config/effectData';
+import { C2_GUIDE_QUEST_ID_SET } from '../config/guideQuestData';
 import { gameDB } from './db';
 
 /**
@@ -166,6 +167,31 @@ function normalizeClearedCircleIds(stats: PlayerStats): void {
 }
 
 /**
+ * 저장된 가이드 퀘스트 상태의 배열/객체 형태를 보정합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function normalizeGuideQuest(stats: PlayerStats): void {
+  if (!stats.guideQuest) return;
+
+  const guideQuest = stats.guideQuest;
+  guideQuest.completedIds = Array.isArray(guideQuest.completedIds)
+    ? guideQuest.completedIds.filter((id) => C2_GUIDE_QUEST_ID_SET.has(id))
+    : [];
+  guideQuest.claimedRewardIds = Array.isArray(guideQuest.claimedRewardIds)
+    ? guideQuest.claimedRewardIds.filter((id) => C2_GUIDE_QUEST_ID_SET.has(id))
+    : [];
+  guideQuest.counters =
+    guideQuest.counters && typeof guideQuest.counters === 'object' ? guideQuest.counters : {};
+  guideQuest.observed =
+    guideQuest.observed && typeof guideQuest.observed === 'object' ? guideQuest.observed : {};
+
+  if (guideQuest.activeId && !C2_GUIDE_QUEST_ID_SET.has(guideQuest.activeId)) {
+    guideQuest.activeId = null;
+  }
+}
+
+/**
  * 난독화된 저장 데이터를 다시 읽기 가능한 JSON 문자열로 복구합니다.
  * @param encoded 난독화된 Base64 문자열
  * @returns 복구된 원본 JSON 문자열
@@ -263,6 +289,7 @@ export const saveManager = {
         normalizeCollectibleMineralProgress(s as PlayerStats);
         normalizeClearedCircleIds(s as PlayerStats);
         normalizeEffectStacks(s as PlayerStats);
+        normalizeGuideQuest(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
         const oldInv = (s.inventory || {}) as any;

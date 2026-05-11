@@ -12,7 +12,7 @@ export { TILE_TYPE_TO_ID, ID_TO_TILE_TYPE } from './game/core';
 export type { Entity, InteractionType, StatusType, ActiveEffect } from './game/entity';
 
 // 플레이어 통계 및 인벤토리
-export type { Inventory, PlayerStats } from './game/player';
+export type { GuideQuestState, Inventory, PlayerStats } from './game/player';
 
 // 장비 시스템
 export type { EquipmentPart, EquipmentStats, Equipment } from './game/equipment';
