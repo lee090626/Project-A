@@ -7,8 +7,17 @@ export type RewardedReviveAdResult =
   | { ok: true }
   | {
       ok: false;
-      reason: 'unavailable' | 'dismissed' | 'not-ready' | 'timeout' | 'error';
+      reason:
+        | 'unavailable'
+        | 'dismissed'
+        | 'not-ready'
+        | 'timeout'
+        | 'error'
+        | 'frequency-capped'
+        | 'invalid';
       message: string;
+      consumesAttempt: boolean;
+      status?: string;
     };
 
 interface RewardedReviveAdCallbacks {
@@ -25,15 +34,6 @@ export function isRewardedReviveAdEnabled(): boolean {
   );
 }
 
-/** Returns whether the Google H5 ad placement API is ready to serve requests. */
-export function isRewardedReviveAdConfigured(): boolean {
-  return (
-    isRewardedReviveAdEnabled() &&
-    window.__drillingGoogleH5AdsReady === true &&
-    typeof window.adBreak === 'function'
-  );
-}
-
 /** Requests a rewarded ad and resolves only after the placement reports a final result. */
 export function requestRewardedReviveAd(
   callbacks: RewardedReviveAdCallbacks = {},
@@ -43,15 +43,17 @@ export function requestRewardedReviveAd(
       ok: false,
       reason: 'unavailable',
       message: 'Rewarded ads are not enabled for this build.',
+      consumesAttempt: false,
     });
   }
 
   const adBreak = window.adBreak;
-  if (window.__drillingGoogleH5AdsReady !== true || typeof adBreak !== 'function') {
+  if (!isRewardedReviveAdEnabled() || typeof adBreak !== 'function') {
     return Promise.resolve({
       ok: false,
       reason: 'not-ready',
-      message: 'Rewarded ads are still loading. Try normal respawn.',
+      message: 'Rewarded ads are not initialized yet. Try again in a moment.',
+      consumesAttempt: false,
     });
   }
 
@@ -74,7 +76,8 @@ export function requestRewardedReviveAd(
       finish({
         ok: false,
         reason: 'timeout',
-        message: 'Rewarded ad request timed out. Try normal respawn.',
+        message: 'Rewarded ad request timed out. Check ad blocker or try again.',
+        consumesAttempt: false,
       });
     }, AD_REQUEST_TIMEOUT_MS);
 
@@ -101,16 +104,12 @@ export function requestRewardedReviveAd(
             ok: false,
             reason: 'dismissed',
             message: 'Ad was closed before completion. Try normal respawn.',
+            consumesAttempt: true,
           });
         },
         adBreakDone: (placementInfo) => {
           if (settled) return;
-          const status = placementInfo?.breakStatus;
-          finish({
-            ok: false,
-            reason: status ? 'unavailable' : 'not-ready',
-            message: 'No rewarded ad is available. Try normal respawn.',
-          });
+          finish(resolveRewardedReviveAdBreakStatus(placementInfo?.breakStatus));
         },
       });
     } catch (error) {
@@ -118,7 +117,89 @@ export function requestRewardedReviveAd(
         ok: false,
         reason: 'error',
         message: 'Rewarded ad failed to start. Try normal respawn.',
+        consumesAttempt: true,
       });
     }
   });
+}
+
+/** Converts Google's placement status into player-facing revive behavior. */
+function resolveRewardedReviveAdBreakStatus(status?: string): RewardedReviveAdResult {
+  switch (status) {
+    case 'viewed':
+      return { ok: true };
+    case 'dismissed':
+      return {
+        ok: false,
+        reason: 'dismissed',
+        message: 'Ad was closed before completion. Try normal respawn.',
+        consumesAttempt: true,
+        status,
+      };
+    case 'notReady':
+      return {
+        ok: false,
+        reason: 'not-ready',
+        message: 'Ad Placement API is not initialized yet. Try again in a moment.',
+        consumesAttempt: false,
+        status,
+      };
+    case 'noAdPreloaded':
+      return {
+        ok: false,
+        reason: 'unavailable',
+        message: 'Rewarded ad is not preloaded yet. Try again in a moment.',
+        consumesAttempt: false,
+        status,
+      };
+    case 'frequencyCapped':
+      return {
+        ok: false,
+        reason: 'frequency-capped',
+        message: 'Rewarded ad is frequency capped. Use normal respawn this time.',
+        consumesAttempt: true,
+        status,
+      };
+    case 'timeout':
+      return {
+        ok: false,
+        reason: 'timeout',
+        message: 'Ad Placement API timed out. Check ad blocker or try again.',
+        consumesAttempt: false,
+        status,
+      };
+    case 'invalid':
+      return {
+        ok: false,
+        reason: 'invalid',
+        message: 'Rewarded ad placement was rejected. Use normal respawn this time.',
+        consumesAttempt: true,
+        status,
+      };
+    case 'error':
+      return {
+        ok: false,
+        reason: 'error',
+        message: 'Rewarded ad failed in the browser. Try normal respawn.',
+        consumesAttempt: true,
+        status,
+      };
+    case 'ignored':
+    case 'other':
+      return {
+        ok: false,
+        reason: 'unavailable',
+        message: 'No rewarded ad is available right now. Try again in a moment.',
+        consumesAttempt: false,
+        status,
+      };
+    default:
+      return {
+        ok: false,
+        reason: 'unavailable',
+        message: 'No rewarded ad is available right now. Try normal respawn.',
+        consumesAttempt: false,
+        status,
+      };
+  }
 }

@@ -39,15 +39,19 @@ const InteractionLayer = ({
     if (isReviveAdLoading || reviveAdAttempted) return;
 
     setIsReviveAdLoading(true);
-    setReviveAdAttempted(true);
     setReviveAdMessage(null);
 
     const result = await requestRewardedReviveAd();
     setIsReviveAdLoading(false);
 
     if (result.ok) {
+      setReviveAdAttempted(true);
       handleRewardRevive();
       return;
+    }
+
+    if (result.consumesAttempt) {
+      setReviveAdAttempted(true);
     }
 
     setReviveAdMessage(result.message);
