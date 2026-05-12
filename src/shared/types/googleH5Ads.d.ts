@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface Window {
+    __drillingGoogleH5AdsEnabled?: boolean;
     __drillingGoogleH5AdsReady?: boolean;
     adsbygoogle?: unknown[];
     adBreak?: (options: GoogleH5AdBreakOptions) => void;

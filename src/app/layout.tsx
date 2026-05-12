@@ -10,8 +10,9 @@ import './globals.css';
 
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
 const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !isCrazyGamesBuild;
-const googleH5AdsClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-const shouldEnableGoogleH5Ads = !isCrazyGamesBuild && !!googleH5AdsClientId;
+const googleH5AdsClientId =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-8319588891960553';
+const shouldEnableGoogleH5Ads = !isCrazyGamesBuild;
 
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
@@ -139,6 +140,7 @@ export default function RootLayout({
               id="google-h5-ads-bootstrap"
               dangerouslySetInnerHTML={{
                 __html: `
+                  window.__drillingGoogleH5AdsEnabled = true;
                   window.__drillingGoogleH5AdsReady = false;
                   window.adsbygoogle = window.adsbygoogle || [];
                   window.adBreak = window.adBreak || function(options) {

@@ -17,10 +17,18 @@ interface RewardedReviveAdCallbacks {
 }
 
 /** Returns whether rewarded revive ads should be offered for the current build. */
-export function isRewardedReviveAdConfigured(): boolean {
+export function isRewardedReviveAdEnabled(): boolean {
   return (
     !isCrazyGamesBuild &&
     typeof window !== 'undefined' &&
+    window.__drillingGoogleH5AdsEnabled === true
+  );
+}
+
+/** Returns whether the Google H5 ad placement API is ready to serve requests. */
+export function isRewardedReviveAdConfigured(): boolean {
+  return (
+    isRewardedReviveAdEnabled() &&
     window.__drillingGoogleH5AdsReady === true &&
     typeof window.adBreak === 'function'
   );

@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { GameWorld } from '@/entities/world/model';
 import {
-  GOOGLE_H5_ADS_READY_EVENT,
-  isRewardedReviveAdConfigured,
+  isRewardedReviveAdEnabled,
   requestRewardedReviveAd,
 } from '@/shared/lib/googleH5Ads';
 
@@ -25,22 +24,8 @@ const InteractionLayer = ({
   handleRewardRevive,
 }: InteractionLayerProps) => {
   const [isReviveAdLoading, setIsReviveAdLoading] = useState(false);
-  const [isReviveAdReady, setIsReviveAdReady] = useState(false);
   const [reviveAdAttempted, setReviveAdAttempted] = useState(false);
   const [reviveAdMessage, setReviveAdMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    const updateReviveAdReady = () => {
-      setIsReviveAdReady(isRewardedReviveAdConfigured());
-    };
-
-    updateReviveAdReady();
-    window.addEventListener(GOOGLE_H5_ADS_READY_EVENT, updateReviveAdReady);
-
-    return () => {
-      window.removeEventListener(GOOGLE_H5_ADS_READY_EVENT, updateReviveAdReady);
-    };
-  }, []);
 
   useEffect(() => {
     if (currentStats.hp > 0) {
@@ -70,7 +55,7 @@ const InteractionLayer = ({
 
   const canShowRewardedRevive =
     currentStats.hp <= 0 &&
-    isReviveAdReady &&
+    isRewardedReviveAdEnabled() &&
     (!reviveAdAttempted || isReviveAdLoading);
 
   return (
