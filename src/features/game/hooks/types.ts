@@ -40,4 +40,5 @@ export interface UseGameActionsResult {
   handleExportSave: () => void;
   handleImportSave: (code: string) => void;
   handleRespawn: () => void;
+  handleRewardRevive: () => void;
 }

@@ -51,7 +51,7 @@ export default function GameOverlay({
   
   const currentStats = stats || player.stats;
   const { toggleModal, handleClose } = uiActions;
-  const { handleRespawn } = gameActions;
+  const { handleRespawn, handleRewardRevive } = gameActions;
   const openStatus = useCallback(() => toggleModal('isStatusOpen'), [toggleModal]);
   const openInventory = useCallback(() => toggleModal('isInventoryOpen'), [toggleModal]);
   const openEncyclopedia = useCallback(() => toggleModal('isEncyclopediaOpen'), [toggleModal]);
@@ -94,6 +94,7 @@ export default function GameOverlay({
         activeInteractionType={activeInteractionType}
         isMobile={isMobile}
         handleRespawn={handleRespawn}
+        handleRewardRevive={handleRewardRevive}
       />
 
       {/* 5. 첫 실행 온보딩 레이어 */}

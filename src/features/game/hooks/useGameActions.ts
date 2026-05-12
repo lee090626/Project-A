@@ -167,5 +167,9 @@ export const useGameActions = (
       sendToWorker('ACTION', { action: 'respawn' });
       updateUi();
     }, [sendToWorker, updateUi]),
+    handleRewardRevive: useCallback(() => {
+      sendToWorker('ACTION', { action: 'rewardRevive' });
+      updateUi();
+    }, [sendToWorker, updateUi]),
   };
 };

@@ -27,6 +27,16 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       break;
     }
 
+    case 'rewardRevive': {
+      stats.hp = stats.maxHp;
+      world.environmentalForce = { vx: 0, vy: 0 };
+      world.shake = 0;
+
+      console.log('[Worker] Player revived at current position through rewarded ad.');
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
+      break;
+    }
+
     case 'selectCheckpoint': {
       if (!Array.isArray(stats.unlockedWaypoints)) {
         stats.unlockedWaypoints = [0];

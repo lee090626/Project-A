@@ -9,6 +9,8 @@ import './globals.css';
 
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
 const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !isCrazyGamesBuild;
+const googleH5AdsClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+const shouldEnableGoogleH5Ads = !isCrazyGamesBuild && !!googleH5AdsClientId;
 
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
@@ -128,6 +130,32 @@ export default function RootLayout({
             id="crazygames-sdk"
             src="https://sdk.crazygames.com/crazygames-sdk-v3.js"
           />
+        )}
+
+        {shouldEnableGoogleH5Ads && (
+          <>
+            <script
+              id="google-h5-ads-bootstrap"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.adsbygoogle = window.adsbygoogle || [];
+                  window.adBreak = window.adBreak || function(options) {
+                    window.adsbygoogle.push(options);
+                  };
+                  window.adConfig = window.adConfig || function(options) {
+                    window.adsbygoogle.push(options);
+                  };
+                  window.adConfig({ preloadAdBreaks: 'on', sound: 'on' });
+                `,
+              }}
+            />
+            <script
+              async
+              data-ad-client={googleH5AdsClientId}
+              data-ad-frequency-hint="30s"
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+            />
+          </>
         )}
       </head>
       <body
