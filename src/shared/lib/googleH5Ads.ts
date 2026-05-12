@@ -1,5 +1,7 @@
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
-const AD_REQUEST_TIMEOUT_MS = 120000;
+const AD_REQUEST_TIMEOUT_MS = 10000;
+
+export const GOOGLE_H5_ADS_READY_EVENT = 'drilling-google-h5-ads-ready';
 
 export type RewardedReviveAdResult =
   | { ok: true }
@@ -16,14 +18,19 @@ interface RewardedReviveAdCallbacks {
 
 /** Returns whether rewarded revive ads should be offered for the current build. */
 export function isRewardedReviveAdConfigured(): boolean {
-  return !isCrazyGamesBuild && typeof window !== 'undefined' && typeof window.adBreak === 'function';
+  return (
+    !isCrazyGamesBuild &&
+    typeof window !== 'undefined' &&
+    window.__drillingGoogleH5AdsReady === true &&
+    typeof window.adBreak === 'function'
+  );
 }
 
 /** Requests a rewarded ad and resolves only after the placement reports a final result. */
 export function requestRewardedReviveAd(
   callbacks: RewardedReviveAdCallbacks = {},
 ): Promise<RewardedReviveAdResult> {
-  if (!isRewardedReviveAdConfigured() || typeof window === 'undefined') {
+  if (isCrazyGamesBuild || typeof window === 'undefined') {
     return Promise.resolve({
       ok: false,
       reason: 'unavailable',
@@ -32,7 +39,7 @@ export function requestRewardedReviveAd(
   }
 
   const adBreak = window.adBreak;
-  if (typeof adBreak !== 'function') {
+  if (window.__drillingGoogleH5AdsReady !== true || typeof adBreak !== 'function') {
     return Promise.resolve({
       ok: false,
       reason: 'not-ready',

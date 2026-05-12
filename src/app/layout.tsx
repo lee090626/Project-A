@@ -5,6 +5,7 @@ import atlasManifest from '../../public/assets/manifest.json';
 import { CORE_DATA_FILES } from '@/shared/config/coreDataFiles';
 import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
 import { getBasePath, withBasePath } from '@/shared/lib/basePath';
+import { GOOGLE_H5_ADS_READY_EVENT } from '@/shared/lib/googleH5Ads';
 import './globals.css';
 
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
@@ -138,6 +139,7 @@ export default function RootLayout({
               id="google-h5-ads-bootstrap"
               dangerouslySetInnerHTML={{
                 __html: `
+                  window.__drillingGoogleH5AdsReady = false;
                   window.adsbygoogle = window.adsbygoogle || [];
                   window.adBreak = window.adBreak || function(options) {
                     window.adsbygoogle.push(options);
@@ -145,7 +147,14 @@ export default function RootLayout({
                   window.adConfig = window.adConfig || function(options) {
                     window.adsbygoogle.push(options);
                   };
-                  window.adConfig({ preloadAdBreaks: 'on', sound: 'on' });
+                  window.adConfig({
+                    preloadAdBreaks: 'on',
+                    sound: 'on',
+                    onReady: function() {
+                      window.__drillingGoogleH5AdsReady = true;
+                      window.dispatchEvent(new Event('${GOOGLE_H5_ADS_READY_EVENT}'));
+                    }
+                  });
                 `,
               }}
             />

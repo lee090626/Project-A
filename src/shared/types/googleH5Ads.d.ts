@@ -2,6 +2,7 @@ export {};
 
 declare global {
   interface Window {
+    __drillingGoogleH5AdsReady?: boolean;
     adsbygoogle?: unknown[];
     adBreak?: (options: GoogleH5AdBreakOptions) => void;
     adConfig?: (options: GoogleH5AdConfigOptions) => void;
@@ -10,6 +11,7 @@ declare global {
   interface GoogleH5AdConfigOptions {
     preloadAdBreaks?: 'on' | 'auto';
     sound?: 'on' | 'off';
+    onReady?: () => void;
   }
 
   interface GoogleH5AdBreakPlacementInfo {
