@@ -69,6 +69,8 @@ npm run dev
 
 프로젝트 문서는 [docs/README.md](docs/README.md)를 기준으로 단계적으로 정리합니다. 아직 작성되지 않은 문서는 링크하지 않습니다.
 
+- [용어 사전](docs/GLOSSARY.md)
+
 개발 에이전트 작업 규칙은 [.agents/rules/08-agents.md](.agents/rules/08-agents.md)를 우선 기준으로 합니다.
 
 ---
