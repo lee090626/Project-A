@@ -43,9 +43,6 @@ const InteractionLayer = ({
 
     let isCancelled = false;
 
-    setReviveAdState('checking');
-    setReviveAdMessage(null);
-
     import('@/shared/lib/googleH5Ads').then(
       ({ isRewardedReviveAdEnabled, startRewardedRevivePlacement }) => {
         if (isCancelled) return;
@@ -55,6 +52,8 @@ const InteractionLayer = ({
           return;
         }
 
+        setReviveAdState('checking');
+        setReviveAdMessage(null);
         revivePlacementRef.current = startRewardedRevivePlacement({
           onRewardAvailable: (showAd) => {
             showRewardedAdRef.current = showAd;
@@ -77,7 +76,12 @@ const InteractionLayer = ({
           },
         });
       },
-    );
+    ).catch(() => {
+      if (isCancelled) return;
+
+      setReviveAdState('finished');
+      setReviveAdMessage('Rewarded ads failed to load. Use normal respawn this time.');
+    });
 
     return () => {
       isCancelled = true;

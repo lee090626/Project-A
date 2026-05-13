@@ -13,7 +13,8 @@ const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !is
 const googleH5AdsClientId =
   process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-8319588891960553';
 const shouldEnableGoogleH5Ads = !isCrazyGamesBuild;
-const shouldEnableGoogleH5AdTestMode = process.env.NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE === 'on';
+const shouldEnableGoogleH5AdTestMode =
+  process.env.NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE === 'on' || process.env.NODE_ENV !== 'production';
 
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
@@ -135,62 +136,65 @@ export default function RootLayout({
           />
         )}
 
-        {shouldEnableGoogleH5Ads && (
-          <>
-            <script
-              id="google-h5-ads-bootstrap"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.__drillingGoogleH5AdsEnabled = true;
-                  window.__drillingGoogleH5AdsReady = false;
-                  window.__drillingGoogleH5AdsDebug =
-                    /[?&]h5adsDebug=1(?:&|$)/.test(window.location.search) ||
-                    window.localStorage.getItem('drilling-h5-ads-debug') === '1';
-                  window.__drillingGoogleH5AdsEvents = window.__drillingGoogleH5AdsEvents || [];
-                  window.__recordDrillingGoogleH5Ads = function(event, payload) {
-                    var entry = { event: event, payload: payload, at: Date.now() };
-                    window.__drillingGoogleH5AdsEvents.push(entry);
-                    if (window.__drillingGoogleH5AdsEvents.length > 80) {
-                      window.__drillingGoogleH5AdsEvents.shift();
-                    }
-                    if (window.__drillingGoogleH5AdsDebug) {
-                      console.info('[Google H5 Ads]', event, payload || '');
-                    }
-                  };
-                  window.__recordDrillingGoogleH5Ads('bootstrap', { testMode: ${JSON.stringify(shouldEnableGoogleH5AdTestMode)} });
-                  window.adsbygoogle = window.adsbygoogle || [];
-                  window.adBreak = window.adBreak || function(options) {
-                    window.adsbygoogle.push(options);
-                  };
-                  window.adConfig = window.adConfig || function(options) {
-                    window.adsbygoogle.push(options);
-                  };
-                  window.adConfig({
-                    preloadAdBreaks: 'on',
-                    sound: 'on',
-                    onReady: function() {
-                      window.__drillingGoogleH5AdsReady = true;
-                      window.__recordDrillingGoogleH5Ads('onReady');
-                      window.dispatchEvent(new Event('${GOOGLE_H5_ADS_READY_EVENT}'));
-                    }
-                  });
-                `,
-              }}
-            />
-            <script
-              async
-              data-ad-client={googleH5AdsClientId}
-              data-ad-frequency-hint="30s"
-              data-adbreak-test={shouldEnableGoogleH5AdTestMode ? 'on' : undefined}
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-            />
-          </>
-        )}
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
       >
         <div id="drilling-game-root">{children}</div>
+        {shouldEnableGoogleH5Ads && (
+          <>
+            <Script id="google-h5-ads-bootstrap" strategy="beforeInteractive">
+              {`
+                window.__drillingGoogleH5AdsEnabled = true;
+                window.__drillingGoogleH5AdsReady = false;
+                window.__drillingGoogleH5AdsDebug =
+                  /[?&]h5adsDebug=1(?:&|$)/.test(window.location.search) ||
+                  window.localStorage.getItem('drilling-h5-ads-debug') === '1';
+                window.__drillingGoogleH5AdsEvents = window.__drillingGoogleH5AdsEvents || [];
+                window.__recordDrillingGoogleH5Ads = function(event, payload) {
+                  var entry = { event: event, payload: payload, at: Date.now() };
+                  window.__drillingGoogleH5AdsEvents.push(entry);
+                  if (window.__drillingGoogleH5AdsEvents.length > 80) {
+                    window.__drillingGoogleH5AdsEvents.shift();
+                  }
+                  if (window.__drillingGoogleH5AdsDebug) {
+                    console.info('[Google H5 Ads]', event, payload || '');
+                  }
+                };
+                window.__recordDrillingGoogleH5Ads('bootstrap', { testMode: ${JSON.stringify(shouldEnableGoogleH5AdTestMode)} });
+                window.adsbygoogle = window.adsbygoogle || [];
+                window.adBreak = window.adBreak || function(options) {
+                  window.adsbygoogle.push(options);
+                };
+                window.adConfig = window.adConfig || function(options) {
+                  window.adsbygoogle.push(options);
+                };
+                window.adConfig({
+                  preloadAdBreaks: 'on',
+                  sound: 'on',
+                  onReady: function() {
+                    window.__drillingGoogleH5AdsReady = true;
+                    window.__recordDrillingGoogleH5Ads('onReady');
+                    window.dispatchEvent(new Event('${GOOGLE_H5_ADS_READY_EVENT}'));
+                  }
+                });
+              `}
+            </Script>
+            <Script id="google-h5-ads-sdk-loader" strategy="afterInteractive">
+              {`
+                if (!document.querySelector('script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"][data-ad-client=${JSON.stringify(googleH5AdsClientId)}]')) {
+                  var googleH5AdsScript = document.createElement('script');
+                  googleH5AdsScript.async = true;
+                  googleH5AdsScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+                  googleH5AdsScript.setAttribute('data-ad-client', ${JSON.stringify(googleH5AdsClientId)});
+                  googleH5AdsScript.setAttribute('data-ad-frequency-hint', '30s');
+                  ${shouldEnableGoogleH5AdTestMode ? "googleH5AdsScript.setAttribute('data-adbreak-test', 'on');" : ''}
+                  document.head.appendChild(googleH5AdsScript);
+                }
+              `}
+            </Script>
+          </>
+        )}
         {shouldRegisterServiceWorker ? (
           <Script id="register-sw" strategy="afterInteractive">
             {`
