@@ -115,7 +115,7 @@ export class GameLoop {
   private readonly STATS_SYNC_FALLBACK_INTERVAL: number = 2000; // 2초 안전망
   private readonly SPAWN_SYSTEM_INTERVAL: number = 100; // 몬스터/보스 스폰 판정은 10Hz로 제한
   public readonly syncInterval: number = 66.66; // HUD interpolation sync target (~15Hz)
-  private readonly perfSamplerEnabled = process.env.NODE_ENV !== 'production';
+  private readonly perfSamplerEnabled = process.env.NEXT_PUBLIC_GAME_LOOP_PERF_LOGS === 'on';
   private readonly perfSampleInterval: number = 1000;
   private perfSampleStartTime: number = 0;
   private perfFrameCount: number = 0;
