@@ -14,7 +14,6 @@ import {
   createInitialMasteryState,
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
-import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { getEffectStackByEffectId } from '@/shared/lib/effectItemUtils';
 import { modifierManager } from './ModifierManager';
 import { calculateCriticalStats, calculateMiningSpeedStats } from './playerCombatStats';
@@ -80,8 +79,7 @@ export const calculateMiningDamage = (
     createInitialMasteryState(targetTileType);
   const masteryMult = getMasteryMultiplier(tileMastery.level);
 
-  // 3. 룬 보너스 및 치명타 계산
-  const runeAttackBonus = getTotalRuneStat(stats, 'power');
+  // 3. 치명타 계산
   const { critRate, critDamage } = calculateCriticalStats(stats);
 
   // stats.power는 이미 statsSyncSystem에서 (기본20 + 장비파워)가 합산된 결과입니다.
@@ -92,8 +90,7 @@ export const calculateMiningDamage = (
   // --- 최종 위력 계산 ---
   const basePower =
     stats.power +
-    tileMasteryBonus +
-    Math.floor(runeAttackBonus);
+    tileMasteryBonus;
 
   const totalPowerMult = 1 + masteryBonuses.miningPowerMult;
 

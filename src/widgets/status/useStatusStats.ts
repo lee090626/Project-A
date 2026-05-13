@@ -14,7 +14,6 @@ import {
 import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
-import { getTotalRuneStat } from '@/shared/lib/runeUtils';
 import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 
 export interface StatBreakdownItem {
@@ -42,12 +41,6 @@ export interface StatusStatsResult {
   finalMoveSpeedMult: number;
   finalLuck: number;
 
-  // Rune bonuses (for display)
-  runePowerBonus: number;
-  runeSpeedBonus: number;
-  runeLuck: number;
-  runeMoveSpeed: number;
-
   // Breakdowns for tooltip
   statBreakdowns: Record<string, StatBreakdownItem[]>;
 }
@@ -69,13 +62,9 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const effectBonuses = calculateEffectBonuses(stats);
     const masteryBonuses = getMasteryBonuses(stats);
     const drillBasePower = equipped.drill?.stats.power || 0;
-    const runePowerBonus = Math.floor(getTotalRuneStat(stats, 'power'));
-    const runeSpeedBonus = getTotalRuneStat(stats, 'miningSpeed');
-    const runeLuck = getTotalRuneStat(stats, 'luck');
-    const runeMoveSpeed = getTotalRuneStat(stats, 'moveSpeed');
 
     // 4. 최종 스탯 도출 (엔진 동기화 수치와 일치 시킴)
-    const finalPower = stats.power + runePowerBonus;
+    const finalPower = stats.power;
     const finalDefense = (stats.defense || 0);
     const finalMaxHp = stats.maxHp;
     const { finalLuck } = calculateLuckStats(stats);
@@ -93,7 +82,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'Base Hero Power', value: BASE_PLAYER_POWER },
         { label: `Drill (${equipped.drill?.name || 'Hand'})`, value: drillBasePower },
         { label: 'Mastery Perks', value: `+${masteryBonuses.miningPower}`, color: 'text-emerald-500' },
-        { label: 'Skill Rune', value: `+${runePowerBonus}`, color: 'text-purple-400' },
         { label: 'Effect', value: `+${effectBonuses?.power || 0}`, color: 'text-orange-400' },
       ],
       defense: [
@@ -112,7 +100,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
       miningSpeed: [
         { label: 'System Baseline', value: `${miningSpeedStats.baseInterval}ms` },
         { label: 'Mastery Speed', value: `-${(miningSpeedStats.masterySpeedBonusMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
-        { label: 'Rune Reduction', value: `-${(runeSpeedBonus * 100).toFixed(0)}%`, color: 'text-purple-400' },
         { label: 'Effect', value: `-${(miningSpeedStats.effectSpeedBonus * 100).toFixed(0)}%`, color: 'text-orange-400' },
         { label: 'Modifier Effect', value: `-${(miningSpeedStats.modifierSpeedBonus * 100).toFixed(0)}%`, color: 'text-cyan-400' },
       ],
@@ -134,10 +121,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
       finalMiningInterval,
       finalMoveSpeedMult,
       finalLuck,
-      runePowerBonus,
-      runeSpeedBonus,
-      runeLuck,
-      runeMoveSpeed,
       statBreakdowns,
     };
   }, [stats]);

@@ -7,20 +7,19 @@ import StatTooltip from './StatTooltip';
 // 새롭게 분리된 하위 컴포넌트들
 import StatSection from './components/StatSection';
 import VitalityRelicSection from './components/VitalityRelicSection';
-import GearRuneSection from './components/GearRuneSection';
+import EquipmentSection from './components/EquipmentSection';
 import MasterySection from './components/MasterySection';
 
 interface StatusWindowProps {
   stats: PlayerStats;
   onClose: () => void;
-  onUnequipRune?: (drillId: string, slotIndex: number) => void;
 }
 
 /**
  * 플레이어의 상세 정보를 표시하는 상태창 컴포넌트입니다.
  * 각 섹션은 도메인별로 분리된 하위 컴포넌트로 구성됩니다.
  */
-function StatusWindow({ stats, onClose, onUnequipRune }: StatusWindowProps) {
+function StatusWindow({ stats, onClose }: StatusWindowProps) {
   const [hoveredTooltip, setHoveredTooltip] = React.useState<{
     type: 'perk' | 'stat';
     id: string;
@@ -114,10 +113,8 @@ function StatusWindow({ stats, onClose, onUnequipRune }: StatusWindowProps) {
           />
 
           {/* COLUMN 3: EQUIPPED HARDWARE (4-SLOT GRID) */}
-          <GearRuneSection 
+          <EquipmentSection 
             equipped={equipped}
-            stats={stats}
-            onUnequipRune={onUnequipRune}
           />
         </div>
 

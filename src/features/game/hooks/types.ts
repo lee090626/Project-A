@@ -30,11 +30,7 @@ export interface UseGameActionsResult {
   handleCraft: (req: CraftRequirements, res: any) => void;
   handleSynthesizeEffect: (effectId: string) => void;
   handleSell: (resource: string, amount: number, price: number) => void;
-  handleSummonRune: (tier: number, count?: number) => void;
-  handleSynthesizeRunes: () => void;
   handleEquipEquipment: (id: string, part: string) => void;
-  handleEquipRune: (runeInstanceId: string, slotIndex: number) => void;
-  handleUnequipRune: (drillId: string, slotIndex: number) => void;
   handleSelectCheckpoint: (depth: number) => void;
   handleResetGame: () => void;
   handleExportSave: () => void;

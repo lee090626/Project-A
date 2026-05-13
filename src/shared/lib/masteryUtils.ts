@@ -1,5 +1,4 @@
 import { MasteryState, PlayerStats } from '../types/game';
-import { EQUIPMENTS } from '../config/equipmentData';
 import { MASTERY_PERKS } from '../config/masteryPerks';
 
 /**
@@ -80,30 +79,13 @@ export const getMasteryBonuses = (stats: PlayerStats) => {
 };
 
 /**
- * 현재 숙련도 레벨에서 사용 가능한 스킬젬 슬롯 수 계산
- * 기본 0개이며, 특정 레벨마다 하나씩 해금되는 로직 (예: 1, 5, 10...)
- */
-export const getUnlockedSlotCount = (level: number, maxSlots: number = 0): number => {
-  if (maxSlots <= 0) return 0;
-
-  // 예시: 1레벨(1개), 5레벨(2개), 10레벨(3개) ...
-  let unlocked = 0;
-  if (level >= 1) unlocked = 1;
-  if (level >= 5) unlocked = 2;
-  if (level >= 10) unlocked = 3;
-
-  return Math.min(unlocked, maxSlots);
-};
-
-/**
  * 특정 장비나 타일의 초기 숙련도 상태 생성
  */
-export const createInitialMasteryState = (id: string, maxSlots: number = 0): MasteryState => {
+export const createInitialMasteryState = (id: string): MasteryState => {
   return {
     id,
     exp: 0,
     level: 1,
-    slottedRunes: maxSlots > 0 ? new Array(maxSlots).fill(null) : undefined,
   };
 };
 
@@ -111,7 +93,5 @@ export const createInitialMasteryState = (id: string, maxSlots: number = 0): Mas
  * 특정 장비의 초기 상태 생성 (기존 호환성 유지를 위해 래핑)
  */
 export const createInitialEquipmentState = (equipmentId: string): MasteryState => {
-  const equipment = EQUIPMENTS[equipmentId];
-  const maxSlots = equipment?.maxSkillSlots || 0;
-  return createInitialMasteryState(equipmentId, maxSlots);
+  return createInitialMasteryState(equipmentId);
 };

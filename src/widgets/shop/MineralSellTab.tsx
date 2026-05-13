@@ -1,8 +1,15 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import { RESOURCE_PRICES } from './useGachaAnimation';
 import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+
+const RESOURCE_PRICES: Record<string, number> = MINERALS.reduce(
+  (acc, mineral) => {
+    acc[mineral.key] = mineral.basePrice;
+    return acc;
+  },
+  {} as Record<string, number>,
+);
 
 interface MineralSellTabProps {
   stats: PlayerStats;

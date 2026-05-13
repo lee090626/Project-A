@@ -1,12 +1,7 @@
 import { useCallback } from 'react';
 import { GameWorld } from '@/entities/world/model';
-import { saveManager, SaveData } from '@/shared/lib/saveManager';
-import { CraftRequirements, CraftResult, Rarity } from '@/shared/types/game';
-import { SKILL_RUNES } from '@/shared/config/skillRuneData';
-
-import { createInitialMasteryState } from '@/shared/lib/masteryUtils';
-import { TILE_SIZE } from '@/shared/config/constants';
-import { createFloatingText, createParticles } from '@/shared/lib/effectUtils';
+import { saveManager } from '@/shared/lib/saveManager';
+import { CraftRequirements } from '@/shared/types/game';
 import { SendToWorker, UseGameActionsResult } from './types';
 
 /**
@@ -78,45 +73,6 @@ export const useGameActions = (
     [sendToWorker, updateUi],
   );
 
-  /** 가챠(Summon) 시스템: 랜 스킬룬 획득 */
-  const handleSummonRune = useCallback(
-    (tier: number, count: number = 1) => {
-      sendToWorker('ACTION', {
-        action: 'summonRune',
-        data: { tier, count },
-      });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
-
-  /** 동일 등급 + 동일 종류의 룬 5개를 상위 등급 1개로 확정 합성 */
-  const handleSynthesizeRunes = useCallback(() => {
-    sendToWorker('ACTION', {
-      action: 'synthesizeRunes',
-    });
-    updateUi();
-  }, [sendToWorker, updateUi]);
-
-
-  /** 드릴 슬롯에 스킬룬 장착 */
-  const handleEquipRune = useCallback(
-    (runeInstanceId: string, slotIndex: number) => {
-      sendToWorker('ACTION', { action: 'equipRune', data: { runeInstanceId, slotIndex } });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
-
-  /** 드릴 슬롯에서 스킬룬 해제 */
-  const handleUnequipRune = useCallback(
-    (drillId: string, slotIndex: number) => {
-      sendToWorker('ACTION', { action: 'unequipRune', data: { drillId, slotIndex } });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
-
   /** 웨이포인트를 통한 층 이동 처리 */
   const handleSelectCheckpoint = useCallback(
     (depth: number) => {
@@ -154,11 +110,7 @@ export const useGameActions = (
     handleCraft,
     handleSynthesizeEffect,
     handleSell,
-    handleSummonRune,
-    handleSynthesizeRunes,
     handleEquipEquipment,
-    handleEquipRune,
-    handleUnequipRune,
     handleSelectCheckpoint,
     handleResetGame,
     handleExportSave,

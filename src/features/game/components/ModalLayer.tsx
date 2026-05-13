@@ -24,11 +24,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleCraft,
     handleSynthesizeEffect,
     handleSell,
-    handleSummonRune,
-    handleSynthesizeRunes,
     handleEquipEquipment,
-    handleEquipRune,
-    handleUnequipRune,
     handleSelectCheckpoint,
     handleResetGame,
     handleExportSave,
@@ -45,8 +41,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
             onClose={() => handleClose('isShopOpen')}
             onUpgrade={handleUpgrade}
             onSell={handleSell}
-            onSummonRune={handleSummonRune}
-            onSynthesizeRunes={handleSynthesizeRunes}
           />
         </Overlay>
       )}
@@ -56,7 +50,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
           <StatusWindow
             stats={currentStats}
             onClose={() => handleClose('isStatusOpen')}
-            onUnequipRune={handleUnequipRune}
           />
         </Overlay>
       )}
@@ -67,7 +60,6 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
             stats={currentStats}
             onClose={() => handleClose('isInventoryOpen')}
             onEquip={handleEquipEquipment}
-            onEquipRune={handleEquipRune}
           />
         </Overlay>
       )}

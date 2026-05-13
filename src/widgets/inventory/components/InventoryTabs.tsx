@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type InventoryTab = 'ingredients' | 'equipment' | 'skillrunes' | 'effects';
+export type InventoryTab = 'ingredients' | 'equipment' | 'effects';
 
 interface InventoryTabsProps {
   activeTab: InventoryTab;
@@ -39,16 +39,6 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
         }`}
       >
         Equipment
-      </button>
-      <button
-        onClick={() => onTabChange('skillrunes')}
-        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none ${
-          activeTab === 'skillrunes'
-            ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700'
-            : 'text-zinc-500 hover:text-zinc-300'
-        }`}
-      >
-        Runes
       </button>
     </div>
   );

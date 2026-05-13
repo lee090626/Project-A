@@ -8,7 +8,6 @@ const TABS = [
   { id: 'basics', label: '🕹️ Basics', icon: '⌨️' },
   { id: 'systems', label: '⚙️ Systems', icon: '🛠️' },
   { id: 'minerals', label: '💎 Minerals', icon: '⛏️' },
-  { id: 'runes', label: '🔮 Runes', icon: '✨' },
 ];
 
 const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
@@ -156,65 +155,6 @@ const GuideWindow: React.FC<GuideWindowProps> = ({ onClose }) => {
                 core!
               </p>
             </div>
-          </div>
-        );
-      case 'runes':
-        return (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <section>
-              <h4 className="text-2xl font-black text-white mb-6 flex items-center gap-3">
-                <span className="p-2 bg-purple-500/20 rounded-lg text-purple-400 text-xl">🔮</span>
-                Skill Module System
-              </h4>
-              <div className="bg-zinc-950 p-8 rounded-4xl border border-zinc-900 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <div className="text-9xl">✨</div>
-                </div>
-                <div className="relative z-10">
-                  <h5 className="text-2xl font-black text-white mb-4">Enhance Your Drill</h5>
-                  <p className="text-zinc-400 text-lg leading-relaxed mb-8 font-medium">
-                    As your Mastery Level increases, you will unlock{' '}
-                    <span className="text-purple-400 font-bold underline decoration-purple-400/30">
-                      Rune Slots
-                    </span>{' '}
-                    on your drill.
-                  </p>
-
-                  <ul className="space-y-4">
-                    {[
-                      {
-                        icon: '⚔️',
-                        title: 'Attack Module',
-                        desc: 'Boosts raw mining damage output',
-                      },
-                      { icon: '⚡', title: 'Speed Module', desc: 'Increases the rate of rotation' },
-                      {
-                        icon: '🍀',
-                        title: 'Luck Module',
-                        desc: 'Improves chances of rare mineral drops',
-                      },
-                      {
-                        icon: '🔥',
-                        title: 'Crit Module',
-                        desc: 'Adds critical hit damage to drilling',
-                      },
-                    ].map((mod) => (
-                      <li key={mod.title} className="flex gap-4 items-center">
-                        <div className="w-10 h-10 bg-zinc-900 rounded-lg flex items-center justify-center text-xl border border-zinc-800 shadow-inner">
-                          {mod.icon}
-                        </div>
-                        <div>
-                          <p className="text-white font-black text-sm tracking-tight">
-                            {mod.title}
-                          </p>
-                          <p className="text-zinc-500 text-xs font-medium">{mod.desc}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </section>
           </div>
         );
       default:

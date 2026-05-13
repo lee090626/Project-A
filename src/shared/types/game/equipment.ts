@@ -35,8 +35,6 @@ export interface Equipment {
   stats: EquipmentStats;
   /** 제작 시 필요한 재료 및 비용 */
   price?: { [key: string]: number };
-  /** 장비에 장착 가능한 최대 스킬룬 슬롯 수 */
-  maxSkillSlots?: number;
   /** 장착 시 부여되는 특수 효과 */
   specialEffect?: string;
 }

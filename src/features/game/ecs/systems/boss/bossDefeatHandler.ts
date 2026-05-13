@@ -21,17 +21,6 @@ export const handleBossDefeat = (world: GameWorld, x: number, y: number) => {
     createFloatingText(world, x, y - 40, `Circle ${circleId} Cleared`, '#a855f7');
   }
 
-  // 보스 전용 유니크 룬 지급
-  if (!player.stats.inventoryRunes) {
-    player.stats.inventoryRunes = [];
-  }
-  player.stats.inventoryRunes.push({
-    id: `rune_${Date.now()}_unique`,
-    runeId: 'lucky_charm_rune',
-    rarity: 'Unique',
-  });
-  createFloatingText(world, x, y - 60, 'Unique Skill Rune Acquired!', '#22d3ee');
-
   // [심리스 개편] 포탈 생성을 생략하고 보상 지급 및 연출에 집중합니다.
   createFloatingText(world, x, y - 20, `Circle ${circleId} Boss Defeated!`, '#a855f7');
   messageBus.emit('game:boss_defeated', { circleId, x, y });

@@ -21,7 +21,6 @@ import { Equipment } from '../types/game';
  * @property {number} stats.maxHp - 최대 체력 (갑옷, 신발)
  * @property {number} stats.moveSpeed - 이동 속도 (신발)
  * @property {Object} price - 제작/구매 비용
- * @property {number} maxSkillSlots - 최대 스킬 슬롯 수 (드릴 전용)
  */
 export const EQUIPMENTS: Record<string, any> = {
   // === Circle 2 — Lust (색욕) ===
@@ -35,7 +34,6 @@ export const EQUIPMENTS: Record<string, any> = {
     image: 'CrimsonFangDrill',
     stats: { power: 25 },
     price: { crimsonstone: 10, galestone: 5, goldCoins: 500 },
-    maxSkillSlots: 1
   },
   'crimson_veil': {
     id: 'crimson_veil',
@@ -82,7 +80,6 @@ export const EQUIPMENTS: Record<string, any> = {
     image: 'VoidCrusher',
     stats: { power: 40 },
     price: { moldstone: 24, sludgestone: 8, goldCoins: 3000 },
-    maxSkillSlots: 2
   },
   'void_mask': {
     id: 'void_mask',
@@ -128,7 +125,6 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🔱',
     stats: { power: 55 },
     price: { midasite: 50, goldCoins: 10000 },
-    maxSkillSlots: 3
   },
   'crown_helm': {
     id: 'crown_helm',
@@ -171,7 +167,6 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🔥',
     stats: { power: 90 },
     price: { furystone: 80, goldCoins: 25000 },
-    maxSkillSlots: 3
   },
   'ember_visor': {
     id: 'ember_visor',
@@ -214,7 +209,6 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🌪️',
     stats: { power: 150 },
     price: { vexite: 150, goldCoins: 80000 },
-    maxSkillSlots: 4
   },
   'ash_cowl': {
     id: 'ash_cowl',

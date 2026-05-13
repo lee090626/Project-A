@@ -145,20 +145,6 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-blue-500/30 transition-colors group">
-              <div className="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/40 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🔮</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-zinc-100">Skill Rune Enchantment</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Your equipped drill can hold mystical magic beyond its physical specs. Insert magic
-                stones into the empty sockets of your equipment through the in-game Skill Rune
-                system. Research hundreds of combinations, such as the 'Fire Rune' that causes an
-                explosion upon killing a monster, or the 'Dash Rune' that boosts your speed, to
-                complete your own unique combat style.
-              </p>
-            </div>
-
             <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-purple-500/30 transition-colors group">
               <div className="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 border border-purple-500/40 group-hover:scale-110 transition-transform">
                 <span className="text-2xl">🐉</span>
@@ -198,7 +184,7 @@ export default function LandingPage() {
               {
                 name: 'Gold',
                 icon: '💰',
-                desc: 'A highly valuable material needed for strong drills and base research. Easily recognizable by its shining glow.',
+                desc: 'A highly valuable material needed for strong drills and late-game crafting. Easily recognizable by its shining glow.',
                 depth: '400m ~ 800m',
               },
               {

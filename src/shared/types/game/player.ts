@@ -1,6 +1,6 @@
 import { TileType } from './core';
 import { MasteryState } from './progress';
-import { SkillRuneItem, SmeltingJob } from './items';
+import { SmeltingJob } from './items';
 import { ActiveEffect } from './entity';
 
 // NOTE: We'll fix these cyclic imports after all files are created and game.ts is updated.
@@ -85,8 +85,6 @@ export interface PlayerStats {
   /** 자원 및 아이템 */
   /** 광물 인벤토리 */
   inventory: Inventory;
-  /** 소지하고 있는 스킬룬 목록 */
-  inventoryRunes: SkillRuneItem[];
   /** 보유 중인 골드 코인 수량 */
   goldCoins: number;
   /** 월드 생성을 위한 맵 시드 번호 */
@@ -110,9 +108,6 @@ export interface PlayerStats {
 
   /** 각 타일 종류별 숙련도 관리 */
   tileMastery: { [tileType: string]: MasteryState };
-
-  /** 해금된 연구(스킬트리) ID 목록 */
-  unlockedResearchIds: string[];
 
   /** 해금된 마스터리 돌파 특성 ID 목록 */
   unlockedMasteryPerks: string[];

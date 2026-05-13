@@ -17,14 +17,14 @@ export type { GuideQuestState, Inventory, PlayerStats } from './game/player';
 // 장비 시스템
 export type { EquipmentPart, EquipmentStats, Equipment } from './game/equipment';
 
-// 아이템 (스킬룬, 드롭템, 제련)
-export type { SkillRune, SkillRuneItem, SmeltingJob, DroppedItem } from './game/items';
+// 아이템 (드롭템, 제련)
+export type { SmeltingJob, DroppedItem } from './game/items';
 
 // 제작 시스템
 export type { CraftRequirements, CraftResult } from './game/crafting';
 
-// 성장 및 연구 (마스터리)
-export type { MasteryState, ResearchEffect, ResearchNode } from './game/progress';
+// 성장 (마스터리)
+export type { MasteryState } from './game/progress';
 
 // UI 및 시각 효과
 export type {

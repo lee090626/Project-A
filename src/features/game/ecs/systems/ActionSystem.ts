@@ -1,7 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { ActionPayload } from '@/shared/types/worker';
 import { handleEconomyAction } from './actions/economyActions';
-import { handleRuneAction } from './actions/runeActions';
 import { handleWorldAction } from './actions/worldActions';
 
 /**
@@ -23,12 +22,6 @@ const actionHandlers: Record<string, ActionHandler> = {
   craft: handleEconomyAction,
   equip: handleWorldAction,
   synthesizeEffect: handleWorldAction,
-
-  // 룬 관련 액션: 소환, 장착, 해제, 합성
-  summonRune: handleRuneAction,
-  equipRune: handleRuneAction,
-  unequipRune: handleRuneAction,
-  synthesizeRunes: handleRuneAction,
 };
 
 /**
@@ -37,16 +30,13 @@ const actionHandlers: Record<string, ActionHandler> = {
  * 
  * @param world - 게임 월드 객체
  * @param payload - 액션 데이터 (action, data 포함)
- * @param payload.action - 실행할 액션 타입 (예: 'upgrade', 'sell', 'summonRune' 등)
+ * @param payload.action - 실행할 액션 타입 (예: 'upgrade', 'sell' 등)
  * @param payload.data - 액션에 필요한 데이터
  * 
  * @example
  * // 강화 액션
  * handlePlayerAction(world, { action: 'upgrade', data: { itemId: 'sword', level: 5 } });
  * 
- * @example
- * // 룬 소환 액션
- * handlePlayerAction(world, { action: 'summonRune', data: { runeType: 'fire' } });
  */
 export function handlePlayerAction(world: GameWorld, payload: ActionPayload) {
   const { action, data } = payload;

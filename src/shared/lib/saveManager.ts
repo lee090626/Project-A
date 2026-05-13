@@ -276,11 +276,9 @@ export const saveManager = {
       if (data.stats) {
         const s = data.stats;
         if (!s.equipmentStates) s.equipmentStates = {};
-        if (!s.unlockedResearchIds) s.unlockedResearchIds = ['root'];
         if (!s.killedMonsterIds) s.killedMonsterIds = [];
         if (!s.refinerySlots) s.refinerySlots = 1;
         if (!s.activeSmeltingJobs) s.activeSmeltingJobs = [];
-        if (!s.inventoryRunes) s.inventoryRunes = [];
         if (!s.tileMastery) s.tileMastery = {};
         if (!s.unlockedMasteryPerks) s.unlockedMasteryPerks = [];
         if (!s.collectionHistory) s.collectionHistory = {};
