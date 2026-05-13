@@ -15,6 +15,8 @@ import {
 } from '@/shared/types/worker';
 import { GameLayers, TextureRegistry } from '@/shared/types/engine';
 
+const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
+
 /**
  * GameEngineInstance class
  * Handles dependency injection and message routing within the worker.
@@ -98,8 +100,10 @@ export class GameEngineInstance {
 
         this.pixiApp.stage.addChild(stage);
 
-        this.lightingFilter = new LightingFilter();
-        stage.filters = [this.lightingFilter];
+        if (!isCrazyGamesBuild) {
+          this.lightingFilter = new LightingFilter();
+          stage.filters = [this.lightingFilter];
+        }
 
         this.layers = { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer };
 
