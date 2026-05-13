@@ -1,43 +1,91 @@
 {
   "frames": {
-    "CritRateRune.png": {
+    "BaseTileset.png": {
       "frame": {
         "x": 3,
         "y": 3,
-        "w": 1024,
-        "h": 1024
+        "w": 640,
+        "h": 640
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 1024,
-        "h": 1024
+        "w": 640,
+        "h": 640
       },
       "sourceSize": {
-        "w": 1024,
-        "h": 1024
+        "w": 640,
+        "h": 640
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "MiningSpeedRune.png": {
+    "Cerberus.png": {
       "frame": {
-        "x": 1033,
+        "x": 649,
         "y": 3,
-        "w": 1008,
-        "h": 924
+        "w": 638,
+        "h": 446
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 97,
+        "w": 638,
+        "h": 446
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Asmodeus.png": {
+      "frame": {
+        "x": 3,
+        "y": 649,
+        "w": 624,
+        "h": 392
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 8,
-        "y": 50,
-        "w": 1008,
-        "h": 924
+        "y": 124,
+        "w": 624,
+        "h": 392
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 640
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "Mechanic.png": {
+      "frame": {
+        "x": 649,
+        "y": 455,
+        "w": 512,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 256,
+        "y": 303,
+        "w": 512,
+        "h": 418
       },
       "sourceSize": {
         "w": 1024,
@@ -48,20 +96,20 @@
         "y": 0.5
       }
     },
-    "Player.png": {
+    "Merchant.png": {
       "frame": {
         "x": 3,
-        "y": 1033,
-        "w": 876,
-        "h": 992
+        "y": 1047,
+        "w": 354,
+        "h": 512
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 148,
-        "y": 32,
-        "w": 876,
-        "h": 992
+        "x": 335,
+        "y": 256,
+        "w": 354,
+        "h": 512
       },
       "sourceSize": {
         "w": 1024,
@@ -72,44 +120,332 @@
         "y": 0.5
       }
     },
-    "MoneyIcon.webp": {
+    "AsmodeusRingRelic.png": {
       "frame": {
-        "x": 885,
-        "y": 1033,
-        "w": 935,
-        "h": 927
+        "x": 363,
+        "y": 1047,
+        "w": 422,
+        "h": 484
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 56,
+        "x": 45,
+        "y": 14,
+        "w": 422,
+        "h": 484
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "InventoryIcon.webp": {
+      "frame": {
+        "x": 791,
+        "y": 879,
+        "w": 481,
+        "h": 399
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 271,
+        "y": 312,
+        "w": 481,
+        "h": 399
+      },
+      "sourceSize": {
+        "w": 1024,
+        "h": 1024
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown02.png": {
+      "frame": {
+        "x": 1293,
+        "y": 3,
+        "w": 366,
+        "h": 424
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 78,
+        "y": 64,
+        "w": 366,
+        "h": 424
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown01.png": {
+      "frame": {
+        "x": 1293,
+        "y": 433,
+        "w": 360,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 360,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown03.png": {
+      "frame": {
+        "x": 1278,
+        "y": 861,
+        "w": 358,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 358,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown04.png": {
+      "frame": {
+        "x": 3,
+        "y": 1565,
+        "w": 360,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 360,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown05.png": {
+      "frame": {
+        "x": 369,
+        "y": 1537,
+        "w": 362,
+        "h": 420
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 64,
+        "w": 362,
+        "h": 420
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown06.png": {
+      "frame": {
+        "x": 737,
+        "y": 1537,
+        "w": 362,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 64,
+        "w": 362,
+        "h": 418
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkUp01.png": {
+      "frame": {
+        "x": 1105,
+        "y": 1289,
+        "w": 314,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 94,
+        "y": 84,
+        "w": 314,
+        "h": 418
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkUp04.png": {
+      "frame": {
+        "x": 1665,
+        "y": 3,
+        "w": 308,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 98,
+        "y": 84,
+        "w": 308,
+        "h": 418
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkUp02.png": {
+      "frame": {
+        "x": 1659,
+        "y": 433,
+        "w": 312,
+        "h": 412
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 96,
+        "y": 84,
+        "w": 312,
+        "h": 412
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkUp05.png": {
+      "frame": {
+        "x": 1659,
+        "y": 851,
+        "w": 306,
+        "h": 408
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 100,
+        "y": 84,
+        "w": 306,
+        "h": 408
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "MasterySealRelic.png": {
+      "frame": {
+        "x": 1425,
+        "y": 1289,
+        "w": 387,
+        "h": 406
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 63,
+        "y": 52,
+        "w": 387,
+        "h": 406
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "BloatedDevourer.png": {
+      "frame": {
+        "x": 791,
+        "y": 1284,
+        "w": 254,
+        "h": 136
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
         "y": 60,
-        "w": 935,
-        "h": 927
-      },
-      "sourceSize": {
-        "w": 1024,
-        "h": 1024
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "StarvingWraith.png": {
-      "frame": {
-        "x": 1826,
-        "y": 933,
-        "w": 188,
-        "h": 216
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 34,
-        "y": 20,
-        "w": 188,
-        "h": 216
+        "w": 254,
+        "h": 136
       },
       "sourceSize": {
         "w": 256,
@@ -120,20 +456,20 @@
         "y": 0.5
       }
     },
-    "VoidCrusher.png": {
+    "GreedySlaughter.png": {
       "frame": {
-        "x": 1826,
-        "y": 1155,
-        "w": 211,
-        "h": 212
+        "x": 1105,
+        "y": 1713,
+        "w": 244,
+        "h": 228
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 22,
-        "y": 22,
-        "w": 211,
-        "h": 212
+        "x": 6,
+        "y": 14,
+        "w": 244,
+        "h": 228
       },
       "sourceSize": {
         "w": 256,
@@ -144,20 +480,20 @@
         "y": 0.5
       }
     },
-    "WindTornSoul.png": {
+    "VoidStep.png": {
       "frame": {
-        "x": 1826,
-        "y": 1373,
-        "w": 210,
-        "h": 172
+        "x": 1355,
+        "y": 1713,
+        "w": 224,
+        "h": 198
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 23,
-        "y": 42,
-        "w": 210,
-        "h": 172
+        "x": 16,
+        "y": 29,
+        "w": 224,
+        "h": 198
       },
       "sourceSize": {
         "w": 256,
@@ -168,44 +504,20 @@
         "y": 0.5
       }
     },
-    "HeresyEssence.png": {
+    "ViolenceEssence.png": {
       "frame": {
-        "x": 1826,
-        "y": 1551,
-        "w": 200,
-        "h": 209
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 29,
-        "y": 24,
-        "w": 200,
-        "h": 209
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "TreacheryEssence.png": {
-      "frame": {
-        "x": 1826,
-        "y": 1766,
-        "w": 205,
-        "h": 208
+        "x": 1585,
+        "y": 1701,
+        "w": 202,
+        "h": 200
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 25,
-        "y": 24,
-        "w": 205,
-        "h": 208
+        "y": 28,
+        "w": 202,
+        "h": 200
       },
       "sourceSize": {
         "w": 256,
@@ -216,20 +528,44 @@
         "y": 0.5
       }
     },
-    "FervorStoneIcon.png": {
+    "CrimsonVeilHelmet.png": {
       "frame": {
-        "x": 1033,
-        "y": 933,
-        "w": 80,
-        "h": 86
+        "x": 633,
+        "y": 879,
+        "w": 128,
+        "h": 128
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 24,
-        "y": 21,
-        "w": 80,
-        "h": 86
+        "x": 64,
+        "y": 64,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "CrimsonStoneTile.png": {
+      "frame": {
+        "x": 1818,
+        "y": 1265,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -240,20 +576,92 @@
         "y": 0.5
       }
     },
-    "RotStoneIcon.png": {
+    "FervorStoneTile.png": {
       "frame": {
-        "x": 1119,
-        "y": 933,
-        "w": 81,
-        "h": 73
+        "x": 1818,
+        "y": 1398,
+        "w": 128,
+        "h": 127
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 24,
-        "y": 20,
-        "w": 81,
-        "h": 73
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "FilthStoneTile.png": {
+      "frame": {
+        "x": 1818,
+        "y": 1531,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GaleStoneTile.png": {
+      "frame": {
+        "x": 1818,
+        "y": 1664,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "StoneTile.png": {
+      "frame": {
+        "x": 1793,
+        "y": 1797,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
       },
       "sourceSize": {
         "w": 128,
@@ -271,8 +679,8 @@
     "image": "game-atlas-1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 2044,
-      "h": 2028
+      "w": 1976,
+      "h": 1990
     },
     "scale": 1
   }

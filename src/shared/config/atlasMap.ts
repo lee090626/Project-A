@@ -16,688 +16,634 @@ import { ATLAS_FILE_MAPPING, AtlasIconName } from './atlasFiles';
 export type { AtlasIconName };
 
 export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
-  "CritDmgRune": {
+  "Player": {
     "atlasIndex": 0,
     "x": 3,
     "y": 3,
-    "width": 1024,
-    "height": 1024,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "width": 876,
+    "height": 992,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
-  "MoveSpeedRune": {
+  "GoldIcon": {
+    "atlasIndex": 0,
+    "x": 885,
+    "y": 3,
+    "width": 935,
+    "height": 927,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "SettingsIcon": {
     "atlasIndex": 0,
     "x": 3,
-    "y": 1033,
-    "width": 1024,
-    "height": 938,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "y": 1001,
+    "width": 906,
+    "height": 913,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
-  "AttackRune": {
+  "StatusIcon": {
     "atlasIndex": 0,
-    "x": 1033,
-    "y": 3,
-    "width": 1011,
-    "height": 926,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "x": 915,
+    "y": 936,
+    "width": 840,
+    "height": 295,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
-  "LuckRune": {
+  "BookIcon": {
     "atlasIndex": 0,
-    "x": 1033,
-    "y": 935,
-    "width": 1008,
-    "height": 924,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "x": 915,
+    "y": 1237,
+    "width": 835,
+    "height": 562,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "CrimsonFangDrill": {
     "atlasIndex": 0,
-    "x": 1033,
-    "y": 1865,
+    "x": 915,
+    "y": 1805,
     "width": 244,
     "height": 94,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "StarvingWraith": {
+    "atlasIndex": 0,
+    "x": 1826,
+    "y": 3,
+    "width": 188,
+    "height": 216,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "VoidCrusher": {
+    "atlasIndex": 0,
+    "x": 1761,
+    "y": 936,
+    "width": 211,
+    "height": 212,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "WindTornSoul": {
+    "atlasIndex": 0,
+    "x": 1761,
+    "y": 1154,
+    "width": 210,
+    "height": 172,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "HeresyEssence": {
+    "atlasIndex": 0,
+    "x": 1756,
+    "y": 1332,
+    "width": 200,
+    "height": 209,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "TreacheryEssence": {
+    "atlasIndex": 0,
+    "x": 1756,
+    "y": 1547,
+    "width": 205,
+    "height": 208,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "VoidMask": {
+    "atlasIndex": 0,
+    "x": 1826,
+    "y": 225,
+    "width": 184,
+    "height": 206,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "GaleBat": {
+    "atlasIndex": 0,
+    "x": 1826,
+    "y": 437,
+    "width": 178,
+    "height": 154,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "LustfulWhisperer": {
+    "atlasIndex": 0,
+    "x": 1826,
+    "y": 597,
+    "width": 176,
+    "height": 170,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "FireBall": {
     "atlasIndex": 0,
-    "x": 1283,
-    "y": 1865,
+    "x": 1826,
+    "y": 773,
     "width": 170,
     "height": 80,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "CrimsonStrideBoots": {
     "atlasIndex": 0,
-    "x": 1459,
-    "y": 1865,
+    "x": 1165,
+    "y": 1805,
     "width": 148,
     "height": 102,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "CrimsonPlateArmor": {
+    "atlasIndex": 0,
+    "x": 1756,
+    "y": 1761,
+    "width": 138,
+    "height": 120,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "FilthStoneIcon": {
     "atlasIndex": 0,
-    "x": 1613,
-    "y": 1865,
+    "x": 1900,
+    "y": 1761,
     "width": 97,
     "height": 91,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "SludgeStoneIcon": {
     "atlasIndex": 0,
-    "x": 1716,
-    "y": 1865,
+    "x": 1319,
+    "y": 1805,
     "width": 94,
     "height": 78,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "GaleStoneIcon": {
     "atlasIndex": 0,
-    "x": 1816,
-    "y": 1865,
+    "x": 1419,
+    "y": 1805,
     "width": 88,
     "height": 92,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "CrimsonStoneIcon": {
     "atlasIndex": 0,
-    "x": 1910,
-    "y": 1865,
+    "x": 1513,
+    "y": 1805,
     "width": 84,
     "height": 88,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "FervorStoneIcon": {
+    "atlasIndex": 0,
+    "x": 1603,
+    "y": 1805,
+    "width": 80,
+    "height": 86,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
+  },
+  "RotStoneIcon": {
+    "atlasIndex": 0,
+    "x": 3,
+    "y": 1920,
+    "width": 81,
+    "height": 73,
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "MoldStoneIcon": {
     "atlasIndex": 0,
-    "x": 3,
-    "y": 1977,
+    "x": 1826,
+    "y": 859,
     "width": 80,
     "height": 64,
-    "atlasWidth": 2047,
-    "atlasHeight": 2044
-  },
-  "CritRateRune": {
-    "atlasIndex": 1,
-    "x": 3,
-    "y": 3,
-    "width": 1024,
-    "height": 1024,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "MiningSpeedRune": {
-    "atlasIndex": 1,
-    "x": 1033,
-    "y": 3,
-    "width": 1008,
-    "height": 924,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "Player": {
-    "atlasIndex": 1,
-    "x": 3,
-    "y": 1033,
-    "width": 876,
-    "height": 992,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "GoldIcon": {
-    "atlasIndex": 1,
-    "x": 885,
-    "y": 1033,
-    "width": 935,
-    "height": 927,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "StarvingWraith": {
-    "atlasIndex": 1,
-    "x": 1826,
-    "y": 933,
-    "width": 188,
-    "height": 216,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "VoidCrusher": {
-    "atlasIndex": 1,
-    "x": 1826,
-    "y": 1155,
-    "width": 211,
-    "height": 212,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "WindTornSoul": {
-    "atlasIndex": 1,
-    "x": 1826,
-    "y": 1373,
-    "width": 210,
-    "height": 172,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "HeresyEssence": {
-    "atlasIndex": 1,
-    "x": 1826,
-    "y": 1551,
-    "width": 200,
-    "height": 209,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "TreacheryEssence": {
-    "atlasIndex": 1,
-    "x": 1826,
-    "y": 1766,
-    "width": 205,
-    "height": 208,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "FervorStoneIcon": {
-    "atlasIndex": 1,
-    "x": 1033,
-    "y": 933,
-    "width": 80,
-    "height": 86,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "RotStoneIcon": {
-    "atlasIndex": 1,
-    "x": 1119,
-    "y": 933,
-    "width": 81,
-    "height": 73,
-    "atlasWidth": 2044,
-    "atlasHeight": 2028
-  },
-  "SettingsIcon": {
-    "atlasIndex": 2,
-    "x": 3,
-    "y": 3,
-    "width": 906,
-    "height": 913,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "StatusIcon": {
-    "atlasIndex": 2,
-    "x": 915,
-    "y": 3,
-    "width": 840,
-    "height": 295,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "BookIcon": {
-    "atlasIndex": 2,
-    "x": 915,
-    "y": 304,
-    "width": 835,
-    "height": 562,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 2017,
+    "atlasHeight": 1996
   },
   "BaseTileset": {
-    "atlasIndex": 2,
+    "atlasIndex": 1,
     "x": 3,
-    "y": 922,
+    "y": 3,
     "width": 640,
     "height": 640,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "Cerberus": {
-    "atlasIndex": 2,
+    "atlasIndex": 1,
     "x": 649,
-    "y": 922,
+    "y": 3,
     "width": 638,
     "height": 446,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "Asmodeus": {
-    "atlasIndex": 2,
+    "atlasIndex": 1,
     "x": 3,
-    "y": 1568,
+    "y": 649,
     "width": 624,
     "height": 392,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "Mechanic": {
-    "atlasIndex": 2,
+    "atlasIndex": 1,
     "x": 649,
-    "y": 1374,
+    "y": 455,
     "width": 512,
     "height": 418,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "Merchant": {
-    "atlasIndex": 2,
-    "x": 1167,
-    "y": 1374,
+    "atlasIndex": 1,
+    "x": 3,
+    "y": 1047,
     "width": 354,
     "height": 512,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "AsmodeusRingRelic": {
-    "atlasIndex": 2,
-    "x": 1293,
-    "y": 872,
+    "atlasIndex": 1,
+    "x": 363,
+    "y": 1047,
     "width": 422,
     "height": 484,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "BloatedDevourer": {
-    "atlasIndex": 2,
-    "x": 633,
-    "y": 1798,
-    "width": 254,
-    "height": 136,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "GreedySlaughter": {
-    "atlasIndex": 2,
-    "x": 1761,
-    "y": 3,
-    "width": 244,
-    "height": 228,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "VoidStep": {
-    "atlasIndex": 2,
-    "x": 1761,
-    "y": 237,
-    "width": 224,
-    "height": 198,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "VoidMask": {
-    "atlasIndex": 2,
-    "x": 1756,
-    "y": 441,
-    "width": 184,
-    "height": 206,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "ViolenceEssence": {
-    "atlasIndex": 2,
-    "x": 1756,
-    "y": 653,
-    "width": 202,
-    "height": 200,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "LustEssence": {
-    "atlasIndex": 2,
-    "x": 1756,
-    "y": 859,
-    "width": 192,
-    "height": 200,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "FraudEssence": {
-    "atlasIndex": 2,
-    "x": 1721,
-    "y": 1065,
-    "width": 192,
-    "height": 199,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "WrathEssence": {
-    "atlasIndex": 2,
-    "x": 1721,
-    "y": 1270,
-    "width": 192,
-    "height": 199,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "GluttoyEssence": {
-    "atlasIndex": 2,
-    "x": 1527,
-    "y": 1475,
-    "width": 190,
-    "height": 198,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "GreedEssence": {
-    "atlasIndex": 2,
-    "x": 1527,
-    "y": 1679,
-    "width": 190,
-    "height": 198,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "VoidMantle": {
-    "atlasIndex": 2,
-    "x": 1723,
-    "y": 1475,
-    "width": 192,
-    "height": 194,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "GaleBat": {
-    "atlasIndex": 2,
-    "x": 893,
-    "y": 1798,
-    "width": 178,
-    "height": 154,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
-  },
-  "LustfulWhisperer": {
-    "atlasIndex": 2,
-    "x": 1723,
-    "y": 1675,
-    "width": 176,
-    "height": 170,
-    "atlasWidth": 2008,
-    "atlasHeight": 1963
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "InventoryIcon": {
-    "atlasIndex": 3,
-    "x": 3,
-    "y": 3,
+    "atlasIndex": 1,
+    "x": 791,
+    "y": 879,
     "width": 481,
     "height": 399,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown02": {
-    "atlasIndex": 3,
-    "x": 3,
-    "y": 408,
+    "atlasIndex": 1,
+    "x": 1293,
+    "y": 3,
     "width": 366,
     "height": 424,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown01": {
-    "atlasIndex": 3,
-    "x": 490,
-    "y": 3,
+    "atlasIndex": 1,
+    "x": 1293,
+    "y": 433,
     "width": 360,
     "height": 422,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown03": {
-    "atlasIndex": 3,
-    "x": 3,
-    "y": 838,
+    "atlasIndex": 1,
+    "x": 1278,
+    "y": 861,
     "width": 358,
     "height": 422,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown04": {
-    "atlasIndex": 3,
-    "x": 367,
-    "y": 838,
+    "atlasIndex": 1,
+    "x": 3,
+    "y": 1565,
     "width": 360,
     "height": 422,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown05": {
-    "atlasIndex": 3,
-    "x": 856,
-    "y": 3,
+    "atlasIndex": 1,
+    "x": 369,
+    "y": 1537,
     "width": 362,
     "height": 420,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkDown06": {
-    "atlasIndex": 3,
-    "x": 856,
-    "y": 429,
+    "atlasIndex": 1,
+    "x": 737,
+    "y": 1537,
     "width": 362,
     "height": 418,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkUp01": {
-    "atlasIndex": 3,
-    "x": 1224,
-    "y": 3,
+    "atlasIndex": 1,
+    "x": 1105,
+    "y": 1289,
     "width": 314,
     "height": 418,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkUp04": {
-    "atlasIndex": 3,
-    "x": 1224,
-    "y": 427,
+    "atlasIndex": 1,
+    "x": 1665,
+    "y": 3,
     "width": 308,
     "height": 418,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkUp02": {
-    "atlasIndex": 3,
-    "x": 3,
-    "y": 1266,
+    "atlasIndex": 1,
+    "x": 1659,
+    "y": 433,
     "width": 312,
     "height": 412,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkUp05": {
-    "atlasIndex": 3,
-    "x": 321,
-    "y": 1266,
+    "atlasIndex": 1,
+    "x": 1659,
+    "y": 851,
     "width": 306,
     "height": 408,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "MasterySealRelic": {
-    "atlasIndex": 3,
-    "x": 633,
-    "y": 1266,
+    "atlasIndex": 1,
+    "x": 1425,
+    "y": 1289,
     "width": 387,
     "height": 406,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "BloatedDevourer": {
+    "atlasIndex": 1,
+    "x": 791,
+    "y": 1284,
+    "width": 254,
+    "height": 136,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "GreedySlaughter": {
+    "atlasIndex": 1,
+    "x": 1105,
+    "y": 1713,
+    "width": 244,
+    "height": 228,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "VoidStep": {
+    "atlasIndex": 1,
+    "x": 1355,
+    "y": 1713,
+    "width": 224,
+    "height": 198,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "ViolenceEssence": {
+    "atlasIndex": 1,
+    "x": 1585,
+    "y": 1701,
+    "width": 202,
+    "height": 200,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "CrimsonVeilHelmet": {
+    "atlasIndex": 1,
+    "x": 633,
+    "y": 879,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "CrimsonStoneTile": {
+    "atlasIndex": 1,
+    "x": 1818,
+    "y": 1265,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "FervorStoneTile": {
+    "atlasIndex": 1,
+    "x": 1818,
+    "y": 1398,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "FilthStoneTile": {
+    "atlasIndex": 1,
+    "x": 1818,
+    "y": 1531,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "GaleStoneTile": {
+    "atlasIndex": 1,
+    "x": 1818,
+    "y": 1664,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
+  },
+  "StoneTile": {
+    "atlasIndex": 1,
+    "x": 1793,
+    "y": 1797,
+    "width": 128,
+    "height": 127,
+    "atlasWidth": 1976,
+    "atlasHeight": 1990
   },
   "PlayerWalkUp03": {
-    "atlasIndex": 3,
-    "x": 1224,
-    "y": 851,
+    "atlasIndex": 2,
+    "x": 3,
+    "y": 3,
     "width": 314,
     "height": 402,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkUp06": {
-    "atlasIndex": 3,
-    "x": 375,
-    "y": 431,
+    "atlasIndex": 2,
+    "x": 323,
+    "y": 3,
     "width": 314,
     "height": 394,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft01": {
-    "atlasIndex": 3,
-    "x": 733,
-    "y": 853,
+    "atlasIndex": 2,
+    "x": 3,
+    "y": 411,
     "width": 310,
     "height": 334,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft02": {
-    "atlasIndex": 3,
-    "x": 1026,
-    "y": 1259,
+    "atlasIndex": 2,
+    "x": 319,
+    "y": 411,
     "width": 308,
     "height": 334,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft03": {
-    "atlasIndex": 3,
-    "x": 1544,
+    "atlasIndex": 2,
+    "x": 643,
     "y": 3,
     "width": 304,
     "height": 332,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft04": {
-    "atlasIndex": 3,
-    "x": 1544,
+    "atlasIndex": 2,
+    "x": 643,
     "y": 341,
     "width": 304,
     "height": 332,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft06": {
-    "atlasIndex": 3,
-    "x": 1544,
-    "y": 679,
+    "atlasIndex": 2,
+    "x": 3,
+    "y": 751,
     "width": 304,
     "height": 332,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "PlayerWalkLeft05": {
-    "atlasIndex": 3,
-    "x": 1340,
-    "y": 1259,
+    "atlasIndex": 2,
+    "x": 633,
+    "y": 679,
     "width": 310,
     "height": 326,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "CrimsonPlateArmor": {
-    "atlasIndex": 3,
-    "x": 695,
-    "y": 431,
-    "width": 138,
-    "height": 120,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "LustEssence": {
+    "atlasIndex": 2,
+    "x": 313,
+    "y": 751,
+    "width": 192,
+    "height": 200,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "CrimsonVeilHelmet": {
-    "atlasIndex": 3,
-    "x": 695,
-    "y": 557,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "FraudEssence": {
+    "atlasIndex": 2,
+    "x": 953,
+    "y": 3,
+    "width": 192,
+    "height": 199,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "CrimsonStoneTile": {
-    "atlasIndex": 3,
-    "x": 695,
-    "y": 691,
-    "width": 128,
-    "height": 127,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "WrathEssence": {
+    "atlasIndex": 2,
+    "x": 953,
+    "y": 208,
+    "width": 192,
+    "height": 199,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "FervorStoneTile": {
-    "atlasIndex": 3,
-    "x": 1049,
-    "y": 853,
-    "width": 128,
-    "height": 127,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "GluttoyEssence": {
+    "atlasIndex": 2,
+    "x": 953,
+    "y": 413,
+    "width": 190,
+    "height": 198,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "FilthStoneTile": {
-    "atlasIndex": 3,
-    "x": 1049,
-    "y": 986,
-    "width": 128,
-    "height": 127,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "GreedEssence": {
+    "atlasIndex": 2,
+    "x": 953,
+    "y": 617,
+    "width": 190,
+    "height": 198,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
-  "GaleStoneTile": {
-    "atlasIndex": 3,
-    "x": 1049,
-    "y": 1119,
-    "width": 128,
-    "height": 127,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
-  },
-  "StoneTile": {
-    "atlasIndex": 3,
-    "x": 1656,
-    "y": 1017,
-    "width": 128,
-    "height": 127,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+  "VoidMantle": {
+    "atlasIndex": 2,
+    "x": 949,
+    "y": 821,
+    "width": 192,
+    "height": 194,
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "C3Tile": {
-    "atlasIndex": 3,
-    "x": 1656,
-    "y": 1150,
+    "atlasIndex": 2,
+    "x": 313,
+    "y": 957,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "MoldStoneTile": {
-    "atlasIndex": 3,
-    "x": 1656,
-    "y": 1282,
+    "atlasIndex": 2,
+    "x": 445,
+    "y": 957,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "RotStoneTile": {
-    "atlasIndex": 3,
-    "x": 1656,
-    "y": 1414,
+    "atlasIndex": 2,
+    "x": 3,
+    "y": 1089,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   },
   "SludgeStoneTile": {
-    "atlasIndex": 3,
-    "x": 1656,
-    "y": 1546,
+    "atlasIndex": 2,
+    "x": 135,
+    "y": 1089,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1851,
-    "atlasHeight": 1681
+    "atlasWidth": 1148,
+    "atlasHeight": 1218
   }
 };
