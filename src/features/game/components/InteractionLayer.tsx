@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { GameWorld } from '@/entities/world/model';
+import type { RewardedRevivePlacement } from '@/shared/lib/googleH5Ads';
 import {
   isRewardedReviveAdEnabled,
-  requestRewardedReviveAd,
+  startRewardedRevivePlacement,
 } from '@/shared/lib/googleH5Ads';
 
 interface InteractionLayerProps {
@@ -23,44 +24,79 @@ const InteractionLayer = ({
   handleRespawn,
   handleRewardRevive,
 }: InteractionLayerProps) => {
-  const [isReviveAdLoading, setIsReviveAdLoading] = useState(false);
-  const [reviveAdAttempted, setReviveAdAttempted] = useState(false);
+  const [reviveAdState, setReviveAdState] = useState<
+    'idle' | 'checking' | 'ready' | 'showing' | 'finished'
+  >('idle');
   const [reviveAdMessage, setReviveAdMessage] = useState<string | null>(null);
+  const revivePlacementRef = useRef<RewardedRevivePlacement | null>(null);
+  const showRewardedAdRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (currentStats.hp > 0) {
-      setIsReviveAdLoading(false);
-      setReviveAdAttempted(false);
+      revivePlacementRef.current?.cancel();
+      revivePlacementRef.current = null;
+      showRewardedAdRef.current = null;
+      setReviveAdState('idle');
       setReviveAdMessage(null);
     }
   }, [currentStats.hp]);
 
-  const handleRewardedReviveClick = useCallback(async () => {
-    if (isReviveAdLoading || reviveAdAttempted) return;
+  useEffect(() => {
+    if (currentStats.hp > 0 || reviveAdState !== 'idle' || !isRewardedReviveAdEnabled()) return;
 
-    setIsReviveAdLoading(true);
+    setReviveAdState('checking');
     setReviveAdMessage(null);
 
-    const result = await requestRewardedReviveAd();
-    setIsReviveAdLoading(false);
+    revivePlacementRef.current = startRewardedRevivePlacement({
+      onRewardAvailable: (showAd) => {
+        showRewardedAdRef.current = showAd;
+        setReviveAdState('ready');
+      },
+      onAdStarted: () => {
+        setReviveAdState('showing');
+      },
+      onResult: (result) => {
+        revivePlacementRef.current = null;
+        showRewardedAdRef.current = null;
+        setReviveAdState('finished');
 
-    if (result.ok) {
-      setReviveAdAttempted(true);
-      handleRewardRevive();
-      return;
-    }
+        if (result.ok) {
+          handleRewardRevive();
+          return;
+        }
 
-    if (result.consumesAttempt) {
-      setReviveAdAttempted(true);
-    }
+        setReviveAdMessage(result.message);
+      },
+    });
+  }, [currentStats.hp, handleRewardRevive, reviveAdState]);
 
-    setReviveAdMessage(result.message);
-  }, [handleRewardRevive, isReviveAdLoading, reviveAdAttempted]);
+  useEffect(() => {
+    return () => {
+      revivePlacementRef.current?.cancel();
+      revivePlacementRef.current = null;
+      showRewardedAdRef.current = null;
+    };
+  }, []);
+
+  const handleRewardedReviveClick = useCallback(() => {
+    if (reviveAdState !== 'ready' || !showRewardedAdRef.current) return;
+
+    setReviveAdState('showing');
+    setReviveAdMessage(null);
+    showRewardedAdRef.current();
+  }, [reviveAdState]);
 
   const canShowRewardedRevive =
     currentStats.hp <= 0 &&
     isRewardedReviveAdEnabled() &&
-    (!reviveAdAttempted || isReviveAdLoading);
+    (reviveAdState === 'checking' || reviveAdState === 'ready' || reviveAdState === 'showing');
+
+  const rewardedReviveLabel =
+    reviveAdState === 'ready'
+      ? 'Watch Ad to Revive'
+      : reviveAdState === 'showing'
+        ? 'Showing Ad...'
+        : 'Checking Ad...';
 
   return (
     <>
@@ -86,10 +122,10 @@ const InteractionLayer = ({
             {canShowRewardedRevive && (
               <button
                 onClick={handleRewardedReviveClick}
-                disabled={isReviveAdLoading}
+                disabled={reviveAdState !== 'ready'}
                 className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 active:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-400 text-black font-black rounded-xl transition-all shadow-lg shadow-emerald-900/20 tracking-widest text-sm"
               >
-                {isReviveAdLoading ? 'Loading Ad...' : 'Watch Ad to Revive'}
+                {rewardedReviveLabel}
               </button>
             )}
 

@@ -13,6 +13,7 @@ const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !is
 const googleH5AdsClientId =
   process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-8319588891960553';
 const shouldEnableGoogleH5Ads = !isCrazyGamesBuild;
+const shouldEnableGoogleH5AdTestMode = process.env.NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE === 'on';
 
 const geistSans = localFont({
   src: '../../public/fonts/geist-latin.woff2',
@@ -164,6 +165,7 @@ export default function RootLayout({
               async
               data-ad-client={googleH5AdsClientId}
               data-ad-frequency-hint="30s"
+              data-adbreak-test={shouldEnableGoogleH5AdTestMode ? 'on' : undefined}
               src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
             />
           </>
