@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-13
+last_reviewed: 2026-05-14
 source_paths:
   - README.md
   - .agents/rules
@@ -18,14 +18,15 @@ source_paths:
 
 ## 현재 상태
 
-문서화는 단계적으로 다시 구축합니다. 현재 단계에서는 이 파일과 `GLOSSARY.md`만 `docs/` 아래의 정본 문서입니다.
+문서화는 단계적으로 다시 구축합니다. 현재 단계에서는 이 파일, `GLOSSARY.md`, `GAME_DATA_MODEL.md`만 `docs/` 아래의 정본 문서입니다.
 
 계획 중인 정본 문서:
 
 | 문서 | 범위 | 상태 |
 |---|---|---|
 | `GLOSSARY.md` | 게임/코드 공통 용어 | 완료 |
-| `DATA_MODEL.md` | 설정 데이터, ID, 참조 관계 | 계획 |
+| `GAME_DATA_MODEL.md` | 설정 데이터, ID, 참조 관계 | 완료 |
+| `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 계획 |
 | `ARCHITECTURE.md` | FSD 레이어, 워커 경계, 런타임 구조 | 계획 |
 | `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 계획 |
 | `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 계획 |

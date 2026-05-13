@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-13
+last_reviewed: 2026-05-14
 source_paths:
   - src/shared/types/game
   - src/shared/config
@@ -38,7 +38,7 @@ source_paths:
 | 용어 | 정의 | 근거 |
 |---|---|---|
 | `GameWorld` | 플레이어, 타일맵, 에셋, UI 상태, 보스 전투 상태 등 런타임 월드 상태를 담는 객체입니다. | `src/entities/world/model.ts` |
-| `PlayerStats` | 장비, 인벤토리, 체력, 깊이, 보스 진행, 숙련도, 연구, 상태 효과, 가이드 퀘스트 등 플레이어 진행 상태입니다. | `src/shared/types/game/player.ts` |
+| `PlayerStats` | 장비, 인벤토리, 체력, 깊이, 보스 진행, 숙련도, 상태 효과, 가이드 퀘스트 등 플레이어 진행 상태입니다. | `src/shared/types/game/player.ts` |
 | `Position` | 게임 내 좌표를 나타내는 `{ x, y }` 구조입니다. | `src/shared/types/game/core.ts` |
 | Depth | 전체 게임 기준 깊이 값입니다. `CircleConfig.depthStart`, `depthEnd`, `PlayerStats.maxDepthReached`에서 사용합니다. | `src/shared/config/circleData.ts`, `src/shared/types/game/player.ts` |
 | Layer | 하나의 Circle 내부를 1~4단계로 나눈 상대 구간입니다. `getLayerFromDepth`가 깊이를 layer로 변환합니다. | `src/shared/config/circleData.ts` |
@@ -77,7 +77,7 @@ source_paths:
 
 | 용어 | 정의 | 근거 |
 |---|---|---|
-| Equipment | 드릴, 투구, 갑옷, 신발 장비입니다. 제작 비용, 스탯, 이미지, 스킬룬 슬롯 수를 가질 수 있습니다. | `src/shared/types/game/equipment.ts`, `src/shared/config/equipmentData.ts` |
+| Equipment | 드릴, 투구, 갑옷, 신발 장비입니다. 제작 비용, 스탯, 이미지 키를 가질 수 있습니다. | `src/shared/types/game/equipment.ts`, `src/shared/config/equipmentData.ts` |
 | `EquipmentPart` | 장비 부위 타입입니다. `Drill`, `Helmet`, `Armor`, `Boots` 중 하나입니다. | `src/shared/types/game/equipment.ts` |
 | Mastery | 특정 타일 타입이나 장비에 대한 숙련도 상태입니다. 경험치와 레벨을 포함합니다. | `src/shared/types/game/progress.ts` |
 | `MasteryPerkDef` | 특정 타일 타입 숙련도 레벨을 요구하는 돌파 특성 정의입니다. | `src/shared/config/mastery/types.ts`, `src/shared/config/masteryPerks.ts` |
@@ -116,3 +116,4 @@ source_paths:
 - `TileType`에는 광물뿐 아니라 시스템 타일과 전리품/정수 키도 포함됩니다. 모든 `TileType`이 수집 가능한 광물은 아닙니다.
 - `atlasFiles.ts`와 `atlasMap.ts`는 자동 생성 파일입니다. RAG 정본으로 직접 설명을 늘리기보다 원본 에셋과 생성 스크립트, 정본 문서를 기준으로 삼아야 합니다.
 - 문서에서 Circle별 정확한 밸런스 수치가 필요하면 이 용어 사전이 아니라 `src/shared/config/circleData.ts`, `src/shared/config/minerals/*`, `src/shared/config/monsters/*`를 확인해야 합니다.
+- Skill Rune, Research, Reliquary Essence는 현재 데이터 모델에 없는 삭제된 기능/구분입니다. 새 문서에서 정본 개념으로 되살리지 않습니다.
