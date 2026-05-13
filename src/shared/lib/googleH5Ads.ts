@@ -1,8 +1,9 @@
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
-const API_READY_TIMEOUT_MS = 30000;
+const API_READY_TIMEOUT_MS = 10000;
 const AD_REQUEST_TIMEOUT_MS = 10000;
 const isGoogleH5AdsDebugEnabled = process.env.NEXT_PUBLIC_GOOGLE_H5_AD_DEBUG === 'on';
 const GOOGLE_H5_ADS_DEBUG_LABEL = 'Google H5 Ads';
+const NORMAL_RESPAWN_MESSAGE = 'Ad revive is unavailable right now. Respawn at Base Camp to continue.';
 
 export const GOOGLE_H5_ADS_READY_EVENT = 'drilling-google-h5-ads-ready';
 
@@ -85,7 +86,7 @@ export function startRewardedRevivePlacement(
         finish({
           ok: false,
           reason: 'not-ready',
-          message: 'Rewarded ad is not ready yet. Use normal respawn this time.',
+          message: NORMAL_RESPAWN_MESSAGE,
           status: 'notReady',
         });
         return;
@@ -100,7 +101,7 @@ export function startRewardedRevivePlacement(
         finish({
           ok: false,
           reason: 'error',
-          message: 'Rewarded ad failed to start. Try normal respawn.',
+          message: NORMAL_RESPAWN_MESSAGE,
           status: 'showAdError',
         });
       }
@@ -118,7 +119,7 @@ export function startRewardedRevivePlacement(
     queueRewardedReviveResult(callbacks, {
       ok: false,
       reason: 'unavailable',
-      message: 'Rewarded ads are not enabled for this build.',
+      message: NORMAL_RESPAWN_MESSAGE,
     });
     return placement;
   }
@@ -128,7 +129,7 @@ export function startRewardedRevivePlacement(
     queueRewardedReviveResult(callbacks, {
       ok: false,
       reason: 'not-ready',
-      message: 'Rewarded ads are not initialized yet. Try again in a moment.',
+      message: NORMAL_RESPAWN_MESSAGE,
     });
     return placement;
   }
@@ -142,7 +143,7 @@ export function startRewardedRevivePlacement(
       finish({
         ok: false,
         reason: 'timeout',
-        message: 'Rewarded ad check timed out. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status: 'watchdogTimeout',
       });
     }, AD_REQUEST_TIMEOUT_MS);
@@ -181,7 +182,7 @@ export function startRewardedRevivePlacement(
           finish({
             ok: false,
             reason: 'dismissed',
-            message: 'Ad was closed before completion. Try normal respawn.',
+            message: 'Ad was closed before completion. Respawn at Base Camp to continue.',
             status: 'dismissed',
           });
         },
@@ -196,7 +197,7 @@ export function startRewardedRevivePlacement(
       finish({
         ok: false,
         reason: 'error',
-        message: 'Rewarded ad failed to start. Try normal respawn.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status: 'adBreakError',
       });
     }
@@ -213,7 +214,7 @@ export function startRewardedRevivePlacement(
       finish({
         ok: false,
         reason: 'not-ready',
-        message: 'Ad Placement API is still preparing. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status: 'readyWatchdogTimeout',
       });
     }, API_READY_TIMEOUT_MS);
@@ -231,49 +232,49 @@ function resolveRewardedReviveAdBreakStatus(status?: string): RewardedReviveAdRe
       return {
         ok: false,
         reason: 'dismissed',
-        message: 'Ad was closed before completion. Try normal respawn.',
+        message: 'Ad was closed before completion. Respawn at Base Camp to continue.',
         status,
       };
     case 'notReady':
       return {
         ok: false,
         reason: 'not-ready',
-        message: 'Ad Placement API is not initialized yet. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'noAdPreloaded':
       return {
         ok: false,
         reason: 'unavailable',
-        message: 'Rewarded ad is not preloaded yet. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'frequencyCapped':
       return {
         ok: false,
         reason: 'frequency-capped',
-        message: 'Rewarded ad is frequency capped. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'timeout':
       return {
         ok: false,
         reason: 'timeout',
-        message: 'Ad Placement API timed out. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'invalid':
       return {
         ok: false,
         reason: 'invalid',
-        message: 'Rewarded ad placement was rejected. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'error':
       return {
         ok: false,
         reason: 'error',
-        message: 'Rewarded ad failed in the browser. Try normal respawn.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     case 'ignored':
@@ -281,14 +282,14 @@ function resolveRewardedReviveAdBreakStatus(status?: string): RewardedReviveAdRe
       return {
         ok: false,
         reason: 'unavailable',
-        message: 'No rewarded ad is available right now. Use normal respawn this time.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
     default:
       return {
         ok: false,
         reason: 'unavailable',
-        message: 'No rewarded ad is available right now. Try normal respawn.',
+        message: NORMAL_RESPAWN_MESSAGE,
         status,
       };
   }

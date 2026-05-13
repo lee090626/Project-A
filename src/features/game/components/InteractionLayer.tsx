@@ -80,7 +80,7 @@ const InteractionLayer = ({
       if (isCancelled) return;
 
       setReviveAdState('finished');
-      setReviveAdMessage('Rewarded ads failed to load. Use normal respawn this time.');
+      setReviveAdMessage('Ad revive is unavailable right now. Respawn at Base Camp to continue.');
     });
 
     return () => {
@@ -113,8 +113,8 @@ const InteractionLayer = ({
     reviveAdState === 'ready'
       ? 'Watch Ad to Revive'
       : reviveAdState === 'showing'
-        ? 'Showing Ad...'
-        : 'Checking Ad...';
+        ? 'Opening Ad...'
+        : 'Checking Revive...';
 
   return (
     <>
@@ -157,7 +157,7 @@ const InteractionLayer = ({
               onClick={handleRespawn}
               className="w-full py-4 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-black rounded-xl transition-all shadow-lg shadow-red-900/20 tracking-widest text-sm"
             >
-              Request Respawn
+              Respawn at Base Camp
             </button>
           </div>
         </div>
