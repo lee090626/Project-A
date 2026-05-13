@@ -20,7 +20,7 @@
 
 ### **Core**
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
 - **Language**: TypeScript
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand)
 - **Styling**: Tailwind CSS 4
@@ -42,20 +42,20 @@
 2.  **게임 루프 (Worker Thread)**: 실제 게임의 로직과 물리, 렌더링 엔진은 Web Worker 내부에서 독립적으로 실행됩니다.
 3.  **동기화 브리지**: 트리플 버퍼링 기술을 통해 메인 스레드와 워커 스레드 간의 데이터를 지연 없이 주고받으며 보간(Interpolation)을 처리합니다.
 
-상세한 내용은 [Architecture Documentation](docs/ARCHITECTURE.md)를 참조하세요.
+상세 아키텍처 문서는 문서화 2차 작업에서 `docs/ARCHITECTURE.md`로 정리할 예정입니다. 현재 문서화 기준은 [문서화 기준](docs/README.md)을 참조하세요.
 
 ---
 
 ## 🚀 시작하기 (Getting Started)
 
-프로젝트를 로컬에서 실행하기 위한 단계입니다. 에셋 관련 추가 작업이 필요하다면 `docs/ASSET_GUIDE.md`를 참고하세요.
+프로젝트를 로컬에서 실행하기 위한 단계입니다. 에셋 관련 상세 규칙은 현재 [.agents/rules/06-asset-guide.md](.agents/rules/06-asset-guide.md)를 기준으로 합니다.
 
 ```bash
 # 1. 의존성 설치
 npm install
 
 # 2. 에셋 최적화 및 좌표 동기화 (최초 실행 시 필수)
-npm run optimize:atlas
+npm run optimize:atlas && npm run update:atlas-map
 
 # 3. 개발 서버 실행
 npm run dev
@@ -67,13 +67,9 @@ npm run dev
 
 ## 📚 문서 (Documentation)
 
-프로젝트의 심층적인 구조와 개발 가이드는 `docs/` 디렉토리에서 확인할 수 있습니다.
+프로젝트 문서는 [docs/README.md](docs/README.md)를 기준으로 단계적으로 정리합니다. 아직 작성되지 않은 문서는 링크하지 않습니다.
 
-- [📖 용어 사전](docs/GLOSSARY.md)
-- [🏛️ 시스템 아키텍처](docs/ARCHITECTURE.md)
-- [⚙️ 핵심 게임 로직](docs/CORE_LOGIC.md)
-- [🎨 렌더링 파이프라인](docs/RENDERING_PIPELINE.md)
-- [🤖 AI 개발 가이드](docs/AI_DEVELOPMENT_GUIDE.md)
+개발 에이전트 작업 규칙은 [.agents/rules/08-agents.md](.agents/rules/08-agents.md)를 우선 기준으로 합니다.
 
 ---
 
