@@ -2,10 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { GameWorld } from '@/entities/world/model';
 import type { RewardedRevivePlacement } from '@/shared/lib/googleH5Ads';
-import {
-  isRewardedReviveAdEnabled,
-  startRewardedRevivePlacement,
-} from '@/shared/lib/googleH5Ads';
 
 interface InteractionLayerProps {
   currentStats: PlayerStats;
@@ -24,6 +20,7 @@ const InteractionLayer = ({
   handleRespawn,
   handleRewardRevive,
 }: InteractionLayerProps) => {
+  const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
   const [reviveAdState, setReviveAdState] = useState<
     'idle' | 'checking' | 'ready' | 'showing' | 'finished'
   >('idle');
@@ -42,33 +39,50 @@ const InteractionLayer = ({
   }, [currentStats.hp]);
 
   useEffect(() => {
-    if (currentStats.hp > 0 || reviveAdState !== 'idle' || !isRewardedReviveAdEnabled()) return;
+    if (isCrazyGamesBuild || currentStats.hp > 0 || reviveAdState !== 'idle') return;
+
+    let isCancelled = false;
 
     setReviveAdState('checking');
     setReviveAdMessage(null);
 
-    revivePlacementRef.current = startRewardedRevivePlacement({
-      onRewardAvailable: (showAd) => {
-        showRewardedAdRef.current = showAd;
-        setReviveAdState('ready');
-      },
-      onAdStarted: () => {
-        setReviveAdState('showing');
-      },
-      onResult: (result) => {
-        revivePlacementRef.current = null;
-        showRewardedAdRef.current = null;
-        setReviveAdState('finished');
+    import('@/shared/lib/googleH5Ads').then(
+      ({ isRewardedReviveAdEnabled, startRewardedRevivePlacement }) => {
+        if (isCancelled) return;
 
-        if (result.ok) {
-          handleRewardRevive();
+        if (!isRewardedReviveAdEnabled()) {
+          setReviveAdState('finished');
           return;
         }
 
-        setReviveAdMessage(result.message);
+        revivePlacementRef.current = startRewardedRevivePlacement({
+          onRewardAvailable: (showAd) => {
+            showRewardedAdRef.current = showAd;
+            setReviveAdState('ready');
+          },
+          onAdStarted: () => {
+            setReviveAdState('showing');
+          },
+          onResult: (result) => {
+            revivePlacementRef.current = null;
+            showRewardedAdRef.current = null;
+            setReviveAdState('finished');
+
+            if (result.ok) {
+              handleRewardRevive();
+              return;
+            }
+
+            setReviveAdMessage(result.message);
+          },
+        });
       },
-    });
-  }, [currentStats.hp, handleRewardRevive, reviveAdState]);
+    );
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentStats.hp, handleRewardRevive, isCrazyGamesBuild, reviveAdState]);
 
   useEffect(() => {
     return () => {
@@ -88,7 +102,7 @@ const InteractionLayer = ({
 
   const canShowRewardedRevive =
     currentStats.hp <= 0 &&
-    isRewardedReviveAdEnabled() &&
+    !isCrazyGamesBuild &&
     (reviveAdState === 'checking' || reviveAdState === 'ready' || reviveAdState === 'showing');
 
   const rewardedReviveLabel =

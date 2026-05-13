@@ -143,6 +143,21 @@ export default function RootLayout({
                 __html: `
                   window.__drillingGoogleH5AdsEnabled = true;
                   window.__drillingGoogleH5AdsReady = false;
+                  window.__drillingGoogleH5AdsDebug =
+                    /[?&]h5adsDebug=1(?:&|$)/.test(window.location.search) ||
+                    window.localStorage.getItem('drilling-h5-ads-debug') === '1';
+                  window.__drillingGoogleH5AdsEvents = window.__drillingGoogleH5AdsEvents || [];
+                  window.__recordDrillingGoogleH5Ads = function(event, payload) {
+                    var entry = { event: event, payload: payload, at: Date.now() };
+                    window.__drillingGoogleH5AdsEvents.push(entry);
+                    if (window.__drillingGoogleH5AdsEvents.length > 80) {
+                      window.__drillingGoogleH5AdsEvents.shift();
+                    }
+                    if (window.__drillingGoogleH5AdsDebug) {
+                      console.info('[Google H5 Ads]', event, payload || '');
+                    }
+                  };
+                  window.__recordDrillingGoogleH5Ads('bootstrap', { testMode: ${JSON.stringify(shouldEnableGoogleH5AdTestMode)} });
                   window.adsbygoogle = window.adsbygoogle || [];
                   window.adBreak = window.adBreak || function(options) {
                     window.adsbygoogle.push(options);
@@ -155,6 +170,7 @@ export default function RootLayout({
                     sound: 'on',
                     onReady: function() {
                       window.__drillingGoogleH5AdsReady = true;
+                      window.__recordDrillingGoogleH5Ads('onReady');
                       window.dispatchEvent(new Event('${GOOGLE_H5_ADS_READY_EVENT}'));
                     }
                   });

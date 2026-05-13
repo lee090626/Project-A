@@ -1,4 +1,5 @@
 const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
+const API_READY_TIMEOUT_MS = 30000;
 const AD_REQUEST_TIMEOUT_MS = 10000;
 const isGoogleH5AdsDebugEnabled = process.env.NEXT_PUBLIC_GOOGLE_H5_AD_DEBUG === 'on';
 const GOOGLE_H5_ADS_DEBUG_LABEL = 'Google H5 Ads';
@@ -54,6 +55,7 @@ export function startRewardedRevivePlacement(
   let showAdFn: (() => void) | null = null;
   let showAdRequested = false;
   let timeoutId: number | null = null;
+  let readyListener: (() => void) | null = null;
 
   const clearWatchdog = () => {
     if (timeoutId === null || typeof window === 'undefined') return;
@@ -61,11 +63,18 @@ export function startRewardedRevivePlacement(
     timeoutId = null;
   };
 
+  const clearReadyListener = () => {
+    if (!readyListener || typeof window === 'undefined') return;
+    window.removeEventListener(GOOGLE_H5_ADS_READY_EVENT, readyListener);
+    readyListener = null;
+  };
+
   const finish = (result: RewardedReviveAdResult) => {
     if (settled) return;
     settled = true;
     clearWatchdog();
-    debugGoogleH5Ads('result', result);
+    clearReadyListener();
+    recordGoogleH5Ads('placement-result', result);
     callbacks.onResult(result);
   };
 
@@ -83,7 +92,7 @@ export function startRewardedRevivePlacement(
       }
 
       showAdRequested = true;
-      debugGoogleH5Ads('showAd');
+      recordGoogleH5Ads('show-ad');
 
       try {
         showAdFn();
@@ -100,7 +109,8 @@ export function startRewardedRevivePlacement(
       if (settled) return;
       settled = true;
       clearWatchdog();
-      debugGoogleH5Ads('cancel');
+      clearReadyListener();
+      recordGoogleH5Ads('placement-cancel');
     },
   };
 
@@ -123,64 +133,90 @@ export function startRewardedRevivePlacement(
     return placement;
   }
 
-  timeoutId = window.setTimeout(() => {
-    finish({
-      ok: false,
-      reason: 'timeout',
-      message: 'Rewarded ad check timed out. Use normal respawn this time.',
-      status: 'watchdogTimeout',
-    });
-  }, AD_REQUEST_TIMEOUT_MS);
+  const startAdBreak = () => {
+    if (settled) return;
+    clearWatchdog();
+    clearReadyListener();
 
-  try {
-    debugGoogleH5Ads('adBreak start');
+    timeoutId = window.setTimeout(() => {
+      finish({
+        ok: false,
+        reason: 'timeout',
+        message: 'Rewarded ad check timed out. Use normal respawn this time.',
+        status: 'watchdogTimeout',
+      });
+    }, AD_REQUEST_TIMEOUT_MS);
 
-    adBreak({
-      type: 'reward',
-      name: 'death_revive',
-      beforeAd: () => {
-        if (settled) return;
-        adStarted = true;
-        debugGoogleH5Ads('beforeAd');
-        callbacks.onAdStarted?.();
-      },
-      afterAd: () => {
-        if (!adStarted) return;
-        adStarted = false;
-        debugGoogleH5Ads('afterAd');
-        callbacks.onAdFinished?.();
-      },
-      beforeReward: (showAd) => {
-        if (settled) return;
-        clearWatchdog();
-        showAdFn = showAd;
-        debugGoogleH5Ads('beforeReward');
-        callbacks.onRewardAvailable(placement.showAd);
-      },
-      adViewed: () => {
-        finish({ ok: true, status: 'viewed' });
-      },
-      adDismissed: () => {
-        finish({
-          ok: false,
-          reason: 'dismissed',
-          message: 'Ad was closed before completion. Try normal respawn.',
-          status: 'dismissed',
-        });
-      },
-      adBreakDone: (placementInfo) => {
-        debugGoogleH5Ads('adBreakDone', placementInfo?.breakStatus ?? 'unknown');
-        if (settled) return;
-        finish(resolveRewardedReviveAdBreakStatus(placementInfo?.breakStatus));
-      },
-    });
-  } catch (error) {
-    finish({
-      ok: false,
-      reason: 'error',
-      message: 'Rewarded ad failed to start. Try normal respawn.',
-      status: 'adBreakError',
-    });
+    try {
+      recordGoogleH5Ads('ad-break-start', { ready: window.__drillingGoogleH5AdsReady });
+
+      adBreak({
+        type: 'reward',
+        name: 'death_revive',
+        beforeAd: () => {
+          if (settled) return;
+          adStarted = true;
+          recordGoogleH5Ads('before-ad');
+          callbacks.onAdStarted?.();
+        },
+        afterAd: () => {
+          if (!adStarted) return;
+          adStarted = false;
+          recordGoogleH5Ads('after-ad');
+          callbacks.onAdFinished?.();
+        },
+        beforeReward: (showAd) => {
+          if (settled) return;
+          clearWatchdog();
+          showAdFn = showAd;
+          recordGoogleH5Ads('before-reward');
+          callbacks.onRewardAvailable(placement.showAd);
+        },
+        adViewed: () => {
+          recordGoogleH5Ads('ad-viewed');
+          finish({ ok: true, status: 'viewed' });
+        },
+        adDismissed: () => {
+          recordGoogleH5Ads('ad-dismissed');
+          finish({
+            ok: false,
+            reason: 'dismissed',
+            message: 'Ad was closed before completion. Try normal respawn.',
+            status: 'dismissed',
+          });
+        },
+        adBreakDone: (placementInfo) => {
+          recordGoogleH5Ads('ad-break-done', placementInfo ?? null);
+          if (settled) return;
+          finish(resolveRewardedReviveAdBreakStatus(placementInfo?.breakStatus));
+        },
+      });
+    } catch (error) {
+      recordGoogleH5Ads('ad-break-error', error instanceof Error ? error.message : String(error));
+      finish({
+        ok: false,
+        reason: 'error',
+        message: 'Rewarded ad failed to start. Try normal respawn.',
+        status: 'adBreakError',
+      });
+    }
+  };
+
+  recordGoogleH5Ads('placement-start', { ready: window.__drillingGoogleH5AdsReady });
+
+  if (window.__drillingGoogleH5AdsReady) {
+    startAdBreak();
+  } else {
+    readyListener = startAdBreak;
+    window.addEventListener(GOOGLE_H5_ADS_READY_EVENT, readyListener, { once: true });
+    timeoutId = window.setTimeout(() => {
+      finish({
+        ok: false,
+        reason: 'not-ready',
+        message: 'Ad Placement API is still preparing. Use normal respawn this time.',
+        status: 'readyWatchdogTimeout',
+      });
+    }, API_READY_TIMEOUT_MS);
   }
 
   return placement;
@@ -278,4 +314,12 @@ function debugGoogleH5Ads(event: string, payload?: unknown) {
   }
 
   console.info(`[${GOOGLE_H5_ADS_DEBUG_LABEL}] ${event}`, payload);
+}
+
+function recordGoogleH5Ads(event: string, payload?: unknown) {
+  if (typeof window !== 'undefined') {
+    window.__recordDrillingGoogleH5Ads?.(event, payload);
+  }
+
+  debugGoogleH5Ads(event, payload);
 }
