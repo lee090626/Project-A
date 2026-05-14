@@ -31,7 +31,7 @@ source_paths:
 | `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 완료 |
 | `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 완료 |
 | `RENDERING_PIPELINE.md` | PixiJS 렌더링, 아틀라스 로딩, 렌더 시스템 | 완료 |
-| `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 계획 |
+| `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 완료 |
 | `DEVELOPMENT_WORKFLOW.md` | 이슈, PR, 커밋, 검증 명령 | 계획 |
 | `DEPLOYMENT.md` | 빌드 타깃과 배포 산출물 | 계획 |
 
