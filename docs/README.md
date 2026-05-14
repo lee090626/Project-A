@@ -33,7 +33,7 @@ source_paths:
 | `RENDERING_PIPELINE.md` | PixiJS 렌더링, 아틀라스 로딩, 렌더 시스템 | 완료 |
 | `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 완료 |
 | `DEVELOPMENT_WORKFLOW.md` | 이슈, PR, 커밋, 검증 명령 | 완료 |
-| `DEPLOYMENT.md` | 빌드 타깃과 배포 산출물 | 계획 |
+| `DEPLOYMENT.md` | 빌드 타깃과 배포 산출물 | 완료 |
 
 위 문서들은 실제 파일이 생성되기 전까지 `README.md`에서 링크하지 않습니다.
 
