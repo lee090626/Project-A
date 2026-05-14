@@ -18,7 +18,7 @@ source_paths:
 
 ## 현재 상태
 
-문서화는 단계적으로 다시 구축합니다. 현재 단계에서는 이 파일, `GLOSSARY.md`, `GAME_DATA_MODEL.md`만 `docs/` 아래의 정본 문서입니다.
+문서화는 단계적으로 다시 구축합니다. 현재 완료된 정본 문서는 아래 표의 완료 항목입니다.
 
 계획 중인 정본 문서:
 
@@ -26,12 +26,12 @@ source_paths:
 |---|---|---|
 | `GLOSSARY.md` | 게임/코드 공통 용어 | 완료 |
 | `GAME_DATA_MODEL.md` | 설정 데이터, ID, 참조 관계 | 완료 |
-| `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 계획 |
-| `ARCHITECTURE.md` | FSD 레이어, 워커 경계, 런타임 구조 | 계획 |
-| `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 계획 |
-| `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 계획 |
-| `RENDERING_PIPELINE.md` | PixiJS 렌더링, 아틀라스 로딩, 렌더 시스템 | 계획 |
-| `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 계획 |
+| `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 완료 |
+| `ARCHITECTURE.md` | FSD 레이어, 워커 경계, 런타임 구조 | 완료 |
+| `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 완료 |
+| `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 완료 |
+| `RENDERING_PIPELINE.md` | PixiJS 렌더링, 아틀라스 로딩, 렌더 시스템 | 완료 |
+| `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 완료 |
 | `DEVELOPMENT_WORKFLOW.md` | 이슈, PR, 커밋, 검증 명령 | 계획 |
 | `DEPLOYMENT.md` | 빌드 타깃과 배포 산출물 | 계획 |
 
