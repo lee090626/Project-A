@@ -26,7 +26,7 @@ source_paths:
 |---|---|---|
 | `GLOSSARY.md` | 게임/코드 공통 용어 | 완료 |
 | `GAME_DATA_MODEL.md` | 설정 데이터, ID, 참조 관계 | 완료 |
-| `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 계획 |
+| `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 완료 |
 | `ARCHITECTURE.md` | FSD 레이어, 워커 경계, 런타임 구조 | 계획 |
 | `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 계획 |
 | `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 계획 |
