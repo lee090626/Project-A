@@ -74,6 +74,7 @@ npm run dev
 - [게임 상수](docs/GAME_CONSTANTS.md)
 - [아키텍처](docs/ARCHITECTURE.md)
 - [코어 게임 루프](docs/CORE_GAME_LOOP.md)
+- [에셋 파이프라인](docs/ASSET_PIPELINE.md)
 
 개발 에이전트 작업 규칙은 [.agents/rules/08-agents.md](.agents/rules/08-agents.md)를 우선 기준으로 합니다.
 
