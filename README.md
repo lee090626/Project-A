@@ -42,7 +42,7 @@
 2.  **게임 루프 (Worker Thread)**: 실제 게임의 로직과 물리, 렌더링 엔진은 Web Worker 내부에서 독립적으로 실행됩니다.
 3.  **동기화 브리지**: 트리플 버퍼링 기술을 통해 메인 스레드와 워커 스레드 간의 데이터를 지연 없이 주고받으며 보간(Interpolation)을 처리합니다.
 
-상세 아키텍처 문서는 후속 문서화 작업에서 `docs/ARCHITECTURE.md`로 정리할 예정입니다. 현재 문서화 기준은 [문서화 기준](docs/README.md)을 참조하세요.
+상세 구조는 [아키텍처](docs/ARCHITECTURE.md)를 참조하세요. 현재 문서화 기준은 [문서화 기준](docs/README.md)을 참조하세요.
 
 ---
 
@@ -72,6 +72,7 @@ npm run dev
 - [용어 사전](docs/GLOSSARY.md)
 - [게임 데이터 모델](docs/GAME_DATA_MODEL.md)
 - [게임 상수](docs/GAME_CONSTANTS.md)
+- [아키텍처](docs/ARCHITECTURE.md)
 
 개발 에이전트 작업 규칙은 [.agents/rules/08-agents.md](.agents/rules/08-agents.md)를 우선 기준으로 합니다.
 
