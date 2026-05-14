@@ -28,6 +28,7 @@ let lastStartTileY = Number.NaN;
 let lastEndTileY = Number.NaN;
 let lastRenderRevision = -1;
 let lastBaseLayout: number[][] | null = null;
+let lastTextureRevision = -1;
 
 // ============================================================
 // TileRenderer
@@ -59,6 +60,7 @@ export function renderTiles(
   const endTileX   = Math.ceil(player.visualPos.x + 20);
   const startTileY = Math.floor(player.visualPos.y - 15);
   const endTileY   = Math.ceil(player.visualPos.y + 15);
+  const textureRevision = Object.keys(textures).length;
 
   const shouldReuseTiles =
     tileLayer === lastTileLayer &&
@@ -67,7 +69,8 @@ export function renderTiles(
     startTileY === lastStartTileY &&
     endTileY === lastEndTileY &&
     tileMap.renderRevision === lastRenderRevision &&
-    world.baseLayout === lastBaseLayout;
+    world.baseLayout === lastBaseLayout &&
+    textureRevision === lastTextureRevision;
 
   if (shouldReuseTiles) return;
 
@@ -83,6 +86,7 @@ export function renderTiles(
   lastEndTileY = endTileY;
   lastRenderRevision = tileMap.renderRevision;
   lastBaseLayout = world.baseLayout;
+  lastTextureRevision = textureRevision;
 
   visibleTileKeys.clear();
 
@@ -112,11 +116,12 @@ export function renderTiles(
 
       const key = `${x},${y}_${renderKey}`;
       visibleTileKeys.add(key);
+      const texture = getSafeTexture(textures, renderKey as string, 'StoneTile');
 
       if (!tileSpriteCache.has(key)) {
         // 풀에서 스프라이트를 꺼내거나 새로 생성
         const sprite = tilePool.pop() ?? new PIXI.Sprite();
-        sprite.texture = getSafeTexture(textures, renderKey as string, 'StoneTile');
+        sprite.texture = texture;
         sprite.width   = TILE_SIZE;
         sprite.height  = TILE_SIZE;
         sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
@@ -124,6 +129,13 @@ export function renderTiles(
 
         tileLayer.addChild(sprite);
         tileSpriteCache.set(key, sprite);
+      } else {
+        const sprite = tileSpriteCache.get(key)!;
+        if (sprite.texture !== texture) {
+          sprite.texture = texture;
+          sprite.width = TILE_SIZE;
+          sprite.height = TILE_SIZE;
+        }
       }
     }
   }

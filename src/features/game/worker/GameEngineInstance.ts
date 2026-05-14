@@ -78,7 +78,8 @@ export class GameEngineInstance {
           canvas: canvas,
           width: canvas.width,
           height: canvas.height,
-          backgroundAlpha: 0,
+          backgroundColor: 0x09090b,
+          backgroundAlpha: 1,
           antialias: true,
           preference: 'webgl',
         });

@@ -40,6 +40,7 @@ function shouldUseMobileControls(win: Window): boolean {
 }
 
 export default function GameEngine() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const worldRef = useRef<GameWorld>(createInitialWorld(12345));
 
@@ -205,8 +206,9 @@ export default function GameEngine() {
     if (typeof window === 'undefined') return;
 
     const handleResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      const rect = containerRef.current?.getBoundingClientRect();
+      const width = Math.max(1, Math.round(rect?.width || window.innerWidth));
+      const height = Math.max(1, Math.round(rect?.height || window.innerHeight));
       const nextIsMobile = shouldUseMobileControls(window);
 
       setWindowSize({ width, height });
@@ -216,6 +218,14 @@ export default function GameEngine() {
     };
     handleResize();
     window.addEventListener('resize', handleResize);
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' && containerRef.current
+        ? new ResizeObserver(handleResize)
+        : null;
+
+    if (containerRef.current) {
+      resizeObserver?.observe(containerRef.current);
+    }
 
     let rafId: number;
     const renderLoop = () => {
@@ -271,6 +281,7 @@ export default function GameEngine() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      resizeObserver?.disconnect();
       cancelAnimationFrame(rafId);
     };
   }, [screenShake, sendToWorker]);
@@ -294,7 +305,7 @@ export default function GameEngine() {
   if (!isClient) return <div className="fixed inset-0 bg-zinc-950" />;
 
   return (
-    <div className="fixed inset-0 overflow-hidden bg-transparent">
+    <div ref={containerRef} className="fixed inset-0 overflow-hidden bg-zinc-950">
       <canvas
         ref={canvasRef}
         width={windowSize.width}
