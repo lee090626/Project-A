@@ -25,6 +25,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleSynthesizeEffect,
     handleSell,
     handleEquipEquipment,
+    handleRerollEquipmentOption,
     handleSelectCheckpoint,
     handleResetGame,
     handleExportSave,
@@ -60,6 +61,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
             stats={currentStats}
             onClose={() => handleClose('isInventoryOpen')}
             onEquip={handleEquipEquipment}
+            onRerollEquipmentOption={handleRerollEquipmentOption}
           />
         </Overlay>
       )}

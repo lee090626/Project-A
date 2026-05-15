@@ -3,9 +3,11 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 source_paths:
   - src/features/game/ecs/systems/GameLoop.ts
+  - src/features/game/ecs/systems/ActionSystem.ts
+  - src/features/game/ecs/systems/actions/economyActions.ts
   - src/features/input/inputSystem.ts
   - src/features/game/ecs/systems/status/index.ts
   - src/features/game/ecs/systems/physics/index.ts
@@ -25,6 +27,9 @@ source_paths:
   - src/features/game/ecs/systems/statsSyncSystem.ts
   - src/features/game/lib/RenderSyncEncoder.ts
   - src/features/game/hooks/useGameWorker.ts
+  - src/features/game/hooks/useGameActions.ts
+  - src/shared/lib/equipmentRefinement.ts
+  - src/widgets/inventory/EquipmentCard.tsx
   - src/features/game/GameEngine.tsx
 ---
 
@@ -143,7 +148,9 @@ flowchart TD
 
 `interactionSystem`은 `staticEntities`를 기준으로 플레이어 주변 NPC/오브젝트를 찾습니다. 가까운 대상이 있으면 interaction prompt 상태를 켜고, `intent.action === 'interact'`이면 대상 타입에 따라 메인 스레드로 `OPEN_MODAL` 메시지를 보냅니다.
 
-명시적 UI 액션은 `ACTION` 메시지로 들어와 `GameEngineInstance.handleAction`에서 `ActionSystem`으로 전달됩니다. `ActionSystem`은 `upgrade`, `sell`, `craft`, `equip`, `synthesizeEffect` 같은 액션을 economy/world 핸들러로 분배합니다.
+명시적 UI 액션은 `ACTION` 메시지로 들어와 `GameEngineInstance.handleAction`에서 `ActionSystem`으로 전달됩니다. `ActionSystem`은 `upgrade`, `sell`, `craft`, `rerollEquipmentOption`, `equip`, `synthesizeEffect` 같은 액션을 economy/world 핸들러로 분배합니다.
+
+`rerollEquipmentOption`은 장비 재련 액션입니다. `economyActions`가 골드를 소비하고 `equipmentStates[equipmentId].mainStatBonusPct`를 갱신한 뒤 `RECALCULATE_PLAYER_STATS`를 발행합니다. 옵션은 -20~20% 범위의 주스탯 보정이며, 현재 값보다 높은 결과만 적용됩니다. 실제 장비 스탯 반영은 `statsSyncSystem`이 `equipmentRefinement.ts`의 계산 함수를 통해 수행합니다.
 
 스탯이 바뀌는 액션은 `messageBus`의 `RECALCULATE_PLAYER_STATS` 이벤트를 발행할 수 있습니다. `GameEngineInstance`는 이 이벤트를 받아 `syncPermanentStats`와 `forceSyncUi`를 실행합니다.
 

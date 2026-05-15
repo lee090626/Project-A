@@ -1,4 +1,4 @@
-import { MasteryState, PlayerStats } from '../types/game';
+import { EquipmentState, MasteryState, PlayerStats } from '../types/game';
 import { MASTERY_PERKS } from '../config/masteryPerks';
 
 /**
@@ -92,6 +92,9 @@ export const createInitialMasteryState = (id: string): MasteryState => {
 /**
  * 특정 장비의 초기 상태 생성 (기존 호환성 유지를 위해 래핑)
  */
-export const createInitialEquipmentState = (equipmentId: string): MasteryState => {
-  return createInitialMasteryState(equipmentId);
+export const createInitialEquipmentState = (equipmentId: string): EquipmentState => {
+  return {
+    ...createInitialMasteryState(equipmentId),
+    mainStatBonusPct: 0,
+  };
 };

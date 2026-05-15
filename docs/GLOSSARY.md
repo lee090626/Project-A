@@ -3,10 +3,11 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 source_paths:
   - src/shared/types/game
   - src/shared/config
+  - src/shared/lib/equipmentRefinement.ts
   - src/features/game
   - src/entities
   - .agents/rules/08-agents.md
@@ -77,8 +78,9 @@ source_paths:
 
 | 용어 | 정의 | 근거 |
 |---|---|---|
-| Equipment | 드릴, 투구, 갑옷, 신발 장비입니다. 제작 비용, 스탯, 이미지 키를 가질 수 있습니다. | `src/shared/types/game/equipment.ts`, `src/shared/config/equipmentData.ts` |
+| Equipment | 드릴, 투구, 갑옷, 신발 장비입니다. 제작 재료, 기본 스탯, 이미지 키를 가질 수 있고 재련으로 부위별 주스탯 보정률을 얻습니다. | `src/shared/types/game/equipment.ts`, `src/shared/config/equipmentData.ts`, `src/shared/lib/equipmentRefinement.ts` |
 | `EquipmentPart` | 장비 부위 타입입니다. `Drill`, `Helmet`, `Armor`, `Boots` 중 하나입니다. | `src/shared/types/game/equipment.ts` |
+| `EquipmentState` | 장비별 저장 상태입니다. 기존 숙련도 필드에 `mainStatBonusPct`를 더해 재련 결과를 보관합니다. | `src/shared/types/game/progress.ts`, `src/shared/lib/equipmentRefinement.ts` |
 | Mastery | 특정 타일 타입이나 장비에 대한 숙련도 상태입니다. 경험치와 레벨을 포함합니다. | `src/shared/types/game/progress.ts` |
 | `MasteryPerkDef` | 특정 타일 타입 숙련도 레벨을 요구하는 돌파 특성 정의입니다. | `src/shared/config/mastery/types.ts`, `src/shared/config/masteryPerks.ts` |
 | Effect | 보유만으로 패시브 효과를 제공하는 누적형 아이템 계열입니다. `EFFECT_DATA`에 Essence, Relic, Crafted Effect가 함께 들어갑니다. | `src/shared/config/effectData.ts`, `src/shared/config/effects/types.ts` |

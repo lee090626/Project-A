@@ -33,7 +33,7 @@ export interface Equipment {
   image?: string;
   /** 장비가 제공하는 능력치 */
   stats: EquipmentStats;
-  /** 제작 시 필요한 재료 및 비용 */
+  /** 제작 시 필요한 재료 */
   price?: { [key: string]: number };
   /** 장착 시 부여되는 특수 효과 */
   specialEffect?: string;

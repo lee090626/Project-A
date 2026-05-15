@@ -8,6 +8,7 @@ interface TabEquipmentProps {
   visibleEquipments: string[];
   stats: PlayerStats;
   onEquip?: (id: string, part: EquipmentPart) => void;
+  onRerollEquipmentOption?: (equipmentId: string) => void;
 }
 
 const TabEquipment = ({ 
@@ -15,7 +16,8 @@ const TabEquipment = ({
   onSetSelectedPart, 
   visibleEquipments, 
   stats, 
-  onEquip 
+  onEquip,
+  onRerollEquipmentOption,
 }: TabEquipmentProps) => {
   
   const isCurrentlyEquipped = (id: string, part: EquipmentPart) => {
@@ -56,7 +58,9 @@ const TabEquipment = ({
                 key={id}
                 equipmentId={id}
                 isEquipped={isCurrentlyEquipped(id, selectedPart)}
+                stats={stats}
                 onEquip={onEquip}
+                onRerollEquipmentOption={onRerollEquipmentOption}
               />
             ))}
           </div>

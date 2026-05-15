@@ -1,7 +1,16 @@
 import { GameWorld } from '@/entities/world/model';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import {
+  EQUIPMENT_MAIN_STAT_BONUS_MAX,
+  getEquipmentQualityLabel,
+  getEquipmentRerollCost,
+  getMainStatBonusPct,
+  rollEquipmentMainStatBonusPct,
+} from '@/shared/lib/equipmentRefinement';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
 import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
+import { showToast } from '../toastSystem';
 
 /**
  * 업그레이드, 판매, 제작 등 경제 관련 액션을 처리합니다.
@@ -54,5 +63,53 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
       }
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
+
+    case 'rerollEquipmentOption': {
+      const equipmentId = typeof data?.equipmentId === 'string' ? data.equipmentId : '';
+      const equipment = EQUIPMENTS[equipmentId];
+      if (!equipment || !stats.ownedEquipmentIds.includes(equipmentId)) {
+        showToast('Equipment not owned.', 'warning', 1800);
+        break;
+      }
+
+      if (!stats.equipmentStates[equipmentId]) {
+        stats.equipmentStates[equipmentId] = createInitialEquipmentState(equipmentId);
+      }
+
+      const state = stats.equipmentStates[equipmentId];
+      const currentBonus = getMainStatBonusPct(state);
+      if (currentBonus >= EQUIPMENT_MAIN_STAT_BONUS_MAX) {
+        showToast('This option is already perfect.', 'info', 1800);
+        break;
+      }
+
+      const cost = getEquipmentRerollCost(equipment, currentBonus);
+      if ((stats.goldCoins || 0) < cost) {
+        showToast('Not enough gold for refinement.', 'warning', 1800);
+        break;
+      }
+
+      stats.goldCoins -= cost;
+      const rolledBonus = rollEquipmentMainStatBonusPct();
+      const finalBonus = Math.max(currentBonus, rolledBonus);
+      state.mainStatBonusPct = finalBonus;
+
+      if (finalBonus > currentBonus) {
+        showToast(
+          `${equipment.name} refined: ${getEquipmentQualityLabel(finalBonus)} +${finalBonus}%`,
+          'success',
+          2200,
+        );
+      } else {
+        showToast(
+          `Refinement held at ${getEquipmentQualityLabel(currentBonus)} +${currentBonus}%.`,
+          'info',
+          1800,
+        );
+      }
+
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
+      break;
+    }
   }
 };

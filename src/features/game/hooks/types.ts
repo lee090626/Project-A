@@ -31,6 +31,7 @@ export interface UseGameActionsResult {
   handleSynthesizeEffect: (effectId: string) => void;
   handleSell: (resource: string, amount: number, price: number) => void;
   handleEquipEquipment: (id: string, part: string) => void;
+  handleRerollEquipmentOption: (equipmentId: string) => void;
   handleSelectCheckpoint: (depth: number) => void;
   handleResetGame: () => void;
   handleExportSave: () => void;

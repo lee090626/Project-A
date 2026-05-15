@@ -9,3 +9,11 @@ export interface MasteryState {
   /** 현재 숙련도 레벨 */
   level: number;
 }
+
+/**
+ * 장비별 재련 상태입니다.
+ */
+export interface EquipmentState extends MasteryState {
+  /** 장비 주스탯 보정률입니다. -20~20 범위의 정수 퍼센트입니다. */
+  mainStatBonusPct: number;
+}

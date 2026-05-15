@@ -24,7 +24,7 @@ export type { SmeltingJob, DroppedItem } from './game/items';
 export type { CraftRequirements, CraftResult } from './game/crafting';
 
 // 성장 (마스터리)
-export type { MasteryState } from './game/progress';
+export type { EquipmentState, MasteryState } from './game/progress';
 
 // UI 및 시각 효과
 export type {

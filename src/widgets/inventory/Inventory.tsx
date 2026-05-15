@@ -20,12 +20,13 @@ interface InventoryProps {
   stats: PlayerStats;
   onClose: () => void;
   onEquip?: (id: string, part: EquipmentPart) => void;
+  onRerollEquipmentOption?: (equipmentId: string) => void;
 }
 
 /**
  * 플레이어의 소지품(재료, 장비, 스킬젬)을 관리하고 장착할 수 있는 인벤토리 컴포넌트입니다.
  */
-function Inventory({ stats, onClose, onEquip }: InventoryProps) {
+function Inventory({ stats, onClose, onEquip, onRerollEquipmentOption }: InventoryProps) {
   // 상태 관리: 선택된 광물/Effect 키, 현재 활성화된 탭
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<InventoryTab>('ingredients');
@@ -105,6 +106,7 @@ function Inventory({ stats, onClose, onEquip }: InventoryProps) {
             visibleEquipments={visibleEquipments}
             stats={stats}
             onEquip={onEquip}
+            onRerollEquipmentOption={onRerollEquipmentOption}
           />
         )}
       </div>

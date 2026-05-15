@@ -4,6 +4,8 @@ import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
 import { EFFECT_DATA } from '../config/effectData';
 import { C2_GUIDE_QUEST_ID_SET } from '../config/guideQuestData';
 import { gameDB } from './db';
+import { clampMainStatBonusPct } from './equipmentRefinement';
+import { createInitialEquipmentState } from './masteryUtils';
 
 /**
  * 저장될 게임 데이터의 규격을 정의합니다.
@@ -192,6 +194,44 @@ function normalizeGuideQuest(stats: PlayerStats): void {
 }
 
 /**
+ * 구버전 장비 숙련도 상태를 현재 장비 재련 상태로 보정합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function normalizeEquipmentStates(stats: PlayerStats): void {
+  if (!stats.equipmentStates || typeof stats.equipmentStates !== 'object') {
+    stats.equipmentStates = {};
+  }
+
+  if (!Array.isArray(stats.ownedEquipmentIds)) {
+    stats.ownedEquipmentIds = Array.isArray(stats.ownedDrillIds) ? stats.ownedDrillIds : [];
+  }
+
+  const equipmentIds = new Set<string>(stats.ownedEquipmentIds);
+  Object.values(stats.equipment || {}).forEach((equipmentId) => {
+    if (typeof equipmentId === 'string') {
+      equipmentIds.add(equipmentId);
+    }
+  });
+
+  equipmentIds.forEach((equipmentId) => {
+    const existing = stats.equipmentStates[equipmentId];
+    if (!existing || typeof existing !== 'object') {
+      stats.equipmentStates[equipmentId] = createInitialEquipmentState(equipmentId);
+      return;
+    }
+
+    stats.equipmentStates[equipmentId] = {
+      id: typeof existing.id === 'string' ? existing.id : equipmentId,
+      exp: typeof existing.exp === 'number' && Number.isFinite(existing.exp) ? existing.exp : 0,
+      level:
+        typeof existing.level === 'number' && Number.isFinite(existing.level) ? existing.level : 1,
+      mainStatBonusPct: clampMainStatBonusPct(existing.mainStatBonusPct),
+    };
+  });
+}
+
+/**
  * 난독화된 저장 데이터를 다시 읽기 가능한 JSON 문자열로 복구합니다.
  * @param encoded 난독화된 Base64 문자열
  * @returns 복구된 원본 JSON 문자열
@@ -288,6 +328,7 @@ export const saveManager = {
         normalizeClearedCircleIds(s as PlayerStats);
         normalizeEffectStacks(s as PlayerStats);
         normalizeGuideQuest(s as PlayerStats);
+        normalizeEquipmentStates(s as PlayerStats);
 
         // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
         const oldInv = (s.inventory || {}) as any;

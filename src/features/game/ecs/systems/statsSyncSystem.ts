@@ -4,7 +4,8 @@ import {
   BASE_PLAYER_MOVE_SPEED,
   BASE_PLAYER_POWER,
 } from '@/shared/config/playerConstants';
-import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
+import { getRefinedEquipmentStats } from '@/shared/lib/equipmentRefinement';
+import { createInitialEquipmentState, getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 
 /**
@@ -57,11 +58,16 @@ export function syncPermanentStats(player: any) {
     if (!id) return;
     const eq = EQUIPMENTS[id];
     if (!eq) return;
+    if (!player.stats.equipmentStates[id]) {
+      player.stats.equipmentStates[id] = createInitialEquipmentState(id);
+    }
 
-    if (eq.stats.power) eqPower += eq.stats.power;
-    if (eq.stats.maxHp) eqMaxHp += eq.stats.maxHp;
-    if (eq.stats.moveSpeed) eqMoveSpeed += eq.stats.moveSpeed;
-    if (eq.stats.defense) eqDefense += eq.stats.defense;
+    const refinedStats = getRefinedEquipmentStats(eq, player.stats.equipmentStates[id]);
+
+    if (refinedStats.power) eqPower += refinedStats.power;
+    if (refinedStats.maxHp) eqMaxHp += refinedStats.maxHp;
+    if (refinedStats.moveSpeed) eqMoveSpeed += refinedStats.moveSpeed;
+    if (refinedStats.defense) eqDefense += refinedStats.defense;
   });
 
   // 2. 최대 체력 동기화: (기본 체력 + 장비HP + 마스터리고정 + Effect 고정) * (1 + 마스터리배율)

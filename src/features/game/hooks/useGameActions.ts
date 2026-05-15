@@ -73,6 +73,18 @@ export const useGameActions = (
     [sendToWorker, updateUi],
   );
 
+  /** 장비 주스탯 옵션 재련 처리 */
+  const handleRerollEquipmentOption = useCallback(
+    (equipmentId: string) => {
+      sendToWorker('ACTION', {
+        action: 'rerollEquipmentOption',
+        data: { equipmentId },
+      });
+      updateUi();
+    },
+    [sendToWorker, updateUi],
+  );
+
   /** 웨이포인트를 통한 층 이동 처리 */
   const handleSelectCheckpoint = useCallback(
     (depth: number) => {
@@ -111,6 +123,7 @@ export const useGameActions = (
     handleSynthesizeEffect,
     handleSell,
     handleEquipEquipment,
+    handleRerollEquipmentOption,
     handleSelectCheckpoint,
     handleResetGame,
     handleExportSave,

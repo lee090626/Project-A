@@ -3,10 +3,11 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 source_paths:
   - src/shared/lib/saveManager.ts
   - src/shared/lib/db.ts
+  - src/shared/lib/equipmentRefinement.ts
   - src/features/game/ecs/systems/storageSystem.ts
   - src/features/game/hooks/useGameWorker.ts
   - src/features/game/hooks/useGameActions.ts
@@ -19,6 +20,7 @@ source_paths:
   - src/entities/world/model.ts
   - src/shared/types/worker.ts
   - src/shared/types/game/player.ts
+  - src/shared/types/game/progress.ts
   - src/shared/config/constants.ts
   - src/shared/config/guideQuestData.ts
   - src/features/game/ecs/systems/guideQuestSystem.ts
@@ -164,7 +166,8 @@ version 1 이하 legacy buffer는 `savedMapWidth`, `savedIndex`, `packed`를 사
 
 | 처리 | 목적 |
 |---|---|
-| 누락 필드 기본값 보정 | `equipmentStates`, `killedMonsterIds`, `refinerySlots`, `activeSmeltingJobs`, `tileMastery`, `unlockedMasteryPerks`, `collectionHistory`, `spawnRulesVersion`을 보장합니다. |
+| 누락 필드 기본값 보정 | `equipmentStates`, `ownedEquipmentIds`, `killedMonsterIds`, `refinerySlots`, `activeSmeltingJobs`, `tileMastery`, `unlockedMasteryPerks`, `collectionHistory`, `spawnRulesVersion`을 보장합니다. |
+| 장비 재련 상태 보정 | 구버전 장비 숙련도 상태를 `mainStatBonusPct`가 있는 현재 `EquipmentState`로 보정하고, 값은 -20~20 정수 퍼센트로 제한합니다. |
 | waypoint 정규화 | `maxDepthReached` 기준으로 100m 단위 waypoint를 보정하고 0m을 보장합니다. |
 | 수집 가능 광물 정규화 | 비수집 배경 타일이 `discoveredMinerals`나 `tileMastery`에 남아 있으면 제거합니다. |
 | 보스 클리어 이관 | `circle_{n}_core` 형태의 legacy artifact 기록을 `clearedCircleIds`로 옮기고 artifact 필드를 삭제합니다. |

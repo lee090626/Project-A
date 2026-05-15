@@ -20,6 +20,7 @@ const actionHandlers: Record<string, ActionHandler> = {
   upgrade: handleEconomyAction,
   sell: handleEconomyAction,
   craft: handleEconomyAction,
+  rerollEquipmentOption: handleEconomyAction,
   equip: handleWorldAction,
   synthesizeEffect: handleWorldAction,
 };

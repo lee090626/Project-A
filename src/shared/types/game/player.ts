@@ -1,5 +1,5 @@
 import { TileType } from './core';
-import { MasteryState } from './progress';
+import { EquipmentState, MasteryState } from './progress';
 import { SmeltingJob } from './items';
 import { ActiveEffect } from './entity';
 
@@ -103,8 +103,8 @@ export interface PlayerStats {
   /** 현재 탐험 중인 차원 번호 */
   dimension: number;
 
-  /** 각 장비별 숙련도 및 스토리지 관리 (ID 기반) */
-  equipmentStates: { [eqId: string]: MasteryState };
+  /** 각 장비별 재련 상태 및 스토리지 관리 (ID 기반) */
+  equipmentStates: { [eqId: string]: EquipmentState };
 
   /** 각 타일 종류별 숙련도 관리 */
   tileMastery: { [tileType: string]: MasteryState };

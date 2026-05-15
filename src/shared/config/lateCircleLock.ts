@@ -1,0 +1,19 @@
+/**
+ * 아직 실제 밸런싱 전인 Circle 5+ 콘텐츠를 사실상 접근 불가능하게 만드는 임시 잠금 수치입니다.
+ */
+export const UNRELEASED_CIRCLE_START = 5;
+
+/** 타일 체력은 현재 저장 포맷의 16bit HP 영역에 맞춰 최대 65535로 제한합니다. */
+export const UNRELEASED_CIRCLE_MINERAL_HEALTH = 65535;
+export const UNRELEASED_CIRCLE_MINERAL_DEFENSE = 1_000_000;
+
+export const UNRELEASED_CIRCLE_MONSTER_HP = 1_000_000_000;
+export const UNRELEASED_CIRCLE_MONSTER_POWER = 1_000_000;
+export const UNRELEASED_CIRCLE_MONSTER_DEFENSE = 100_000;
+
+export const UNRELEASED_CIRCLE_BOSS_HP = 10_000_000_000;
+export const UNRELEASED_CIRCLE_BOSS_POWER = 5_000_000;
+export const UNRELEASED_CIRCLE_BOSS_DEFENSE = 1_000_000;
+
+export const UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT = 1_000_000;
+export const UNRELEASED_CIRCLE_REROLL_COST = 1_000_000_000;
