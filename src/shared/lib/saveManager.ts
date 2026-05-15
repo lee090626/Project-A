@@ -32,6 +32,8 @@ const WAYPOINT_INTERVAL = 100;
 const COLLECTIBLE_MINERAL_KEYS = new Set(MINERALS.map((m) => m.key as string));
 const KNOWN_TILE_DEFINITION_KEYS = new Set(TILE_DEFINITIONS.map((m) => m.key as string));
 const LEGACY_BOSS_CORE_PATTERN = /^circle_(\d+)_core$/;
+const LEGACY_C4_SELL_RELIC_ID = 'relic_mammon_coin';
+const C4_SELL_RELIC_ID = 'relic_fafnir_hoard';
 
 /**
  * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
@@ -128,6 +130,28 @@ function normalizeEffectStacks(stats: PlayerStats): void {
 
     stats.collectionHistory[itemId] = Math.min(count, effect.maxStack);
   }
+}
+
+/**
+ * C4 보스 relic ID 변경 전 저장된 수집 기록을 현재 파프니르 relic으로 이전합니다.
+ *
+ * @param stats 플레이어 스탯
+ */
+function migrateLegacyEffectIds(stats: PlayerStats): void {
+  if (!stats.collectionHistory) {
+    stats.collectionHistory = {};
+    return;
+  }
+
+  const legacyCount = stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
+  if (typeof legacyCount !== 'number' || legacyCount <= 0) {
+    delete stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
+    return;
+  }
+
+  stats.collectionHistory[C4_SELL_RELIC_ID] =
+    (stats.collectionHistory[C4_SELL_RELIC_ID] || 0) + legacyCount;
+  delete stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
 }
 
 /**
@@ -326,6 +350,7 @@ export const saveManager = {
         normalizeUnlockedWaypoints(s as PlayerStats);
         normalizeCollectibleMineralProgress(s as PlayerStats);
         normalizeClearedCircleIds(s as PlayerStats);
+        migrateLegacyEffectIds(s as PlayerStats);
         normalizeEffectStacks(s as PlayerStats);
         normalizeGuideQuest(s as PlayerStats);
         normalizeEquipmentStates(s as PlayerStats);

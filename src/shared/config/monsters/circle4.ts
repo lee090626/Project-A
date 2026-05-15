@@ -67,7 +67,7 @@ export const circle4Monsters: MonsterDefinition[] = [
       gold: 12000,
       drops: [
         { itemId: 'essence_greed', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'relic_mammon_coin', chance: 0.4, minAmount: 1, maxAmount: 1 },
+        { itemId: 'relic_fafnir_hoard', chance: 0.4, minAmount: 1, maxAmount: 1 },
       ],
     },
     behavior: { attackRange: 1, aggroRange: 10 },

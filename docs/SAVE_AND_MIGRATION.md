@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-15
+last_reviewed: 2026-05-16
 source_paths:
   - src/shared/lib/saveManager.ts
   - src/shared/lib/db.ts
@@ -23,6 +23,7 @@ source_paths:
   - src/shared/types/game/progress.ts
   - src/shared/config/constants.ts
   - src/shared/config/guideQuestData.ts
+  - src/shared/config/effects/relics.ts
   - src/features/game/ecs/systems/guideQuestSystem.ts
   - src/features/game/components/ModalLayer.tsx
   - src/widgets/settings/Settings.tsx
@@ -172,6 +173,7 @@ version 1 이하 legacy buffer는 `savedMapWidth`, `savedIndex`, `packed`를 사
 | 수집 가능 광물 정규화 | 비수집 배경 타일이 `discoveredMinerals`나 `tileMastery`에 남아 있으면 제거합니다. |
 | 보스 클리어 이관 | `circle_{n}_core` 형태의 legacy artifact 기록을 `clearedCircleIds`로 옮기고 artifact 필드를 삭제합니다. |
 | Effect stack clamp | `EFFECT_DATA[itemId].maxStack`을 넘는 `collectionHistory` 값을 줄입니다. |
+| Effect ID 이관 | C4 보스 relic이 `relic_mammon_coin`에서 `relic_fafnir_hoard`로 변경되어 기존 수집 기록을 새 ID로 합산합니다. |
 | guide quest 정규화 | 완료/보상 ID와 counter/observed 구조를 현재 C2 guide ID 집합에 맞춥니다. |
 | inventory 마이그레이션 | `veinstone`을 `crimsonstone`으로 옮깁니다. |
 | legacy item 보상 | 더 이상 정의되지 않는 양수 수량 아이템은 1개당 10G로 환산합니다. |
