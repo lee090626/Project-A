@@ -1,4 +1,9 @@
-import { createInitialWorld, GameWorld } from '@/entities/world/model';
+import {
+  createInitialWorld,
+  GameWorld,
+  isAnyModalOpen,
+  MODAL_UI_KEYS,
+} from '@/entities/world/model';
 import * as PIXI from 'pixi.js';
 import { LightingFilter } from '@/features/game/lib/LightingFilter';
 import { GameLoop } from '@/features/game/ecs/systems/GameLoop';
@@ -11,6 +16,7 @@ import {
   InitPayload,
   UpdateAssetsPayload,
   InputPayload,
+  UiStatePayload,
   ActionPayload,
 } from '@/shared/types/worker';
 import { GameLayers, TextureRegistry } from '@/shared/types/engine';
@@ -247,6 +253,30 @@ export class GameEngineInstance {
     }
     if (payload.mobileJoystick) {
       this.world.mobileJoystick = payload.mobileJoystick;
+    }
+  }
+
+  /**
+   * 메인 스레드가 소유한 모달 상태를 워커 입력 차단 로직에 반영합니다.
+   */
+  handleUiState(payload: UiStatePayload) {
+    for (const key of MODAL_UI_KEYS) {
+      const nextValue = payload.ui[key];
+      if (typeof nextValue === 'boolean') {
+        this.world.ui[key] = nextValue;
+      }
+    }
+
+    if (typeof payload.ui.isMobile === 'boolean') {
+      this.world.ui.isMobile = payload.ui.isMobile;
+    }
+
+    if (isAnyModalOpen(this.world.ui)) {
+      this.world.intent.moveX = 0;
+      this.world.intent.moveY = 0;
+      this.world.intent.action = 'none';
+      this.world.intent.miningTarget = null;
+      this.world.player.isDrilling = false;
     }
   }
 

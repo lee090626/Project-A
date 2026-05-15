@@ -3,12 +3,13 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-16
 source_paths:
   - .agents/rules/08-agents.md
   - src/app/play/page.tsx
   - src/app/_components/GamePlayShell.tsx
   - src/features/game/GameEngine.tsx
+  - src/features/game/hooks/useGameUI.ts
   - src/features/game/hooks/useGameWorker.ts
   - src/features/game/worker/game.worker.ts
   - src/features/game/worker/WorkerMessageRouter.ts
@@ -96,6 +97,7 @@ flowchart LR
 | Main -> Worker | `SET_CANVAS` | `OffscreenCanvas`를 워커에 전달합니다. |
 | Main -> Worker | `RESIZE` | 브라우저 창 크기를 워커 Pixi renderer에 반영합니다. |
 | Main -> Worker | `INPUT` | keyboard/mobile joystick 입력 상태를 전달합니다. |
+| Main -> Worker | `UI_STATE` | 메인 스레드가 소유한 모달/모바일 UI 플래그를 워커 입력 차단 로직에 미러링합니다. |
 | Main -> Worker | `ACTION` | UI 액션이나 게임 액션을 워커의 action system으로 전달합니다. |
 | Main -> Worker | `RETURN_BUFFER` | `RENDER_SYNC`에 사용한 buffer를 워커 pool로 반환합니다. |
 | Main -> Worker | `RETURN_SAVE_BUFFER` | 저장 후 tile map buffer를 워커에 반환하는 zero-copy 경로입니다. |
@@ -168,6 +170,8 @@ React UI는 `GameWorld` 전체를 직접 구독하지 않습니다. 워커가 �
 | `toasts` | 워커 `SHOW_TOAST` 또는 메인 UI 요청 |
 
 HUD나 modal 같은 UI 컴포넌트는 worker 내부 객체에 직접 접근하지 않고, `useGameStore`, `GameEngine`의 props, `GameOverlay`를 통해 필요한 상태를 받습니다.
+
+모달 오픈/닫힘 플래그는 React UI가 메인 스레드에서 소유합니다. 단, 워커의 `inputSystem`도 모달 중 이동/상호작용을 차단해야 하므로 `useGameUI`는 모달 상태 변경 시 `UI_STATE` 메시지로 `MODAL_UI_KEYS`와 `isMobile` 값을 워커 `world.ui`에 동기화합니다. 워커에서 상호작용 성공으로 `OPEN_MODAL`을 보낸 경우에도 메인 스레드가 실제 모달을 열고 다시 `UI_STATE`를 보내는 흐름을 탑니다.
 
 ## 이 문서에서 다루지 않는 범위
 

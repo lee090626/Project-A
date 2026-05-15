@@ -1,5 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { MINERAL_MAP } from '@/shared/config/mineralData';
 import {
   EQUIPMENT_MAIN_STAT_BONUS_MAX,
   getEquipmentQualityLabel,
@@ -10,7 +11,65 @@ import {
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
 import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
+import type { CraftRequirements, PlayerStats } from '@/shared/types/game';
 import { showToast } from '../toastSystem';
+
+const EQUIPMENT_RESULT_KEYS = [
+  'DrillId',
+  'HelmetId',
+  'ArmorId',
+  'BootsId',
+  'drillId',
+  'helmetId',
+  'armorId',
+  'bootsId',
+] as const;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object';
+}
+
+function getInventoryAmount(stats: PlayerStats, resource: string): number | undefined {
+  if (resource === 'goldCoins') return stats.goldCoins || 0;
+
+  const amount = stats.inventory?.[resource];
+  return typeof amount === 'number' ? amount : undefined;
+}
+
+function isValidRequirementAmount(amount: unknown): amount is number {
+  return typeof amount === 'number' && Number.isFinite(amount) && amount >= 0;
+}
+
+function canAffordRequirements(stats: PlayerStats, requirements: CraftRequirements): boolean {
+  return Object.entries(requirements).every(([resource, amount]) => {
+    const owned = getInventoryAmount(stats, resource);
+    return owned !== undefined && isValidRequirementAmount(amount) && owned >= amount;
+  });
+}
+
+function spendRequirements(stats: PlayerStats, requirements: CraftRequirements) {
+  Object.entries(requirements).forEach(([resource, amount]) => {
+    if (!isValidRequirementAmount(amount) || amount === 0) return;
+
+    if (resource === 'goldCoins') {
+      stats.goldCoins -= amount;
+      return;
+    }
+
+    stats.inventory[resource] -= amount;
+  });
+}
+
+function getEquipmentIdFromCraftResult(result: unknown): string | null {
+  if (!isRecord(result)) return null;
+
+  for (const key of EQUIPMENT_RESULT_KEYS) {
+    const value = result[key];
+    if (typeof value === 'string') return value;
+  }
+
+  return null;
+}
 
 /**
  * 업그레이드, 판매, 제작 등 경제 관련 액션을 처리합니다.
@@ -20,49 +79,66 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
 
   switch (action) {
     case 'upgrade':
-      if (data.type === 'power') stats.power += 5;
-      else if (data.type === 'maxHp') stats.maxHp += 20;
-      if (data.requirements) {
-        Object.entries(data.requirements).forEach(([res, amt]) => {
-          const amount = amt as number;
-          if (res === 'goldCoins') stats.goldCoins -= amount;
-          else if (stats.inventory[res as any] !== undefined) {
-            (stats.inventory as any)[res] -= amount;
-          }
-        });
-      }
-      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
+      showToast('Legacy upgrade is unavailable.', 'warning', 1800);
       break;
 
-    case 'sell':
-      if (stats.inventory[data.resource] >= data.amount) {
-        stats.inventory[data.resource] -= data.amount;
-        // [Effect] 마몬의 황금 주화 (GOLD_SELL_BOOST): 판매가 2배
-        const priceMultiplier = hasEffectItemEffect(stats, 'GOLD_SELL_BOOST') ? 2.0 : 1.0;
-        stats.goldCoins += Math.floor(data.price * priceMultiplier);
-      }
-      break;
+    case 'sell': {
+      const resource = typeof data?.resource === 'string' ? data.resource : '';
+      const amount = typeof data?.amount === 'number' ? data.amount : 0;
+      const mineral = MINERAL_MAP[resource];
 
-    case 'craft':
-      if (data.req) {
-        Object.entries(data.req).forEach(([res, amt]) => {
-          if (res === 'goldCoins') stats.goldCoins -= amt as number;
-          else if (stats.inventory[res as any] !== undefined)
-            (stats.inventory as any)[res] -= amt as number;
-        });
+      if (!mineral || mineral.collectible === false || !Number.isInteger(amount) || amount <= 0) {
+        showToast('Invalid sell request.', 'warning', 1800);
+        break;
       }
-      if (data.res) {
-        const equipId = data.res.DrillId || data.res.HelmetId || data.res.ArmorId || data.res.BootsId || 
-                       data.res.drillId || data.res.helmetId || data.res.armorId || data.res.bootsId;
-        if (equipId && !stats.ownedEquipmentIds.includes(equipId)) {
-          stats.ownedEquipmentIds.push(equipId);
-          if (!stats.equipmentStates[equipId]) {
-            stats.equipmentStates[equipId] = createInitialEquipmentState(equipId);
-          }
-        }
+
+      const owned = getInventoryAmount(stats, resource);
+      if (owned === undefined || owned < amount) {
+        showToast('Not enough materials to sell.', 'warning', 1800);
+        break;
       }
+
+      stats.inventory[resource] = owned - amount;
+      // [Effect] 파프니르의 황금 보물 (GOLD_SELL_BOOST): 판매가 2배
+      const priceMultiplier = hasEffectItemEffect(stats, 'GOLD_SELL_BOOST') ? 2.0 : 1.0;
+      stats.goldCoins += Math.floor(amount * mineral.basePrice * priceMultiplier);
+      break;
+    }
+
+    case 'craft': {
+      const equipId = getEquipmentIdFromCraftResult(data?.res);
+      const equipment = equipId ? EQUIPMENTS[equipId] : null;
+      if (!equipId || !equipment) {
+        showToast('Invalid craft request.', 'warning', 1800);
+        break;
+      }
+
+      if (!Array.isArray(stats.ownedEquipmentIds)) {
+        stats.ownedEquipmentIds = [];
+      }
+      if (!stats.equipmentStates) {
+        stats.equipmentStates = {};
+      }
+
+      if (stats.ownedEquipmentIds.includes(equipId)) {
+        showToast('Equipment already owned.', 'info', 1800);
+        break;
+      }
+
+      const requirements = (equipment.price || {}) as CraftRequirements;
+      if (!canAffordRequirements(stats, requirements)) {
+        showToast('Not enough materials to craft.', 'warning', 1800);
+        break;
+      }
+
+      spendRequirements(stats, requirements);
+      stats.ownedEquipmentIds.push(equipId);
+      stats.equipmentStates[equipId] =
+        stats.equipmentStates[equipId] || createInitialEquipmentState(equipId);
+
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
+    }
 
     case 'rerollEquipmentOption': {
       const equipmentId = typeof data?.equipmentId === 'string' ? data.equipmentId : '';

@@ -12,6 +12,7 @@ export type WorkerMessageType =
   | 'SET_CANVAS'
   | 'RESIZE'
   | 'INPUT'
+  | 'UI_STATE'
   | 'ACTION'
   | 'RETURN_BUFFER'
   | 'RETURN_SAVE_BUFFER'
@@ -51,6 +52,13 @@ export interface InputPayload {
 }
 
 /**
+ * 메인 스레드 UI 상태 중 워커 입력 차단에 필요한 값입니다.
+ */
+export interface UiStatePayload {
+  ui: Record<string, boolean>;
+}
+
+/**
  * 액션 핸들링 페이로드
  */
 export interface ActionPayload {
@@ -67,6 +75,7 @@ export type MainToWorkerMessage =
   | { type: 'SET_CANVAS'; payload: { offscreen?: OffscreenCanvas } }
   | { type: 'RESIZE'; payload: { width: number; height: number } }
   | { type: 'INPUT'; payload: InputPayload }
+  | { type: 'UI_STATE'; payload: UiStatePayload }
   | { type: 'ACTION'; payload: ActionPayload }
   | { type: 'RETURN_BUFFER'; payload: { buffer?: ArrayBuffer } }
   | { type: 'RETURN_SAVE_BUFFER'; payload: { buffer?: ArrayBuffer } }
@@ -110,6 +119,7 @@ const mainToWorkerTypes = new Set<WorkerMessageType>([
   'SET_CANVAS',
   'RESIZE',
   'INPUT',
+  'UI_STATE',
   'ACTION',
   'RETURN_BUFFER',
   'RETURN_SAVE_BUFFER',
@@ -144,6 +154,12 @@ export function isMainToWorkerMessage(value: unknown): value is MainToWorkerMess
       return isRecord(payload) && typeof payload.width === 'number' && typeof payload.height === 'number';
     case 'INPUT':
       return isRecord(payload);
+    case 'UI_STATE':
+      return (
+        isRecord(payload) &&
+        isRecord(payload.ui) &&
+        Object.values(payload.ui).every((value) => typeof value === 'boolean')
+      );
     case 'ACTION':
       return isRecord(payload) && typeof payload.action === 'string';
     case 'SAVE_REQUEST':

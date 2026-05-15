@@ -31,6 +31,9 @@ export class WorkerMessageRouter {
       case 'INPUT':
         this.engine.handleInput(payload);
         break;
+      case 'UI_STATE':
+        this.engine.handleUiState(payload);
+        break;
       case 'RESIZE':
         this.engine.resize(payload.width, payload.height);
         break;

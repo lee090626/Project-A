@@ -80,6 +80,11 @@ export default function GameEngine() {
     setUiVersion((v) => v + 1);
   }, []);
 
+  // Worker 연결 전 UI 훅이 먼저 만들어지므로, 실제 sender는 worker 초기화 후 교체합니다.
+  const [workerSender, setWorkerSender] = useState<{ send: SendToWorker }>({
+    send: () => {},
+  });
+
   const loadAssetsAndTransfer = useCallback(async (sendWorker: SendToWorker) => {
     const basePath = getBasePath();
     const assetsPath = `${basePath}/assets`;
@@ -133,7 +138,7 @@ export default function GameEngine() {
     }
   }, []);
 
-  const uiActions = useGameUI(worldRef, updateUi);
+  const uiActions = useGameUI(worldRef, updateUi, workerSender.send);
   const { toggleModal, handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
 
   const handleCloseOnboarding = useCallback(() => {
@@ -151,11 +156,6 @@ export default function GameEngine() {
     },
     [handleOpen],
   );
-
-  // Need to provide a throwaway `sendToWorker` for `useGameActions` initially, or properly wrap
-  const [workerSender, setWorkerSender] = useState<{ send: SendToWorker }>({
-    send: () => {},
-  });
 
   const gameActions = useGameActions(worldRef, updateUi, workerSender.send);
 
@@ -215,6 +215,7 @@ export default function GameEngine() {
       setIsMobile(nextIsMobile);
       worldRef.current.ui.isMobile = nextIsMobile;
       sendToWorker('RESIZE', { width, height });
+      sendToWorker('UI_STATE', { ui: { isMobile: nextIsMobile } });
     };
     handleResize();
     window.addEventListener('resize', handleResize);

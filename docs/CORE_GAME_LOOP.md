@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-15
+last_reviewed: 2026-05-16
 source_paths:
   - src/features/game/ecs/systems/GameLoop.ts
   - src/features/game/ecs/systems/ActionSystem.ts
@@ -27,6 +27,7 @@ source_paths:
   - src/features/game/ecs/systems/statsSyncSystem.ts
   - src/features/game/lib/RenderSyncEncoder.ts
   - src/features/game/hooks/useGameWorker.ts
+  - src/features/game/hooks/useGameUI.ts
   - src/features/game/hooks/useGameActions.ts
   - src/shared/lib/equipmentRefinement.ts
   - src/widgets/inventory/EquipmentCard.tsx
@@ -116,6 +117,8 @@ flowchart TD
 
 `inputSystem`은 `world.keys`와 `world.mobileJoystick`을 읽어 `world.intent`를 갱신합니다.
 
+모달 플래그는 메인 스레드 React UI가 소유하지만, 입력 차단은 워커의 `inputSystem`에서 일어나야 합니다. `useGameUI`는 모달 오픈/닫힘과 모바일 모드 변경을 `UI_STATE` 메시지로 워커 `world.ui`에 미러링하고, `inputSystem`은 `isAnyModalOpen(world.ui)`이 true이면 이동/상호작용 의도를 만들지 않습니다.
+
 | 입력 | 결과 |
 |---|---|
 | 방향키, WASD, ZQSD | `intent.moveX`, `intent.moveY` |
@@ -149,6 +152,8 @@ flowchart TD
 `interactionSystem`은 `staticEntities`를 기준으로 플레이어 주변 NPC/오브젝트를 찾습니다. 가까운 대상이 있으면 interaction prompt 상태를 켜고, `intent.action === 'interact'`이면 대상 타입에 따라 메인 스레드로 `OPEN_MODAL` 메시지를 보냅니다.
 
 명시적 UI 액션은 `ACTION` 메시지로 들어와 `GameEngineInstance.handleAction`에서 `ActionSystem`으로 전달됩니다. `ActionSystem`은 `upgrade`, `sell`, `craft`, `rerollEquipmentOption`, `equip`, `synthesizeEffect` 같은 액션을 economy/world 핸들러로 분배합니다.
+
+경제 액션은 UI payload를 신뢰하지 않고 워커에서 다시 검증합니다. 장비 제작은 `EQUIPMENTS[equipmentId].price`를 기준으로 재료를 확인한 뒤 차감하고, 이미 보유한 장비나 부족한 재료는 거부합니다. 광물 판매도 `MINERAL_MAP[resource].basePrice`를 워커에서 다시 조회하며 음수/소수/비수집 광물 요청을 거부합니다. legacy `upgrade` 액션은 현재 성장 루프에서 사용하지 않으므로 워커에서 no-op으로 처리합니다.
 
 `rerollEquipmentOption`은 장비 재련 액션입니다. `economyActions`가 골드를 소비하고 `equipmentStates[equipmentId].mainStatBonusPct`를 갱신한 뒤 `RECALCULATE_PLAYER_STATS`를 발행합니다. 옵션은 -20~20% 범위의 주스탯 보정이며, 현재 값보다 높은 결과만 적용됩니다. 실제 장비 스탯 반영은 `statsSyncSystem`이 `equipmentRefinement.ts`의 계산 함수를 통해 수행합니다.
 
