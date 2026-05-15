@@ -4,7 +4,7 @@ import { TileType } from '../types/game';
  * 월드 스폰/지형 보정 규칙이 바뀌었을 때 런타임 캐시와 레거시 지형을 갱신하기 위한 버전입니다.
  * 스폰 density, weight, layer 또는 저장 지형 마이그레이션을 조정하면 값을 올려 기존 세이브를 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 11;
+export const SPAWN_RULE_VERSION = 12;
 export const BOSS_SPAWN_X = 15;
 export const BOSS_SPAWN_DEPTH_FROM_END = 8;
 
@@ -156,7 +156,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Wrath',
     nameKo: '분노',
     theme: '용암, 불꽃, 격노',
-    bgType: 'stone',
+    bgType: 'ragestone',
     depthStart: 900,
     depthEnd: 1200,
     minerals: [
@@ -172,7 +172,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Heresy',
     nameKo: '이단',
     theme: '재, 저주, 어둠',
-    bgType: 'stone',
+    bgType: 'ashstone',
     depthStart: 1200,
     depthEnd: 1500,
     minerals: [
@@ -188,7 +188,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Violence',
     nameKo: '폭력',
     theme: '피, 가시, 잔혹',
-    bgType: 'stone',
+    bgType: 'thornstone',
     depthStart: 1500,
     depthEnd: 1800,
     minerals: [
@@ -204,7 +204,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Fraud',
     nameKo: '사기',
     theme: '기만, 그림자, 이중성',
-    bgType: 'stone',
+    bgType: 'mimicite',
     depthStart: 1800,
     depthEnd: 2100,
     minerals: [
@@ -220,7 +220,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Treachery',
     nameKo: '배신',
     theme: '얼음, 침묵, 칠흑',
-    bgType: 'stone',
+    bgType: 'froststone',
     depthStart: 2100,
     depthEnd: 2400,
     minerals: [

@@ -1,4 +1,5 @@
 import { Equipment } from '../types/game';
+import { UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT } from './lateCircleLock';
 
 /**
  * 장비 데이터베이스 (EQUIPMENTS)
@@ -20,7 +21,7 @@ import { Equipment } from '../types/game';
  * @property {number} stats.defense - 방어력 (투구, 갑옷, 신발)
  * @property {number} stats.maxHp - 최대 체력 (갑옷, 신발)
  * @property {number} stats.moveSpeed - 이동 속도 (신발)
- * @property {Object} price - 제작/구매 비용
+ * @property {Object} price - 제작 재료
  */
 export const EQUIPMENTS: Record<string, any> = {
   // === Circle 2 — Lust (색욕) ===
@@ -33,7 +34,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🦷',
     image: 'CrimsonFangDrill',
     stats: { power: 25 },
-    price: { crimsonstone: 10, galestone: 5, goldCoins: 500 },
+    price: { crimsonstone: 10, galestone: 5 },
   },
   'crimson_veil': {
     id: 'crimson_veil',
@@ -44,7 +45,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🥽',
     image: 'CrimsonVeilHelmet',
     stats: { maxHp: 80, defense: 3 },
-    price: { crimsonstone: 5, galestone: 3, goldCoins: 300 },
+    price: { crimsonstone: 5, galestone: 3 },
   },
   'crimson_plate': {
     id: 'crimson_plate',
@@ -55,7 +56,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🛡️',
     image: 'CrimsonPlateArmor',
     stats: { maxHp: 200, defense: 5 },
-    price: { crimsonstone: 25, fervorstone: 10, goldCoins: 1200 },
+    price: { crimsonstone: 25, fervorstone: 10 },
   },
   'crimson_stride': {
     id: 'crimson_stride',
@@ -66,7 +67,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '👢',
     image: 'CrimsonStrideBoots',
     stats: { moveSpeed: 15, defense: 2 },
-    price: { galestone: 15, fervorstone: 5, goldCoins: 800 },
+    price: { galestone: 15, fervorstone: 5 },
   },
 
   // === Circle 3 — Gluttony (탐식) ===
@@ -79,7 +80,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🌑',
     image: 'VoidCrusher',
     stats: { power: 40 },
-    price: { moldstone: 24, sludgestone: 8, goldCoins: 3000 },
+    price: { moldstone: 24, sludgestone: 8 },
   },
   'void_mask': {
     id: 'void_mask',
@@ -90,7 +91,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🎭',
     image: 'VoidMask',
     stats: { maxHp: 80, defense: 6 },
-    price: { moldstone: 16, sludgestone: 6, goldCoins: 2200 }
+    price: { moldstone: 16, sludgestone: 6 }
   },
   'void_mantle': {
     id: 'void_mantle',
@@ -101,7 +102,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '🧥',
     image: 'VoidMantle',
     stats: { maxHp: 400, defense: 10 },
-    price: { moldstone: 24, sludgestone: 14, rotstone: 6, goldCoins: 3600 }
+    price: { moldstone: 24, sludgestone: 14, rotstone: 6 }
   },
   'void_step': {
     id: 'void_step',
@@ -112,7 +113,7 @@ export const EQUIPMENTS: Record<string, any> = {
     icon: '👣',
     image: 'VoidStep',
     stats: { moveSpeed: 25, defense: 6},
-    price: { moldstone: 16, sludgestone: 8, rotstone: 4, goldCoins: 2700 }
+    price: { moldstone: 16, sludgestone: 8, rotstone: 4 }
   },
 
   // === Circle 4 — Greed (탐욕) ===
@@ -124,7 +125,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 4,
     icon: '🔱',
     stats: { power: 55 },
-    price: { midasite: 50, goldCoins: 10000 },
+    price: { midasite: 50 },
   },
   'crown_helm': {
     id: 'crown_helm',
@@ -134,7 +135,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 4,
     icon: '👑',
     stats: { defense: 25 },
-    price: { luststone: 40, goldCoins: 8000 }
+    price: { luststone: 40 }
   },
   'crown_vestment': {
     id: 'crown_vestment',
@@ -144,7 +145,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 4,
     icon: '🥋',
     stats: { maxHp: 500 },
-    price: { midasite: 60, goldCoins: 12000 }
+    price: { midasite: 60 }
   },
   'crown_treads': {
     id: 'crown_treads',
@@ -154,7 +155,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 4,
     icon: '👟',
     stats: { moveSpeed: 35, defense: 10, maxHp: 150 },
-    price: { midasite: 30, goldCoins: 9000 }
+    price: { midasite: 30 }
   },
 
   // === Circle 5 — Wrath (분노) ===
@@ -166,7 +167,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 5,
     icon: '🔥',
     stats: { power: 90 },
-    price: { furystone: 80, goldCoins: 25000 },
+    price: { furystone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT },
   },
   'ember_visor': {
     id: 'ember_visor',
@@ -176,7 +177,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 5,
     icon: '🕶️',
     stats: { defense: 45 },
-    price: { cinderstone: 60, goldCoins: 20000 }
+    price: { cinderstone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   },
   'ember_plate': {
     id: 'ember_plate',
@@ -186,7 +187,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 5,
     icon: '🛡️',
     stats: { maxHp: 1000 },
-    price: { furystone: 100, goldCoins: 35000 }
+    price: { furystone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   },
   'ember_stride': {
     id: 'ember_stride',
@@ -196,7 +197,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 5,
     icon: '🥾',
     stats: { moveSpeed: 55, defense: 15, maxHp: 300 },
-    price: { cinderstone: 50, goldCoins: 22000 }
+    price: { cinderstone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   },
 
   // === Circle 6 — Heresy (이단) ===
@@ -208,7 +209,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 6,
     icon: '🌪️',
     stats: { power: 150 },
-    price: { vexite: 150, goldCoins: 80000 },
+    price: { vexite: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT },
   },
   'ash_cowl': {
     id: 'ash_cowl',
@@ -218,7 +219,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 6,
     icon: '👤',
     stats: { defense: 80 },
-    price: { ashstone: 120, goldCoins: 60000 }
+    price: { ashstone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   },
   'ash_shroud': {
     id: 'ash_shroud',
@@ -228,7 +229,7 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 6,
     icon: '🧥',
     stats: { maxHp: 2000 },
-    price: { vexite: 200, goldCoins: 100000 }
+    price: { vexite: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   },
   'ash_glide': {
     id: 'ash_glide',
@@ -238,6 +239,6 @@ export const EQUIPMENTS: Record<string, any> = {
     circle: 6,
     icon: '🛸',
     stats: { moveSpeed: 80, defense: 30, maxHp: 600 },
-    price: { ashstone: 100, goldCoins: 75000 }
+    price: { ashstone: UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT }
   }
 };

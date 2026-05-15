@@ -1,4 +1,12 @@
 import { MonsterDefinition } from './types';
+import {
+  UNRELEASED_CIRCLE_BOSS_DEFENSE,
+  UNRELEASED_CIRCLE_BOSS_HP,
+  UNRELEASED_CIRCLE_BOSS_POWER,
+  UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+  UNRELEASED_CIRCLE_MONSTER_HP,
+  UNRELEASED_CIRCLE_MONSTER_POWER,
+} from '../lateCircleLock';
 
 export const circle8Monsters: MonsterDefinition[] = [
   {
@@ -8,7 +16,12 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 600000, power: 10000, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 60000,
       gold: 12000,
@@ -25,7 +38,12 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 500000, power: 15000, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 50000,
       gold: 10000,
@@ -42,7 +60,12 @@ export const circle8Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Fraud 서클의 하급 영혼입니다.',
-    stats: { maxHp: 450000, power: 12000, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 45000,
       gold: 9000,
@@ -61,7 +84,12 @@ export const circle8Monsters: MonsterDefinition[] = [
     description: '신성한 심판자를 자처하지만, 사실은 기만과 부패로 영혼들을 타락시키는 서클 8의 지배자.',
     width: 5,
     height: 5,
-    stats: { maxHp: 12000000, power: 45000, defense: 20, attackCooldown: 2000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_BOSS_HP,
+      power: UNRELEASED_CIRCLE_BOSS_POWER,
+      defense: UNRELEASED_CIRCLE_BOSS_DEFENSE,
+      attackCooldown: 2000,
+    },
     rewards: {
       exp: 6000000,
       gold: 1200000,

@@ -1,4 +1,8 @@
 import { MineralDefinition } from './types';
+import {
+  UNRELEASED_CIRCLE_MINERAL_DEFENSE,
+  UNRELEASED_CIRCLE_MINERAL_HEALTH,
+} from '../lateCircleLock';
 
 export const circle7Minerals: MineralDefinition[] = [
   {
@@ -13,8 +17,8 @@ export const circle7Minerals: MineralDefinition[] = [
     color: '#94a3b8',
     minDepth: 1810,
     basePrice: 160,
-    baseHealth: 9765,
-    defense: 70,
+    baseHealth: UNRELEASED_CIRCLE_MINERAL_HEALTH,
+    defense: UNRELEASED_CIRCLE_MINERAL_DEFENSE,
     image: 'GoldIcon',
     tileImage: 'StoneTile',
   },
@@ -30,8 +34,8 @@ export const circle7Minerals: MineralDefinition[] = [
     color: '#94a3b8',
     minDepth: 1910,
     basePrice: 320,
-    baseHealth: 19531,
-    defense: 75,
+    baseHealth: UNRELEASED_CIRCLE_MINERAL_HEALTH,
+    defense: UNRELEASED_CIRCLE_MINERAL_DEFENSE,
     image: 'GoldIcon',
     tileImage: 'StoneTile',
   },
@@ -47,8 +51,8 @@ export const circle7Minerals: MineralDefinition[] = [
     color: '#94a3b8',
     minDepth: 2010,
     basePrice: 480,
-    baseHealth: 29296,
-    defense: 80,
+    baseHealth: UNRELEASED_CIRCLE_MINERAL_HEALTH,
+    defense: UNRELEASED_CIRCLE_MINERAL_DEFENSE,
     image: 'GoldIcon',
     tileImage: 'StoneTile',
   },

@@ -3,10 +3,11 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 source_paths:
   - src/shared/config/combatConstants.ts
   - src/shared/config/constants.ts
+  - src/shared/config/lateCircleLock.ts
   - src/shared/config/playerConstants.ts
   - src/features/game/lib/playerCombatStats.ts
   - src/features/game/lib/miningCalculator.ts
@@ -28,6 +29,7 @@ source_paths:
 |---|---|---|
 | `src/shared/config/combatConstants.ts` | `COMBAT_CONSTANTS` | 채굴 간격, 공격 속도 상한, 치명타 상한/배율, 방어력 지수, 상태 이상 위력 배율을 정의합니다. |
 | `src/shared/config/constants.ts` | `TILE_SIZE`, `CAMERA_SCALE`, `BASE_DEPTH`, `MOVEMENT_DELAY_MS`, 저장/동기화 상수 | 타일 픽셀 단위, 카메라 스케일, 맵 기준 깊이, 이동 입력 간격, 저장 키, UI/공간 해시 동기화 주기를 정의합니다. |
+| `src/shared/config/lateCircleLock.ts` | `UNRELEASED_CIRCLE_*` | 아직 밸런싱 전인 Circle 5+를 접근 불가능하게 만드는 임시 광물/몬스터/장비/재련 수치입니다. |
 | `src/shared/config/playerConstants.ts` | `BASE_PLAYER_MAX_HP`, `BASE_PLAYER_POWER`, `BASE_PLAYER_MOVE_SPEED` | 새 플레이어와 영구 스탯 재계산의 기본 체력, 채굴 위력, 이동 속도를 정의합니다. |
 
 ## 전투와 채굴 상수
@@ -69,6 +71,20 @@ source_paths:
 `TILE_SIZE`는 단순 표시값이 아니라 좌표계의 중심 상수입니다. 변경 시 렌더링, 충돌, 스폰, 투사체, VFX, 플로팅 텍스트, spatial hash query가 모두 영향을 받습니다.
 
 `BASE_DEPTH`는 맵 생성과 depth 표시를 잇는 보정값입니다. 변경 시 `CircleConfig.depthStart/depthEnd`, 보스 스폰 깊이, 플레이어 `stats.depth`, 기존 저장 지형 해석을 함께 검토합니다.
+
+## 임시 콘텐츠 잠금 상수
+
+`src/shared/config/lateCircleLock.ts`는 Circle 5 이후 콘텐츠를 실제 밸런싱 전까지 막기 위한 임시 상수입니다.
+
+| 상수 계열 | 사용처 | 의미 |
+|---|---|---|
+| `UNRELEASED_CIRCLE_MINERAL_*` | C5~C9 광물 데이터 | 배경 포함 C5+ 타일을 채굴 불가능한 수준으로 만듭니다. 체력은 타일 저장 포맷의 16bit HP 상한 때문에 `65535`를 넘기지 않습니다. |
+| `UNRELEASED_CIRCLE_MONSTER_*` | C5~C9 일반 몬스터 | C5+ 일반 몬스터 처치를 사실상 막습니다. |
+| `UNRELEASED_CIRCLE_BOSS_*` | C5~C9 보스 | C5+ 보스 처치를 사실상 막습니다. |
+| `UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT` | C5~C6 장비 제작 재료량 | 미출시 장비 제작을 막습니다. |
+| `UNRELEASED_CIRCLE_REROLL_COST` | C5~C9 장비 재련 비용 | 미출시 구간 장비 재련을 막습니다. |
+
+이 상수들은 장기 밸런스 값이 아닙니다. C5+를 플레이 가능한 구간으로 열 때는 이 상수 사용처를 제거하고 각 Circle의 실제 수치를 넣습니다.
 
 ## 플레이어 기본 스탯 상수
 

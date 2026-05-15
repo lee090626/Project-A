@@ -1,4 +1,12 @@
 import { MonsterDefinition } from './types';
+import {
+  UNRELEASED_CIRCLE_BOSS_DEFENSE,
+  UNRELEASED_CIRCLE_BOSS_HP,
+  UNRELEASED_CIRCLE_BOSS_POWER,
+  UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+  UNRELEASED_CIRCLE_MONSTER_HP,
+  UNRELEASED_CIRCLE_MONSTER_POWER,
+} from '../lateCircleLock';
 
 export const circle5Monsters: MonsterDefinition[] = [
   {
@@ -8,7 +16,12 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 12000, power: 300, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 1200,
       gold: 240,
@@ -25,7 +38,12 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 10000, power: 450, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 1000,
       gold: 200,
@@ -42,7 +60,12 @@ export const circle5Monsters: MonsterDefinition[] = [
     type: 'monster',
     imagePath: 'LustfulWhisperer',
     description: 'Wrath 서클의 하급 영혼입니다.',
-    stats: { maxHp: 25000, power: 250, defense: 5, attackCooldown: 1000 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
+      power: UNRELEASED_CIRCLE_MONSTER_POWER,
+      defense: UNRELEASED_CIRCLE_MONSTER_DEFENSE,
+      attackCooldown: 1000,
+    },
     rewards: {
       exp: 2500,
       gold: 500,
@@ -61,7 +84,12 @@ export const circle5Monsters: MonsterDefinition[] = [
     description: 'Circle 5 분노의 지옥을 지배하는 최초의 전쟁군주. 끊임없는 증오심으로 적을 섬멸합니다.',
     width: 5,
     height: 5,
-    stats: { maxHp: 500000, power: 1200, defense: 120, attackCooldown: 2500 },
+    stats: {
+      maxHp: UNRELEASED_CIRCLE_BOSS_HP,
+      power: UNRELEASED_CIRCLE_BOSS_POWER,
+      defense: UNRELEASED_CIRCLE_BOSS_DEFENSE,
+      attackCooldown: 2500,
+    },
     rewards: {
       exp: 175000,
       gold: 35000,

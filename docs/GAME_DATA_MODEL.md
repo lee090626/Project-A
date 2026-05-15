@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-15
 source_paths:
   - src/shared/config/circleData.ts
   - src/shared/config/mineralData.ts
@@ -18,6 +18,8 @@ source_paths:
   - src/shared/config/guideQuestData.ts
   - src/shared/config/coreDataFiles.ts
   - src/shared/config/coreDataFiles.json
+  - src/shared/config/lateCircleLock.ts
+  - src/shared/lib/equipmentRefinement.ts
   - src/shared/types/game
 ---
 
@@ -36,13 +38,15 @@ source_paths:
 | `src/shared/config/minerals/types.ts` | `MineralDefinition` | 광물/타일 정의의 필드 구조입니다. |
 | `src/shared/config/monsterData.ts` | `MONSTER_LIST`, `MONSTERS`, `MONSTER_DEFINITIONS` | Circle별 몬스터 파일을 통합하고 ID 조회 맵을 제공합니다. |
 | `src/shared/config/monsters/types.ts` | `MonsterDefinition`, `BossPattern` | 몬스터/보스 정의와 보스 패턴 구조입니다. |
-| `src/shared/config/equipmentData.ts` | `EQUIPMENTS` | 장비 ID, 부위, Circle, 스탯, 제작 비용, 이미지 키를 정의합니다. |
+| `src/shared/config/equipmentData.ts` | `EQUIPMENTS` | 장비 ID, 부위, Circle, 기본 스탯, 제작 재료, 이미지 키를 정의합니다. |
+| `src/shared/lib/equipmentRefinement.ts` | 장비 주스탯 재련 규칙 | 부위별 주스탯, 옵션 범위, 리롤 비용, 품질 라벨, 재련 스탯 계산을 정의합니다. |
 | `src/shared/config/effectData.ts` | `EFFECT_DATA`, `EFFECT_LIST` | Essence, Relic, Crafted Effect를 하나의 Effect 데이터베이스로 통합합니다. |
 | `src/shared/config/effects/types.ts` | `EffectDefinition` | 누적형 보유 효과 아이템의 필드 구조입니다. |
 | `src/shared/config/masteryPerks.ts` | `MASTERY_PERKS` | Circle별 mastery perk 파일을 하나의 배열로 통합합니다. |
 | `src/shared/config/mastery/types.ts` | `MasteryPerkDef`, `MasteryPerkEffect` | 타일 숙련도 돌파 특성의 구조입니다. |
 | `src/shared/config/guideQuestData.ts` | `C2_GUIDE_QUESTS`, C2 guide ID 상수, guide state helper | 초반 C2 가이드 퀘스트 목표, 보상, 진행도 계산을 정의합니다. |
 | `src/shared/config/coreDataFiles.ts` | `CORE_DATA_FILES`, `BASE_LAYOUT_FILE`, `ENTITIES_FILE` | `/baseLayout.json`, `/entities.json`, `/game-init-data.json` 같은 초기 데이터 파일 목록을 검증해 노출합니다. |
+| `src/shared/config/lateCircleLock.ts` | C5+ 임시 잠금 수치 | 아직 밸런싱 전인 Circle 5+ 광물, 몬스터, 제작, 재련 비용을 사실상 접근 불가능한 값으로 고정합니다. |
 
 ## 기본 ID 관계
 
@@ -56,7 +60,7 @@ source_paths:
 | `CircleConfig.monsters[].monsterId` | `src/shared/config/circleData.ts` | `MONSTERS`에서 조회 가능한 `MonsterDefinition.id`여야 합니다. |
 | `CircleConfig.boss.id` | `src/shared/config/circleData.ts` | `MonsterDefinition.type`이 `boss`인 몬스터 ID여야 합니다. |
 | `MonsterDefinition.rewards.drops[].itemId` | `src/shared/config/monsters/*` | 보상 처리 코드가 인벤토리나 `collectionHistory`에 적재할 수 있는 자원/Effect ID여야 합니다. |
-| `Equipment.price` key | `src/shared/config/equipmentData.ts` | `goldCoins`, 수집 가능 광물 키, 또는 제작 재료로 취급되는 Effect ID를 사용합니다. |
+| `Equipment.price` key | `src/shared/config/equipmentData.ts` | 수집 가능 광물 키 또는 제작 재료로 취급되는 Effect ID를 사용합니다. 장비 제작에는 `goldCoins`를 사용하지 않습니다. |
 | `EffectDefinition.requirements` key | `src/shared/config/effects/*` | 제작에 소비할 `goldCoins`, 광물 키, Effect ID를 사용합니다. |
 | `MasteryPerkDef.tileType` | `src/shared/config/mastery/*` | 숙련도 대상으로 기록되는 타일/광물 키와 일치해야 합니다. |
 | `GuideQuestDefinition.reward.inventory` key | `src/shared/config/guideQuestData.ts` | 플레이어 인벤토리에 적재 가능한 자원 키여야 합니다. |
@@ -73,7 +77,7 @@ source_paths:
 | `clearedCircleIds` | `CircleConfig.id` |
 | `encounteredBossIds`, `bossRespawnTimers` | `MonsterDefinition.id` 중 보스 ID |
 | `killedMonsterIds` | `MonsterDefinition.id` |
-| `equipmentStates` | `EQUIPMENTS`의 장비 ID |
+| `equipmentStates` | `EQUIPMENTS`의 장비 ID별 재련 상태입니다. `mainStatBonusPct`는 -20~20 정수 퍼센트입니다. |
 | `tileMastery` | 숙련도 대상으로 쓰는 타일/광물 키 |
 | `unlockedMasteryPerks` | `MasteryPerkDef.id` |
 | `collectionHistory` | `EffectDefinition.id` 등 누적 수집 아이템 ID |
@@ -93,6 +97,20 @@ source_paths:
 | `EffectDefinition.image` | Essence, Relic, Crafted Effect UI 아틀라스 키 |
 
 에셋을 추가하거나 이름을 바꾸면 `.agents/rules/06-asset-guide.md`를 기준으로 원본 파일을 정리한 뒤 `npm run optimize:atlas && npm run update:atlas-map`을 실행합니다.
+
+## C5+ 임시 접근 잠금
+
+2026-05-15 기준 Circle 5 이후 콘텐츠는 실제 밸런싱 전이므로 `src/shared/config/lateCircleLock.ts`의 고정값으로 잠겨 있습니다.
+
+잠금 방식:
+
+- `circleData.ts`에서 Circle 5~9의 `bgType`을 일반 `stone`이 아니라 해당 Circle의 고방어 광물로 지정합니다.
+- `minerals/circle5.ts`부터 `minerals/circle9.ts`까지 광물 `baseHealth`는 저장 포맷 상한인 `65535`, `defense`는 플레이어가 대미지를 넣기 어려운 값으로 둡니다.
+- `monsters/circle5.ts`부터 `monsters/circle9.ts`까지 일반 몬스터와 보스 스탯은 `lateCircleLock.ts`의 잠금 수치를 사용합니다.
+- C5~C6 장비 제작 재료량과 C5~C9 장비 재련 비용도 잠금 수치를 사용합니다.
+- `SPAWN_RULE_VERSION`을 올려 기존 세이브의 플레이어 주변 미수정 생성 타일이 현재 규칙으로 재생성되게 합니다.
+
+C5+를 실제 플레이 구간으로 열 때는 `lateCircleLock.ts` 의존을 제거하고, 광물/몬스터/장비/재련 비용을 Circle별 실제 밸런스 값으로 되돌립니다.
 
 ## 데이터 추가 절차
 
@@ -115,7 +133,8 @@ source_paths:
 
 1. `src/shared/config/equipmentData.ts`의 `EQUIPMENTS`에 장비 ID를 추가합니다.
 2. `part`, `circle`, `stats`, `price`, `image`를 기존 장비와 같은 형식으로 맞춥니다.
-3. 제작 비용 키가 인벤토리, `goldCoins`, Effect 데이터와 충돌하지 않는지 확인합니다.
+3. `price`에는 제작 재료만 넣고 `goldCoins`는 넣지 않습니다. 골드는 `equipmentRefinement.ts`의 리롤 비용으로 소비됩니다.
+4. 새 Circle 장비를 추가했다면 `equipmentRefinement.ts`의 Circle별 리롤 비용 맵 보정이 필요한지 확인합니다.
 
 새 Effect를 추가할 때:
 
