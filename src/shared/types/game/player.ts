@@ -79,7 +79,7 @@ export interface PlayerStats {
   moveSpeed: number;
   /** 캐릭터 기본 방어력 */
   defense: number;
-  /** 캐릭터 기본 행운 (기본 0) */
+  /** 보상 계산에 사용하는 최종 행운 */
   luck: number;
 
   /** 자원 및 아이템 */

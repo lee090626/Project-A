@@ -8,7 +8,6 @@ import {
 } from '@/shared/config/playerConstants';
 import {
   calculateCriticalStats,
-  calculateLuckStats,
   calculateMiningSpeedStats,
 } from '@/features/game/lib/playerCombatStats';
 import {
@@ -67,7 +66,7 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
     const finalPower = stats.power;
     const finalDefense = (stats.defense || 0);
     const finalMaxHp = stats.maxHp;
-    const { finalLuck } = calculateLuckStats(stats);
+    const finalLuck = stats.luck || 0;
 
     const { critRate: finalCritRate, critDamage: finalCritDmg } = calculateCriticalStats(stats);
     const miningSpeedStats = calculateMiningSpeedStats(stats);

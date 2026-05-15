@@ -1,5 +1,5 @@
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
-import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
+import { calculateEffectBonuses, type EffectBonuses } from '@/shared/lib/effectItemUtils';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { PlayerStats } from '@/shared/types/game';
 import { modifierManager } from './ModifierManager';
@@ -43,6 +43,9 @@ export interface LuckStats {
   /** 최종 행운 */
   finalLuck: number;
 }
+
+type LuckMasteryBonuses = Pick<ReturnType<typeof getMasteryBonuses>, 'luck' | 'luckMult'>;
+type LuckEffectBonuses = Pick<EffectBonuses, 'luck'>;
 
 /**
  * 플레이어 스탯을 기준으로 실제 전투에 사용되는 치명타 수치를 계산합니다.
@@ -118,6 +121,16 @@ export function calculateLuckStats(stats: PlayerStats): LuckStats {
   const effectBonuses = calculateEffectBonuses(stats);
   const masteryBonuses = getMasteryBonuses(stats);
 
+  return calculateLuckStatsFromBonuses(masteryBonuses, effectBonuses);
+}
+
+/**
+ * 이미 계산된 mastery 및 Effect 보너스를 기준으로 최종 행운을 계산합니다.
+ */
+export function calculateLuckStatsFromBonuses(
+  masteryBonuses: LuckMasteryBonuses,
+  effectBonuses: LuckEffectBonuses,
+): LuckStats {
   const flatLuck = masteryBonuses.luck + effectBonuses.luck * 100;
   const luckMultiplier = 1 + masteryBonuses.luckMult;
   const finalLuck = Math.max(0, flatLuck * luckMultiplier);

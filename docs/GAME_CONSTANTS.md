@@ -96,7 +96,7 @@ source_paths:
 | `BASE_PLAYER_POWER` | `createInitialPlayer`, `statsSyncSystem`, 상태 패널 | 장비, mastery, Effect 보너스를 더하기 전 기본 채굴 위력입니다. |
 | `BASE_PLAYER_MOVE_SPEED` | `createInitialPlayer`, `statsSyncSystem`, 상태 패널 | 장비, mastery, Effect 보너스를 더하기 전 기본 이동 속도입니다. |
 
-`statsSyncSystem`은 기본 스탯에 장비, mastery, Effect 보너스를 합산합니다. 따라서 기본 스탯을 바꾸면 신규 플레이어뿐 아니라 기존 저장 데이터의 재계산 결과도 바뀔 수 있습니다.
+`statsSyncSystem`은 기본 스탯에 장비, mastery, Effect 보너스를 합산하고, 보상 계산에 사용하는 최종 `PlayerStats.luck`도 동기화합니다. 따라서 기본 스탯이나 luck 보너스를 바꾸면 신규 플레이어뿐 아니라 기존 저장 데이터의 재계산 결과도 바뀔 수 있습니다.
 
 ## 현재 주의할 상수
 

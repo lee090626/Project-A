@@ -1,7 +1,7 @@
 import { GameWorld } from '@/entities/world/model';
 import { ID_TO_TILE_TYPE } from '@/shared/types/game';
 import { addEffectStack, isEffectItemId } from '@/shared/lib/effectItemUtils';
-import { messageBus } from '@/shared/lib/MessageBus';
+import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 
 
 /**
@@ -42,6 +42,7 @@ function collectDroppedItem(world: GameWorld, index: number): void {
     if (gained > 0) {
       world.aggregationBuffer[id] = (world.aggregationBuffer[id] || 0) + gained;
       messageBus.emit('game:item_collected', { id, amount: gained });
+      messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
     }
     return;
   }

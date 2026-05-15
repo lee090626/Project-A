@@ -141,7 +141,7 @@ flowchart TD
 
 1. `miningTargeter`가 조준 대상과 몬스터 타겟 여부를 판단합니다.
 2. 플레이어가 채굴 중이고 유효한 타일 타겟이 있으면 `miningExecutor`가 타격과 파괴를 처리합니다.
-3. 파괴에 성공하면 mastery, Effect, luck 보너스를 계산합니다.
+3. 파괴에 성공하면 mastery, Effect 보너스로 숙련도 경험치 배율을 계산하고, 보상 수량에는 `statsSyncSystem`이 동기화한 `PlayerStats.luck`을 사용합니다.
 4. `masteryService`가 보상과 숙련도 경험치를 적용합니다.
 
 ## 상호작용과 액션
@@ -186,11 +186,11 @@ flowchart TD
 | 2 | `damageProcessor`가 상호 타격 판정과 대미지/시각 이벤트를 처리합니다. |
 | 3 | `deathHandler`가 사망, 보상 정산, `ENTITY_DIED` 이벤트 발행을 처리합니다. |
 
-`LootGenerator`는 `ENTITY_DIED` 이벤트를 구독해 전리품 생성을 처리합니다. 전투 시스템 자체가 드롭 물리나 수집까지 모두 처리하지는 않습니다.
+`LootGenerator`는 `ENTITY_DIED` 이벤트를 구독해 전리품 생성을 처리합니다. 전투 시스템 자체가 드롭 물리나 수집까지 모두 처리하지는 않습니다. 몬스터 전리품 수량 보너스는 `statsSyncSystem`이 동기화한 최종 `PlayerStats.luck`을 기준으로 계산합니다.
 
 ## Effect, 튜토리얼, 가이드
 
-`effectSystem`은 이름과 달리 상태 이상만 처리하는 시스템이 아닙니다. 현재 책임은 화면 흔들림 감쇠, 파티클, 플로팅 텍스트, 드롭 아이템 물리/수집, 아이템 획득 토스트 취합입니다.
+`effectSystem`은 이름과 달리 상태 이상만 처리하는 시스템이 아닙니다. 현재 책임은 화면 흔들림 감쇠, 파티클, 플로팅 텍스트, 드롭 아이템 물리/수집, 아이템 획득 토스트 취합입니다. Effect 아이템을 수집하면 `RECALCULATE_PLAYER_STATS`를 발행해 luck을 포함한 영구 스탯을 즉시 다시 계산합니다.
 
 `tutorialSystem`은 플레이어 진행 상태를 보고 튜토리얼 트리거를 메인 스레드에 보냅니다. 2026-05-14 기준 환영 가이드가 주된 트리거입니다.
 

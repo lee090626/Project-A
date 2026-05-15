@@ -7,6 +7,7 @@ import {
 import { getRefinedEquipmentStats } from '@/shared/lib/equipmentRefinement';
 import { createInitialEquipmentState, getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
+import { calculateLuckStatsFromBonuses } from '@/features/game/lib/playerCombatStats';
 
 /**
  * 플레이어의 영구 스탯(체력, 이속 등)을 장비, 마스터리 및 Effect 보너스에 맞춰 동기화합니다.
@@ -94,8 +95,8 @@ export function syncPermanentStats(player: any) {
   // 5. 방어력 적용 (장비방어 + Effect 방어)
   player.stats.defense = eqDefense + (effectBonuses?.defense || 0);
 
-  // 6. 행운(Luck) 적용 (장기적으로 장비 행운도 여기 합산)
-  player.stats.luck = (effectBonuses?.luck || 0);
+  // 6. 행운(Luck) 적용: 최종 보상 계산에 쓰는 단일 행운 값
+  player.stats.luck = calculateLuckStatsFromBonuses(masteryBonuses, effectBonuses).finalLuck;
 }
 
 /**
