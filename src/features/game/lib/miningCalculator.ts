@@ -4,10 +4,9 @@ import { MINERAL_MAP } from '@/shared/config/mineralData';
 import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
 import { CIRCLES } from '@/shared/config/circleData';
 import {
-  ASMODEUS_RING_DEFENSE_IGNORE_CAP,
-  ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK,
-  ASMODEUS_RING_EFFECT_ID,
-  ASMODEUS_RING_TARGET_CIRCLE_ID,
+  BOSS_RELIC_DEFENSE_IGNORE_CAP,
+  BOSS_RELIC_DEFENSE_IGNORE_PER_STACK,
+  BOSS_RELIC_DEFENSE_IGNORE_RULES,
 } from '@/shared/config/effects/relics';
 import {
   getMasteryMultiplier,
@@ -28,35 +27,43 @@ export interface DamageResult {
   attackInterval: number;
 }
 
-const asmodeusRingTargetMinerals = new Set<string>(
-  CIRCLES.find((circle) => circle.id === ASMODEUS_RING_TARGET_CIRCLE_ID)?.minerals.map(
-    (rule) => rule.type,
-  ) ?? [],
-);
+const bossRelicDefenseIgnoreTargets = BOSS_RELIC_DEFENSE_IGNORE_RULES.map((rule) => ({
+  effectId: rule.effectId,
+  targetMinerals: new Set<string>(
+    CIRCLES.find((circle) => circle.id === rule.targetCircleId)?.minerals.map(
+      (mineralRule) => mineralRule.type,
+    ) ?? [],
+  ),
+}));
 
 /**
- * 아스모데우스의 반지 중첩에 따라 C3 광물 방어력 무시 효과를 적용합니다.
+ * 보스 relic 중첩에 따라 다음 Circle 광물 방어력 무시 효과를 적용합니다.
  *
  * @param stats - 현재 플레이어 스탯
  * @param targetTileType - 현재 채굴 대상 타일 타입
  * @param defense - 보정 전 대상 방어력
- * @returns 반지 효과가 반영된 최종 방어력
+ * @returns 보스 relic 효과가 반영된 최종 방어력
  */
-function applyAsmodeusRingDefenseIgnore(
+function applyBossRelicDefenseIgnore(
   stats: PlayerStats,
   targetTileType: string,
   defense: number,
 ): number {
-  if (!asmodeusRingTargetMinerals.has(targetTileType)) return defense;
+  const ignoreRate = bossRelicDefenseIgnoreTargets.reduce((total, rule) => {
+    if (!rule.targetMinerals.has(targetTileType)) return total;
 
-  const stacks = getEffectStackByEffectId(stats, ASMODEUS_RING_EFFECT_ID);
-  if (stacks <= 0) return defense;
+    const stacks = getEffectStackByEffectId(stats, rule.effectId);
+    if (stacks <= 0) return total;
 
-  const ignoreRate = Math.min(
-    stacks * ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK,
-    ASMODEUS_RING_DEFENSE_IGNORE_CAP,
-  );
-  return defense * (1 - ignoreRate);
+    return total + Math.min(
+      stacks * BOSS_RELIC_DEFENSE_IGNORE_PER_STACK,
+      BOSS_RELIC_DEFENSE_IGNORE_CAP,
+    );
+  }, 0);
+
+  if (ignoreRate <= 0) return defense;
+
+  return defense * (1 - Math.min(ignoreRate, 1));
 }
 
 /**
@@ -118,7 +125,7 @@ export const calculateMiningDamage = (
   if (customDefense === undefined) {
     const mineralDef = MINERAL_MAP[targetTileType];
     defense = mineralDef ? mineralDef.defense : 0;
-    defense = applyAsmodeusRingDefenseIgnore(stats, targetTileType, defense);
+    defense = applyBossRelicDefenseIgnore(stats, targetTileType, defense);
   }
 
   const netPower = Math.max(0, totalPower - defense);

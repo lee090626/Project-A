@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-15
+last_reviewed: 2026-05-16
 source_paths:
   - src/shared/config/circleData.ts
   - src/shared/config/mineralData.ts
@@ -65,6 +65,8 @@ source_paths:
 | `MasteryPerkDef.tileType` | `src/shared/config/mastery/*` | 숙련도 대상으로 기록되는 타일/광물 키와 일치해야 합니다. |
 | `GuideQuestDefinition.reward.inventory` key | `src/shared/config/guideQuestData.ts` | 플레이어 인벤토리에 적재 가능한 자원 키여야 합니다. |
 
+보스 relic의 진행 효과는 다음 Circle 광물 방어 무시로 통일합니다. 현재 C2/C3/C4 보스 relic은 각각 C3/C4/C5 광물 방어력을 중첩당 5%, 최대 50%까지 무시합니다.
+
 ## 플레이어 저장 상태와의 연결
 
 `PlayerStats`는 config 데이터의 ID를 문자열로 저장합니다. 따라서 config ID를 바꾸면 저장 데이터 마이그레이션도 함께 검토해야 합니다.
@@ -108,6 +110,7 @@ source_paths:
 - `minerals/circle5.ts`부터 `minerals/circle9.ts`까지 광물 `baseHealth`는 저장 포맷 상한인 `65535`, `defense`는 플레이어가 대미지를 넣기 어려운 값으로 둡니다.
 - `monsters/circle5.ts`부터 `monsters/circle9.ts`까지 일반 몬스터와 보스 스탯은 `lateCircleLock.ts`의 잠금 수치를 사용합니다.
 - C5~C6 장비 제작 재료량과 C5~C9 장비 재련 비용도 잠금 수치를 사용합니다.
+- C5~C9 보스 relic 드롭과 placeholder relic 정의는 실제 Circle 재설계 전까지 제거합니다. 해당 구간은 Essence 보상만 남기고, 기존 저장에 있던 C5+ placeholder relic 기록은 로드 시 정리합니다.
 - `SPAWN_RULE_VERSION`을 올려 기존 세이브의 플레이어 주변 미수정 생성 타일이 현재 규칙으로 재생성되게 합니다.
 
 C5+를 실제 플레이 구간으로 열 때는 `lateCircleLock.ts` 의존을 제거하고, 광물/몬스터/장비/재련 비용을 Circle별 실제 밸런스 값으로 되돌립니다.

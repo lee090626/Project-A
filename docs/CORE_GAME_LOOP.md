@@ -26,10 +26,13 @@ source_paths:
   - src/features/game/ecs/systems/storageSystem.ts
   - src/features/game/ecs/systems/statsSyncSystem.ts
   - src/features/game/lib/RenderSyncEncoder.ts
+  - src/features/game/lib/ModifierManager.ts
+  - src/features/game/lib/miningCalculator.ts
   - src/features/game/hooks/useGameWorker.ts
   - src/features/game/hooks/useGameUI.ts
   - src/features/game/hooks/useGameActions.ts
   - src/shared/lib/equipmentRefinement.ts
+  - src/shared/lib/effectItemUtils.ts
   - src/widgets/inventory/EquipmentCard.tsx
   - src/features/game/GameEngine.tsx
 ---
@@ -144,8 +147,9 @@ flowchart TD
 
 1. `miningTargeter`가 조준 대상과 몬스터 타겟 여부를 판단합니다.
 2. 플레이어가 채굴 중이고 유효한 타일 타겟이 있으면 `miningExecutor`가 타격과 파괴를 처리합니다.
-3. 파괴에 성공하면 mastery, Effect 보너스로 숙련도 경험치 배율을 계산하고, 보상 수량에는 `statsSyncSystem`이 동기화한 `PlayerStats.luck`을 사용합니다.
-4. `masteryService`가 보상과 숙련도 경험치를 적용합니다.
+3. `miningCalculator`가 장비, 숙련도, 치명타, 보스 relic의 다음 Circle 광물 방어 무시를 반영해 타일 대미지를 계산합니다.
+4. 파괴에 성공하면 mastery와 Effect flat bonus로 숙련도 경험치 배율을 계산하고, 보상 수량에는 `statsSyncSystem`이 동기화한 `PlayerStats.luck`을 사용합니다.
+5. `masteryService`가 보상과 숙련도 경험치를 적용합니다.
 
 ## 상호작용과 액션
 
@@ -183,7 +187,7 @@ flowchart TD
 - 타일 충돌 시 제거
 - 수명 만료 시 제거
 
-`combatSystem`은 전투 오케스트레이터입니다.
+`combatSystem`은 전투 오케스트레이터입니다. 처치 시 부수 효과는 `ModifierManager.triggerOnKillSideEffects`를 통해 처리합니다. 현재 보스 relic의 진행 효과는 전투 처치 hook이 아니라 `miningCalculator`의 다음 Circle 광물 방어 무시로 적용됩니다.
 
 | 단계 | 처리 |
 |---|---|
@@ -196,6 +200,8 @@ flowchart TD
 ## Effect, 튜토리얼, 가이드
 
 `effectSystem`은 이름과 달리 상태 이상만 처리하는 시스템이 아닙니다. 현재 책임은 화면 흔들림 감쇠, 파티클, 플로팅 텍스트, 드롭 아이템 물리/수집, 아이템 획득 토스트 취합입니다. Effect 아이템을 수집하면 `RECALCULATE_PLAYER_STATS`를 발행해 luck을 포함한 영구 스탯을 즉시 다시 계산합니다.
+
+Effect 아이템의 `bonus` 필드는 `calculateEffectBonuses`에서 수집 중첩 수만큼 flat stat bonus로 합산됩니다. 보스 relic 방어 무시는 `BOSS_RELIC_DEFENSE_IGNORE_RULES`에 정의된 대상 Circle 광물에만 적용하고, C5+ placeholder relic 효과는 Circle 재설계 전까지 정의하지 않습니다.
 
 `tutorialSystem`은 플레이어 진행 상태를 보고 튜토리얼 트리거를 메인 스레드에 보냅니다. 2026-05-14 기준 환영 가이드가 주된 트리거입니다.
 

@@ -70,7 +70,7 @@ export const circle3Monsters: MonsterDefinition[] = [
       gold: 4500,
       drops: [
         { itemId: 'essence_gluttony', chance: 1.0, minAmount: 5, maxAmount: 10 },
-        { itemId: 'relic_beelzebub_needle', chance: 0.5, minAmount: 1, maxAmount: 1 },
+        { itemId: 'relic_cerberus_fang', chance: 0.5, minAmount: 1, maxAmount: 1 },
       ],
     },
     behavior: { attackRange: 1, aggroRange: 15, respawnMs: 15000 },

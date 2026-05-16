@@ -1,6 +1,6 @@
 import { GameWorld } from '@/entities/world/model';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
-import { calculateEffectBonuses, hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
+import { calculateEffectBonuses } from '@/shared/lib/effectItemUtils';
 import { miningTargeter } from './MiningTargeter';
 import { miningExecutor } from './MiningExecutor';
 import { masteryService } from './MasteryService';
@@ -26,9 +26,6 @@ export const miningSystem = (world: GameWorld, now: number) => {
   const effectBonuses = calculateEffectBonuses(player.stats);
 
   let masteryExpMultiplier = 1.0 + masteryBonuses.masteryExpMult + effectBonuses.masteryExp;
-  if (hasEffectItemEffect(player.stats, 'MASTERY_BOOST')) {
-    masteryExpMultiplier += 3.0;
-  }
 
   const luck = player.stats.luck || 0;
   const masteryExpGain = Math.floor(

@@ -1,5 +1,5 @@
 import { PlayerStats } from '@/shared/types/game';
-import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
+import { getEffectStackByEffectId } from '@/shared/lib/effectItemUtils';
 
 // ============================================================
 // 타입 정의
@@ -46,7 +46,7 @@ export interface ModifierContext {
  * `ModifierManager`의 내부 레지스트리에 등록됩니다.
  */
 interface EffectModifierDef {
-  /** 이 모디파이어가 발동되는 Effect effectId (`hasEffectItemEffect` 키와 동일) */
+  /** 이 모디파이어가 발동되는 Effect effectId */
   effectId: string;
   /** 발동 시점 */
   hook: ModifierHook;
@@ -59,9 +59,10 @@ interface EffectModifierDef {
    *
    * @param baseValue - 변환 대상 원본 값
    * @param ctx - 플레이어 스탯 및 부수 효과 콜백 컨텍스트
+   * @param stacks - 해당 effectId를 제공하는 Effect 보유 중첩 수
    * @returns 변환된 최종 값
    */
-  transform: (baseValue: number, ctx: ModifierContext) => number;
+  transform: (baseValue: number, ctx: ModifierContext, stacks: number) => number;
 }
 
 // ============================================================
@@ -73,88 +74,7 @@ interface EffectModifierDef {
  * 새 Effect 효과를 추가할 때 이 배열에만 항목을 추가하면 됩니다.
  * combatSystem.ts를 수정할 필요가 없습니다.
  */
-const EFFECT_MODIFIER_REGISTRY: EffectModifierDef[] = [
-  // ─── onKill ───────────────────────────────────────────────
-
-  /**
-   * [아스모데우스의 반지] EXP_BOOST
-   * 처치 시 획득 경험치 30% 증가
-   */
-  {
-    effectId: 'EXP_BOOST',
-    hook: 'onKill',
-    stat: 'exp',
-    transform: (base) => Math.floor(base * 1.3),
-  },
-
-  /**
-   * [아바돈의 부러진 칼날] LOOT_QUANTITY_BOOST
-   * 처치 시 드롭 아이템 획득량 25% 증가
-   */
-  {
-    effectId: 'LOOT_QUANTITY_BOOST',
-    hook: 'onKill',
-    stat: 'loot',
-    transform: (base) => base * 1.25,
-  },
-
-  /**
-   * [벨제붑의 독니] LIFE_STEAL_PERCENT
-   * 처치 시 최대 체력의 5%를 회복합니다.
-   * 부수 효과(힐 텍스트)는 combatSystem에서 sideEffect 콜백으로 처리합니다.
-   */
-  {
-    effectId: 'LIFE_STEAL_PERCENT',
-    hook: 'onKill',
-    stat: 'incomingDamage', // 직접 값 변환 없음, sideEffect만 발동
-    transform: (base, ctx) => {
-      const healAmount = Math.floor(ctx.playerStats.maxHp * 0.05);
-      ctx.sideEffect?.('HEAL', healAmount);
-      return base; // 피해량 값은 변경 없음
-    },
-  },
-
-  // ─── onMining ──────────────────────────────────────────────
-
-  /**
-   * [사탄의 타오르는 열정] MINING_SPEED_BOOST
-   * 기본 채굴 속도 배율 25% 증가
-   */
-  {
-    effectId: 'MINING_SPEED_BOOST',
-    hook: 'onMining',
-    stat: 'miningSpeed',
-    transform: (base) => base + 0.25,
-  },
-
-  /**
-   * [레비아탄의 뒤틀린 투영] TWISTED_PROJECTION
-   * 잃은 체력 1%당 채굴 속도 1% 증가
-   */
-  {
-    effectId: 'TWISTED_PROJECTION',
-    hook: 'onMining',
-    stat: 'miningSpeed',
-    transform: (base, ctx) => {
-      const missingPercent = Math.max(0, (ctx.playerStats.maxHp - ctx.playerStats.hp) / ctx.playerStats.maxHp);
-      return base + missingPercent;
-    },
-  },
-
-  /**
-   * [레비아탄의 뒤틀린 투영] TWISTED_PROJECTION
-   * 잃은 체력 1%당 채굴 위력 1% 증가
-   */
-  {
-    effectId: 'TWISTED_PROJECTION',
-    hook: 'onMining',
-    stat: 'miningDamage',
-    transform: (base, ctx) => {
-      const missingPercent = Math.max(0, (ctx.playerStats.maxHp - ctx.playerStats.hp) / ctx.playerStats.maxHp);
-      return base * (1 + missingPercent);
-    },
-  },
-];
+const EFFECT_MODIFIER_REGISTRY: EffectModifierDef[] = [];
 
 // ============================================================
 // ModifierManager 클래스
@@ -194,9 +114,10 @@ class ModifierManager {
 
     for (const mod of EFFECT_MODIFIER_REGISTRY) {
       if (mod.hook !== hook || mod.stat !== stat) continue;
-      if (!hasEffectItemEffect(ctx.playerStats, mod.effectId)) continue;
+      const stacks = getEffectStackByEffectId(ctx.playerStats, mod.effectId);
+      if (stacks <= 0) continue;
 
-      value = mod.transform(value, ctx);
+      value = mod.transform(value, ctx, stacks);
     }
 
     return value;
@@ -211,10 +132,11 @@ class ModifierManager {
   public triggerOnKillSideEffects(ctx: ModifierContext): void {
     for (const mod of EFFECT_MODIFIER_REGISTRY) {
       if (mod.hook !== 'onKill') continue;
-      if (!hasEffectItemEffect(ctx.playerStats, mod.effectId)) continue;
+      const stacks = getEffectStackByEffectId(ctx.playerStats, mod.effectId);
+      if (stacks <= 0) continue;
 
       // transform을 호출하되 반환값은 무시 (부수 효과만 발동)
-      mod.transform(0, ctx);
+      mod.transform(0, ctx, stacks);
     }
   }
 }

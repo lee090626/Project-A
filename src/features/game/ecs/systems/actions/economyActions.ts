@@ -10,7 +10,6 @@ import {
 } from '@/shared/lib/equipmentRefinement';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
-import { hasEffectItemEffect } from '@/shared/lib/effectItemUtils';
 import type { CraftRequirements, PlayerStats } from '@/shared/types/game';
 import { showToast } from '../toastSystem';
 
@@ -99,9 +98,7 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
       }
 
       stats.inventory[resource] = owned - amount;
-      // [Effect] 파프니르의 황금 보물 (GOLD_SELL_BOOST): 판매가 2배
-      const priceMultiplier = hasEffectItemEffect(stats, 'GOLD_SELL_BOOST') ? 2.0 : 1.0;
-      stats.goldCoins += Math.floor(amount * mineral.basePrice * priceMultiplier);
+      stats.goldCoins += Math.floor(amount * mineral.basePrice);
       break;
     }
 

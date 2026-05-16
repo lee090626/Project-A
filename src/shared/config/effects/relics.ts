@@ -2,10 +2,30 @@ import { EffectDefinition } from './types';
 
 export const ASMODEUS_RING_EFFECT_ID = 'CIRCLE3_MINERAL_DEFENSE_IGNORE';
 export const ASMODEUS_RING_TARGET_CIRCLE_ID = 3;
-export const ASMODEUS_RING_MAX_STACK = 10;
-export const ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK = 0.05;
-export const ASMODEUS_RING_DEFENSE_IGNORE_CAP =
-  ASMODEUS_RING_MAX_STACK * ASMODEUS_RING_DEFENSE_IGNORE_PER_STACK;
+export const CERBERUS_FANG_EFFECT_ID = 'CIRCLE4_MINERAL_DEFENSE_IGNORE';
+export const CERBERUS_FANG_TARGET_CIRCLE_ID = 4;
+export const FAFNIR_HOARD_EFFECT_ID = 'CIRCLE5_MINERAL_DEFENSE_IGNORE';
+export const FAFNIR_HOARD_TARGET_CIRCLE_ID = 5;
+
+export const BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK = 10;
+export const BOSS_RELIC_DEFENSE_IGNORE_PER_STACK = 0.05;
+export const BOSS_RELIC_DEFENSE_IGNORE_CAP =
+  BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK * BOSS_RELIC_DEFENSE_IGNORE_PER_STACK;
+
+export const BOSS_RELIC_DEFENSE_IGNORE_RULES = [
+  {
+    effectId: ASMODEUS_RING_EFFECT_ID,
+    targetCircleId: ASMODEUS_RING_TARGET_CIRCLE_ID,
+  },
+  {
+    effectId: CERBERUS_FANG_EFFECT_ID,
+    targetCircleId: CERBERUS_FANG_TARGET_CIRCLE_ID,
+  },
+  {
+    effectId: FAFNIR_HOARD_EFFECT_ID,
+    targetCircleId: FAFNIR_HOARD_TARGET_CIRCLE_ID,
+  },
+] as const;
 
 export const relicEffects: Record<string, EffectDefinition> = {
   relic_asmodeus_ring: {
@@ -13,7 +33,7 @@ export const relicEffects: Record<string, EffectDefinition> = {
     name: "Asmodeus's Ring",
     nameKo: '아스모데우스의 반지',
     type: 'stackable',
-    maxStack: ASMODEUS_RING_MAX_STACK,
+    maxStack: BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK,
     image: 'AsmodeusRingRelic',
     description: 'Ignores Circle 3 mineral defense per stack.',
     descriptionKo: '보유량에 따라 제3원 광물의 방어력을 일부 무시합니다.',
@@ -21,95 +41,30 @@ export const relicEffects: Record<string, EffectDefinition> = {
     effectDescription: 'Ignores C3 mineral defense by 5% per stack',
     effectDescriptionKo: '중첩당 C3 광물 방어력 5% 무시',
   },
-  relic_beelzebub_needle: {
-    id: 'relic_beelzebub_needle',
-    name: "Beelzebub's Needle",
-    nameKo: '벨제붑의 독니',
+  relic_cerberus_fang: {
+    id: 'relic_cerberus_fang',
+    name: "Cerberus's Devouring Fang",
+    nameKo: '케르베로스의 포식 송곳니',
     type: 'stackable',
-    image: 'BeelzebubNeedleRelic',
-    description: 'Heals HP on kill per stack.',
-    descriptionKo: '몬스터 처치 시 체력이 회복됩니다. (중첩 가능)',
-    bonus: { stat: 'maxHp', value: 10 },
-    effectId: 'LIFE_STEAL_PERCENT',
-    effectDescription: 'HP Recovery on Kill',
-    effectDescriptionKo: '처치 시 HP 회복',
+    maxStack: BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK,
+    image: 'Cerberus',
+    description: 'Ignores Circle 4 mineral defense per stack.',
+    descriptionKo: '보유량에 따라 제4원 광물의 방어력을 일부 무시합니다.',
+    effectId: CERBERUS_FANG_EFFECT_ID,
+    effectDescription: 'Ignores C4 mineral defense by 5% per stack',
+    effectDescriptionKo: '중첩당 C4 광물 방어력 5% 무시',
   },
   relic_fafnir_hoard: {
     id: 'relic_fafnir_hoard',
     name: "Fafnir's Golden Hoard",
     nameKo: '파프니르의 황금 보물',
     type: 'stackable',
+    maxStack: BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK,
     image: 'GoldIcon',
-    description: 'Doubles mineral sell price and grants luck per stack.',
-    descriptionKo: '광물 판매 가격이 2배가 되고, 보유량에 따라 행운이 증가합니다.',
-    bonus: { stat: 'luck', value: 0.2 },
-    effectId: 'GOLD_SELL_BOOST',
-    effectDescription: 'Doubles Mineral Sell Price',
-    effectDescriptionKo: '광물 판매가 2배',
-  },
-  relic_satan_heart: {
-    id: 'relic_satan_heart',
-    name: "Satan's Burning Heart",
-    nameKo: '사탄의 타오르는 심장',
-    type: 'stackable',
-    image: 'SatanHeartRelic',
-    description: 'Increases mining speed per stack.',
-    descriptionKo: '기본 채굴 속도가 중첩 증가합니다.',
-    bonus: { stat: 'miningSpeed', value: 0.05 },
-    effectId: 'MINING_SPEED_BOOST',
-    effectDescription: 'Increases Mining Speed',
-    effectDescriptionKo: '채굴 속도 증가',
-  },
-  relic_belphegor_eye: {
-    id: 'relic_belphegor_eye',
-    name: "Belphegor's Shadow Eye",
-    nameKo: '벨페고르의 눈',
-    type: 'stackable',
-    image: 'BelphegorEyeRelic',
-    description: 'Increases mastery gain speed per stack.',
-    descriptionKo: '모든 숙련도 획득 속도가 중첩 증가합니다.',
-    bonus: { stat: 'power', value: 5 },
-    effectId: 'MASTERY_BOOST',
-    effectDescription: 'Increases Mastery Gain Speed',
-    effectDescriptionKo: '숙련도 획득 속도 증가',
-  },
-  relic_abaddon_blade: {
-    id: 'relic_abaddon_blade',
-    name: "Abaddon's Broken Blade",
-    nameKo: '아바돈의 부러진 칼날',
-    type: 'stackable',
-    image: 'AbaddonBladeRelic',
-    description: 'Increases loot amount per stack.',
-    descriptionKo: '몬스터 처치 시 전리품 획득량이 중첩 증가합니다.',
-    bonus: { stat: 'power', value: 10 },
-    effectId: 'LOOT_QUANTITY_BOOST',
-    effectDescription: 'Increases Loot Quantity',
-    effectDescriptionKo: '전리품 획득량 증가',
-  },
-  relic_leviathan_mirror: {
-    id: 'relic_leviathan_mirror',
-    name: "Leviathan's Deceptive Mirror",
-    nameKo: '레비아탄의 뒤틀린 투영',
-    type: 'stackable',
-    image: 'LeviathanMirrorRelic',
-    description: 'Increases damage/mining speed based on missing HP.',
-    descriptionKo: '잃은 체력에 비례하여 위력이 강화됩니다.',
-    bonus: { stat: 'defense', value: 5 },
-    effectId: 'TWISTED_PROJECTION',
-    effectDescription: 'Enhances Berserk Effect',
-    effectDescriptionKo: '광전사 효과 강화',
-  },
-  relic_lucifer_ice: {
-    id: 'relic_lucifer_ice',
-    name: "Lucifer's Eternal Ice",
-    nameKo: '루시퍼의 영겁 서리',
-    type: 'stackable',
-    image: 'LuciferIceRelic',
-    description: 'Increases all stats for every 100m reached.',
-    descriptionKo: '깊이 도달에 따른 보너스가 중첩 강화됩니다.',
-    bonus: { stat: 'maxHp', value: 50 },
-    effectId: 'INFINITE_SCALING',
-    effectDescription: 'Enhances Infinite Growth Effect',
-    effectDescriptionKo: '무한 성장 효과 강화',
+    description: 'Ignores Circle 5 mineral defense per stack.',
+    descriptionKo: '보유량에 따라 제5원 광물의 방어력을 일부 무시합니다.',
+    effectId: FAFNIR_HOARD_EFFECT_ID,
+    effectDescription: 'Ignores C5 mineral defense by 5% per stack',
+    effectDescriptionKo: '중첩당 C5 광물 방어력 5% 무시',
   },
 };

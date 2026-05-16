@@ -32,8 +32,17 @@ const WAYPOINT_INTERVAL = 100;
 const COLLECTIBLE_MINERAL_KEYS = new Set(MINERALS.map((m) => m.key as string));
 const KNOWN_TILE_DEFINITION_KEYS = new Set(TILE_DEFINITIONS.map((m) => m.key as string));
 const LEGACY_BOSS_CORE_PATTERN = /^circle_(\d+)_core$/;
-const LEGACY_C4_SELL_RELIC_ID = 'relic_mammon_coin';
-const C4_SELL_RELIC_ID = 'relic_fafnir_hoard';
+const LEGACY_C3_BOSS_RELIC_ID = 'relic_beelzebub_needle';
+const C3_BOSS_RELIC_ID = 'relic_cerberus_fang';
+const LEGACY_C4_BOSS_RELIC_ID = 'relic_mammon_coin';
+const C4_BOSS_RELIC_ID = 'relic_fafnir_hoard';
+const REMOVED_UNRELEASED_RELIC_IDS = [
+  'relic_satan_heart',
+  'relic_belphegor_eye',
+  'relic_abaddon_blade',
+  'relic_leviathan_mirror',
+  'relic_lucifer_ice',
+] as const;
 
 /**
  * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
@@ -133,7 +142,7 @@ function normalizeEffectStacks(stats: PlayerStats): void {
 }
 
 /**
- * C4 보스 relic ID 변경 전 저장된 수집 기록을 현재 파프니르 relic으로 이전합니다.
+ * 현재 보스 relic ID 체계로 바뀌기 전 저장된 수집 기록을 이전합니다.
  *
  * @param stats 플레이어 스탯
  */
@@ -143,15 +152,23 @@ function migrateLegacyEffectIds(stats: PlayerStats): void {
     return;
   }
 
-  const legacyCount = stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
-  if (typeof legacyCount !== 'number' || legacyCount <= 0) {
-    delete stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
-    return;
+  const legacyC3BossRelicCount = stats.collectionHistory[LEGACY_C3_BOSS_RELIC_ID];
+  if (typeof legacyC3BossRelicCount === 'number' && legacyC3BossRelicCount > 0) {
+    stats.collectionHistory[C3_BOSS_RELIC_ID] =
+      (stats.collectionHistory[C3_BOSS_RELIC_ID] || 0) + legacyC3BossRelicCount;
   }
+  delete stats.collectionHistory[LEGACY_C3_BOSS_RELIC_ID];
 
-  stats.collectionHistory[C4_SELL_RELIC_ID] =
-    (stats.collectionHistory[C4_SELL_RELIC_ID] || 0) + legacyCount;
-  delete stats.collectionHistory[LEGACY_C4_SELL_RELIC_ID];
+  const legacyC4BossRelicCount = stats.collectionHistory[LEGACY_C4_BOSS_RELIC_ID];
+  if (typeof legacyC4BossRelicCount === 'number' && legacyC4BossRelicCount > 0) {
+    stats.collectionHistory[C4_BOSS_RELIC_ID] =
+      (stats.collectionHistory[C4_BOSS_RELIC_ID] || 0) + legacyC4BossRelicCount;
+  }
+  delete stats.collectionHistory[LEGACY_C4_BOSS_RELIC_ID];
+
+  for (const relicId of REMOVED_UNRELEASED_RELIC_IDS) {
+    delete stats.collectionHistory[relicId];
+  }
 }
 
 /**
