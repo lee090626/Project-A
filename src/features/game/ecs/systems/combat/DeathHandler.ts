@@ -7,7 +7,7 @@ import { messageBus } from '@/shared/lib/MessageBus';
 /**
  * 엔티티의 사망 여부를 확인하고, 사망 시 보상 정산 및 엔티티 제거를 처리합니다.
  */
-export const deathHandler = (world: GameWorld, now: number) => {
+export const deathHandler = (world: GameWorld, _now: number) => {
   const { player, entities } = world;
 
   // 플레이어 생존 확인
@@ -17,7 +17,7 @@ export const deathHandler = (world: GameWorld, now: number) => {
   for (let i = entities.soa.count - 1; i >= 0; i--) {
     const type = entities.soa.type[i];
     if ((type === 1 || type === 2) && entities.soa.hp[i] <= 0) {
-      processDeath(world, i, now);
+      processDeath(world, i);
     }
   }
 };
@@ -25,7 +25,7 @@ export const deathHandler = (world: GameWorld, now: number) => {
 /**
  * 개별 엔티티의 사망 처리 로직
  */
-function processDeath(world: GameWorld, index: number, now: number) {
+function processDeath(world: GameWorld, index: number) {
   const { player, entities } = world;
   const type = entities.soa.type[index];
   const defIdx = entities.soa.monsterDefIndex[index];

@@ -71,16 +71,12 @@ function getEquipmentIdFromCraftResult(result: unknown): string | null {
 }
 
 /**
- * 업그레이드, 판매, 제작 등 경제 관련 액션을 처리합니다.
+ * 판매, 제작, 장비 재련 등 경제 관련 액션을 처리합니다.
  */
 export const handleEconomyAction = (world: GameWorld, action: string, data: any) => {
   const stats = world.player.stats;
 
   switch (action) {
-    case 'upgrade':
-      showToast('Legacy upgrade is unavailable.', 'warning', 1800);
-      break;
-
     case 'sell': {
       const resource = typeof data?.resource === 'string' ? data.resource : '';
       const amount = typeof data?.amount === 'number' ? data.amount : 0;

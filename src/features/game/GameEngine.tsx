@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { createInitialWorld, GameWorld } from '@/entities/world/model';
 import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
 import { fetchBaseLayout, fetchEntities } from '@/shared/lib/dataLoader';
@@ -139,7 +139,7 @@ export default function GameEngine() {
   }, []);
 
   const uiActions = useGameUI(worldRef, updateUi, workerSender.send);
-  const { toggleModal, handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
+  const { handleClose, handleOpen, isAnyModalOpen, closeAllModals } = uiActions;
 
   const handleCloseOnboarding = useCallback(() => {
     setIsOnboardingOpen(false);

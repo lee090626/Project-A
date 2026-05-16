@@ -78,7 +78,7 @@ export class MapSerializer {
 
   public static deserializeFromBuffer(
     buffer: ArrayBuffer,
-    chunks: Map<number, Int32Array>,
+    _chunks: Map<number, Int32Array>,
     modifiedCoords: Set<string>,
     getChunkInfo: (x: number) => { chunkX: number; localX: number },
     getChunk: (chunkX: number) => Int32Array
@@ -143,7 +143,7 @@ export class MapSerializer {
 
   public static deserializeObject(
     data: any,
-    chunks: Map<number, Int32Array>,
+    _chunks: Map<number, Int32Array>,
     modifiedCoords: Set<string>,
     getChunkInfo: (x: number) => { chunkX: number; localX: number },
     getChunk: (chunkX: number) => Int32Array

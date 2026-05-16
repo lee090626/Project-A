@@ -1,5 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
-import { CraftRequirements, CraftResult } from '@/shared/types/game';
+import { CraftRequirements } from '@/shared/types/game';
 import { WorkerMessageType } from '@/shared/types/worker';
 
 /**
@@ -26,7 +26,6 @@ export interface UseGameUIResult {
  * useGameActions 반환 타입
  */
 export interface UseGameActionsResult {
-  handleUpgrade: (type: string, requirements: CraftRequirements) => void;
   handleCraft: (req: CraftRequirements, res: any) => void;
   handleSynthesizeEffect: (effectId: string) => void;
   handleSell: (resource: string, amount: number, price: number) => void;

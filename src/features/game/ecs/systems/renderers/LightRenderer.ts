@@ -26,7 +26,7 @@ export function renderLighting(
   stage: { scale: { x: number } },
   screenWidth: number,
   screenHeight: number,
-  now: number,
+  _now: number,
   lightingFilter: any | null,
 ): void {
   if (!lightingFilter) return;

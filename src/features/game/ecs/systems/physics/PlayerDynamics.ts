@@ -36,7 +36,7 @@ export const playerDynamics = (
   movementDelay: number,
   lerpFactor: number
 ) => {
-  const { player, intent, tileMap } = world;
+  const { player } = world;
 
   // 1. 논리적 위치 업데이트 (그리드 이동)
   if (now - world.timestamp.lastMove >= movementDelay) {

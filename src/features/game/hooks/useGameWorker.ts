@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { saveManager, SaveData } from '@/shared/lib/saveManager';
 import { gameDB } from '@/shared/lib/db';
 import { useGameStore } from '@/shared/lib/store';

@@ -20,7 +20,6 @@ interface ModalLayerProps {
 
 const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerProps) => {
   const {
-    handleUpgrade,
     handleCraft,
     handleSynthesizeEffect,
     handleSell,
@@ -30,24 +29,22 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
     handleResetGame,
     handleExportSave,
     handleImportSave,
-    handleRespawn,
   } = gameActions;
 
   return (
     <>
       {ui.isShopOpen && (
-        <Overlay key="shop" onClose={() => handleClose('isShopOpen')}>
+        <Overlay key="shop">
           <Shop
             stats={currentStats}
             onClose={() => handleClose('isShopOpen')}
-            onUpgrade={handleUpgrade}
             onSell={handleSell}
           />
         </Overlay>
       )}
 
       {ui.isStatusOpen && (
-        <Overlay key="status" onClose={() => handleClose('isStatusOpen')}>
+        <Overlay key="status">
           <StatusWindow
             stats={currentStats}
             onClose={() => handleClose('isStatusOpen')}
@@ -56,7 +53,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
       )}
 
       {ui.isInventoryOpen && (
-        <Overlay key="inventory" onClose={() => handleClose('isInventoryOpen')}>
+        <Overlay key="inventory">
           <Inventory
             stats={currentStats}
             onClose={() => handleClose('isInventoryOpen')}
@@ -67,7 +64,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
       )}
 
       {ui.isCraftingOpen && (
-        <Overlay key="crafting" onClose={() => handleClose('isCraftingOpen')}>
+        <Overlay key="crafting">
           <Crafting
             stats={currentStats}
             onClose={() => handleClose('isCraftingOpen')}
@@ -78,7 +75,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
       )}
 
       {ui.isElevatorOpen && (
-        <Overlay key="elevator" onClose={() => handleClose('isElevatorOpen')}>
+        <Overlay key="elevator">
           <Elevator
             stats={currentStats}
             onClose={() => handleClose('isElevatorOpen')}
@@ -88,13 +85,13 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
       )}
 
       {ui.isEncyclopediaOpen && (
-        <Overlay key="encyclopedia" onClose={() => handleClose('isEncyclopediaOpen')}>
+        <Overlay key="encyclopedia">
           <Encyclopedia stats={currentStats} onClose={() => handleClose('isEncyclopediaOpen')} />
         </Overlay>
       )}
 
       {ui.isSettingsOpen && (
-        <Overlay key="settings" onClose={() => handleClose('isSettingsOpen')}>
+        <Overlay key="settings">
           <Settings
             onClose={() => handleClose('isSettingsOpen')}
             onReset={handleResetGame}
@@ -108,7 +105,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
       )}
 
       {ui.isGuideOpen && (
-        <Overlay key="guide" onClose={() => handleClose('isGuideOpen')}>
+        <Overlay key="guide">
           <GuideWindow onClose={() => handleClose('isGuideOpen')} />
         </Overlay>
       )}
@@ -116,7 +113,7 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
   );
 };
 
-function Overlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+function Overlay({ children }: { children: React.ReactNode }) {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center p-2 sm:p-6 lg:p-12 bg-zinc-950/70 animate-in fade-in duration-150 pointer-events-auto">
       <div

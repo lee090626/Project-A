@@ -11,7 +11,7 @@ export interface AtlasMetadata {
   atlasHeight: number;
 }
 
-import { ATLAS_FILE_MAPPING, AtlasIconName } from './atlasFiles';
+import { AtlasIconName } from './atlasFiles';
 
 export type { AtlasIconName };
 

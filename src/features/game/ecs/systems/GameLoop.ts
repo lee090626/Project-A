@@ -22,7 +22,6 @@ import { vfxSystem } from '@/features/game/ecs/systems/VfxSystem';
 import { sfxSystem } from '@/features/game/ecs/systems/sfxSystem';
 import * as PIXI from 'pixi.js';
 import {
-  TILE_SIZE,
   UI_SYNC_INTERVAL,
   SPATIAL_HASH_INTERVAL,
 } from '@/shared/config/constants';
@@ -239,50 +238,6 @@ export class GameLoop {
     this.perfFrameCount = 0;
     this.perfCounters = createPerfCounters();
   }
-
-  /**
-   * [v4 Protocol] 차원 이동 및 월드 리셋을 위한 안전 시퀀스
-   */
-  public async safeReset(newSeed: number, nextDim: number) {
-    // 1. Pause
-    this.isRunning = false;
-    console.log('[GameLoop] Reset sequence started. Loop paused.');
-
-    // 2. Flush (최종 UI 상태 동기화)
-    self.postMessage({
-      type: 'SYNC_UI',
-      payload: {
-        stats: this.world.player.stats,
-        ui: this.world.ui,
-      },
-    });
-
-    // 약간의 딜레이를 주어 메시지가 전송될 시간을 확보 (필요 시)
-    await new Promise((resolve) => setTimeout(resolve, 50));
-
-    // 3. Clear (풀 비우기)
-    this.world.particlePool.getPool().forEach((p) => (p.active = false));
-    this.world.floatingTextPool.getPool().forEach((f) => (f.active = false));
-    this.world.droppedItemPool.clear();
-    this.world.entities.clear(); // [v4] Protocol: Reuse instance, just clear data
-    this.world.spawnedCoords.clear();
-
-    // 4. Reset (타일맵 리셋)
-    this.world.tileMap.reset(newSeed, nextDim);
-
-    // 플레이어 위치 초기화
-    this.world.player.pos = { x: 15, y: 8 };
-    this.world.player.visualPos = { x: 15, y: 8 };
-    this.world.player.stats.depth = 0;
-
-    console.log('[GameLoop] World reset complete.');
-
-    // 5. Resume
-    this.isRunning = true;
-    this.lastLoopTime = performance.now();
-    this.loop(this.lastLoopTime);
-  }
-
   private loop = (now: number) => {
     if (!this.isRunning) return;
 

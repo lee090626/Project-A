@@ -6,7 +6,7 @@ import { MONSTER_LIST } from '@/shared/config/monsterData';
  * 플레이어 주변의 몬스터 스폰 지점을 탐색하여 엔티티를 생성합니다.
  */
 export const mobSpawner = (world: GameWorld) => {
-  const { player, tileMap, spawnedCoords, entities } = world;
+  const { player, tileMap, spawnedCoords } = world;
 
   // 플레이어 주변 일정 범위(뷰포트보다 약간 넓게) 탐색 범위 설정
   const rangeX = 15;

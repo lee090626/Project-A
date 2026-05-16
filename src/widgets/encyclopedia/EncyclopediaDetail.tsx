@@ -1,4 +1,3 @@
-import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
 import AtlasIcon from '@/shared/ui/AtlasIcon';

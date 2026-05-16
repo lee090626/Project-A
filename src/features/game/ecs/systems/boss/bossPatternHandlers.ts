@@ -64,7 +64,6 @@ export const patternTimers = new Map<string, number>();
 
 const handleShot: PatternHandler = (ctx) => {
   const { entities, bx, by, px, py, now, pattern } = ctx;
-  const { soa } = entities;
 
   const count = pattern.projectileCount ?? 1;
   const speed = pattern.projectileSpeed ?? 5;
@@ -93,7 +92,6 @@ const handleShot: PatternHandler = (ctx) => {
 
 const handleCross: PatternHandler = (ctx) => {
   const { entities, bx, by, now, pattern } = ctx;
-  const { soa } = entities;
 
   const speed = pattern.projectileSpeed ?? 7;
   const power = pattern.projectilePower ?? 15;
@@ -114,7 +112,6 @@ const handleCross: PatternHandler = (ctx) => {
 
 const handleAoe: PatternHandler = (ctx) => {
   const { entities, bx, by, now, pattern } = ctx;
-  const { soa } = entities;
 
   const count = pattern.projectileCount ?? 12;
   const speed = pattern.projectileSpeed ?? 5;
@@ -142,7 +139,6 @@ const handleLure: PatternHandler = (ctx) => {
 
 const handleSwarm: PatternHandler = (ctx) => {
   const { entities, bx, by, now, pattern } = ctx;
-  const { soa } = entities;
 
   const count = pattern.projectileCount ?? 15;
   const baseSpeed = pattern.projectileSpeed ?? 4;
@@ -161,7 +157,7 @@ const handleSwarm: PatternHandler = (ctx) => {
 };
 
 const handleGravity: PatternHandler = (ctx) => {
-  const { world, bx, by, px, py, pattern } = ctx;
+  const { world, bx, by, px, py } = ctx;
 
   const dx = bx - px;
   const dy = by - py;
@@ -209,7 +205,6 @@ const handleRoar: PatternHandler = (ctx) => {
  */
 const handleHellfire: PatternHandler = (ctx) => {
   const { entities, bx, by, px, py, now, pattern } = ctx;
-  const { soa } = entities;
 
   const count = pattern.projectileCount ?? 7;
   const speed = pattern.projectileSpeed ?? 3;

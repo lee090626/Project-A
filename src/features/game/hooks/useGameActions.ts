@@ -5,25 +5,13 @@ import { CraftRequirements } from '@/shared/types/game';
 import { SendToWorker, UseGameActionsResult } from './types';
 
 /**
- * 게임의 핵심 액션(업그레이드, 제작, 판매 등)을 처리하는 커스텀 훅입니다.
+ * 게임의 핵심 액션(제작, 판매 등)을 처리하는 커스텀 훅입니다.
  */
 export const useGameActions = (
-  worldRef: React.MutableRefObject<GameWorld>,
+  _worldRef: React.MutableRefObject<GameWorld>,
   updateUi: () => void,
   sendToWorker: SendToWorker,
 ): UseGameActionsResult => {
-  /** 업그레이드(공격력, 최대 체력) 처리 */
-  const handleUpgrade = useCallback(
-    (type: string, requirements: CraftRequirements) => {
-      sendToWorker('ACTION', {
-        action: 'upgrade',
-        data: { type, requirements },
-      });
-      updateUi();
-    },
-    [sendToWorker, updateUi],
-  );
-
   /** 새로운 아이템 제작 처리 */
   const handleCraft = useCallback(
     (req: CraftRequirements, res: any) => {
@@ -122,7 +110,6 @@ export const useGameActions = (
   }, []);
 
   return {
-    handleUpgrade,
     handleCraft,
     handleSynthesizeEffect,
     handleSell,

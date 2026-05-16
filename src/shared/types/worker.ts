@@ -16,8 +16,7 @@ export type WorkerMessageType =
   | 'ACTION'
   | 'RETURN_BUFFER'
   | 'RETURN_SAVE_BUFFER'
-  | 'SAVE_REQUEST'
-  | 'SAFE_RESET';
+  | 'SAVE_REQUEST';
 
 /**
  * 초기화 페이로드
@@ -62,13 +61,11 @@ export interface UiStatePayload {
  * 액션 핸들링 페이로드
  */
 export type ActionType =
-  | 'upgrade'
   | 'sell'
   | 'craft'
   | 'rerollEquipmentOption'
   | 'equip'
   | 'synthesizeEffect'
-  | 'synthesizeRelic'
   | 'selectCheckpoint'
   | 'respawn'
   | 'rewardRevive';
@@ -91,8 +88,7 @@ export type MainToWorkerMessage =
   | { type: 'ACTION'; payload: ActionPayload }
   | { type: 'RETURN_BUFFER'; payload: { buffer?: ArrayBuffer } }
   | { type: 'RETURN_SAVE_BUFFER'; payload: { buffer?: ArrayBuffer } }
-  | { type: 'SAVE_REQUEST'; payload: { type: 'export' } }
-  | { type: 'SAFE_RESET'; payload?: undefined };
+  | { type: 'SAVE_REQUEST'; payload: { type: 'export' } };
 
 /**
  * 워커 -> 메인 스레드 메시지 타입
@@ -136,7 +132,6 @@ const mainToWorkerTypes = new Set<WorkerMessageType>([
   'RETURN_BUFFER',
   'RETURN_SAVE_BUFFER',
   'SAVE_REQUEST',
-  'SAFE_RESET',
 ]);
 
 const workerToMainTypes = new Set<EngineMessageType>([
@@ -182,12 +177,6 @@ function isActionPayload(value: unknown): value is ActionPayload {
 
   const data = value.data;
   switch (value.action) {
-    case 'upgrade':
-      return (
-        isRecord(data) &&
-        isNonEmptyString(data.type) &&
-        isRequirementsRecord(data.requirements)
-      );
     case 'sell':
       return (
         isRecord(data) &&
@@ -208,11 +197,7 @@ function isActionPayload(value: unknown): value is ActionPayload {
     case 'equip':
       return isRecord(data) && isNonEmptyString(data.id) && isEquipmentPart(data.part);
     case 'synthesizeEffect':
-    case 'synthesizeRelic':
-      return (
-        isRecord(data) &&
-        (isNonEmptyString(data.effectId) || isNonEmptyString(data.relicId))
-      );
+      return isRecord(data) && isNonEmptyString(data.effectId);
     case 'selectCheckpoint':
       return (
         isRecord(data) &&
@@ -257,7 +242,6 @@ export function isMainToWorkerMessage(value: unknown): value is MainToWorkerMess
     case 'ASSETS_ATLAS':
       return isRecord(payload) && Array.isArray(payload.atlasData);
     case 'INIT':
-    case 'SAFE_RESET':
       return payload === undefined || isRecord(payload);
     default:
       return false;

@@ -11,7 +11,6 @@ import {
 import { ObjectPool } from '@/shared/lib/effectPool';
 import { EntityManager } from '@/shared/lib/ecs/EntityManager';
 import { SpatialHash } from '@/shared/lib/ecs/SpatialHash';
-import { TILE_SIZE } from '@/shared/config/constants';
 
 /**
  * [초고속] 드랍 아이템 관리 클래스 (SoA + Pooling)

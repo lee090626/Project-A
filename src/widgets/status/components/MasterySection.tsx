@@ -45,7 +45,6 @@ const MasterySection = ({ stats, hoveredTooltipId, onHoverPerk, onLeavePerk }: M
                 (stats.tileMastery && stats.tileMastery[tileKey]) ||
                 createInitialMasteryState(tileKey)
               }
-              unlockedPerks={stats.unlockedMasteryPerks}
               hoveredTooltipId={hoveredTooltipId}
               onHoverPerk={onHoverPerk}
               onLeavePerk={onLeavePerk}

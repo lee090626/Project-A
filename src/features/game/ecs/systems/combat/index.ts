@@ -10,7 +10,7 @@ let isCombatInitialized = false;
  * 플레이어와 몬스터 간의 전투(대미지 처리, 사망 등)를 관리하는 메인 시스템(오케스트레이터)입니다.
  * SoC 원칙에 따라 실질적인 연산은 하위 도메인 시스템에 위임합니다.
  */
-export const combatSystem = (world: GameWorld, deltaTime: number, now: number) => {
+export const combatSystem = (world: GameWorld, _deltaTime: number, now: number) => {
   // 1. 도메인 서비스 초기화 (최초 1회)
   if (!isCombatInitialized) {
     LootGenerator.init();

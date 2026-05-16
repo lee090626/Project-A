@@ -1,5 +1,4 @@
 import { GameWorld } from '@/entities/world/model';
-import { BASE_DEPTH } from '@/shared/config/constants';
 
 /**
  * 환경적인 힘(Storm, 가속도 등) 및 월드 경계를 처리합니다.

@@ -51,7 +51,7 @@ export const interactionSystem = (world: GameWorld) => {
       // 상호작용 의도(스페이스 키) 처리
       if (intent.action === 'interact') {
         console.log(`[Interaction] Executing action for: ${nearbyEntity.name}`);
-        handleEntityInteraction(world, nearbyEntity);
+        handleEntityInteraction(nearbyEntity);
         // 상호작용 성공 후 의도 초기화
         world.intent.action = 'none';
       }
@@ -68,7 +68,7 @@ export const interactionSystem = (world: GameWorld) => {
 /**
  * 엔티티 종류에 따른 상호작용(상점 열기, 대화 등)을 처리합니다.
  */
-const handleEntityInteraction = (world: GameWorld, entity: Entity) => {
+const handleEntityInteraction = (entity: Entity) => {
   console.log(`[Interaction] Handling ${entity.interactionType} for ${entity.name}`);
   if (entity.interactionType === 'shop') {
     self.postMessage({ type: 'OPEN_MODAL', payload: { target: 'isShopOpen' } });

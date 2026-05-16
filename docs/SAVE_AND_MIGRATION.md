@@ -75,7 +75,7 @@ flowchart TD
   TileDb --> IDB["IndexedDB tileMapBuffer"]
 ```
 
-`autoSaveSystem`은 `now - lastSaveTime > 10000`일 때 `SAVE` 메시지를 보냅니다. `src/shared/config/constants.ts`에도 `SAVE_INTERVAL = 10000`이 있지만, 2026-05-14 기준 `autoSaveSystem`은 이 상수를 import하지 않고 literal `10000`을 사용합니다.
+`autoSaveSystem`은 `now - lastSaveTime > 10000`일 때 `SAVE` 메시지를 보냅니다.
 
 worker가 보내는 payload:
 
@@ -214,7 +214,6 @@ IndexedDB를 사용할 수 없는 환경에서는 이 마이그레이션을 실�
 
 | 항목 | 기준 |
 |---|---|
-| `SAVE_INTERVAL` | `constants.ts`에 있지만 `autoSaveSystem`은 literal `10000`을 사용합니다. 저장 주기를 바꾸려면 둘을 함께 확인합니다. |
 | `RETURN_SAVE_BUFFER` | 메시지 타입과 일부 main-thread branch는 존재하지만 `WorkerMessageRouter`는 현재 반환된 저장 버퍼를 재사용하지 않습니다. |
 | `SAVE_OBFUSCATION_KEY` | 클라이언트 난독화 키입니다. 보안 비밀값이 아닙니다. 값을 바꿀 때는 기존 값을 `LEGACY_SAVE_OBFUSCATION_KEYS`에 남겨 기존 LocalStorage 저장과 export 코드를 읽을 수 있게 해야 합니다. |
 

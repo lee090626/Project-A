@@ -8,7 +8,6 @@ import { AtlasIconName } from '@/shared/config/atlasMap';
 interface TileMasteryCardProps {
   tileKey: string;
   mastery: { level: number; exp: number };
-  unlockedPerks?: string[];
   hoveredTooltipId?: string;
   onHoverPerk: (e: React.MouseEvent, perkId: string, name: string, desc: string) => void;
   onLeavePerk: () => void;
@@ -17,7 +16,6 @@ interface TileMasteryCardProps {
 export function TileMasteryCard({
   tileKey,
   mastery,
-  unlockedPerks = [],
   hoveredTooltipId,
   onHoverPerk,
   onLeavePerk,
@@ -67,7 +65,6 @@ export function TileMasteryCard({
             const isUnlocked = mastery.level >= level;
             const perkId = `perk_${tileKey}_${level}`;
             const perk = MASTERY_PERKS.find((p) => p.id === perkId);
-            const hasPerk = unlockedPerks.includes(perkId);
 
             return (
               <div

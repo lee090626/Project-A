@@ -13,13 +13,12 @@ import { useShopTrade } from './useShopTrade';
  */
 interface ShopProps {
   stats: PlayerStats;
-  onUpgrade: (id: string, price: Record<string, number>) => void;
   onSell: (resource: string, amount: number, price: number) => void;
   onClose: () => void;
 }
 
 /**
- * 플레이어가 자원을 판매하고 장비를 업그레이드하거나 스킬젬을 관리할 수 있는 상점(Forge) 컴포넌트입니다.
+ * 플레이어가 자원을 판매할 수 있는 상점 컴포넌트입니다.
  */
 function Shop({ stats, onSell, onClose }: ShopProps) {
   const {

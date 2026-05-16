@@ -1,4 +1,3 @@
-import { Equipment } from '../types/game';
 import { UNRELEASED_CIRCLE_EQUIPMENT_REQUIREMENT } from './lateCircleLock';
 
 /**

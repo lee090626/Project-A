@@ -19,8 +19,8 @@ export const renderSystem = (
   textures: TextureRegistry,
   lightingFilter: LightingFilter | null = null,
 ) => {
-  const { player, tileMap, entities, assets, shake } = world;
-  const { stage, tileLayer, staticLayer, entityLayer, effectLayer, lightLayer, uiLayer } = layers;
+  const { player, shake } = world;
+  const { stage, tileLayer, effectLayer } = layers;
 
   // 1. Camera Control (centering and shake)
   const shakeX = (Math.random() - 0.5) * shake * 2;
@@ -119,4 +119,3 @@ function updateMiningTarget(world: GameWorld, layers: GameLayers) {
     targetRect.visible = false;
   }
 }
-

@@ -304,12 +304,4 @@ export class GameEngineInstance {
       [tileMapBuffer.buffer],
     );
   }
-
-  async safeReset(seed: number, dimension: number) {
-    if (this.gameLoop) {
-      await this.gameLoop.safeReset(seed, dimension);
-      this.world.player.stats.mapSeed = seed;
-      this.world.player.stats.dimension = dimension;
-    }
-  }
 }

@@ -1,5 +1,4 @@
 import { GameWorld } from '@/entities/world/model';
-import { MOVEMENT_DELAY_MS } from '@/shared/config/constants';
 import { statusEffector, processMovementSideEffects } from './StatusEffector';
 import { environmentalPhysics } from './EnvironmentalPhysics';
 import { playerDynamics } from './PlayerDynamics';

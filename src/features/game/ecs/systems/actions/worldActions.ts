@@ -83,19 +83,13 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       break;
     }
 
-    case 'synthesizeRelic':
     case 'synthesizeEffect': {
       if (!isRecord(data)) {
         showToast('Invalid effect request.', 'warning', 1800);
         break;
       }
 
-      const effectId =
-        typeof data.effectId === 'string'
-          ? data.effectId
-          : typeof data.relicId === 'string'
-            ? data.relicId
-            : '';
+      const effectId = typeof data.effectId === 'string' ? data.effectId : '';
       const effect = EFFECT_DATA[effectId];
       if (effect && effect.requirements) {
         const hasEnough = Object.entries(effect.requirements).every(([res, amt]) => {

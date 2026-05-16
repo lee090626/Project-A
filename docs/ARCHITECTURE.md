@@ -102,7 +102,6 @@ flowchart LR
 | Main -> Worker | `RETURN_BUFFER` | `RENDER_SYNC`에 사용한 buffer를 워커 pool로 반환합니다. |
 | Main -> Worker | `RETURN_SAVE_BUFFER` | 저장 후 tile map buffer를 워커에 반환하는 zero-copy 경로입니다. |
 | Main -> Worker | `SAVE_REQUEST` | 저장 데이터 export 요청입니다. |
-| Main -> Worker | `SAFE_RESET` | 타입에는 있으나 현재 `WorkerMessageRouter` switch에서 별도 처리하지 않습니다. 사용 전 라우팅 확인이 필요합니다. |
 | Worker -> Main | `ENGINE_READY` | 워커 초기화 또는 에셋 준비 상태를 알립니다. |
 | Worker -> Main | `RENDER_SYNC` | 렌더 보간용 `ArrayBuffer` 스냅샷입니다. |
 | Worker -> Main | `SYNC_UI` | Zustand에 반영할 저빈도 UI/stat/boss 상태입니다. |

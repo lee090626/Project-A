@@ -52,7 +52,7 @@ export const createMobContainer = (
   const texture = textures[textureKey] || PIXI.Texture.WHITE;
   const tint = !textureKey ? 0xef4444 : undefined;
   
-  const { container, sprite } = createBaseContainer(entity.width || 1, entity.height || 1, texture, tint);
+  const { container } = createBaseContainer(entity.width || 1, entity.height || 1, texture, tint);
 
   // HP Bar
   const hpBar = new PIXI.Graphics();

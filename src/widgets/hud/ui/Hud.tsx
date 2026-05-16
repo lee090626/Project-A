@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { getCircleConfig, getLayerFromDepth } from '@/shared/config/circleData';
 import { PlayerStats } from '@/shared/types/game';
-import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { ElevatorIcon } from '@/shared/ui/icons';
 
 import { HpBar } from './components/HpBar';
@@ -41,17 +40,6 @@ const Hud: React.FC<HudProps> = React.memo(
   }) => {
     const config = getCircleConfig(stats.depth);
     const layerIdx = getLayerFromDepth(stats.depth, config);
-
-    // 장착된 장비 객체들 도출 (안전한 접근)
-    const equipped = useMemo(() => {
-      const eq = (stats as any).equipment;
-      return {
-        drill: eq?.drillId ? (EQUIPMENTS as any)[eq.drillId] : null,
-        helmet: eq?.helmetId ? (EQUIPMENTS as any)[eq.helmetId] : null,
-        armor: eq?.armorId ? (EQUIPMENTS as any)[eq.armorId] : null,
-        boots: eq?.bootsId ? (EQUIPMENTS as any)[eq.bootsId] : null,
-      };
-    }, [stats]);
 
     const layerName = useMemo(() => {
       let prefix = '';
