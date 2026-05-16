@@ -87,7 +87,7 @@ source_paths:
 
 `trailingSlash`는 `false`입니다. 주석 기준으로 Cloudflare Pages의 index serving과 충돌할 수 있어 비활성화되어 있습니다. `images.unoptimized`는 `true`라서 Next Image 최적화 서버에 의존하지 않습니다.
 
-`IS_EXPORT`가 없는 standalone 빌드에서는 `next.config.ts`의 `headers()`가 낮은 위험 보안 헤더와 `Content-Security-Policy-Report-Only`를 모든 경로에 적용합니다. `IS_EXPORT=true` 정적 export에서는 Next의 `headers()` 기능이 적용되지 않으므로 Cloudflare Pages용 `public/_headers` 파일을 함께 둡니다.
+보안 헤더의 정본은 `config/security-headers.json`입니다. `IS_EXPORT`가 없는 standalone 빌드에서는 `next.config.ts`의 `headers()`가 이 JSON을 읽어 낮은 위험 보안 헤더와 `Content-Security-Policy-Report-Only`를 모든 경로에 적용합니다. `IS_EXPORT=true` 정적 export에서는 Next의 `headers()` 기능이 적용되지 않으므로 `scripts/generate-headers.js`가 같은 JSON에서 Cloudflare Pages용 `public/_headers` 파일을 생성합니다.
 
 ## 보안 헤더 1차 적용
 
@@ -95,16 +95,18 @@ source_paths:
 
 | 헤더 | 적용 위치 | 정책 |
 |---|---|---|
-| `X-Content-Type-Options` | `next.config.ts`, `public/_headers` | `nosniff` |
-| `Referrer-Policy` | `next.config.ts`, `public/_headers` | `strict-origin-when-cross-origin` |
-| `Permissions-Policy` | `next.config.ts`, `public/_headers` | `camera=(), microphone=(), geolocation=(), payment=(), usb=()` |
-| `Content-Security-Policy-Report-Only` | `next.config.ts`, `public/_headers` | Google H5 Ads, CrazyGames SDK, worker/blob, atlas/image 로딩을 고려한 관찰 모드 CSP |
+| `X-Content-Type-Options` | `config/security-headers.json` -> `next.config.ts`, `public/_headers` | `nosniff` |
+| `Referrer-Policy` | `config/security-headers.json` -> `next.config.ts`, `public/_headers` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | `config/security-headers.json` -> `next.config.ts`, `public/_headers` | `camera=(), microphone=(), geolocation=(), payment=(), usb=()` |
+| `Content-Security-Policy-Report-Only` | `config/security-headers.json` -> `next.config.ts`, `public/_headers` | Google H5 Ads, CrazyGames SDK, worker/blob, atlas/image 로딩을 고려한 관찰 모드 CSP |
 
 `Content-Security-Policy` 강제 모드는 아직 사용하지 않습니다. Google H5 Ads, Web Worker, Service Worker, Itch/CrazyGames iframe 배포가 있으므로 먼저 Report-Only 위반 로그를 확인한 뒤 강제 전환 여부를 판단합니다. `X-Frame-Options`와 `frame-ancestors`도 iframe 배포를 막을 수 있어 1차 적용에서는 제외합니다.
 
 ## 서비스워커
 
 `scripts/generate-sw.js`는 `public/sw.js`를 자동 생성합니다. 이 파일은 `.gitignore`에 포함되어 있으며 직접 편집하지 않습니다.
+
+`scripts/generate-headers.js`는 `config/security-headers.json`에서 `public/_headers`를 생성합니다. 보안 헤더를 바꿀 때는 JSON을 수정한 뒤 `npm run gen:headers`를 실행해 정적 export 산출물용 헤더 파일을 갱신합니다.
 
 생성 시점:
 

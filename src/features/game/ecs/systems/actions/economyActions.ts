@@ -10,7 +10,13 @@ import {
 } from '@/shared/lib/equipmentRefinement';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { createInitialEquipmentState } from '@/shared/lib/masteryUtils';
-import type { CraftRequirements, PlayerStats } from '@/shared/types/game';
+import {
+  canAffordRequirements,
+  getResourceAmount,
+  spendRequirements,
+} from '@/shared/lib/resourceRequirements';
+import { isRecord } from '@/shared/lib/validation';
+import type { CraftRequirements } from '@/shared/types/game';
 import { showToast } from '../toastSystem';
 
 const EQUIPMENT_RESULT_KEYS = [
@@ -23,41 +29,6 @@ const EQUIPMENT_RESULT_KEYS = [
   'armorId',
   'bootsId',
 ] as const;
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === 'object';
-}
-
-function getInventoryAmount(stats: PlayerStats, resource: string): number | undefined {
-  if (resource === 'goldCoins') return stats.goldCoins || 0;
-
-  const amount = stats.inventory?.[resource];
-  return typeof amount === 'number' ? amount : undefined;
-}
-
-function isValidRequirementAmount(amount: unknown): amount is number {
-  return typeof amount === 'number' && Number.isFinite(amount) && amount >= 0;
-}
-
-function canAffordRequirements(stats: PlayerStats, requirements: CraftRequirements): boolean {
-  return Object.entries(requirements).every(([resource, amount]) => {
-    const owned = getInventoryAmount(stats, resource);
-    return owned !== undefined && isValidRequirementAmount(amount) && owned >= amount;
-  });
-}
-
-function spendRequirements(stats: PlayerStats, requirements: CraftRequirements) {
-  Object.entries(requirements).forEach(([resource, amount]) => {
-    if (!isValidRequirementAmount(amount) || amount === 0) return;
-
-    if (resource === 'goldCoins') {
-      stats.goldCoins -= amount;
-      return;
-    }
-
-    stats.inventory[resource] -= amount;
-  });
-}
 
 function getEquipmentIdFromCraftResult(result: unknown): string | null {
   if (!isRecord(result)) return null;
@@ -87,7 +58,7 @@ export const handleEconomyAction = (world: GameWorld, action: string, data: any)
         break;
       }
 
-      const owned = getInventoryAmount(stats, resource);
+      const owned = getResourceAmount(stats, resource);
       if (owned === undefined || owned < amount) {
         showToast('Not enough materials to sell.', 'warning', 1800);
         break;

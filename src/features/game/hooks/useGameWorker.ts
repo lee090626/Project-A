@@ -3,6 +3,7 @@ import { saveManager, SaveData } from '@/shared/lib/saveManager';
 import { gameDB } from '@/shared/lib/db';
 import { useGameStore } from '@/shared/lib/store';
 import { playGameSfx } from '@/shared/lib/sfxManager';
+import { tileMapBufferToArrayBuffer } from '@/shared/lib/tileMapSaveCodec';
 import { isGameSfxId, ToastType } from '@/shared/types/game';
 import { SendToWorker } from './types';
 import {
@@ -22,14 +23,6 @@ const isSaveDataPayload = (value: unknown): value is SaveData =>
   typeof value.timestamp === 'number' &&
   isObjectPayload(value.stats) &&
   isObjectPayload(value.position);
-
-const getArrayBufferFromTransfer = (value: unknown): ArrayBuffer | null => {
-  if (value instanceof ArrayBuffer) return value;
-  if (ArrayBuffer.isView(value) && value.buffer instanceof ArrayBuffer) {
-    return value.buffer;
-  }
-  return null;
-};
 
 export function useGameWorker(
   isClient: boolean,
@@ -106,7 +99,7 @@ export function useGameWorker(
       } else if (type === 'SAVE' && isObjectPayload(payload)) {
         // Zero-Copy 흐름: 버퍼를 IndexedDB에 저장한 뒤 워커에돌려줌
         const { tileMapBuffer, ...rest } = payload;
-        const tileMapArrayBuffer = getArrayBufferFromTransfer(tileMapBuffer);
+        const tileMapArrayBuffer = tileMapBufferToArrayBuffer(tileMapBuffer);
         if (isSaveDataPayload(rest)) {
           saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
         }

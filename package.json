@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:gh": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg next build",
-    "build:itch": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
-    "build:cf": "IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
-    "build:crazygames": "BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' npm run gen:sw && BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' next build && node scripts/prepare-crazygames-build.js",
+    "build:gh": "npm run gen:headers && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=/drilling-rpg BASE_PATH=/drilling-rpg next build",
+    "build:itch": "npm run gen:headers && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
+    "build:cf": "npm run gen:headers && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' npm run gen:sw && IS_EXPORT=true NEXT_PUBLIC_BASE_PATH='' BASE_PATH='' next build",
+    "build:crazygames": "npm run gen:headers && BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' npm run gen:sw && BUILD_TARGET=crazygames NEXT_PUBLIC_BUILD_TARGET=crazygames IS_EXPORT=true NEXT_PUBLIC_BASE_PATH=. BASE_PATH='' next build && node scripts/prepare-crazygames-build.js",
     "package:crazygames": "npm run build:crazygames && node scripts/zip-crazygames-build.js",
     "start": "next start",
     "lint": "eslint",
@@ -18,9 +18,10 @@
     "optimize:atlas": "node scripts/generate-atlas.mjs",
     "update:atlas-map": "node scripts/generateAtlasMap.js",
     "format": "prettier --write .",
+    "gen:headers": "node scripts/generate-headers.js",
     "gen:sw": "node scripts/generate-sw.js",
-    "predev": "npm run gen:sw",
-    "prebuild": "npm run gen:sw"
+    "predev": "npm run gen:headers && npm run gen:sw",
+    "prebuild": "npm run gen:headers && npm run gen:sw"
   },
   "dependencies": {
     "next": "^16.2.6",

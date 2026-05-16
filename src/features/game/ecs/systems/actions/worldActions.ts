@@ -3,6 +3,11 @@ import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { addEffectStack } from '@/shared/lib/effectItemUtils';
+import {
+  canAffordRequirements,
+  spendRequirements,
+} from '@/shared/lib/resourceRequirements';
+import { isEquipmentPart, isRecord } from '@/shared/lib/validation';
 import { EquipmentPart } from '@/shared/types/game';
 import { showToast } from '../toastSystem';
 
@@ -12,14 +17,6 @@ const EQUIPMENT_SLOT_BY_PART: Record<EquipmentPart, keyof GameWorld['player']['s
   Armor: 'armorId',
   Boots: 'bootsId',
 };
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === 'object';
-}
-
-function isEquipmentPart(value: unknown): value is EquipmentPart {
-  return value === 'Drill' || value === 'Helmet' || value === 'Armor' || value === 'Boots';
-}
 
 /**
  * 부활, 웨이포인트 이동, Effect 합성 등 월드 관련 액션을 처리합니다.
@@ -92,18 +89,8 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
       const effectId = typeof data.effectId === 'string' ? data.effectId : '';
       const effect = EFFECT_DATA[effectId];
       if (effect && effect.requirements) {
-        const hasEnough = Object.entries(effect.requirements).every(([res, amt]) => {
-          const owned = res === 'goldCoins' ? stats.goldCoins : stats.inventory[res as any] || 0;
-          return owned >= (amt as number);
-        });
-
-        if (!hasEnough) break;
-
-        // 자원 소모
-        Object.entries(effect.requirements).forEach(([res, amt]) => {
-          if (res === 'goldCoins') stats.goldCoins -= amt as number;
-          else (stats.inventory[res as any] as number) -= amt as number;
-        });
+        if (!canAffordRequirements(stats, effect.requirements)) break;
+        spendRequirements(stats, effect.requirements);
 
         // 결과 반영: 모든 Effect 아이템은 스택 누적 규칙을 따릅니다.
         addEffectStack(stats, effectId, 1);

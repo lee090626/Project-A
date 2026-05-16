@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { EFFECT_DATA } from '@/shared/config/effectData';
+import { canAffordRequirements } from '@/shared/lib/resourceRequirements';
 
 export type CraftType = 'Equipment' | 'Effects';
 
@@ -51,14 +52,7 @@ export function useCrafting(stats: PlayerStats) {
       if (owned) return false;
     }
 
-    // 모든 재료 조건을 충족하는지 확인
-    return Object.entries(rcp.requirements).every(([key, val]) => {
-      const currentVal =
-        (stats as any)[key] !== undefined
-          ? (stats as any)[key]
-          : (stats.inventory as any)[key] || 0;
-      return currentVal >= (val as number);
-    });
+    return canAffordRequirements(stats, rcp.requirements || {});
   }, [craftType, stats]);
 
   const selectTab = useCallback((tab: CraftType) => {

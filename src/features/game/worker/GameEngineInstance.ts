@@ -11,6 +11,7 @@ import { handlePlayerAction } from '@/features/game/ecs/systems/ActionSystem';
 import { syncPermanentStats } from '@/features/game/ecs/systems/statsSyncSystem';
 import { forceSyncUi } from '@/features/game/ecs/systems/syncSystem';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
+import { decodeTileMapData } from '@/shared/lib/tileMapSaveCodec';
 import { AssetParser } from '../lib/AssetParser';
 import {
   InitPayload,
@@ -165,12 +166,11 @@ export class GameEngineInstance {
         this.world.tileMap.deserializeFromBuffer(tileMapBuffer, stats.mapSeed, stats.dimension);
       } else if (tileMapData) {
         // [Legacy] Base64 문자열을 디코딩 후 복원
-        const binary = atob(tileMapData);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-        }
-        this.world.tileMap.deserializeFromBuffer(bytes.buffer, stats.mapSeed, stats.dimension);
+        this.world.tileMap.deserializeFromBuffer(
+          decodeTileMapData(tileMapData),
+          stats.mapSeed,
+          stats.dimension,
+        );
       } else if (tileMap) {
         this.world.tileMap.deserialize(tileMap, stats.mapSeed, stats.dimension);
       }

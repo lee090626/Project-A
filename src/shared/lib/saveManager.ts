@@ -6,6 +6,8 @@ import { C2_GUIDE_QUEST_ID_SET } from '../config/guideQuestData';
 import { gameDB } from './db';
 import { clampMainStatBonusPct } from './equipmentRefinement';
 import { createInitialEquipmentState } from './masteryUtils';
+import { decodeTileMapData, encodeTileMapBuffer, tileMapBufferToArrayBuffer } from './tileMapSaveCodec';
+import { isFiniteNumber, isRecord } from './validation';
 
 /**
  * 저장될 게임 데이터의 규격을 정의합니다.
@@ -50,14 +52,6 @@ const REMOVED_UNRELEASED_RELIC_IDS = [
   'relic_lucifer_ice',
 ] as const;
 const EQUIPMENT_SLOT_KEYS = ['drillId', 'helmetId', 'armorId', 'bootsId'] as const;
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === 'object';
-}
-
-function isFiniteNumber(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value);
-}
 
 function normalizeNonNegativeNumber(value: unknown, fallback = 0): number {
   if (!isFiniteNumber(value)) return fallback;
@@ -135,29 +129,6 @@ function normalizePosition(value: unknown): Position | null {
     x: Math.trunc(value.x),
     y: Math.trunc(value.y),
   };
-}
-
-function tileMapBufferToArrayBuffer(value: SaveData['tileMapBuffer']): ArrayBuffer | null {
-  if (value instanceof ArrayBuffer) return value;
-  if (!ArrayBuffer.isView(value)) return null;
-
-  const bytes = new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
-  const copy = new Uint8Array(bytes.byteLength);
-  copy.set(bytes);
-  return copy.buffer;
-}
-
-function decodeTileMapData(tileMapDataBase64: string): ArrayBuffer {
-  if (tileMapDataBase64.length > MAX_TILE_MAP_DATA_LENGTH) {
-    throw new Error('tileMapData is too large.');
-  }
-
-  const binary = atob(tileMapDataBase64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes.buffer;
 }
 
 function writeStatsOnly(data: SaveData): void {
@@ -593,12 +564,7 @@ export const saveManager = {
           delete data.tileMapData; // 이전 Base64 데이터 활성화 안 됨
         } else {
           // 폴백: 기존 Base64 방식
-          const bytes = new Uint8Array(buffer);
-          let binary = '';
-          for (let i = 0; i < bytes.byteLength; i++) {
-            binary += String.fromCharCode(bytes[i]);
-          }
-          data.tileMapData = btoa(binary);
+          data.tileMapData = encodeTileMapBuffer(buffer);
         }
         delete data.tileMapBuffer;
       }
@@ -649,7 +615,7 @@ export const saveManager = {
 
     try {
       // 1. Base64 데코딩 후 ArrayBuffer로 변환
-      const buffer = decodeTileMapData(tileMapDataBase64);
+      const buffer = decodeTileMapData(tileMapDataBase64, MAX_TILE_MAP_DATA_LENGTH);
 
       // 2. IndexedDB에 복사
       await gameDB.saveTileMap(buffer);
@@ -690,12 +656,7 @@ export const saveManager = {
         throw new Error('Invalid tileMapBuffer.');
       }
 
-      const bytes = new Uint8Array(buffer);
-      let binary = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-        binary += String.fromCharCode(bytes[i]);
-      }
-      data.tileMapData = btoa(binary);
+      data.tileMapData = encodeTileMapBuffer(buffer);
       delete data.tileMapBuffer;
     }
     return obfuscate(JSON.stringify(data));
@@ -731,7 +692,9 @@ export const saveManager = {
       if (gameDB.isAvailable) {
         const buffer =
           tileMapBufferToArrayBuffer(normalized.tileMapBuffer) ||
-          (normalized.tileMapData ? decodeTileMapData(normalized.tileMapData) : null);
+          (normalized.tileMapData
+            ? decodeTileMapData(normalized.tileMapData, MAX_TILE_MAP_DATA_LENGTH)
+            : null);
 
         if (buffer) {
           await gameDB.saveTileMap(buffer);

@@ -215,6 +215,7 @@ IndexedDB를 사용할 수 없는 환경에서는 이 마이그레이션을 실�
 | 항목 | 기준 |
 |---|---|
 | `RETURN_SAVE_BUFFER` | 메시지 타입과 일부 main-thread branch는 존재하지만 `WorkerMessageRouter`는 현재 반환된 저장 버퍼를 재사용하지 않습니다. |
+| `tileMapSaveCodec.ts` | tile map `ArrayBuffer`와 legacy Base64 `tileMapData` 변환의 공통 구현입니다. 세이브 import/export, IndexedDB 마이그레이션, worker 복구 경로는 이 codec을 기준으로 맞춥니다. |
 | `SAVE_OBFUSCATION_KEY` | 클라이언트 난독화 키입니다. 보안 비밀값이 아닙니다. 값을 바꿀 때는 기존 값을 `LEGACY_SAVE_OBFUSCATION_KEYS`에 남겨 기존 LocalStorage 저장과 export 코드를 읽을 수 있게 해야 합니다. |
 
 ## 변경 지침

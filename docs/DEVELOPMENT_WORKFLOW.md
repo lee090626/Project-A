@@ -169,6 +169,7 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | `npm run lint` | ESLint |
 | `npx tsc --noEmit` | TypeScript 타입 검사. package script는 아니지만 `08-agents.md`의 기준 검증입니다. |
 | `npm run build` | 기본 Next.js build |
+| `npm run gen:headers` | `config/security-headers.json`에서 `public/_headers` 재생성 |
 | `npm run optimize:atlas` | 원본 에셋을 아틀라스로 패킹 |
 | `npm run update:atlas-map` | 아틀라스 좌표와 타입 매핑 재생성 |
 | `npm run format` | Prettier 전체 포맷 |

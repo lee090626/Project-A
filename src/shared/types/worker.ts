@@ -2,6 +2,8 @@ import { PlayerStats, Position } from './game';
 import { isGameSfxId } from './game/audio';
 import type { PlaySfxPayload } from './game/audio';
 import type { ToastItem } from './game';
+import { isRequirementsRecord } from '@/shared/lib/resourceRequirements';
+import { isEquipmentPart, isFiniteNumber, isNonEmptyString, isRecord } from '@/shared/lib/validation';
 
 /**
  * 메인 스레드 -> 워커 스레드 메시지 타입
@@ -145,32 +147,6 @@ const workerToMainTypes = new Set<EngineMessageType>([
   'OPEN_MODAL',
   'TUTORIAL_TRIGGER',
 ]);
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return !!value && typeof value === 'object';
-}
-
-function isFiniteNumber(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value);
-}
-
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === 'string' && value.length > 0 && value.length <= 160;
-}
-
-function isRequirementsRecord(value: unknown): value is Record<string, number> {
-  return (
-    isRecord(value) &&
-    Object.entries(value).every(
-      ([key, amount]) =>
-        isNonEmptyString(key) && isFiniteNumber(amount) && amount >= 0,
-    )
-  );
-}
-
-function isEquipmentPart(value: unknown): value is 'Drill' | 'Helmet' | 'Armor' | 'Boots' {
-  return value === 'Drill' || value === 'Helmet' || value === 'Armor' || value === 'Boots';
-}
 
 function isActionPayload(value: unknown): value is ActionPayload {
   if (!isRecord(value) || typeof value.action !== 'string') return false;
