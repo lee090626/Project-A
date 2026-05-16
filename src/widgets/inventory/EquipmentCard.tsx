@@ -1,5 +1,6 @@
 import React from 'react';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { EQUIPMENT_PART_LABELS } from '@/shared/lib/equipmentParts';
 import { Equipment, EquipmentPart, PlayerStats } from '@/shared/types/game';
 import { AtlasIconName } from '@/shared/config/atlasMap';
 import {
@@ -44,12 +45,6 @@ function EquipmentCard({
     mainStatBonusPct < EQUIPMENT_MAIN_STAT_BONUS_MAX &&
     stats.goldCoins >= rerollCost;
 
-  const partLabels: Record<EquipmentPart, string> = {
-    Drill: 'Weapon (Drill)',
-    Helmet: 'Head (Helmet)',
-    Armor: 'Body (Armor)',
-    Boots: 'Legs (Boots)',
-  };
   const statItems = getEquipmentStatItems(refinedStats, mainStat);
 
   return (
@@ -72,7 +67,7 @@ function EquipmentCard({
           <div
             className={`text-[10px] font-bold mb-1 tracking-widest ${isEquipped ? 'text-cyan-400' : 'text-zinc-500'}`}
           >
-            {isEquipped ? 'Currently Equipped' : 'Inventory'} • {partLabels[equipment.part]}
+            {isEquipped ? 'Currently Equipped' : 'Inventory'} • {EQUIPMENT_PART_LABELS[equipment.part]}
           </div>
           <h4 className="text-xl md:text-2xl font-black text-white tracking-tighter">
             {equipment.name}

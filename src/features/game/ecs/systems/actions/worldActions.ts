@@ -7,16 +7,9 @@ import {
   canAffordRequirements,
   spendRequirements,
 } from '@/shared/lib/resourceRequirements';
-import { isEquipmentPart, isRecord } from '@/shared/lib/validation';
-import { EquipmentPart } from '@/shared/types/game';
+import { EQUIPMENT_SLOT_BY_PART, isEquipmentPart } from '@/shared/lib/equipmentParts';
+import { isRecord } from '@/shared/lib/validation';
 import { showToast } from '../toastSystem';
-
-const EQUIPMENT_SLOT_BY_PART: Record<EquipmentPart, keyof GameWorld['player']['stats']['equipment']> = {
-  Drill: 'drillId',
-  Helmet: 'helmetId',
-  Armor: 'armorId',
-  Boots: 'bootsId',
-};
 
 /**
  * 부활, 웨이포인트 이동, Effect 합성 등 월드 관련 액션을 처리합니다.

@@ -1,4 +1,5 @@
 import React from 'react';
+import { EQUIPMENT_PARTS, EQUIPMENT_SLOT_BY_PART } from '@/shared/lib/equipmentParts';
 import { PlayerStats, EquipmentPart } from '@/shared/types/game';
 import EquipmentCard from '../EquipmentCard';
 
@@ -21,21 +22,14 @@ const TabEquipment = ({
 }: TabEquipmentProps) => {
   
   const isCurrentlyEquipped = (id: string, part: EquipmentPart) => {
-    const { equipment } = stats;
-    switch (part) {
-      case 'Drill': return equipment.drillId === id;
-      case 'Helmet': return equipment.helmetId === id;
-      case 'Armor': return equipment.armorId === id;
-      case 'Boots': return equipment.bootsId === id;
-      default: return false;
-    }
+    return stats.equipment[EQUIPMENT_SLOT_BY_PART[part]] === id;
   };
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       {/* Part selection tabs */}
       <div className="flex gap-2 mb-6 px-1 flex-wrap">
-        {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
+        {EQUIPMENT_PARTS.map((part) => (
           <button
             key={part}
             onClick={() => onSetSelectedPart(part)}

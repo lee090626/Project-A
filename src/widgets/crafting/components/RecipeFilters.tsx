@@ -1,4 +1,5 @@
 import React from 'react';
+import { EQUIPMENT_PARTS } from '@/shared/lib/equipmentParts';
 import { EquipmentPart } from '@/shared/types/game';
 import { CraftType } from '../useCrafting';
 
@@ -59,7 +60,7 @@ const RecipeFilters = ({
             </div>
             <div className="flex items-center gap-3 flex-wrap">
               <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Part:</span>
-              {(['Drill', 'Helmet', 'Armor', 'Boots'] as EquipmentPart[]).map((part) => (
+              {EQUIPMENT_PARTS.map((part) => (
                 <button
                   key={part}
                   onClick={() => onSelectPart(part)}

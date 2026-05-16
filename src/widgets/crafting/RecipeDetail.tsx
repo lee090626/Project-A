@@ -2,6 +2,7 @@ import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
 import { EFFECT_DATA } from '@/shared/config/effectData';
+import { isEquipmentPart } from '@/shared/lib/equipmentParts';
 import { formatNumber } from '@/shared/lib/numberUtils';
 import AtlasIcon from '@/shared/ui/AtlasIcon';
 
@@ -199,7 +200,7 @@ export function RecipeDetail({ selectedRecipe, stats, canCraft, onCraft }: Recip
               : 'bg-zinc-800 text-zinc-600 border-white/5 cursor-not-allowed grayscale'
           }`}
         >
-          {(['Drill', 'Helmet', 'Armor', 'Boots'].includes(selectedRecipe.type) &&
+          {(isEquipmentPart(selectedRecipe.type) &&
             stats.ownedEquipmentIds?.includes(selectedRecipe.id))
             ? 'Already Owned'
             : 'System Craft'}

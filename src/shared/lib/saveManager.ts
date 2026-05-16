@@ -4,6 +4,7 @@ import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
 import { EFFECT_DATA } from '../config/effectData';
 import { C2_GUIDE_QUEST_ID_SET } from '../config/guideQuestData';
 import { gameDB } from './db';
+import { EQUIPMENT_SLOT_KEYS } from './equipmentParts';
 import { clampMainStatBonusPct } from './equipmentRefinement';
 import { createInitialEquipmentState } from './masteryUtils';
 import { decodeTileMapData, encodeTileMapBuffer, tileMapBufferToArrayBuffer } from './tileMapSaveCodec';
@@ -51,7 +52,6 @@ const REMOVED_UNRELEASED_RELIC_IDS = [
   'relic_leviathan_mirror',
   'relic_lucifer_ice',
 ] as const;
-const EQUIPMENT_SLOT_KEYS = ['drillId', 'helmetId', 'armorId', 'bootsId'] as const;
 
 function normalizeNonNegativeNumber(value: unknown, fallback = 0): number {
   if (!isFiniteNumber(value)) return fallback;

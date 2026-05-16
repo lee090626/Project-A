@@ -19,6 +19,7 @@ source_paths:
   - src/shared/config/coreDataFiles.ts
   - src/shared/config/coreDataFiles.json
   - src/shared/config/lateCircleLock.ts
+  - src/shared/lib/equipmentParts.ts
   - src/shared/lib/equipmentRefinement.ts
   - src/shared/types/game
 ---
@@ -39,6 +40,7 @@ source_paths:
 | `src/shared/config/monsterData.ts` | `MONSTER_LIST`, `MONSTERS`, `MONSTER_DEFINITIONS` | Circle별 몬스터 파일을 통합하고 ID 조회 맵을 제공합니다. |
 | `src/shared/config/monsters/types.ts` | `MonsterDefinition`, `BossPattern` | 몬스터/보스 정의와 보스 패턴 구조입니다. |
 | `src/shared/config/equipmentData.ts` | `EQUIPMENTS` | 장비 ID, 부위, Circle, 기본 스탯, 제작 재료, 이미지 키를 정의합니다. |
+| `src/shared/lib/equipmentParts.ts` | 장비 부위/슬롯 헬퍼 | `EquipmentPart` 표시 순서, 저장 슬롯 키, 부위 라벨, 부위 검증 함수를 정의합니다. |
 | `src/shared/lib/equipmentRefinement.ts` | 장비 주스탯 재련 규칙 | 부위별 주스탯, 옵션 범위, 리롤 비용, 품질 라벨, 재련 스탯 계산을 정의합니다. |
 | `src/shared/config/effectData.ts` | `EFFECT_DATA`, `EFFECT_LIST` | Essence, Relic, Crafted Effect를 하나의 Effect 데이터베이스로 통합합니다. |
 | `src/shared/config/effects/types.ts` | `EffectDefinition` | 누적형 보유 효과 아이템의 필드 구조입니다. |
@@ -135,7 +137,7 @@ C5+를 실제 플레이 구간으로 열 때는 `lateCircleLock.ts` 의존을 �
 새 장비를 추가할 때:
 
 1. `src/shared/config/equipmentData.ts`의 `EQUIPMENTS`에 장비 ID를 추가합니다.
-2. `part`, `circle`, `stats`, `price`, `image`를 기존 장비와 같은 형식으로 맞춥니다.
+2. `part`는 `src/shared/lib/equipmentParts.ts`의 `EQUIPMENT_PARTS`에 있는 부위만 사용하고, `circle`, `stats`, `price`, `image`를 기존 장비와 같은 형식으로 맞춥니다.
 3. `price`에는 제작 재료만 넣고 `goldCoins`는 넣지 않습니다. 골드는 `equipmentRefinement.ts`의 리롤 비용으로 소비됩니다.
 4. 새 Circle 장비를 추가했다면 `equipmentRefinement.ts`의 Circle별 리롤 비용 맵 보정이 필요한지 확인합니다.
 
