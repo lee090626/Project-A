@@ -24,11 +24,17 @@ export interface SaveData {
   /** (New) Buffer를 Base64로 인코딩한 타일 맵 데이터 */
   tileMapData?: string;
   /** (Memory) 저장 직전 워커로부터 전달받는 버퍼 (저장 전 인코딩용, 실제 디스크에는 기록불가) */
-  tileMapBuffer?: Uint32Array;
+  tileMapBuffer?: Uint32Array | ArrayBuffer;
 }
 
 const SAVE_KEY = 'drilling-game-save';
 const WAYPOINT_INTERVAL = 100;
+const MAX_SAVE_CODE_LENGTH = 8_000_000;
+const MAX_TILE_MAP_DATA_LENGTH = 24 * 1024 * 1024;
+const MAX_POSITION_ABS = 100_000;
+const MAX_ARRAY_ITEMS = 5_000;
+const MAX_RECORD_KEYS = 5_000;
+const MAX_SAFE_SAVE_NUMBER = 1_000_000_000;
 const COLLECTIBLE_MINERAL_KEYS = new Set(MINERALS.map((m) => m.key as string));
 const KNOWN_TILE_DEFINITION_KEYS = new Set(TILE_DEFINITIONS.map((m) => m.key as string));
 const LEGACY_BOSS_CORE_PATTERN = /^circle_(\d+)_core$/;
@@ -43,6 +49,129 @@ const REMOVED_UNRELEASED_RELIC_IDS = [
   'relic_leviathan_mirror',
   'relic_lucifer_ice',
 ] as const;
+const EQUIPMENT_SLOT_KEYS = ['drillId', 'helmetId', 'armorId', 'bootsId'] as const;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object';
+}
+
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function normalizeNonNegativeNumber(value: unknown, fallback = 0): number {
+  if (!isFiniteNumber(value)) return fallback;
+  return Math.min(MAX_SAFE_SAVE_NUMBER, Math.max(0, value));
+}
+
+function normalizeQuantity(value: unknown): number {
+  return Math.floor(normalizeNonNegativeNumber(value));
+}
+
+function normalizeStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  const result: string[] = [];
+  const seen = new Set<string>();
+  for (const item of value) {
+    if (result.length >= MAX_ARRAY_ITEMS) break;
+    if (typeof item !== 'string' || item.length === 0 || item.length > 160) continue;
+    if (seen.has(item)) continue;
+    seen.add(item);
+    result.push(item);
+  }
+  return result;
+}
+
+function normalizeNumberArray(value: unknown): number[] {
+  if (!Array.isArray(value)) return [];
+
+  const result: number[] = [];
+  const seen = new Set<number>();
+  for (const item of value) {
+    if (result.length >= MAX_ARRAY_ITEMS) break;
+    if (!isFiniteNumber(item) || item < 0) continue;
+    const normalized = Math.floor(item);
+    if (seen.has(normalized)) continue;
+    seen.add(normalized);
+    result.push(normalized);
+  }
+  return result;
+}
+
+function normalizeNumberRecord(value: unknown): Record<string, number> {
+  if (!isRecord(value)) return {};
+
+  const result: Record<string, number> = {};
+  for (const [key, amount] of Object.entries(value).slice(0, MAX_RECORD_KEYS)) {
+    if (!key || key.length > 160) continue;
+    if (!isFiniteNumber(amount)) continue;
+    result[key] = Math.min(MAX_SAFE_SAVE_NUMBER, Math.max(0, amount));
+  }
+  return result;
+}
+
+function normalizeObservedRecord(value: unknown): Record<string, number | boolean> {
+  if (!isRecord(value)) return {};
+
+  const result: Record<string, number | boolean> = {};
+  for (const [key, observed] of Object.entries(value).slice(0, MAX_RECORD_KEYS)) {
+    if (!key || key.length > 160) continue;
+    if (typeof observed === 'boolean') {
+      result[key] = observed;
+    } else if (isFiniteNumber(observed)) {
+      result[key] = Math.min(MAX_SAFE_SAVE_NUMBER, Math.max(0, observed));
+    }
+  }
+  return result;
+}
+
+function normalizePosition(value: unknown): Position | null {
+  if (!isRecord(value) || !isFiniteNumber(value.x) || !isFiniteNumber(value.y)) return null;
+  if (Math.abs(value.x) > MAX_POSITION_ABS || Math.abs(value.y) > MAX_POSITION_ABS) {
+    return null;
+  }
+  return {
+    x: Math.trunc(value.x),
+    y: Math.trunc(value.y),
+  };
+}
+
+function tileMapBufferToArrayBuffer(value: SaveData['tileMapBuffer']): ArrayBuffer | null {
+  if (value instanceof ArrayBuffer) return value;
+  if (!ArrayBuffer.isView(value)) return null;
+
+  const bytes = new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  return copy.buffer;
+}
+
+function decodeTileMapData(tileMapDataBase64: string): ArrayBuffer {
+  if (tileMapDataBase64.length > MAX_TILE_MAP_DATA_LENGTH) {
+    throw new Error('tileMapData is too large.');
+  }
+
+  const binary = atob(tileMapDataBase64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+function writeStatsOnly(data: SaveData): void {
+  const statsOnly = {
+    version: data.version,
+    timestamp: data.timestamp,
+    stats: data.stats,
+    position: data.position,
+    ...(gameDB.isAvailable ? {} : { tileMapData: data.tileMapData }),
+  };
+  const json = JSON.stringify(statsOnly);
+  const obfuscatedStr = obfuscate(json);
+  localStorage.setItem(SAVE_KEY, obfuscatedStr);
+}
 
 /**
  * 세이브 데이터의 웨이포인트 목록을 최대 도달 깊이에 맞춰 정규화합니다.
@@ -224,10 +353,8 @@ function normalizeGuideQuest(stats: PlayerStats): void {
   guideQuest.claimedRewardIds = Array.isArray(guideQuest.claimedRewardIds)
     ? guideQuest.claimedRewardIds.filter((id) => C2_GUIDE_QUEST_ID_SET.has(id))
     : [];
-  guideQuest.counters =
-    guideQuest.counters && typeof guideQuest.counters === 'object' ? guideQuest.counters : {};
-  guideQuest.observed =
-    guideQuest.observed && typeof guideQuest.observed === 'object' ? guideQuest.observed : {};
+  guideQuest.counters = normalizeNumberRecord(guideQuest.counters);
+  guideQuest.observed = normalizeObservedRecord(guideQuest.observed);
 
   if (guideQuest.activeId && !C2_GUIDE_QUEST_ID_SET.has(guideQuest.activeId)) {
     guideQuest.activeId = null;
@@ -254,6 +381,8 @@ function normalizeEquipmentStates(stats: PlayerStats): void {
       equipmentIds.add(equipmentId);
     }
   });
+
+  stats.ownedEquipmentIds = Array.from(equipmentIds);
 
   equipmentIds.forEach((equipmentId) => {
     const existing = stats.equipmentStates[equipmentId];
@@ -294,6 +423,134 @@ function deobfuscate(encoded: string): string {
   return deobfuscated;
 }
 
+function normalizeSaveData(raw: unknown): SaveData | null {
+  if (!isRecord(raw) || !isRecord(raw.stats)) return null;
+
+  const normalizedPosition = normalizePosition(raw.position);
+  if (!normalizedPosition) return null;
+
+  const data = raw as unknown as SaveData;
+  if (!isFiniteNumber(data.version) || !isFiniteNumber(data.timestamp)) return null;
+
+  data.version = Math.max(1, Math.floor(data.version));
+  data.timestamp = Math.max(0, Math.floor(data.timestamp));
+  data.position = normalizedPosition;
+
+  if (data.tileMapData !== undefined) {
+    if (typeof data.tileMapData !== 'string' || data.tileMapData.length > MAX_TILE_MAP_DATA_LENGTH) {
+      delete data.tileMapData;
+    }
+  }
+  if (data.tileMapBuffer !== undefined && !tileMapBufferToArrayBuffer(data.tileMapBuffer)) {
+    delete data.tileMapBuffer;
+  }
+  if (data.tileMap !== undefined && !isRecord(data.tileMap)) {
+    delete data.tileMap;
+  }
+
+  const s = data.stats as PlayerStats;
+  if (!isRecord(s.equipment)) {
+    s.equipment = {
+      drillId: null,
+      helmetId: null,
+      armorId: null,
+      bootsId: null,
+    };
+  }
+  for (const slot of EQUIPMENT_SLOT_KEYS) {
+    const value = s.equipment[slot];
+    s.equipment[slot] = typeof value === 'string' ? value : null;
+  }
+
+  s.hp = normalizeNonNegativeNumber(s.hp, 100);
+  s.maxHp = Math.max(1, normalizeNonNegativeNumber(s.maxHp, 100));
+  s.hp = Math.min(s.hp, s.maxHp);
+  s.power = normalizeNonNegativeNumber(s.power, 20);
+  s.moveSpeed = normalizeNonNegativeNumber(s.moveSpeed, 100);
+  s.defense = normalizeNonNegativeNumber(s.defense);
+  s.luck = normalizeNonNegativeNumber(s.luck);
+  s.goldCoins = normalizeQuantity(s.goldCoins);
+  s.depth = normalizeQuantity(s.depth);
+  s.mapSeed = isFiniteNumber(s.mapSeed) ? Math.trunc(s.mapSeed) : 12345;
+  s.dimension = isFiniteNumber(s.dimension) ? Math.max(0, Math.trunc(s.dimension)) : 0;
+  s.maxDepthReached = normalizeQuantity(s.maxDepthReached);
+  s.refinerySlots = Math.max(1, normalizeQuantity(s.refinerySlots || 1));
+
+  if (!isRecord(s.inventory)) {
+    s.inventory = {} as Inventory;
+  }
+  if (!isRecord(s.bossRespawnTimers)) {
+    s.bossRespawnTimers = {};
+  } else {
+    s.bossRespawnTimers = normalizeNumberRecord(s.bossRespawnTimers);
+  }
+
+  s.ownedEquipmentIds = normalizeStringArray(
+    Array.isArray(s.ownedEquipmentIds) ? s.ownedEquipmentIds : s.ownedDrillIds,
+  );
+  s.discoveredMinerals = normalizeStringArray(s.discoveredMinerals);
+  s.encounteredBossIds = normalizeStringArray(s.encounteredBossIds);
+  s.killedMonsterIds = normalizeStringArray(s.killedMonsterIds);
+  s.unlockedMasteryPerks = normalizeStringArray(s.unlockedMasteryPerks);
+  s.clearedCircleIds = normalizeNumberArray(s.clearedCircleIds);
+  s.collectionHistory = normalizeNumberRecord(s.collectionHistory);
+
+  // 구 버전 데이터와의 호환성을 위한 패치 로직
+  if (!s.equipmentStates) s.equipmentStates = {};
+  if (!Array.isArray(s.activeSmeltingJobs)) s.activeSmeltingJobs = [];
+  else s.activeSmeltingJobs = s.activeSmeltingJobs.slice(0, MAX_ARRAY_ITEMS);
+  if (!s.tileMastery) s.tileMastery = {};
+  if (!isFiniteNumber(s.spawnRulesVersion)) s.spawnRulesVersion = 0;
+  normalizeUnlockedWaypoints(s);
+  normalizeCollectibleMineralProgress(s);
+  normalizeClearedCircleIds(s);
+  migrateLegacyEffectIds(s);
+  normalizeEffectStacks(s);
+  normalizeGuideQuest(s);
+  normalizeEquipmentStates(s);
+
+  // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
+  const oldInv = (s.inventory || {}) as Record<string, unknown>;
+  s.inventory = {} as Inventory;
+
+  let compensationGold = 0;
+  for (const key of Object.keys(oldInv).slice(0, MAX_RECORD_KEYS)) {
+    const amount = normalizeQuantity(oldInv[key]);
+    if (amount <= 0) continue;
+
+    // 명시적 마이그레이션: veinstone -> crimsonstone
+    if (key === 'veinstone') {
+      (s.inventory as any).crimsonstone = ((s.inventory as any).crimsonstone || 0) + amount;
+      console.log(`[SaveManager] migrated 'veinstone' to 'crimsonstone'`);
+      continue;
+    }
+
+    if (COLLECTIBLE_MINERAL_KEYS.has(key)) {
+      (s.inventory as any)[key] = amount;
+    } else if (KNOWN_TILE_DEFINITION_KEYS.has(key)) {
+      // stone, gluttony_stone 같은 배경 타일 잔여 데이터는 보상 없이 제거합니다.
+      continue;
+    } else {
+      // 더 이상 정의되지 않는 구형 광물은 1개당 10G로 환산
+      compensationGold += amount * 10;
+    }
+  }
+
+  if (compensationGold > 0) {
+    s.goldCoins = normalizeQuantity((s.goldCoins || 0) + compensationGold);
+    console.log(`[SaveManager] Legacy items converted to ${compensationGold} Gold Coins.`);
+  }
+
+  // 신규 광물 초기화
+  MINERALS.forEach((m) => {
+    if ((s.inventory as any)[m.key] === undefined) {
+      (s.inventory as any)[m.key] = 0;
+    }
+  });
+
+  return data;
+}
+
 /**
  * 로컬 저장소와 세이브 데이터의 입출력을 관리하는 유틸리티입니다.
  */
@@ -308,7 +565,11 @@ export const saveManager = {
     try {
       // 타일맵 버퍼 IndexedDB에 저장 (비동기, 폴백 시 LocalStorage에 Base64로 저장)
       if (data.tileMapBuffer) {
-        const buffer = data.tileMapBuffer.buffer as ArrayBuffer;
+        const buffer = tileMapBufferToArrayBuffer(data.tileMapBuffer);
+        if (!buffer) {
+          throw new Error('Invalid tileMapBuffer.');
+        }
+
         if (gameDB.isAvailable) {
           // IndexedDB: 바이너리 그대로 저장
           gameDB.saveTileMap(buffer);
@@ -326,17 +587,7 @@ export const saveManager = {
       }
 
       // 스탯/위치는 LocalStorage에 JSON으로 저장 (기존 방식 유지하되 타일맵 제외하다 훨씬 가볈)
-      const statsOnly = {
-        version: data.version,
-        timestamp: data.timestamp,
-        stats: data.stats,
-        position: data.position,
-        // IndexedDB 가용 시 tileMapData를 포함하지 않음
-        ...(gameDB.isAvailable ? {} : { tileMapData: data.tileMapData }),
-      };
-      const json = JSON.stringify(statsOnly);
-      const obfuscatedStr = obfuscate(json);
-      localStorage.setItem(SAVE_KEY, obfuscatedStr);
+      writeStatsOnly(data);
     } catch (e) {
       console.error('게임 저장 실패:', e);
     }
@@ -351,66 +602,7 @@ export const saveManager = {
       const saved = localStorage.getItem(SAVE_KEY);
       if (!saved) return null;
       const json = deobfuscate(saved);
-      const data = JSON.parse(json);
-
-      // 구 버전 데이터와의 호환성을 위한 패치 로직
-      if (data.stats) {
-        const s = data.stats;
-        if (!s.equipmentStates) s.equipmentStates = {};
-        if (!s.killedMonsterIds) s.killedMonsterIds = [];
-        if (!s.refinerySlots) s.refinerySlots = 1;
-        if (!s.activeSmeltingJobs) s.activeSmeltingJobs = [];
-        if (!s.tileMastery) s.tileMastery = {};
-        if (!s.unlockedMasteryPerks) s.unlockedMasteryPerks = [];
-        if (!s.collectionHistory) s.collectionHistory = {};
-        if (typeof s.spawnRulesVersion !== 'number') s.spawnRulesVersion = 0;
-        normalizeUnlockedWaypoints(s as PlayerStats);
-        normalizeCollectibleMineralProgress(s as PlayerStats);
-        normalizeClearedCircleIds(s as PlayerStats);
-        migrateLegacyEffectIds(s as PlayerStats);
-        normalizeEffectStacks(s as PlayerStats);
-        normalizeGuideQuest(s as PlayerStats);
-        normalizeEquipmentStates(s as PlayerStats);
-
-        // 인벤토리 누락 아이템 보정 및 레거시 데이터 마이그레이션
-        const oldInv = (s.inventory || {}) as any;
-        s.inventory = {} as Inventory;
-
-        let compensationGold = 0;
-        for (const key of Object.keys(oldInv)) {
-          // 명시적 마이그레이션: veinstone -> crimsonstone
-          if (key === 'veinstone') {
-            (s.inventory as any).crimsonstone =
-              ((s.inventory as any).crimsonstone || 0) + oldInv[key];
-            console.log(`[SaveManager] migrated 'veinstone' to 'crimsonstone'`);
-            continue;
-          }
-
-          if (COLLECTIBLE_MINERAL_KEYS.has(key)) {
-            (s.inventory as any)[key] = oldInv[key];
-          } else if (KNOWN_TILE_DEFINITION_KEYS.has(key)) {
-            // stone, gluttony_stone 같은 배경 타일 잔여 데이터는 보상 없이 제거합니다.
-            continue;
-          } else if (typeof oldInv[key] === 'number' && oldInv[key] > 0) {
-            // 더 이상 정의되지 않는 구형 광물은 1개당 10G로 환산
-            compensationGold += oldInv[key] * 10;
-          }
-        }
-
-        if (compensationGold > 0) {
-          s.goldCoins = (s.goldCoins || 0) + compensationGold;
-          console.log(`[SaveManager] Legacy items converted to ${compensationGold} Gold Coins.`);
-        }
-
-        // 신규 광물 초기화
-        MINERALS.forEach((m) => {
-          if ((s.inventory as any)[m.key] === undefined) {
-            (s.inventory as any)[m.key] = 0;
-          }
-        });
-      }
-
-      return data;
+      return normalizeSaveData(JSON.parse(json));
     } catch (e) {
       console.error('게임 로드 실패:', e);
       return null;
@@ -441,12 +633,7 @@ export const saveManager = {
 
     try {
       // 1. Base64 데코딩 후 ArrayBuffer로 변환
-      const binary = atob(tileMapDataBase64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
-      }
-      const buffer = bytes.buffer;
+      const buffer = decodeTileMapData(tileMapDataBase64);
 
       // 2. IndexedDB에 복사
       await gameDB.saveTileMap(buffer);
@@ -483,7 +670,12 @@ export const saveManager = {
   export(data: SaveData): string {
     // Buffer가 존재할 경우 Base64 문자열로 인코딩하여 외부용 텍스트 코드로 만듦
     if (data.tileMapBuffer) {
-      const bytes = new Uint8Array(data.tileMapBuffer.buffer);
+      const buffer = tileMapBufferToArrayBuffer(data.tileMapBuffer);
+      if (!buffer) {
+        throw new Error('Invalid tileMapBuffer.');
+      }
+
+      const bytes = new Uint8Array(buffer);
       let binary = '';
       for (let i = 0; i < bytes.byteLength; i++) {
         binary += String.fromCharCode(bytes[i]);
@@ -501,11 +693,48 @@ export const saveManager = {
    */
   import(obfuscatedStr: string): SaveData | null {
     try {
+      if (typeof obfuscatedStr !== 'string' || obfuscatedStr.length > MAX_SAVE_CODE_LENGTH) {
+        return null;
+      }
+
       const json = deobfuscate(obfuscatedStr);
-      return JSON.parse(json);
+      return normalizeSaveData(JSON.parse(json));
     } catch (e) {
       console.error('세이브 데이터 임포트 실패:', e);
       return null;
+    }
+  },
+
+  /**
+   * 외부 세이브 코드를 현재 저장소 구조에 맞춰 반영합니다.
+   * IndexedDB 환경에서는 export 코드의 Base64 타일맵도 IndexedDB로 복사합니다.
+   */
+  async saveImported(data: SaveData): Promise<boolean> {
+    const normalized = normalizeSaveData(data);
+    if (!normalized) return false;
+
+    try {
+      if (gameDB.isAvailable) {
+        const buffer =
+          tileMapBufferToArrayBuffer(normalized.tileMapBuffer) ||
+          (normalized.tileMapData ? decodeTileMapData(normalized.tileMapData) : null);
+
+        if (buffer) {
+          await gameDB.saveTileMap(buffer);
+        } else {
+          await gameDB.clearTileMap();
+        }
+
+        delete normalized.tileMap;
+        delete normalized.tileMapData;
+        delete normalized.tileMapBuffer;
+      }
+
+      saveManager.save(normalized);
+      return true;
+    } catch (e) {
+      console.error('세이브 데이터 임포트 저장 실패:', e);
+      return false;
     }
   },
 };

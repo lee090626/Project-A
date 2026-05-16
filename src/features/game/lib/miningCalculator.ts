@@ -14,7 +14,6 @@ import {
   getMasteryBonuses,
 } from '@/shared/lib/masteryUtils';
 import { getEffectStackByEffectId } from '@/shared/lib/effectItemUtils';
-import { modifierManager } from './ModifierManager';
 import { calculateCriticalStats, calculateMiningSpeedStats } from './playerCombatStats';
 
 /**
@@ -110,9 +109,6 @@ export const calculateMiningDamage = (
     if (stats.activeEffects.some((e) => e.type === 'WEAKEN'))
       totalPower = Math.floor(totalPower * COMBAT_CONSTANTS.WEAKEN_POWER_MULTIPLIER);
   }
-
-  // ModifierManager를 통한 최종 위력 보정 (예: 체력 비례 대미지 등)
-  totalPower = modifierManager.applyAll('onMining', 'miningDamage', totalPower, { playerStats: stats });
 
   let isCrit = false;
   if (Math.random() < critRate) {

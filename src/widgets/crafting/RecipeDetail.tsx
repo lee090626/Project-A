@@ -3,7 +3,7 @@ import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
 import { EFFECT_DATA } from '@/shared/config/effectData';
 import { formatNumber } from '@/shared/lib/numberUtils';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 
 interface RecipeDetailProps {
   selectedRecipe: any;

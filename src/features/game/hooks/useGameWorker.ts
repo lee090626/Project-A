@@ -23,6 +23,14 @@ const isSaveDataPayload = (value: unknown): value is SaveData =>
   isObjectPayload(value.stats) &&
   isObjectPayload(value.position);
 
+const getArrayBufferFromTransfer = (value: unknown): ArrayBuffer | null => {
+  if (value instanceof ArrayBuffer) return value;
+  if (ArrayBuffer.isView(value) && value.buffer instanceof ArrayBuffer) {
+    return value.buffer;
+  }
+  return null;
+};
+
 export function useGameWorker(
   isClient: boolean,
   snapshots: React.MutableRefObject<{ time: number; data: Float32Array }[]>,
@@ -98,16 +106,22 @@ export function useGameWorker(
       } else if (type === 'SAVE' && isObjectPayload(payload)) {
         // Zero-Copy 흐름: 버퍼를 IndexedDB에 저장한 뒤 워커에돌려줌
         const { tileMapBuffer, ...rest } = payload;
+        const tileMapArrayBuffer = getArrayBufferFromTransfer(tileMapBuffer);
         if (isSaveDataPayload(rest)) {
           saveManager.save(rest); // 스탯/위치 LocalStorage에 저장
         }
-        if (tileMapBuffer instanceof ArrayBuffer && gameDB.isAvailable) {
-          gameDB.saveTileMap(tileMapBuffer).then(() => {
+        if (tileMapArrayBuffer && gameDB.isAvailable) {
+          gameDB.saveTileMap(tileMapArrayBuffer).then(() => {
             // 저장 완료 후 버퍼를 워커에게 돌려줌 (Zero-Copy 재활용)
             worker.postMessage(
-              { type: 'RETURN_SAVE_BUFFER', payload: { buffer: tileMapBuffer } },
-              [tileMapBuffer]
+              { type: 'RETURN_SAVE_BUFFER', payload: { buffer: tileMapArrayBuffer } },
+              [tileMapArrayBuffer]
             );
+          }).catch((error) => {
+            console.warn('[Main] IndexedDB tile map save failed. Falling back to LocalStorage.', error);
+            if (isSaveDataPayload(payload)) {
+              saveManager.save(payload);
+            }
           });
         } else {
           // IndexedDB 불가 시 폴백: 기존 Base64 방식

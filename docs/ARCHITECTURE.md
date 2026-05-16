@@ -113,7 +113,7 @@ flowchart LR
 | Worker -> Main | `OPEN_MODAL` | 상호작용 성공 후 모달 오픈 요청입니다. |
 | Worker -> Main | `TUTORIAL_TRIGGER` | 튜토리얼/가이드 오픈 요청입니다. |
 
-메인 스레드의 `useGameWorker`는 `isWorkerToMainMessage`로 수신 메시지를 검증하고, 송신 전에 `isMainToWorkerMessage`로 메시지 형태를 검증합니다. 워커의 `WorkerMessageRouter`도 `isMainToWorkerMessage`를 통과한 메시지만 `GameEngineInstance`로 라우팅합니다.
+메인 스레드의 `useGameWorker`는 `isWorkerToMainMessage`로 수신 메시지를 검증하고, 송신 전에 `isMainToWorkerMessage`로 메시지 형태를 검증합니다. 워커의 `WorkerMessageRouter`도 `isMainToWorkerMessage`를 통과한 메시지만 `GameEngineInstance`로 라우팅합니다. `ACTION` 메시지는 단순 문자열만 보지 않고 `sell`, `craft`, `equip`, `selectCheckpoint` 등 액션별 payload shape까지 검증한 뒤 워커 action system으로 전달합니다.
 
 ## 워커 내부 구조
 

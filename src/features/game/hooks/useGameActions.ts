@@ -105,12 +105,16 @@ export const useGameActions = (
     sendToWorker('SAVE_REQUEST', { type: 'export' });
   }, [sendToWorker]);
 
-  const handleImportSave = useCallback((code: string) => {
+  const handleImportSave = useCallback(async (code: string) => {
     if (code) {
       const imported = saveManager.import(code);
       if (imported) {
-        saveManager.save(imported);
-        window.location.reload();
+        const saved = await saveManager.saveImported(imported);
+        if (saved) {
+          window.location.reload();
+        } else {
+          alert('Invalid save code.');
+        }
       } else {
         alert('Invalid save code.');
       }

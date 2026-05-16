@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { EffectDefinition } from '@/shared/config/effectData';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 import { atlasMap } from '@/shared/config/atlasMap';
 
 interface TabEffectsProps {

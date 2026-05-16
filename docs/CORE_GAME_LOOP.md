@@ -26,7 +26,6 @@ source_paths:
   - src/features/game/ecs/systems/storageSystem.ts
   - src/features/game/ecs/systems/statsSyncSystem.ts
   - src/features/game/lib/RenderSyncEncoder.ts
-  - src/features/game/lib/ModifierManager.ts
   - src/features/game/lib/miningCalculator.ts
   - src/features/game/hooks/useGameWorker.ts
   - src/features/game/hooks/useGameUI.ts
@@ -155,9 +154,9 @@ flowchart TD
 
 `interactionSystem`은 `staticEntities`를 기준으로 플레이어 주변 NPC/오브젝트를 찾습니다. 가까운 대상이 있으면 interaction prompt 상태를 켜고, `intent.action === 'interact'`이면 대상 타입에 따라 메인 스레드로 `OPEN_MODAL` 메시지를 보냅니다.
 
-명시적 UI 액션은 `ACTION` 메시지로 들어와 `GameEngineInstance.handleAction`에서 `ActionSystem`으로 전달됩니다. `ActionSystem`은 `upgrade`, `sell`, `craft`, `rerollEquipmentOption`, `equip`, `synthesizeEffect` 같은 액션을 economy/world 핸들러로 분배합니다.
+명시적 UI 액션은 `ACTION` 메시지로 들어와 `GameEngineInstance.handleAction`에서 `ActionSystem`으로 전달됩니다. 메시지 경계의 `isMainToWorkerMessage`는 액션별 payload shape를 먼저 검증하고, `ActionSystem`은 `upgrade`, `sell`, `craft`, `rerollEquipmentOption`, `equip`, `synthesizeEffect` 같은 액션을 economy/world 핸들러로 분배합니다.
 
-경제 액션은 UI payload를 신뢰하지 않고 워커에서 다시 검증합니다. 장비 제작은 `EQUIPMENTS[equipmentId].price`를 기준으로 재료를 확인한 뒤 차감하고, 이미 보유한 장비나 부족한 재료는 거부합니다. 광물 판매도 `MINERAL_MAP[resource].basePrice`를 워커에서 다시 조회하며 음수/소수/비수집 광물 요청을 거부합니다. legacy `upgrade` 액션은 현재 성장 루프에서 사용하지 않으므로 워커에서 no-op으로 처리합니다.
+경제 액션은 UI payload를 신뢰하지 않고 워커에서 다시 검증합니다. 장비 제작은 `EQUIPMENTS[equipmentId].price`를 기준으로 재료를 확인한 뒤 차감하고, 이미 보유한 장비나 부족한 재료는 거부합니다. 광물 판매도 `MINERAL_MAP[resource].basePrice`를 워커에서 다시 조회하며 음수/소수/비수집 광물 요청을 거부합니다. 장비 장착은 해당 장비 ID를 보유 중이고 요청 part와 장비 정의 part가 일치할 때만 허용합니다. waypoint 이동은 해금된 정수 depth만 허용하고, 광고 보상 부활은 사망 상태에서만 처리합니다. legacy `upgrade` 액션은 현재 성장 루프에서 사용하지 않으므로 워커에서 no-op으로 처리합니다.
 
 `rerollEquipmentOption`은 장비 재련 액션입니다. `economyActions`가 골드를 소비하고 `equipmentStates[equipmentId].mainStatBonusPct`를 갱신한 뒤 `RECALCULATE_PLAYER_STATS`를 발행합니다. 옵션은 -20~20% 범위의 주스탯 보정이며, 현재 값보다 높은 결과만 적용됩니다. 실제 장비 스탯 반영은 `statsSyncSystem`이 `equipmentRefinement.ts`의 계산 함수를 통해 수행합니다.
 
@@ -187,7 +186,7 @@ flowchart TD
 - 타일 충돌 시 제거
 - 수명 만료 시 제거
 
-`combatSystem`은 전투 오케스트레이터입니다. 처치 시 부수 효과는 `ModifierManager.triggerOnKillSideEffects`를 통해 처리합니다. 현재 보스 relic의 진행 효과는 전투 처치 hook이 아니라 `miningCalculator`의 다음 Circle 광물 방어 무시로 적용됩니다.
+`combatSystem`은 전투 오케스트레이터입니다. 현재 보스 relic의 진행 효과는 전투 처치 hook이 아니라 `miningCalculator`의 다음 Circle 광물 방어 무시로 적용됩니다.
 
 | 단계 | 처리 |
 |---|---|

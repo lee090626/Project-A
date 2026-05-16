@@ -1,6 +1,6 @@
 import React from 'react';
 import { Equipment } from '@/shared/types/game';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 import { AtlasIconName } from '@/shared/config/atlasMap';
 
 interface EquipmentSectionProps {

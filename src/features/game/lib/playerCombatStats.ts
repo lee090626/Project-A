@@ -2,7 +2,6 @@ import { COMBAT_CONSTANTS } from '@/shared/config/combatConstants';
 import { calculateEffectBonuses, type EffectBonuses } from '@/shared/lib/effectItemUtils';
 import { getMasteryBonuses } from '@/shared/lib/masteryUtils';
 import { PlayerStats } from '@/shared/types/game';
-import { modifierManager } from './ModifierManager';
 
 /**
  * 플레이어의 현재 치명타 관련 최종 수치를 나타냅니다.
@@ -24,8 +23,6 @@ export interface MiningSpeedStats {
   masterySpeedBonusMult: number;
   /** Effect 기본 보너스에서 오는 채굴 속도 배율 */
   effectSpeedBonus: number;
-  /** 모디파이어가 추가로 더한 채굴 속도 배율 */
-  modifierSpeedBonus: number;
   /** 상한 적용 후 최종 채굴 속도 배율 */
   totalSpeedBonusMult: number;
   /** 피로 상태까지 반영한 최종 채굴 간격 */
@@ -85,15 +82,9 @@ export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats 
 
   const rawSpeedBonusMult =
     effectBonuses.miningSpeed + masteryBonuses.miningSpeedMult;
-  const modifiedSpeedBonusMult = modifierManager.applyAll(
-    'onMining',
-    'miningSpeed',
-    rawSpeedBonusMult,
-    { playerStats: stats },
-  );
   const totalSpeedBonusMult = Math.min(
     COMBAT_CONSTANTS.MAX_ATTACK_SPEED_CAP,
-    modifiedSpeedBonusMult,
+    rawSpeedBonusMult,
   );
 
   let attackInterval = baseInterval * (1 - totalSpeedBonusMult);
@@ -105,7 +96,6 @@ export function calculateMiningSpeedStats(stats: PlayerStats): MiningSpeedStats 
     baseInterval,
     masterySpeedBonusMult: masteryBonuses.miningSpeedMult,
     effectSpeedBonus: effectBonuses.miningSpeed,
-    modifierSpeedBonus: modifiedSpeedBonusMult - rawSpeedBonusMult,
     totalSpeedBonusMult,
     attackInterval,
   };

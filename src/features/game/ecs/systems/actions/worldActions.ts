@@ -1,8 +1,25 @@
 import { EFFECT_DATA } from '@/shared/config/effectData';
+import { EQUIPMENTS } from '@/shared/config/equipmentData';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { addEffectStack } from '@/shared/lib/effectItemUtils';
+import { EquipmentPart } from '@/shared/types/game';
 import { showToast } from '../toastSystem';
+
+const EQUIPMENT_SLOT_BY_PART: Record<EquipmentPart, keyof GameWorld['player']['stats']['equipment']> = {
+  Drill: 'drillId',
+  Helmet: 'helmetId',
+  Armor: 'armorId',
+  Boots: 'bootsId',
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object';
+}
+
+function isEquipmentPart(value: unknown): value is EquipmentPart {
+  return value === 'Drill' || value === 'Helmet' || value === 'Armor' || value === 'Boots';
+}
 
 /**
  * 부활, 웨이포인트 이동, Effect 합성 등 월드 관련 액션을 처리합니다.
@@ -28,6 +45,11 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
     }
 
     case 'rewardRevive': {
+      if (stats.hp > 0) {
+        showToast('Reward revive is only available after defeat.', 'warning', 1800);
+        break;
+      }
+
       stats.hp = stats.maxHp;
       world.environmentalForce = { vx: 0, vy: 0 };
       world.shake = 0;
@@ -38,26 +60,42 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
     }
 
     case 'selectCheckpoint': {
+      const depth = isRecord(data) && typeof data.depth === 'number' ? data.depth : -1;
+      if (!Number.isInteger(depth) || depth < 0) {
+        showToast('Invalid waypoint', 'warning', 1800);
+        break;
+      }
+
       if (!Array.isArray(stats.unlockedWaypoints)) {
         stats.unlockedWaypoints = [0];
       }
-      if (!stats.unlockedWaypoints.includes(data.depth)) {
+      if (!stats.unlockedWaypoints.includes(depth)) {
         showToast('Locked waypoint', 'warning', 1800);
         break;
       }
 
       world.player.pos.x = 15;
-      world.player.pos.y = data.depth + 10;
+      world.player.pos.y = depth + 10;
       world.player.visualPos.x = 15;
-      world.player.visualPos.y = data.depth + 10;
-      stats.depth = data.depth;
+      world.player.visualPos.y = depth + 10;
+      stats.depth = depth;
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }
 
     case 'synthesizeRelic':
     case 'synthesizeEffect': {
-      const effectId = data.effectId ?? data.relicId;
+      if (!isRecord(data)) {
+        showToast('Invalid effect request.', 'warning', 1800);
+        break;
+      }
+
+      const effectId =
+        typeof data.effectId === 'string'
+          ? data.effectId
+          : typeof data.relicId === 'string'
+            ? data.relicId
+            : '';
       const effect = EFFECT_DATA[effectId];
       if (effect && effect.requirements) {
         const hasEnough = Object.entries(effect.requirements).every(([res, amt]) => {
@@ -81,11 +119,29 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
     }
 
     case 'equip': {
-      const { id, part } = data;
-      if (part === 'Drill') stats.equipment.drillId = id;
-      else if (part === 'Helmet') stats.equipment.helmetId = id;
-      else if (part === 'Armor') stats.equipment.armorId = id;
-      else if (part === 'Boots') stats.equipment.bootsId = id;
+      const id = isRecord(data) && typeof data.id === 'string' ? data.id : '';
+      const part = isRecord(data) ? data.part : undefined;
+      const equipment = EQUIPMENTS[id];
+      if (!id || !isEquipmentPart(part) || !equipment || equipment.part !== part) {
+        showToast('Invalid equipment request.', 'warning', 1800);
+        break;
+      }
+
+      if (!Array.isArray(stats.ownedEquipmentIds) || !stats.ownedEquipmentIds.includes(id)) {
+        showToast('Equipment not owned.', 'warning', 1800);
+        break;
+      }
+
+      if (!stats.equipment) {
+        stats.equipment = {
+          drillId: null,
+          helmetId: null,
+          armorId: null,
+          bootsId: null,
+        };
+      }
+
+      stats.equipment[EQUIPMENT_SLOT_BY_PART[part]] = id;
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;
     }

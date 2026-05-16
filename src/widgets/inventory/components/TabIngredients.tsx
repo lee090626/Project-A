@@ -1,6 +1,6 @@
 import React from 'react';
 import { MineralDefinition } from '@/shared/config/mineralData';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 
 interface TabIngredientsProps {
   ownedMinerals: MineralDefinition[];

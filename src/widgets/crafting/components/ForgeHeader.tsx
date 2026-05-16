@@ -1,5 +1,5 @@
 import React from 'react';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 
 interface ForgeHeaderProps {
   goldCoins: number;

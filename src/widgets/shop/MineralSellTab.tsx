@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlayerStats } from '@/shared/types/game';
 import { MINERALS } from '@/shared/config/mineralData';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 
 const RESOURCE_PRICES: Record<string, number> = MINERALS.reduce(
   (acc, mineral) => {

@@ -61,8 +61,20 @@ export interface UiStatePayload {
 /**
  * 액션 핸들링 페이로드
  */
+export type ActionType =
+  | 'upgrade'
+  | 'sell'
+  | 'craft'
+  | 'rerollEquipmentOption'
+  | 'equip'
+  | 'synthesizeEffect'
+  | 'synthesizeRelic'
+  | 'selectCheckpoint'
+  | 'respawn'
+  | 'rewardRevive';
+
 export interface ActionPayload {
-  action: string;
+  action: ActionType;
   data?: unknown;
 }
 
@@ -143,6 +155,79 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === 'object';
 }
 
+function isFiniteNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0 && value.length <= 160;
+}
+
+function isRequirementsRecord(value: unknown): value is Record<string, number> {
+  return (
+    isRecord(value) &&
+    Object.entries(value).every(
+      ([key, amount]) =>
+        isNonEmptyString(key) && isFiniteNumber(amount) && amount >= 0,
+    )
+  );
+}
+
+function isEquipmentPart(value: unknown): value is 'Drill' | 'Helmet' | 'Armor' | 'Boots' {
+  return value === 'Drill' || value === 'Helmet' || value === 'Armor' || value === 'Boots';
+}
+
+function isActionPayload(value: unknown): value is ActionPayload {
+  if (!isRecord(value) || typeof value.action !== 'string') return false;
+
+  const data = value.data;
+  switch (value.action) {
+    case 'upgrade':
+      return (
+        isRecord(data) &&
+        isNonEmptyString(data.type) &&
+        isRequirementsRecord(data.requirements)
+      );
+    case 'sell':
+      return (
+        isRecord(data) &&
+        isNonEmptyString(data.resource) &&
+        isFiniteNumber(data.amount) &&
+        Number.isInteger(data.amount) &&
+        data.amount > 0 &&
+        (data.price === undefined || (isFiniteNumber(data.price) && data.price >= 0))
+      );
+    case 'craft':
+      return (
+        isRecord(data) &&
+        isRecord(data.res) &&
+        (data.req === undefined || isRequirementsRecord(data.req))
+      );
+    case 'rerollEquipmentOption':
+      return isRecord(data) && isNonEmptyString(data.equipmentId);
+    case 'equip':
+      return isRecord(data) && isNonEmptyString(data.id) && isEquipmentPart(data.part);
+    case 'synthesizeEffect':
+    case 'synthesizeRelic':
+      return (
+        isRecord(data) &&
+        (isNonEmptyString(data.effectId) || isNonEmptyString(data.relicId))
+      );
+    case 'selectCheckpoint':
+      return (
+        isRecord(data) &&
+        isFiniteNumber(data.depth) &&
+        Number.isInteger(data.depth) &&
+        data.depth >= 0
+      );
+    case 'respawn':
+    case 'rewardRevive':
+      return data === undefined || isRecord(data);
+    default:
+      return false;
+  }
+}
+
 export function isMainToWorkerMessage(value: unknown): value is MainToWorkerMessage {
   if (!isRecord(value) || typeof value.type !== 'string' || !mainToWorkerTypes.has(value.type as WorkerMessageType)) {
     return false;
@@ -161,7 +246,7 @@ export function isMainToWorkerMessage(value: unknown): value is MainToWorkerMess
         Object.values(payload.ui).every((value) => typeof value === 'boolean')
       );
     case 'ACTION':
-      return isRecord(payload) && typeof payload.action === 'string';
+      return isActionPayload(payload);
     case 'SAVE_REQUEST':
       return isRecord(payload) && payload.type === 'export';
     case 'RETURN_BUFFER':

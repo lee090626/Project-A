@@ -2,7 +2,7 @@ import React from 'react';
 import { MINERALS } from '@/shared/config/mineralData';
 import { getNextLevelExp, getMasteryMultiplier } from '@/shared/lib/masteryUtils';
 import { MASTERY_PERKS } from '@/shared/config/masteryPerks';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 import { AtlasIconName } from '@/shared/config/atlasMap';
 
 interface TileMasteryCardProps {

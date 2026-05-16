@@ -23,7 +23,7 @@
     "prebuild": "npm run gen:sw"
   },
   "dependencies": {
-    "next": "^16.2.5",
+    "next": "^16.2.6",
     "pixi.js": "^8.17.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

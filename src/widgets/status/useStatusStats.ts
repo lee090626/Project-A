@@ -100,7 +100,6 @@ export function useStatusStats(stats: PlayerStats): StatusStatsResult {
         { label: 'System Baseline', value: `${miningSpeedStats.baseInterval}ms` },
         { label: 'Mastery Speed', value: `-${(miningSpeedStats.masterySpeedBonusMult * 100).toFixed(0)}%`, color: 'text-emerald-500' },
         { label: 'Effect', value: `-${(miningSpeedStats.effectSpeedBonus * 100).toFixed(0)}%`, color: 'text-orange-400' },
-        { label: 'Modifier Effect', value: `-${(miningSpeedStats.modifierSpeedBonus * 100).toFixed(0)}%`, color: 'text-cyan-400' },
       ],
       moveSpeed: [
         { label: 'Base Speed', value: `${BASE_PLAYER_MOVE_SPEED}%` },

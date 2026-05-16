@@ -1,11 +1,23 @@
-import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '../config/constants';
+import type { FloatingText, Particle } from '../types/game';
+
+interface ParticlePoolHost {
+  particlePool: {
+    get: () => Particle | null;
+  };
+}
+
+interface FloatingTextPoolHost {
+  floatingTextPool: {
+    get: () => FloatingText | null;
+  };
+}
 
 /**
  * 타일 파괴 시 또는 피격 시 사방으로 흩어지는 파편 파티클을 생성합니다.
  */
 export const createParticles = (
-  world: GameWorld,
+  world: ParticlePoolHost,
   x: number,
   y: number,
   color: string,
@@ -27,7 +39,7 @@ export const createParticles = (
 };
 
 export const createFloatingText = (
-  world: GameWorld,
+  world: FloatingTextPoolHost,
   x: number,
   y: number,
   text: string,

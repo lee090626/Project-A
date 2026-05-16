@@ -1,6 +1,5 @@
 import { GameWorld } from '@/entities/world/model';
 import { TILE_SIZE } from '@/shared/config/constants';
-import { modifierManager } from '@/features/game/lib/ModifierManager';
 import { messageBus } from '@/shared/lib/MessageBus';
 
 const LUCK_POINTS_PER_LOOT_MULTIPLIER = 100;
@@ -30,14 +29,6 @@ export class LootGenerator {
     const luckMultiplier =
       1 + Math.max(0, player.stats.luck || 0) / LUCK_POINTS_PER_LOOT_MULTIPLIER;
 
-    // Effect 적용 (수량 보너스 등)
-    const lootMultiplier = modifierManager.applyAll(
-      'onKill',
-      'loot',
-      1.0,
-      { playerStats: player.stats }
-    );
-
     monsterDef.rewards.drops.forEach((drop: any) => {
       const rand = Math.random();
       if (rand < drop.chance) {
@@ -47,7 +38,7 @@ export class LootGenerator {
         // 행운 및 Effect 보너스 적용
         const finalAmount = Math.max(
           1,
-          Math.floor(baseAmount * luckMultiplier * lootMultiplier)
+          Math.floor(baseAmount * luckMultiplier)
         );
 
         // 시각적 분산 스폰 (엔티티 중심 좌표 기준)

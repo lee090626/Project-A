@@ -10,7 +10,7 @@ import {
   getMainStatBonusPct,
   getRefinedEquipmentStats,
 } from '@/shared/lib/equipmentRefinement';
-import AtlasIcon from '@/widgets/hud/ui/AtlasIcon';
+import AtlasIcon from '@/shared/ui/AtlasIcon';
 
 interface EquipmentCardProps {
   equipmentId: string;

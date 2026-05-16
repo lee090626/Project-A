@@ -57,7 +57,7 @@ source_paths:
 | `position` | `Position` | LocalStorage | 플레이어 논리 위치입니다. |
 | `tileMap` | object | legacy | 구버전 객체형 타일맵입니다. |
 | `tileMapData` | Base64 string | legacy/fallback/export | 바이너리 타일맵을 Base64로 인코딩한 값입니다. |
-| `tileMapBuffer` | `Uint32Array` | memory only | worker에서 main으로 전달하는 저장 직전 타일맵 버퍼입니다. 디스크에 직접 JSON 저장하지 않습니다. |
+| `tileMapBuffer` | `Uint32Array \| ArrayBuffer` | memory only | worker에서 main으로 전달하거나 IndexedDB에서 로드한 저장 직전 타일맵 버퍼입니다. 디스크에 직접 JSON 저장하지 않습니다. |
 
 `SaveData.version`과 타일맵 바이너리 헤더의 버전은 별개입니다. 현재 `SaveData.version`은 `1`, `MapSerializer`의 바이너리 포맷 버전은 `2`입니다.
 
@@ -89,7 +89,7 @@ worker가 보내는 payload:
 }
 ```
 
-메인 스레드의 `useGameWorker`는 `SAVE`를 받으면 먼저 `tileMapBuffer`를 뺀 나머지 `version/timestamp/stats/position`을 `saveManager.save`에 넘깁니다. 타일맵은 IndexedDB가 가능하면 `gameDB.saveTileMap`, 불가능하면 `saveManager.save(payload)`의 Base64 fallback 경로로 저장됩니다.
+메인 스레드의 `useGameWorker`는 `SAVE`를 받으면 먼저 `tileMapBuffer`를 뺀 나머지 `version/timestamp/stats/position`을 `saveManager.save`에 넘깁니다. 타일맵은 `Uint32Array` 또는 `ArrayBuffer`를 `ArrayBuffer`로 정규화한 뒤 IndexedDB가 가능하면 `gameDB.saveTileMap`, 불가능하면 `saveManager.save(payload)`의 Base64 fallback 경로로 저장됩니다.
 
 ## 로드 흐름
 
@@ -111,7 +111,7 @@ flowchart TD
 
 1. 메인 스레드에서 `gameDB.init()`을 실행합니다.
 2. `saveManager.load()`가 `drilling-game-save`를 읽고 난독화를 해제합니다.
-3. `saveManager.load()`가 구버전/오염 데이터 보정을 수행합니다.
+3. `saveManager.load()`가 최상위 shape, position, 주요 숫자/배열/record 범위를 검증하고 구버전/오염 데이터 보정을 수행합니다.
 4. IndexedDB가 가능하고 `saved.tileMapData`가 있으면 `migrateTileMapToIndexedDB`를 실행합니다.
 5. IndexedDB에서 `tileMapBuffer`를 로드합니다.
 6. `INIT` 메시지로 `seed`, `saveData`, `tileMapBuffer`를 worker에 보냅니다.
@@ -161,6 +161,8 @@ worker 복원 우선순위:
 
 version 1 이하 legacy buffer는 `savedMapWidth`, `savedIndex`, `packed`를 사용해 x/y를 복원합니다. 더 오래된 객체형 `tileMap`은 `"x,y": [typeId, health]` 형태를 `deserializeObject`로 복원합니다.
 
+복원 시에는 잘못된 buffer 길이, 알 수 없는 포맷 버전, 맵 높이 밖 y 좌표, 과도한 레코드 수, 과도한 청크 수를 무시합니다. 이 제한은 외부 import 코드나 손상된 LocalStorage가 무제한 청크를 할당하지 못하게 하기 위한 방어선입니다.
+
 ## 마이그레이션과 정규화
 
 `saveManager.load()`는 저장 데이터를 읽을 때 아래 보정을 한 번 수행합니다.
@@ -202,7 +204,7 @@ IndexedDB를 사용할 수 없는 환경에서는 이 마이그레이션을 실�
 
 설정 창의 `Export Save`는 `useGameActions.handleExportSave`를 통해 worker에 `SAVE_REQUEST`를 보냅니다. worker는 현재 월드의 `tileMapBuffer`를 포함한 `EXPORT_DATA`를 보내고, 메인 스레드는 `saveManager.export`로 타일맵 버퍼를 Base64 `tileMapData`로 바꾼 뒤 클립보드에 복사합니다.
 
-`Import Save`는 prompt로 받은 문자열을 `saveManager.import`로 파싱하고, 성공하면 `saveManager.save(imported)` 후 페이지를 reload합니다.
+`Import Save`는 prompt로 받은 문자열을 `saveManager.import`로 파싱하고 schema/범위 정규화에 성공한 경우에만 `saveManager.saveImported(imported)` 후 페이지를 reload합니다. IndexedDB가 가능하면 export 코드의 Base64 `tileMapData`를 IndexedDB `tileMapBuffer`로 복사하고, 유효한 타일맵이 없으면 기존 IndexedDB 타일맵을 지워 다른 세이브의 맵과 섞이지 않게 합니다. IndexedDB를 사용할 수 없는 환경에서는 LocalStorage Base64 fallback을 유지합니다.
 
 `Reset`은 `saveManager.clear()`를 호출해 LocalStorage 저장을 삭제하고, IndexedDB가 가능하면 `gameDB.clearTileMap()`도 호출합니다.
 
@@ -214,8 +216,6 @@ IndexedDB를 사용할 수 없는 환경에서는 이 마이그레이션을 실�
 |---|---|
 | `SAVE_INTERVAL` | `constants.ts`에 있지만 `autoSaveSystem`은 literal `10000`을 사용합니다. 저장 주기를 바꾸려면 둘을 함께 확인합니다. |
 | `RETURN_SAVE_BUFFER` | 메시지 타입과 일부 main-thread branch는 존재하지만 `WorkerMessageRouter`는 현재 반환된 저장 버퍼를 재사용하지 않습니다. |
-| `tileMapBuffer` 타입 | `SaveData`는 `Uint32Array`를 사용하고, 일부 메시지 branch는 `ArrayBuffer`를 검사합니다. zero-copy 경로를 고치거나 최적화할 때 타입을 먼저 정리해야 합니다. |
-| import 경로 | `saveManager.save(imported)`는 `tileMapBuffer`가 있을 때만 IndexedDB 저장을 수행합니다. 외부 세이브 코드의 `tileMapData`를 IndexedDB 환경에서 가져오는 흐름은 수정 전 실제 복원을 검증해야 합니다. |
 | `DRILLING_SECRET_KEY` | 키를 바꾸면 기존 LocalStorage 저장 문자열을 복호화할 수 없습니다. |
 
 ## 변경 지침
