@@ -43,7 +43,7 @@ source_paths:
 | IndexedDB | DB `drilling-game-db`, store `save-data`, key `tileMapBuffer` | 타일맵 바이너리 `ArrayBuffer` | `db.ts` |
 | LocalStorage | `drilling-game-settings` | 화면 흔들림, SFX, 성능 모드 설정 | `Settings.tsx` |
 
-`drilling-game-save` 값은 JSON을 그대로 저장하지 않고 `DRILLING_SECRET_KEY`로 XOR 후 Base64 인코딩한 문자열입니다. 이 처리는 난독화에 가깝고, 보안 저장소로 취급하지 않습니다.
+`drilling-game-save` 값은 JSON을 그대로 저장하지 않고 `SAVE_OBFUSCATION_KEY`로 XOR 후 Base64 인코딩한 문자열입니다. 이 처리는 암호화가 아니라 난독화이며, 클라이언트 번들에 키가 포함되므로 보안 저장소나 변조 방지 장치로 취급하지 않습니다. 로드/import는 `LEGACY_SAVE_OBFUSCATION_KEYS`도 순서대로 시도해 기존 저장 문자열과 기존 export 코드를 읽을 수 있게 유지합니다.
 
 ## SaveData 구조
 
@@ -216,7 +216,7 @@ IndexedDB를 사용할 수 없는 환경에서는 이 마이그레이션을 실�
 |---|---|
 | `SAVE_INTERVAL` | `constants.ts`에 있지만 `autoSaveSystem`은 literal `10000`을 사용합니다. 저장 주기를 바꾸려면 둘을 함께 확인합니다. |
 | `RETURN_SAVE_BUFFER` | 메시지 타입과 일부 main-thread branch는 존재하지만 `WorkerMessageRouter`는 현재 반환된 저장 버퍼를 재사용하지 않습니다. |
-| `DRILLING_SECRET_KEY` | 키를 바꾸면 기존 LocalStorage 저장 문자열을 복호화할 수 없습니다. |
+| `SAVE_OBFUSCATION_KEY` | 클라이언트 난독화 키입니다. 보안 비밀값이 아닙니다. 값을 바꿀 때는 기존 값을 `LEGACY_SAVE_OBFUSCATION_KEYS`에 남겨 기존 LocalStorage 저장과 export 코드를 읽을 수 있게 해야 합니다. |
 
 ## 변경 지침
 

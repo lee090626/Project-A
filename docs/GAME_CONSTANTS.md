@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-15
+last_reviewed: 2026-05-16
 source_paths:
   - src/shared/config/combatConstants.ts
   - src/shared/config/constants.ts
@@ -28,7 +28,7 @@ source_paths:
 | 파일 | 정본 상수 | 책임 |
 |---|---|---|
 | `src/shared/config/combatConstants.ts` | `COMBAT_CONSTANTS` | 채굴 간격, 공격 속도 상한, 치명타 상한/배율, 방어력 지수, 상태 이상 위력 배율을 정의합니다. |
-| `src/shared/config/constants.ts` | `TILE_SIZE`, `CAMERA_SCALE`, `BASE_DEPTH`, `MOVEMENT_DELAY_MS`, 저장/동기화 상수 | 타일 픽셀 단위, 카메라 스케일, 맵 기준 깊이, 이동 입력 간격, 저장 키, UI/공간 해시 동기화 주기를 정의합니다. |
+| `src/shared/config/constants.ts` | `TILE_SIZE`, `CAMERA_SCALE`, `BASE_DEPTH`, `MOVEMENT_DELAY_MS`, 저장/동기화 상수 | 타일 픽셀 단위, 카메라 스케일, 맵 기준 깊이, 이동 입력 간격, 저장 난독화 키, UI/공간 해시 동기화 주기를 정의합니다. |
 | `src/shared/config/lateCircleLock.ts` | `UNRELEASED_CIRCLE_*` | 아직 밸런싱 전인 Circle 5+를 접근 불가능하게 만드는 임시 광물/몬스터/장비/재련 수치입니다. |
 | `src/shared/config/playerConstants.ts` | `BASE_PLAYER_MAX_HP`, `BASE_PLAYER_POWER`, `BASE_PLAYER_MOVE_SPEED` | 새 플레이어와 영구 스탯 재계산의 기본 체력, 채굴 위력, 이동 속도를 정의합니다. |
 
@@ -64,7 +64,8 @@ source_paths:
 | `CAMERA_SCALE` | `renderSystem.ts` | Pixi stage의 기본 카메라 확대 배율입니다. |
 | `BASE_DEPTH` | `MapGenerator.ts`, `TileMap.ts`, spawn/physics systems | 지상/베이스 구간과 실제 Circle depth를 보정하는 기준 깊이입니다. |
 | `MOVEMENT_DELAY_MS` | `physics/index.ts`, `StatusEffector.ts` | 플레이어 그리드 이동의 기준 입력 간격입니다. |
-| `DRILLING_SECRET_KEY` | `saveManager.ts` | 저장 데이터 암호화/복호화 키입니다. 변경하면 기존 저장 데이터 호환성이 깨질 수 있습니다. |
+| `SAVE_OBFUSCATION_KEY` | `saveManager.ts` | LocalStorage 저장 문자열을 사람이 바로 읽기 어렵게 변환하는 현재 난독화 키입니다. 클라이언트 번들에 포함되므로 보안 비밀값이 아닙니다. 문자열 값을 바꾸면 새 저장/export 문자열이 바뀝니다. |
+| `LEGACY_SAVE_OBFUSCATION_KEYS` | `saveManager.ts` | 이전 난독화 문자열을 읽기 위한 호환용 키 목록입니다. 새 저장에는 사용하지 않습니다. |
 | `UI_SYNC_INTERVAL` | `GameLoop.ts` | 워커에서 UI 상태를 동기화하는 기준 주기입니다. |
 | `SPATIAL_HASH_INTERVAL` | `GameLoop.ts` | 공간 해시 업데이트 주기입니다. |
 
@@ -108,7 +109,6 @@ source_paths:
 | `PLAYER_ACCELERATION` | 현재 이동 구현은 별도 physics 시스템에서 처리합니다. 사용처 확인 없이 밸런스 기준으로 인용하지 않습니다. |
 | `PLAYER_MAX_SPEED` | 현재 이동 구현의 정본 값으로 취급하지 않습니다. |
 | `PLAYER_FRICTION` | 현재 이동 구현의 정본 값으로 취급하지 않습니다. |
-| `SECRET_KEY` | 현재 저장 암호화 경로는 `DRILLING_SECRET_KEY`를 사용합니다. |
 | `SAVE_INTERVAL` | 자동 저장 주기 설명으로 남아 있으나 현재 `GameLoop.ts`의 자동 저장 간격과 직접 연결되어 있지 않습니다. |
 
 이 상수들을 정리하거나 다시 연결하려면 문서만 수정하지 말고 코드 사용처 정리, 타입 검증, 저장/루프 동작 확인을 함께 진행합니다.
@@ -132,7 +132,7 @@ source_paths:
 
 저장 관련 상수를 변경할 때:
 
-1. `saveManager.ts`의 암호화/복호화 경로를 확인합니다.
+1. `saveManager.ts`의 난독화/해제 경로를 확인합니다.
 2. 기존 저장 데이터 호환성 또는 마이그레이션 필요 여부를 판단합니다.
 3. 저장 파일이 깨질 수 있는 변경은 `SAVE_AND_MIGRATION.md` 범위로 분리해 문서화합니다.
 

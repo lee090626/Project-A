@@ -48,15 +48,15 @@ export const PLAYER_FRICTION = 0.85;
 
 /**
  * 저장 데이터 난독화 키
- * @description 로컬 저장소에 저장된 게임 데이터를 암호화/복호화하는 데 사용됩니다.
+ * @description 로컬 저장소에 저장된 게임 데이터를 사람이 바로 읽기 어렵게 변환할 때 사용합니다. 클라이언트 번들에 포함되므로 보안 비밀값이 아닙니다.
  */
-export const DRILLING_SECRET_KEY = 'DRILLING_SECRET_KEY!';
+export const SAVE_OBFUSCATION_KEY = 'DRILLING_SAVE_OBFUSCATION_V1';
 
 /**
- * 보안 키
- * @description 추가적인 보안 검증에 사용되는 키입니다.
+ * 이전 저장 난독화 키 목록
+ * @description 기존 LocalStorage 저장과 export 코드를 읽기 위한 호환용 값입니다. 새 저장에는 사용하지 않습니다.
  */
-export const SECRET_KEY = 'DRILL_RPG_SALT_2024';
+export const LEGACY_SAVE_OBFUSCATION_KEYS = ['DRILLING_SECRET_KEY!'] as const;
 
 /**
  * 성능 및 동기화 관련 상수

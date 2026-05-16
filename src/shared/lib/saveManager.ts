@@ -1,5 +1,5 @@
 import { PlayerStats, Position, Inventory } from '../types/game';
-import { DRILLING_SECRET_KEY } from '../config/constants';
+import { LEGACY_SAVE_OBFUSCATION_KEYS, SAVE_OBFUSCATION_KEY } from '../config/constants';
 import { MINERALS, TILE_DEFINITIONS } from '../config/mineralData';
 import { EFFECT_DATA } from '../config/effectData';
 import { C2_GUIDE_QUEST_ID_SET } from '../config/guideQuestData';
@@ -236,7 +236,10 @@ function normalizeCollectibleMineralProgress(stats: PlayerStats): void {
  * @returns 난독화된 문자열
  */
 function obfuscate(jsonStr: string): string {
-  const key = DRILLING_SECRET_KEY;
+  return obfuscateWithKey(jsonStr, SAVE_OBFUSCATION_KEY);
+}
+
+function obfuscateWithKey(jsonStr: string, key: string): string {
   let obfuscated = '';
   for (let i = 0; i < jsonStr.length; i++) {
     const charCode = jsonStr.charCodeAt(i) ^ key.charCodeAt(i % key.length);
@@ -406,8 +409,7 @@ function normalizeEquipmentStates(stats: PlayerStats): void {
  * @param encoded 난독화된 Base64 문자열
  * @returns 복구된 원본 JSON 문자열
  */
-function deobfuscate(encoded: string): string {
-  const key = DRILLING_SECRET_KEY;
+function deobfuscateWithKey(encoded: string, key: string): string {
   let decoded = '';
   try {
     decoded = decodeURIComponent(escape(atob(encoded)));
@@ -421,6 +423,21 @@ function deobfuscate(encoded: string): string {
     deobfuscated += String.fromCharCode(charCode);
   }
   return deobfuscated;
+}
+
+function parseObfuscatedJson(encoded: string): unknown {
+  const keys = [SAVE_OBFUSCATION_KEY, ...LEGACY_SAVE_OBFUSCATION_KEYS];
+  let lastError: unknown;
+
+  for (const key of keys) {
+    try {
+      return JSON.parse(deobfuscateWithKey(encoded, key));
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error('Invalid obfuscated JSON.');
 }
 
 function normalizeSaveData(raw: unknown): SaveData | null {
@@ -601,8 +618,7 @@ export const saveManager = {
     try {
       const saved = localStorage.getItem(SAVE_KEY);
       if (!saved) return null;
-      const json = deobfuscate(saved);
-      return normalizeSaveData(JSON.parse(json));
+      return normalizeSaveData(parseObfuscatedJson(saved));
     } catch (e) {
       console.error('게임 로드 실패:', e);
       return null;
@@ -647,8 +663,7 @@ export const saveManager = {
       // 4. 검증 성공 시에만 LocalStorage의 tileMapData 제거
       const saved = localStorage.getItem(SAVE_KEY);
       if (saved) {
-        const json = deobfuscate(saved);
-        const data = JSON.parse(json);
+        const data = parseObfuscatedJson(saved) as Record<string, unknown>;
         delete data.tileMapData;
         delete data.tileMap;
         localStorage.setItem(SAVE_KEY, obfuscate(JSON.stringify(data)));
@@ -697,8 +712,7 @@ export const saveManager = {
         return null;
       }
 
-      const json = deobfuscate(obfuscatedStr);
-      return normalizeSaveData(JSON.parse(json));
+      return normalizeSaveData(parseObfuscatedJson(obfuscatedStr));
     } catch (e) {
       console.error('세이브 데이터 임포트 실패:', e);
       return null;
