@@ -6,6 +6,7 @@ import {
   BASE_PLAYER_MOVE_SPEED,
   BASE_PLAYER_POWER,
 } from '@/shared/config/playerConstants';
+import { createPlayerStartPosition } from '@/shared/config/playerPosition';
 
 /**
  * 게임 내 플레이어 캐릭터의 상태를 나타내는 인터페이스입니다.
@@ -111,9 +112,9 @@ export const createInitialPlayer = (seed: number): Player => ({
     collectionHistory: {},
     guideQuest: createInitialGuideQuestState(),
   },
-  pos: { x: 15, y: 8 }, // 보스 센터(x=15) 근처에서 시작
+  pos: createPlayerStartPosition(),
   velocity: { x: 0, y: 0 },
-  visualPos: { x: 15, y: 8 },
+  visualPos: createPlayerStartPosition(),
   isDrilling: false,
   lastHitTime: 0,
   lastAttackTime: 0,

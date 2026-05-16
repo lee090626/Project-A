@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { createInitialWorld, GameWorld } from '@/entities/world/model';
 import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
+import { createPlayerStartPosition, PLAYER_START_POSITION } from '@/shared/config/playerPosition';
 import { fetchBaseLayout, fetchEntities } from '@/shared/lib/dataLoader';
 import { getBasePath } from '@/shared/lib/basePath';
 import {
@@ -48,7 +49,7 @@ export default function GameEngine() {
   const [, setUiVersion] = useState(0);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [isEngineReady, setIsEngineReady] = useState(false);
-  const [hudPosition, setHudPosition] = useState({ x: 15, y: 8 });
+  const [hudPosition, setHudPosition] = useState(createPlayerStartPosition);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -65,10 +66,10 @@ export default function GameEngine() {
   // 트리플 버퍼링 및 보간(Lerp) 관련 Ref
   const snapshots = useRef<{ time: number; data: Float32Array }[]>([]);
   const interpolatedState = useRef({
-    x: 15,
-    y: 8,
-    camX: 15,
-    camY: 8,
+    x: PLAYER_START_POSITION.x,
+    y: PLAYER_START_POSITION.y,
+    camX: PLAYER_START_POSITION.x,
+    camY: PLAYER_START_POSITION.y,
     shake: 0,
     hp: 0,
   });

@@ -1,5 +1,6 @@
 import { EFFECT_DATA } from '@/shared/config/effectData';
 import { EQUIPMENTS } from '@/shared/config/equipmentData';
+import { createPlayerStartPosition, createWaypointPosition } from '@/shared/config/playerPosition';
 import { GameWorld } from '@/entities/world/model';
 import { messageBus, TOPIC } from '@/shared/lib/MessageBus';
 import { addEffectStack } from '@/shared/lib/effectItemUtils';
@@ -20,8 +21,9 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
   switch (action) {
     case 'respawn': {
       stats.hp = stats.maxHp;
-      world.player.pos = { x: 15, y: 8 };
-      world.player.visualPos = { x: 15, y: 8 };
+      const baseCampPosition = createPlayerStartPosition();
+      world.player.pos = baseCampPosition;
+      world.player.visualPos = { ...baseCampPosition };
 
       // 보스 전투 상태 및 환경 물리력 강제 초기화
       // [Rebase Resolve] bossCombatStatus가 Record로 변경됨에 따라 빈 객체로 초기화
@@ -64,10 +66,9 @@ export const handleWorldAction = (world: GameWorld, action: string, data: any) =
         break;
       }
 
-      world.player.pos.x = 15;
-      world.player.pos.y = depth + 10;
-      world.player.visualPos.x = 15;
-      world.player.visualPos.y = depth + 10;
+      const waypointPosition = createWaypointPosition(depth);
+      Object.assign(world.player.pos, waypointPosition);
+      Object.assign(world.player.visualPos, waypointPosition);
       stats.depth = depth;
       messageBus.emit(TOPIC.RECALCULATE_PLAYER_STATS);
       break;

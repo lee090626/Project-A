@@ -9,6 +9,7 @@ source_paths:
   - src/shared/config/constants.ts
   - src/shared/config/lateCircleLock.ts
   - src/shared/config/playerConstants.ts
+  - src/shared/config/playerPosition.ts
   - src/features/game/lib/playerCombatStats.ts
   - src/features/game/lib/miningCalculator.ts
   - src/features/game/ecs/systems/statsSyncSystem.ts
@@ -31,6 +32,7 @@ source_paths:
 | `src/shared/config/constants.ts` | `TILE_SIZE`, `CAMERA_SCALE`, `BASE_DEPTH`, `MOVEMENT_DELAY_MS`, 저장/동기화 상수 | 타일 픽셀 단위, 카메라 스케일, 맵 기준 깊이, 이동 입력 간격, 저장 난독화 키, UI/공간 해시 동기화 주기를 정의합니다. |
 | `src/shared/config/lateCircleLock.ts` | `UNRELEASED_CIRCLE_*` | 아직 밸런싱 전인 Circle 5+를 접근 불가능하게 만드는 임시 광물/몬스터/장비/재련 수치입니다. |
 | `src/shared/config/playerConstants.ts` | `BASE_PLAYER_MAX_HP`, `BASE_PLAYER_POWER`, `BASE_PLAYER_MOVE_SPEED` | 새 플레이어와 영구 스탯 재계산의 기본 체력, 채굴 위력, 이동 속도를 정의합니다. |
+| `src/shared/config/playerPosition.ts` | `PLAYER_START_POSITION`, `getWorldYForDepth` | 새 플레이어, HUD 초기값, 일반 리스폰, waypoint 이동에 쓰는 플레이어 좌표 기준을 정의합니다. |
 
 ## 전투와 채굴 상수
 
@@ -62,7 +64,7 @@ source_paths:
 |---|---|---|
 | `TILE_SIZE` | 렌더러, 물리, 스폰, VFX, spatial query | 논리 타일 좌표를 픽셀 좌표로 변환하는 기준입니다. 변경 범위가 가장 넓습니다. |
 | `CAMERA_SCALE` | `renderSystem.ts` | Pixi stage의 기본 카메라 확대 배율입니다. |
-| `BASE_DEPTH` | `MapGenerator.ts`, `TileMap.ts`, spawn/physics systems | 지상/베이스 구간과 실제 Circle depth를 보정하는 기준 깊이입니다. |
+| `BASE_DEPTH` | `MapGenerator.ts`, `TileMap.ts`, spawn/physics systems, `playerPosition.ts` | 지상/베이스 구간과 실제 Circle depth를 보정하는 기준 깊이입니다. |
 | `MOVEMENT_DELAY_MS` | `physics/index.ts`, `StatusEffector.ts` | 플레이어 그리드 이동의 기준 입력 간격입니다. |
 | `SAVE_OBFUSCATION_KEY` | `saveManager.ts` | LocalStorage 저장 문자열을 사람이 바로 읽기 어렵게 변환하는 현재 난독화 키입니다. 클라이언트 번들에 포함되므로 보안 비밀값이 아닙니다. 문자열 값을 바꾸면 새 저장/export 문자열이 바뀝니다. |
 | `LEGACY_SAVE_OBFUSCATION_KEYS` | `saveManager.ts` | 이전 난독화 문자열을 읽기 위한 호환용 키 목록입니다. 새 저장에는 사용하지 않습니다. |
