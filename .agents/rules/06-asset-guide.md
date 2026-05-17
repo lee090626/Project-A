@@ -15,10 +15,10 @@
 
 | `entities/` | 일반 몬스터 (1x1) | `PascalCase.png` | **256x256** | PNG (투명) |
 | `entities/` | 거대 보스 (5x5) | `PascalCase.png` | **640x640** | PNG (투명) |
-| `drills/` | 드릴 장비 | `PascalCaseDrill.png` | **256x256** | PNG (투명) |
-| `helmets/` | 투구 장비 | `PascalCaseHelmet.png` | **256x256** | PNG (투명) |
-| `armors/` | 갑옷 장비 | `PascalCaseArmor.png` | **256x256** | PNG (투명) |
-| `boots/` | 신발 장비 | `PascalCaseBoots.png` | **256x256** | PNG (투명) |
+| `drills/` | 드릴 장비 | `PascalCase.png` | **256x256** | PNG (투명) |
+| `helmets/` | 투구 장비 | `PascalCase.png` | **256x256** | PNG (투명) |
+| `armors/` | 갑옷 장비 | `PascalCase.png` | **256x256** | PNG (투명) |
+| `boots/` | 신발 장비 | `PascalCase.png` | **256x256** | PNG (투명) |
 | `vfx/` | 투사체/이펙트 | `PascalCaseProjectile.png` | **256x256** | PNG (투명) |
 | `essences/` | Effect 하위 타입: 정수 (기본 제작 재료/드롭템) | `PascalCaseEssence.png` | **256x256** | PNG (투명) |
 | `relics/` | Effect 하위 타입: 성물/제작 효과 아이템 | `PascalCaseRelic.png` | **512x512** | PNG (투명) |

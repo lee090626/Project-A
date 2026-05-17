@@ -3,7 +3,7 @@
 ---
 status: canonical
 owner: engineering
-last_reviewed: 2026-05-14
+last_reviewed: 2026-05-16
 source_paths:
   - .agents/rules/06-asset-guide.md
   - package.json
@@ -51,15 +51,15 @@ RAG 관점에서 정본은 원본 에셋, 생성 스크립트, 그리고 이 문
 
 | 폴더 | 주 용도 | 대표 키 |
 |---|---|---|
-| `armors/` | 갑옷 장비 | `CrimsonPlateArmor`, `VoidMantle` |
-| `boots/` | 신발 장비 | `CrimsonStrideBoots`, `VoidStep` |
-| `drills/` | 드릴 장비 | `CrimsonFangDrill`, `VoidCrusher` |
-| `entities/` | 몬스터와 보스 | `Asmodeus`, `Cerberus`, `GaleBat` |
+| `armors/` | 갑옷 장비 | `CrimsonPlateArmor`, `VoidMantle`, `CrownVestment` |
+| `boots/` | 신발 장비 | `CrimsonStrideBoots`, `VoidStep`, `CrownTreads` |
+| `drills/` | 드릴 장비 | `CrimsonFangDrill`, `VoidCrusher`, `CrownPiercer` |
+| `entities/` | 몬스터와 보스 | `Asmodeus`, `Cerberus`, `Fafnir`, `HoardingSpecter` |
 | `essences/` | Essence Effect 아이템 | `LustEssence`, `WrathEssence` |
-| `helmets/` | 투구 장비 | `CrimsonVeilHelmet`, `VoidMask` |
-| `minerals/` | 인벤토리/UI용 광물 아이콘 | `CrimsonStoneIcon`, `MoldStoneIcon` |
-| `relics/` | Relic 또는 제작형 Effect 아이템 | `AsmodeusRingRelic`, `MasterySealRelic` |
-| `tiles/` | 월드 타일 이미지 | `StoneTile`, `CrimsonStoneTile` |
+| `helmets/` | 투구 장비 | `CrimsonVeilHelmet`, `VoidMask`, `CrownHelm` |
+| `minerals/` | 인벤토리/UI용 광물 아이콘 | `CrimsonStoneIcon`, `MoldStoneIcon`, `GoldStoneIcon` |
+| `relics/` | Relic 또는 제작형 Effect 아이템 | `AsmodeusRingRelic`, `FafnirHoardRelic`, `MasterySealRelic` |
+| `tiles/` | 월드 타일 이미지 | `StoneTile`, `CrimsonStoneTile`, `C4Tile` |
 | `ui/icons/` | DOM UI 아이콘 | `MoneyIcon.webp`, `InventoryIcon.webp` |
 | `vfx/` | 투사체/시각 효과 | `FireBall` |
 | `world/` | 플레이어, NPC, 베이스 타일셋 | `Player`, `Merchant`, `BaseTileset` |
