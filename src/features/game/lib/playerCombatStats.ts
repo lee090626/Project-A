@@ -121,7 +121,7 @@ export function calculateLuckStatsFromBonuses(
   masteryBonuses: LuckMasteryBonuses,
   effectBonuses: LuckEffectBonuses,
 ): LuckStats {
-  const flatLuck = masteryBonuses.luck + effectBonuses.luck * 100;
+  const flatLuck = masteryBonuses.luck + effectBonuses.luck;
   const luckMultiplier = 1 + masteryBonuses.luckMult;
   const finalLuck = Math.max(0, flatLuck * luckMultiplier);
 

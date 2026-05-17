@@ -27,9 +27,9 @@ export const essenceEffects: Record<string, EffectDefinition> = {
     nameKo: '탐욕의 정수',
     type: 'stackable',
     description: 'Increases Luck slightly.',
-    descriptionKo: '행운이 극히 미세하게 증가합니다.',
+    descriptionKo: '행운이 소폭 증가합니다.',
     image: 'GreedEssence',
-    bonus: { stat: 'luck', value: 0.05 },
+    bonus: { stat: 'luck', value: 0.5 },
   },
   essence_wrath: {
     id: 'essence_wrath',
