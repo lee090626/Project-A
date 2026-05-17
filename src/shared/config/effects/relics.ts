@@ -60,7 +60,7 @@ export const relicEffects: Record<string, EffectDefinition> = {
     nameKo: '파프니르의 황금 보물',
     type: 'stackable',
     maxStack: BOSS_RELIC_DEFENSE_IGNORE_MAX_STACK,
-    image: 'GoldIcon',
+    image: 'FafnirHoardRelic',
     description: 'Ignores Circle 5 mineral defense per stack.',
     descriptionKo: '보유량에 따라 제5원 광물의 방어력을 일부 무시합니다.',
     effectId: FAFNIR_HOARD_EFFECT_ID,

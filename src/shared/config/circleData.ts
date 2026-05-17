@@ -4,7 +4,7 @@ import { TileType } from '../types/game';
  * 월드 스폰/지형 보정 규칙이 바뀌었을 때 런타임 캐시와 레거시 지형을 갱신하기 위한 버전입니다.
  * 스폰 density, weight, layer 또는 저장 지형 마이그레이션을 조정하면 값을 올려 기존 세이브를 재평가합니다.
  */
-export const SPAWN_RULE_VERSION = 12;
+export const SPAWN_RULE_VERSION = 15;
 export const BOSS_SPAWN_X = 15;
 export const BOSS_SPAWN_DEPTH_FROM_END = 8;
 
@@ -95,8 +95,8 @@ export const CIRCLES: CircleConfig[] = [
     depthEnd: 300,
     minerals: [
       { type: 'crimsonstone', threshold: 0.85, minLayer: 1 },
-      { type: 'galestone', threshold: 0.25, minLayer: 2 },
-      { type: 'fervorstone', threshold: 0.1, minLayer: 3 },
+      { type: 'galestone', threshold: 0.45, minLayer: 2 },
+      { type: 'fervorstone', threshold: 0.35, minLayer: 3 },
     ],
     monsterDensityByLayer: {
       1: 0.55,
@@ -140,7 +140,7 @@ export const CIRCLES: CircleConfig[] = [
     name: 'Greed',
     nameKo: '탐욕',
     theme: '황금, 욕망, 차가운 빛',
-    bgType: 'stone',
+    bgType: 'greed_stone',
     depthStart: 600,
     depthEnd: 900,
     minerals: [
@@ -148,7 +148,16 @@ export const CIRCLES: CircleConfig[] = [
       { type: 'luststone', threshold: 0.4, minLayer: 2, scale: 7 },
       { type: 'midasite', threshold: 0.25, minLayer: 3, scale: 6 },
     ],
-    monsters: [{ monsterId: 'c4_hoarder', chance: 0.08, weight: 1, minLayer: 1 }],
+    monsterDensityByLayer: {
+      1: 0.65,
+      2: 0.7,
+      3: 0.75,
+    },
+    monsters: [
+      { monsterId: 'c4_hoarder', weight: 6, minLayer: 1 },
+      { monsterId: 'c4_mimic', weight: 5, minLayer: 2 },
+      { monsterId: 'c4_sinner', weight: 4, minLayer: 3 },
+    ],
     boss: { id: 'c4_fafnir', spawnLayer: 4 },
   },
   {

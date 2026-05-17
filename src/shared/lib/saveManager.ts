@@ -516,7 +516,7 @@ function normalizeSaveData(raw: unknown): SaveData | null {
     if (COLLECTIBLE_MINERAL_KEYS.has(key)) {
       (s.inventory as any)[key] = amount;
     } else if (KNOWN_TILE_DEFINITION_KEYS.has(key)) {
-      // stone, gluttony_stone 같은 배경 타일 잔여 데이터는 보상 없이 제거합니다.
+      // stone, gluttony_stone, greed_stone 같은 배경 타일 잔여 데이터는 보상 없이 제거합니다.
       continue;
     } else {
       // 더 이상 정의되지 않는 구형 광물은 1개당 10G로 환산

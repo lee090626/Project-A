@@ -1,9 +1,153 @@
 {
   "frames": {
-    "PlayerWalkUp03.png": {
+    "PlayerWalkDown01.png": {
       "frame": {
         "x": 3,
         "y": 3,
+        "w": 360,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 360,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown03.png": {
+      "frame": {
+        "x": 369,
+        "y": 3,
+        "w": 358,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 358,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown04.png": {
+      "frame": {
+        "x": 3,
+        "y": 431,
+        "w": 360,
+        "h": 422
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 82,
+        "y": 64,
+        "w": 360,
+        "h": 422
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown05.png": {
+      "frame": {
+        "x": 733,
+        "y": 3,
+        "w": 362,
+        "h": 420
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 64,
+        "w": 362,
+        "h": 420
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkDown06.png": {
+      "frame": {
+        "x": 733,
+        "y": 429,
+        "w": 362,
+        "h": 418
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 80,
+        "y": 64,
+        "w": 362,
+        "h": 418
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "MasterySealRelic.png": {
+      "frame": {
+        "x": 3,
+        "y": 859,
+        "w": 387,
+        "h": 406
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 63,
+        "y": 52,
+        "w": 387,
+        "h": 406
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "PlayerWalkUp03.png": {
+      "frame": {
+        "x": 396,
+        "y": 853,
         "w": 314,
         "h": 402
       },
@@ -26,8 +170,8 @@
     },
     "PlayerWalkUp06.png": {
       "frame": {
-        "x": 323,
-        "y": 3,
+        "x": 716,
+        "y": 853,
         "w": 314,
         "h": 394
       },
@@ -48,168 +192,24 @@
         "y": 0.5
       }
     },
-    "PlayerWalkLeft01.png": {
+    "FafnirHoardRelic.png": {
       "frame": {
-        "x": 3,
-        "y": 411,
-        "w": 310,
-        "h": 334
+        "x": 369,
+        "y": 431,
+        "w": 356,
+        "h": 356
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 98,
-        "y": 84,
-        "w": 310,
-        "h": 334
+        "x": 78,
+        "y": 90,
+        "w": 356,
+        "h": 356
       },
       "sourceSize": {
         "w": 512,
         "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "PlayerWalkLeft02.png": {
-      "frame": {
-        "x": 319,
-        "y": 411,
-        "w": 308,
-        "h": 334
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 98,
-        "y": 84,
-        "w": 308,
-        "h": 334
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "PlayerWalkLeft03.png": {
-      "frame": {
-        "x": 643,
-        "y": 3,
-        "w": 304,
-        "h": 332
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 100,
-        "y": 84,
-        "w": 304,
-        "h": 332
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "PlayerWalkLeft04.png": {
-      "frame": {
-        "x": 643,
-        "y": 341,
-        "w": 304,
-        "h": 332
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 100,
-        "y": 86,
-        "w": 304,
-        "h": 332
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "PlayerWalkLeft06.png": {
-      "frame": {
-        "x": 3,
-        "y": 751,
-        "w": 304,
-        "h": 332
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 100,
-        "y": 84,
-        "w": 304,
-        "h": 332
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "PlayerWalkLeft05.png": {
-      "frame": {
-        "x": 633,
-        "y": 679,
-        "w": 310,
-        "h": 326
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 96,
-        "y": 86,
-        "w": 310,
-        "h": 326
-      },
-      "sourceSize": {
-        "w": 512,
-        "h": 512
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "LustEssence.png": {
-      "frame": {
-        "x": 313,
-        "y": 751,
-        "w": 192,
-        "h": 200
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 32,
-        "y": 28,
-        "w": 192,
-        "h": 200
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
       },
       "pivot": {
         "x": 0.5,
@@ -218,7 +218,7 @@
     },
     "FraudEssence.png": {
       "frame": {
-        "x": 953,
+        "x": 1101,
         "y": 3,
         "w": 192,
         "h": 199
@@ -242,7 +242,7 @@
     },
     "WrathEssence.png": {
       "frame": {
-        "x": 953,
+        "x": 1101,
         "y": 208,
         "w": 192,
         "h": 199
@@ -266,7 +266,7 @@
     },
     "GluttoyEssence.png": {
       "frame": {
-        "x": 953,
+        "x": 1101,
         "y": 413,
         "w": 190,
         "h": 198
@@ -290,7 +290,7 @@
     },
     "GreedEssence.png": {
       "frame": {
-        "x": 953,
+        "x": 1101,
         "y": 617,
         "w": 190,
         "h": 198
@@ -314,7 +314,7 @@
     },
     "VoidMantle.png": {
       "frame": {
-        "x": 949,
+        "x": 1101,
         "y": 821,
         "w": 192,
         "h": 194
@@ -336,10 +336,130 @@
         "y": 0.5
       }
     },
+    "Mimic.png": {
+      "frame": {
+        "x": 1036,
+        "y": 1021,
+        "w": 164,
+        "h": 156
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 46,
+        "y": 50,
+        "w": 164,
+        "h": 156
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GoldStoneTile.png": {
+      "frame": {
+        "x": 3,
+        "y": 1271,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "LustStoneTile.png": {
+      "frame": {
+        "x": 137,
+        "y": 1271,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "MidasiteTile.png": {
+      "frame": {
+        "x": 271,
+        "y": 1271,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "StoneTile.png": {
+      "frame": {
+        "x": 405,
+        "y": 1261,
+        "w": 128,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "C3Tile.png": {
       "frame": {
-        "x": 313,
-        "y": 957,
+        "x": 539,
+        "y": 1261,
         "w": 126,
         "h": 126
       },
@@ -362,8 +482,8 @@
     },
     "MoldStoneTile.png": {
       "frame": {
-        "x": 445,
-        "y": 957,
+        "x": 671,
+        "y": 1261,
         "w": 126,
         "h": 126
       },
@@ -386,8 +506,8 @@
     },
     "RotStoneTile.png": {
       "frame": {
-        "x": 3,
-        "y": 1089,
+        "x": 803,
+        "y": 1253,
         "w": 126,
         "h": 126
       },
@@ -410,8 +530,8 @@
     },
     "SludgeStoneTile.png": {
       "frame": {
-        "x": 135,
-        "y": 1089,
+        "x": 935,
+        "y": 1253,
         "w": 126,
         "h": 126
       },
@@ -439,8 +559,8 @@
     "image": "game-atlas-2.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1148,
-      "h": 1218
+      "w": 1296,
+      "h": 1402
     },
     "scale": 1
   }

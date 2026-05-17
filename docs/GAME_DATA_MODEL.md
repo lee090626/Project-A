@@ -69,6 +69,8 @@ source_paths:
 
 보스 relic의 진행 효과는 다음 Circle 광물 방어 무시로 통일합니다. 현재 C2/C3/C4 보스 relic은 각각 C3/C4/C5 광물 방어력을 중첩당 5%, 최대 50%까지 무시합니다.
 
+2026-05-16 기준 정식 플레이 가능한 Circle 콘텐츠 범위는 Circle 2~4입니다. Circle 4 Greed는 `greed_stone` 배경 지층, `goldstone`/`luststone`/`midasite` 광물, `c4_hoarder`/`c4_mimic`/`c4_sinner` 일반 몬스터, `c4_fafnir` 보스, `relic_fafnir_hoard` 보스 relic, `crown_*` 장비 세트를 포함합니다.
+
 ## 플레이어 저장 상태와의 연결
 
 `PlayerStats`는 config 데이터의 ID를 문자열로 저장합니다. 따라서 config ID를 바꾸면 저장 데이터 마이그레이션도 함께 검토해야 합니다.

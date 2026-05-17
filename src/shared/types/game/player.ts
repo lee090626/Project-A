@@ -20,6 +20,7 @@ export type Inventory = {
     | 'stone'
     | 'dungeon_bricks'
     | 'gluttony_stone'
+    | 'greed_stone'
   >]: number;
 } & {
   [key: string]: number;

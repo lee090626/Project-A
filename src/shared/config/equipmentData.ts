@@ -123,8 +123,9 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Drill',
     circle: 4,
     icon: '🔱',
-    stats: { power: 55 },
-    price: { midasite: 50 },
+    image: 'CrownPiercer',
+    stats: { power: 70 },
+    price: { goldstone: 24 },
   },
   'crown_helm': {
     id: 'crown_helm',
@@ -133,8 +134,9 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Helmet',
     circle: 4,
     icon: '👑',
-    stats: { defense: 25 },
-    price: { luststone: 40 }
+    image: 'CrownHelm',
+    stats: { maxHp: 140, defense: 12 },
+    price: { goldstone: 24, luststone: 10 }
   },
   'crown_vestment': {
     id: 'crown_vestment',
@@ -143,8 +145,9 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Armor',
     circle: 4,
     icon: '🥋',
-    stats: { maxHp: 500 },
-    price: { midasite: 60 }
+    image: 'CrownVestment',
+    stats: { maxHp: 700, defense: 18 },
+    price: { goldstone: 36, luststone: 18, midasite: 8 }
   },
   'crown_treads': {
     id: 'crown_treads',
@@ -153,8 +156,9 @@ export const EQUIPMENTS: Record<string, any> = {
     part: 'Boots',
     circle: 4,
     icon: '👟',
+    image: 'CrownTreads',
     stats: { moveSpeed: 35, defense: 10, maxHp: 150 },
-    price: { midasite: 30 }
+    price: { goldstone: 24, luststone: 12, midasite: 6 }
   },
 
   // === Circle 5 — Wrath (분노) ===

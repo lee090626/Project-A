@@ -54,6 +54,7 @@ export type TileType =
   | 'boss_skin'
   | 'monster_nest'
   | 'monster'
+  | 'greed_stone'
   | 'empty'
   | 'wall'
   // === 몬스터 전리품 및 정수 (Loot & Essences) ===
@@ -100,6 +101,7 @@ export const TILE_TYPE_TO_ID: Record<string, number> = {
   boss_skin: 32,
   stone: 33,
   gluttony_stone: 34,
+  greed_stone: 35,
   // === 몬스터 전리품 및 정수 (100+) ===
   essence_lust: 100,
   essence_gluttony: 101,
