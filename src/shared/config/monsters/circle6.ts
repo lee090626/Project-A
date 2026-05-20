@@ -15,7 +15,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     nameKo: '이단 사제',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Heresy 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Heresy.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -23,7 +23,6 @@ export const circle6Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 3500,
       gold: 700,
       drops: [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -37,7 +36,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     nameKo: '영겁의 불꽃 영혼',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Heresy 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Heresy.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -45,7 +44,6 @@ export const circle6Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 3000,
       gold: 600,
       drops: [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -59,7 +57,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     nameKo: '타락한 천사',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Heresy 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Heresy.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -67,7 +65,6 @@ export const circle6Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 5000,
       gold: 1000,
       drops: [
         { itemId: 'essence_heresy', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -81,7 +78,7 @@ export const circle6Monsters: MonsterDefinition[] = [
     nameKo: '이단의 성녀, 릴리스',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '타락한 신앙의 상징. 아름다우면서도 치명적인 권능으로 이단자들을 이끕니다.',
+    description: 'A symbol of corrupted faith. Beautiful and lethal, she leads heretics with forbidden power.',
     width: 5,
     height: 5,
     stats: {
@@ -91,7 +88,6 @@ export const circle6Monsters: MonsterDefinition[] = [
       attackCooldown: 2000,
     },
     rewards: {
-      exp: 450000,
       gold: 90000,
       drops: [
         { itemId: 'essence_heresy', chance: 1.0, minAmount: 5, maxAmount: 10 },

@@ -15,7 +15,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     nameKo: '스틱스의 거주자',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Wrath 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Wrath.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -23,7 +23,6 @@ export const circle5Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 1200,
       gold: 240,
       drops: [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -37,7 +36,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     nameKo: '격노한 복수심',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Wrath 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Wrath.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -45,7 +44,6 @@ export const circle5Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 1000,
       gold: 200,
       drops: [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -59,7 +57,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     nameKo: '진흙 골렘',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Wrath 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Wrath.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -67,7 +65,6 @@ export const circle5Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 2500,
       gold: 500,
       drops: [
         { itemId: 'essence_wrath', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -81,7 +78,7 @@ export const circle5Monsters: MonsterDefinition[] = [
     nameKo: '최초의 전쟁군주, 아자젤',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: 'Circle 5 분노의 지옥을 지배하는 최초의 전쟁군주. 끊임없는 증오심으로 적을 섬멸합니다.',
+    description: 'The first warlord who rules Circle 5, the inferno of Wrath. He annihilates enemies with endless hatred.',
     width: 5,
     height: 5,
     stats: {
@@ -91,7 +88,6 @@ export const circle5Monsters: MonsterDefinition[] = [
       attackCooldown: 2500,
     },
     rewards: {
-      exp: 175000,
       gold: 35000,
       drops: [
         { itemId: 'essence_wrath', chance: 1.0, minAmount: 5, maxAmount: 10 },

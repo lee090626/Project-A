@@ -15,7 +15,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     nameKo: '말레브랑케',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Fraud 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Fraud.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -23,7 +23,6 @@ export const circle8Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 60000,
       gold: 12000,
       drops: [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -37,7 +36,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     nameKo: '거짓 예언자',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Fraud 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Fraud.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -45,7 +44,6 @@ export const circle8Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 50000,
       gold: 10000,
       drops: [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -59,7 +57,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     nameKo: '환술사의 그림자',
     type: 'monster',
     imagePath: 'LustfulWhisperer',
-    description: 'Fraud 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Fraud.',
     stats: {
       maxHp: UNRELEASED_CIRCLE_MONSTER_HP,
       power: UNRELEASED_CIRCLE_MONSTER_POWER,
@@ -67,7 +65,6 @@ export const circle8Monsters: MonsterDefinition[] = [
       attackCooldown: 1000,
     },
     rewards: {
-      exp: 45000,
       gold: 9000,
       drops: [
         { itemId: 'essence_fraud', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -81,7 +78,7 @@ export const circle8Monsters: MonsterDefinition[] = [
     nameKo: '거짓된 심판자 가드리엘',
     type: 'boss',
     imagePath: 'Asmodeus',
-    description: '신성한 심판자를 자처하지만, 사실은 기만과 부패로 영혼들을 타락시키는 서클 8의 지배자.',
+    description: 'A false judge who claims divine authority while corrupting souls through deception and decay as the ruler of Circle 8.',
     width: 5,
     height: 5,
     stats: {
@@ -91,7 +88,6 @@ export const circle8Monsters: MonsterDefinition[] = [
       attackCooldown: 2000,
     },
     rewards: {
-      exp: 6000000,
       gold: 1200000,
       drops: [
         { itemId: 'essence_fraud', chance: 1.0, minAmount: 5, maxAmount: 10 },

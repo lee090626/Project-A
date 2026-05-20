@@ -62,7 +62,6 @@ export interface MonsterDefinition {
   };
   /** 보상 정보 */
   rewards: {
-    exp: number;
     gold: number;
     drops: Array<{
       itemId: string;

@@ -7,12 +7,11 @@ export const circle3Monsters: MonsterDefinition[] = [
     nameKo: '비대한 포식자',
     type: 'monster',
     imagePath: 'BloatedDevourer',
-    description: 'Gluttony 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Gluttony.',
     width: 2,
     height: 2,
     stats: { maxHp: 1000, power: 40, defense: 5, attackCooldown: 1000 },
     rewards: {
-      exp: 150,
       gold: 30,
       drops: [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -26,10 +25,9 @@ export const circle3Monsters: MonsterDefinition[] = [
     nameKo: '굶주린 망령',
     type: 'monster',
     imagePath: 'StarvingWraith',
-    description: 'Gluttony 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Gluttony.',
     stats: { maxHp: 850, power: 45, defense: 5, attackCooldown: 1000 },
     rewards: {
-      exp: 120,
       gold: 24,
       drops: [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -43,10 +41,9 @@ export const circle3Monsters: MonsterDefinition[] = [
     nameKo: '탐식의 도살자',
     type: 'monster',
     imagePath: 'GreedySlaughter',
-    description: 'Gluttony 서클의 하급 영혼입니다.',
+    description: 'A lesser soul from the Circle of Gluttony.',
     stats: { maxHp: 1250, power: 38, defense: 5, attackCooldown: 1000 },
     rewards: {
-      exp: 180,
       gold: 36,
       drops: [
         { itemId: 'essence_gluttony', chance: 1, minAmount: 1, maxAmount: 1 },
@@ -61,12 +58,11 @@ export const circle3Monsters: MonsterDefinition[] = [
     type: 'boss',
     imagePath: 'Cerberus',
     description:
-      '음침한 비가 쏟아지의 제3원 탐식의 지옥을 지키는 세 머리 달린 괴물 개. 끊임없이 짖어대며 죄인들을 갈기갈기 찢어발기며 탐식의 죄를 처단합니다.',
+      'A three-headed beast that guards Circle 3, the inferno of Gluttony, beneath a bleak and endless rain. Its relentless barking tears sinners apart and enforces the sin of gluttony.',
     width: 7,
     height: 7,
     stats: { maxHp: 50000, power: 180, defense: 25, attackCooldown: 2000 },
     rewards: {
-      exp: 22500,
       gold: 4500,
       drops: [
         { itemId: 'essence_gluttony', chance: 1.0, minAmount: 5, maxAmount: 10 },
