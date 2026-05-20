@@ -26,7 +26,7 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
       const circle = CIRCLES.find((c) => c.boss?.id === m.id);
       return {
         id: m.id,
-        name: m.nameKo || m.name,
+        name: m.name,
         icon: m.imagePath,
         depth: circle ? circle.depthEnd : 0,
         description: m.description,

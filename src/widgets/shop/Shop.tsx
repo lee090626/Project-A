@@ -29,11 +29,11 @@ function Shop({ stats, onSell, onClose }: ShopProps) {
   return (
     <WindowFrame showPattern topGlowClassName="from-amber-500/5">
       <WindowHeader
-        headerChromeClassName="bg-zinc-900/90 backdrop-blur-xl border border-zinc-800/50"
+        headerChromeClassName="pixel-panel"
         headerClassName="z-10"
         showSheen
         icon={
-          <div className="w-12 h-12 md:w-14 md:h-14 bg-amber-500/10 rounded-xl md:rounded-2xl flex items-center justify-center border border-amber-500/20 shadow-inner">
+          <div className="pixel-slot w-12 h-12 md:w-14 md:h-14 bg-amber-500/10 flex items-center justify-center">
             <AtlasSprite name="GoldIcon" size={40} />
           </div>
         }

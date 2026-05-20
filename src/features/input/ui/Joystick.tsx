@@ -94,7 +94,7 @@ export default function Joystick({ size = 150, stickSize = 60, onMove }: Joystic
   return (
     <div
       ref={containerRef}
-      className="relative rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl touch-none select-none"
+      className="pixel-panel relative touch-none select-none"
       style={{ width: size, height: size }}
       onMouseDown={handleStart}
       onTouchStart={handleStart}
@@ -107,8 +107,8 @@ export default function Joystick({ size = 150, stickSize = 60, onMove }: Joystic
 
       {/* 조이스틱 핸들 */}
       <div
-        className={`absolute rounded-full transition-transform duration-75 shadow-lg flex items-center justify-center
-          ${isActive ? 'bg-amber-400 scale-110 shadow-amber-400/50' : 'bg-white/80 scale-100 shadow-white/20'}`}
+        className={`absolute transition-transform duration-75 flex items-center justify-center
+          ${isActive ? 'bg-amber-400 scale-110' : 'bg-[#d8c2a6] scale-100'}`}
         style={{
           width: stickSize,
           height: stickSize,
@@ -117,7 +117,7 @@ export default function Joystick({ size = 150, stickSize = 60, onMove }: Joystic
           transform: `translate(${stickPos.x}px, ${stickPos.y}px)`,
         }}
       >
-        <div className="w-1/3 h-1/3 rounded-full bg-black/20" />
+        <div className="w-1/3 h-1/3 bg-black/30" />
       </div>
     </div>
   );

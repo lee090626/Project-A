@@ -52,6 +52,7 @@ export const AtlasSprite: FC<AtlasSpriteProps> = ({
     backgroundSize: `${atlasWidth * scale}px ${atlasHeight * scale}px`,
     backgroundRepeat: 'no-repeat',
     flexShrink: 0,
+    imageRendering: 'pixelated',
   };
 
   return (

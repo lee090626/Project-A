@@ -43,8 +43,8 @@ const InteractionLayer = ({
 
     let isCancelled = false;
 
-    import('@/shared/lib/googleH5Ads').then(
-      ({ isRewardedReviveAdEnabled, startRewardedRevivePlacement }) => {
+    import('@/shared/lib/googleH5Ads')
+      .then(({ isRewardedReviveAdEnabled, startRewardedRevivePlacement }) => {
         if (isCancelled) return;
 
         if (!isRewardedReviveAdEnabled()) {
@@ -75,13 +75,13 @@ const InteractionLayer = ({
             setReviveAdMessage(result.message);
           },
         });
-      },
-    ).catch(() => {
-      if (isCancelled) return;
+      })
+      .catch(() => {
+        if (isCancelled) return;
 
-      setReviveAdState('finished');
-      setReviveAdMessage('Ad revive is unavailable right now. Respawn at Base Camp to continue.');
-    });
+        setReviveAdState('finished');
+        setReviveAdMessage('Ad revive is unavailable right now. Respawn at Base Camp to continue.');
+      });
 
     return () => {
       isCancelled = true;
@@ -120,19 +120,17 @@ const InteractionLayer = ({
     <>
       {/* Death Overlay */}
       {currentStats.hp <= 0 && (
-        <div className="absolute inset-0 z-100 flex flex-col items-center justify-center bg-red-950/60 backdrop-blur-xl animate-in fade-in duration-700 pointer-events-auto">
-          <div className="text-center space-y-7 p-8 md:p-12 bg-zinc-950/80 border-2 border-red-500/50 rounded-3xl shadow-2xl shadow-red-900/40 max-w-md w-[calc(100%-2rem)] pointer-events-auto">
+        <div className="absolute inset-0 z-100 flex flex-col items-center justify-center bg-red-950/60 animate-in fade-in duration-300 pointer-events-auto">
+          <div className="pixel-frame pixel-font text-center space-y-7 p-8 md:p-12 max-w-md w-[calc(100%-2rem)] pointer-events-auto">
             <div className="space-y-2">
-              <h2 className="text-5xl font-black text-red-500 tracking-tighter drop-shadow-sm">
+              <h2 className="text-5xl font-black text-red-500 drop-shadow-[2px_2px_0_rgba(0,0,0,0.85)]">
                 Driller Down
               </h2>
-              <p className="text-zinc-400 font-medium tracking-widest text-xs">
-                Structural integrity compromised
-              </p>
+              <p className="text-zinc-400 font-medium text-xs">Structural integrity compromised</p>
             </div>
 
             <div className="py-4">
-              <div className="text-4xl font-mono text-zinc-500">
+              <div className="text-4xl text-zinc-500">
                 Depth: <span className="text-white">{currentStats.depth}m</span>
               </div>
             </div>
@@ -141,21 +139,19 @@ const InteractionLayer = ({
               <button
                 onClick={handleRewardedReviveClick}
                 disabled={reviveAdState !== 'ready'}
-                className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 active:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-400 text-black font-black rounded-xl transition-all shadow-lg shadow-emerald-900/20 tracking-widest text-sm"
+                className="pixel-button pixel-button-success w-full py-4 disabled:bg-zinc-700 disabled:text-zinc-400 font-black transition-colors text-sm"
               >
                 {rewardedReviveLabel}
               </button>
             )}
 
             {reviveAdMessage && (
-              <p className="text-xs font-bold text-amber-200/90">
-                {reviveAdMessage}
-              </p>
+              <p className="text-xs font-bold text-amber-200/90">{reviveAdMessage}</p>
             )}
 
             <button
               onClick={handleRespawn}
-              className="w-full py-4 bg-red-600 hover:bg-red-500 active:bg-red-700 text-white font-black rounded-xl transition-all shadow-lg shadow-red-900/20 tracking-widest text-sm"
+              className="pixel-button pixel-button-danger w-full py-4 font-black transition-colors text-sm"
             >
               Respawn at Base Camp
             </button>
@@ -166,7 +162,7 @@ const InteractionLayer = ({
       {/* Interaction Prompt Overlay */}
       {showInteractionPrompt && activeInteractionType && currentStats.hp > 0 && (
         <div className="absolute left-1/2 bottom-32 md:bottom-40 lg:bottom-44 -translate-x-1/2 z-30 animate-in slide-in-from-bottom-4 fade-in duration-300 pointer-events-none">
-          <div className="flex items-center px-10 justify-center w-15 h-10 bg-emerald-500 text-black font-black rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+          <div className="pixel-button pixel-button-success pixel-font flex items-center px-10 justify-center w-15 h-10 font-black">
             <span className="text-base">{isMobile ? 'Action' : 'Space'}</span>
           </div>
         </div>

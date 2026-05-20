@@ -19,10 +19,10 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
   return (
     <div className="absolute inset-x-0 top-3 sm:top-5 z-[45] flex justify-center px-3 pointer-events-none">
       <section
-        className="w-full max-w-[760px] pointer-events-auto rounded-lg border border-white/15 bg-zinc-950/85 backdrop-blur-md shadow-[0_18px_48px_-24px_rgba(0,0,0,0.9)] text-white"
+        className="pixel-panel pixel-font w-full max-w-[760px] pointer-events-auto text-white"
         aria-label="Quick start guide"
       >
-        <div className="flex items-start justify-between gap-3 border-b border-white/10 px-4 py-3 sm:px-5">
+        <div className="flex items-start justify-between gap-3 border-b-2 border-[#4e3d31] px-4 py-3 sm:px-5">
           <div className="min-w-0">
             <h2 className="text-sm sm:text-base font-black">Quick Start</h2>
             <p className="mt-0.5 text-xs sm:text-sm text-zinc-400">
@@ -32,7 +32,7 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
           <button
             type="button"
             onClick={onClose}
-            className="h-8 shrink-0 rounded-lg bg-white px-3 text-sm font-black text-zinc-950 transition-colors hover:bg-zinc-200 active:scale-95"
+            className="pixel-button h-8 shrink-0 px-3 text-sm font-black text-[#f8e3a5] transition-colors active:translate-y-px"
           >
             Got it
           </button>
@@ -59,7 +59,7 @@ export default function OnboardingOverlay({ isMobile, onClose }: OnboardingOverl
             <SpaceKeyGlyph label={isMobile ? 'Action' : 'Space'} />
           </ControlHint>
 
-          <div className="min-w-0 border-t border-white/10 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+          <div className="min-w-0 border-t-2 border-[#4e3d31] pt-3 sm:border-l-2 sm:border-t-0 sm:pl-4 sm:pt-0">
             <p className="text-xs font-bold text-amber-300">Goal</p>
             <p className="mt-1 text-sm font-black text-white">Reach the next circle</p>
             <p className="mt-1 text-xs leading-5 text-zinc-400">
@@ -108,30 +108,24 @@ function ArrowKeyGlyph() {
 
 function JoystickGlyph() {
   return (
-    <div className="relative h-[52px] w-[52px] rounded-full border border-white/20 bg-white/5">
-      <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/80 shadow-[0_0_16px_rgba(103,232,249,0.35)]" />
+    <div className="pixel-slot relative h-[52px] w-[52px]">
+      <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 bg-cyan-300/80" />
     </div>
   );
 }
 
 function SpaceKeyGlyph({ label }: { label: string }) {
   return (
-    <div className="flex h-[52px] w-[72px] items-center justify-center rounded-lg border border-white/20 bg-white/5 px-2 text-xs font-black text-white shadow-inner">
+    <div className="pixel-slot flex h-[52px] w-[72px] items-center justify-center px-2 text-xs font-black text-white">
       {label}
     </div>
   );
 }
 
-function KeyCap({
-  className = '',
-  children,
-}: {
-  className?: string;
-  children: React.ReactNode;
-}) {
+function KeyCap({ className = '', children }: { className?: string; children: React.ReactNode }) {
   return (
     <div
-      className={`flex h-[22px] w-[22px] items-center justify-center rounded-md border border-white/20 bg-white/5 text-xs font-black text-white shadow-inner ${className}`}
+      className={`pixel-slot flex h-[22px] w-[22px] items-center justify-center text-xs font-black text-white ${className}`}
     >
       {children}
     </div>

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useGameStore } from '@/shared/lib/store';
+import { WindowFrame, WindowHeader } from '@/shared/ui/window';
 
 /**
  * 설정 컴포넌트의 Props 인터페이스입니다.
@@ -44,7 +45,7 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
         const parsed = JSON.parse(saved);
         updateSettings(parsed);
       } catch (e) {
-        console.error('설정을 불러오는데 실패했습니다.', e);
+        console.error('Failed to load settings.', e);
       }
     }
   }, [updateSettings]);
@@ -76,28 +77,24 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
       onClick={onToggle}
       onKeyDown={(e) => e.key === 'Enter' && onToggle()}
       tabIndex={0}
-      className={`flex justify-between items-center p-6 rounded-xl border transition-all duration-300 cursor-pointer group/toggle relative focus:outline-none focus:ring-2 focus:ring-amber-400/50
-        ${
-          active
-            ? 'bg-[#eab308]/10 border-[#eab308]/40'
-            : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'
-        }`}
+      className={`pixel-panel flex justify-between items-center p-6 transition-colors cursor-pointer group/toggle relative focus:outline-none focus:ring-2 focus:ring-amber-400/50
+        ${active ? 'pixel-panel-active' : 'bg-zinc-900/50 border-zinc-800 hover:border-[#d4a35f]'}`}
     >
       <div className="flex flex-col gap-1 relative z-10">
         <span
-          className={`text-base font-bold tracking-tight transition-colors duration-200 ${active ? 'text-white' : 'text-zinc-400 group-hover/toggle:text-zinc-200'}`}
+          className={`text-base font-bold transition-colors duration-200 ${active ? 'text-white' : 'text-zinc-400 group-hover/toggle:text-zinc-200'}`}
         >
           {label}
         </span>
-        <span className="text-[10px] text-zinc-600 font-bold tracking-widest">{subLabel}</span>
+        <span className="text-[10px] text-zinc-600 font-bold">{subLabel}</span>
       </div>
 
       <div
-        className={`w-14 h-7 rounded-full relative transition-all duration-300 p-1 flex items-center
-        ${active ? 'bg-[#eab308]' : 'bg-zinc-800 border border-zinc-700'}`}
+        className={`pixel-bar w-14 h-7 relative transition-colors duration-300 p-1 flex items-center
+        ${active ? 'pixel-bar-active' : 'bg-zinc-800 border border-zinc-700'}`}
       >
         <div
-          className={`w-5 h-5 rounded-full transition-transform duration-300
+          className={`w-5 h-5 transition-transform duration-300
             ${active ? 'translate-x-7 bg-zinc-950' : 'translate-x-0 bg-zinc-500'}`}
         />
       </div>
@@ -105,32 +102,16 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
   );
 
   return (
-    <div className="flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden">
-      {/* HEADER SECTION - Bento Style Floating Header */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 bg-zinc-900 border border-zinc-800 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6">
-        <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
-          <div className="flex items-center gap-3">
-            <span className="text-2xl md:text-3xl">⚙️</span>
-            <div className="flex flex-col">
-              <h2 className="text-2xl md:text-3xl font-black tracking-tighter text-zinc-400 leading-none">
-                Settings
-              </h2>
-              <span className="text-[10px] text-zinc-600 font-bold tracking-widest mt-1">
-                System Configuration
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 md:gap-6 w-full md:w-auto justify-between md:justify-end">
-          <button
-            onClick={onClose}
-            className="w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 hover:bg-zinc-100 hover:text-black hover:border-zinc-100 transition-all active:scale-90 shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
-          >
-            <span className="text-lg md:text-xl font-bold">✕</span>
-          </button>
-        </div>
-      </div>
+    <WindowFrame>
+      <WindowHeader
+        icon={<span className="text-2xl md:text-3xl">⚙️</span>}
+        title="Settings"
+        subtitle="System Configuration"
+        titleClassName="text-zinc-300"
+        subtitleClassName="text-zinc-600"
+        onClose={onClose}
+        closeButtonClassName="hover:bg-zinc-100 hover:text-black hover:border-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+      />
 
       <div className="flex-1 overflow-y-auto custom-scrollbar px-10 py-10 flex items-center justify-center">
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -138,9 +119,7 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-zinc-400">🎮</span>
-              <h3 className="text-[10px] font-bold text-zinc-500 tracking-[0.2em]">
-                Gameplay Settings
-              </h3>
+              <h3 className="text-[10px] font-bold text-zinc-500">Gameplay Settings</h3>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -175,27 +154,23 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-zinc-400">⚙️</span>
-              <h3 className="text-[10px] font-bold text-zinc-500 tracking-[0.2em]">
-                System & Data
-              </h3>
+              <h3 className="text-[10px] font-bold text-zinc-500">System & Data</h3>
             </div>
 
             <div className="flex flex-col gap-4">
               {/* 백업 그룹 */}
-              <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-2xl">
-                <h4 className="text-[10px] font-bold text-zinc-400 tracking-widest mb-4">
-                  Data Backup
-                </h4>
+              <div className="pixel-panel p-6">
+                <h4 className="text-[10px] font-bold text-zinc-400 mb-4">Data Backup</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={onExport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="pixel-button h-12 text-zinc-300 text-[10px] font-bold hover:text-white transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📤</span> Export Save
                   </button>
                   <button
                     onClick={onImport}
-                    className="h-12 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-[10px] font-bold tracking-[0.15em] hover:bg-zinc-700 hover:text-white transition-all active:scale-[0.98] flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="pixel-button h-12 text-zinc-300 text-[10px] font-bold hover:text-white transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
                   >
                     <span>📥</span> Import Save
                   </button>
@@ -203,17 +178,17 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
               </div>
 
               {/* 초기화 그룹 */}
-              <div className="bg-rose-950/10 border border-rose-900/30 p-6 rounded-2xl group/reset relative overflow-hidden">
+              <div className="pixel-panel bg-rose-950/10 border-rose-900/50 p-6 group/reset relative overflow-hidden">
                 <div className="flex flex-col relative z-10">
                   <h4 className="text-sm font-bold text-rose-500">Data Reset</h4>
-                  <p className="text-[9px] text-zinc-600 font-bold tracking-widest mt-1 mb-4 leading-relaxed">
+                  <p className="text-[9px] text-zinc-600 font-bold mt-1 mb-4 leading-relaxed">
                     Permanently deletes all game progress. This action cannot be undone.
                   </p>
                   <button
                     onClick={() => {
                       if (confirm('Delete all progress? This action cannot be undone.')) onReset();
                     }}
-                    className="w-full h-12 rounded-xl bg-rose-600/20 border border-rose-600/40 text-rose-500 text-[10px] font-bold tracking-[0.2em] hover:bg-rose-600 hover:text-white transition-all active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50"
+                    className="pixel-button w-full h-12 text-rose-500 text-[10px] font-bold hover:bg-rose-600 hover:text-white transition-colors active:translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50"
                   >
                     Reset Data
                   </button>
@@ -223,6 +198,6 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
           </div>
         </div>
       </div>
-    </div>
+    </WindowFrame>
   );
 }

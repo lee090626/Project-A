@@ -7,7 +7,7 @@ import { useGameStore } from '@/shared/lib/store';
  */
 const BossHealthBar: React.FC = () => {
   const bossMap = useGameStore((state) => state.boss);
-  
+
   // 현재 활성화된 보스들만 필터링
   const activeBossEntries = Object.entries(bossMap || {}).filter(([, boss]) => boss && boss.active);
 
@@ -21,37 +21,36 @@ const BossHealthBar: React.FC = () => {
         const circleNumber = circleMatch ? circleMatch[1] : '?';
 
         return (
-          <div key={instanceId} className="animate-in slide-in-from-top-10 duration-700">
+          <div key={instanceId} className="pixel-font animate-in slide-in-from-top-10 duration-300">
             {/* 보스 이름 및 정보 */}
             <div className="flex justify-between items-end mb-1.5 px-2">
               <div className="flex flex-col">
-                <span className="text-[10px] md:text-xs font-black text-rose-500 tracking-[0.2em] opacity-80">
+                <span className="text-[10px] md:text-xs font-black text-rose-400 opacity-90">
                   Abyssal Lord - Circle {circleNumber}
                 </span>
-                <h2 className="text-xl md:text-3xl font-black text-white tracking-tighter drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+                <h2 className="text-xl md:text-3xl font-black text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.85)]">
                   {boss.name}
                 </h2>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-lg md:text-2xl font-mono font-black text-white tracking-tighter">
+                <span className="text-lg md:text-2xl font-black text-white">
                   {Math.ceil(hpPercent)}%
                 </span>
               </div>
             </div>
 
             {/* 체력 바 메인 컨테이너 */}
-            <div className="relative h-4 md:h-6 bg-black/60 backdrop-blur-xl rounded-full p-[2px] border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden">
+            <div className="pixel-bar relative h-4 md:h-6 p-[2px]">
               {/* 배경 그리드 장식 */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle,rgba(255,255,255,0.2)_1px,transparent_1px)] bg-[size:10px_10px]" />
+              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(90deg,rgba(255,255,255,0.28)_1px,transparent_1px)] bg-[size:8px_8px]" />
 
               {/* 실제 체력 바 (애니메이션 적용) */}
               <div
-                className="h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_20px_rgba(225,29,72,0.4)] bg-linear-to-r from-orange-500 to-red-600 relative"
+                className="pixel-bar-fill h-full transition-[width] duration-300 bg-[#d94b4b] relative"
                 style={{ width: `${hpPercent}%` }}
               >
                 {/* 하이라이트 효과 */}
-                <div className="absolute inset-0 bg-linear-to-b from-white/30 to-transparent opacity-50" />
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-white/40" />
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-white/20" />
               </div>
             </div>
 

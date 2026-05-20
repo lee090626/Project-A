@@ -62,18 +62,15 @@ export function HeaderGoldBadge({
 }: HeaderGoldBadgeProps) {
   if (variant === 'labeled') {
     return (
-      <div className="flex items-center justify-center gap-3 md:gap-4 bg-black/40 px-5 py-2.5 md:px-8 md:py-3.5 rounded-xl md:rounded-3xl border border-white/5 shadow-inner group">
+      <div className="pixel-badge pixel-font flex items-center justify-center gap-3 md:gap-4 px-4 py-2 md:px-6 md:py-3 group">
         <div className="flex items-center justify-center">
           <AtlasSprite name="GoldIcon" size={32} />
         </div>
-        <span className="text-sm md:text-2xl font-black text-white tabular-nums tracking-tighter flex items-baseline gap-2">
+        <span className="text-sm md:text-2xl font-black text-[#f8e3a5] tabular-nums flex items-baseline gap-2">
           {gold.toLocaleString()}
           {label && (
             <span
-              className={[
-                'text-[10px] md:text-xs tracking-widest font-black opacity-60',
-                labelClassName,
-              ]
+              className={['text-[10px] md:text-xs font-black opacity-70', labelClassName]
                 .filter(Boolean)
                 .join(' ')}
             >
@@ -86,11 +83,11 @@ export function HeaderGoldBadge({
   }
 
   return (
-    <div className="flex items-center justify-center gap-2 md:gap-4 bg-zinc-950 px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl border border-zinc-800 shadow-inner">
+    <div className="pixel-badge pixel-font flex items-center justify-center gap-2 md:gap-4 px-4 py-2 md:px-6 md:py-3">
       <div className="flex items-center justify-center">
         <AtlasSprite name="GoldIcon" size={32} />
       </div>
-      <span className="text-sm md:text-xl font-black text-white tabular-nums tracking-tighter">
+      <span className="text-sm md:text-xl font-black text-[#f8e3a5] tabular-nums">
         {gold.toLocaleString()}
       </span>
     </div>
@@ -123,16 +120,14 @@ export function WindowHeader({
   return (
     <div
       className={[
-        'relative flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 rounded-2xl md:rounded-3xl shadow-2xl shrink-0 gap-4 md:gap-6',
+        'pixel-panel pixel-font relative flex flex-col md:flex-row justify-between items-center mb-6 md:mb-10 px-4 py-4 md:px-8 md:py-5 shrink-0 gap-4 md:gap-6',
         headerChromeClassName,
         headerClassName,
       ]
         .filter(Boolean)
         .join(' ')}
     >
-      {showSheen && (
-        <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent rounded-2xl md:rounded-3xl pointer-events-none" />
-      )}
+      {showSheen && <div className="absolute inset-0 bg-[#d4a35f]/5 pointer-events-none" />}
 
       <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8 w-full md:w-auto relative z-10">
         <div className={titleClusterClassName}>
@@ -140,7 +135,7 @@ export function WindowHeader({
           <div className="flex flex-col">
             <h2
               className={[
-                'text-2xl md:text-3xl font-black tracking-tighter leading-none',
+                'text-2xl md:text-3xl font-black leading-none drop-shadow-[2px_2px_0_rgba(0,0,0,0.75)]',
                 titleClassName,
               ]
                 .filter(Boolean)
@@ -150,10 +145,7 @@ export function WindowHeader({
             </h2>
             {subtitle && (
               <span
-                className={[
-                  'text-[10px] font-bold tracking-widest mt-1',
-                  subtitleClassName,
-                ]
+                className={['text-[10px] font-bold mt-1', subtitleClassName]
                   .filter(Boolean)
                   .join(' ')}
               >
@@ -187,7 +179,7 @@ export function WindowHeader({
           disabled={closeDisabled}
           aria-label="Close window"
           className={[
-            'w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center rounded-xl md:rounded-2xl bg-zinc-800 border border-zinc-700 text-zinc-400 transition-all active:scale-90 shadow-xl focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed',
+            'pixel-button w-10 h-10 md:w-12 md:h-12 shrink-0 flex items-center justify-center text-[#d8c2a6] transition-colors active:translate-y-px focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed',
             closeButtonClassName,
           ]
             .filter(Boolean)

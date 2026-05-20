@@ -29,12 +29,10 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
               if (e.cancelable) e.preventDefault();
               onActionPress();
             }}
-            className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-linear-to-br from-rose-500 to-rose-600 backdrop-blur-xl border border-rose-400/40 shadow-[0_0_30px_rgba(244,63,94,0.4)] flex items-center justify-center active:scale-95 transition-all group"
+            className="pixel-button pixel-button-action pixel-font relative w-16 h-16 md:w-24 md:h-24 flex items-center justify-center active:translate-y-px transition-colors group"
           >
-            <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-active:opacity-100 transition-opacity" />
-            <span className="relative text-white font-black text-[10px] md:text-sm tracking-tighter">
-              Action
-            </span>
+            <div className="absolute inset-0 bg-white/10 opacity-0 group-active:opacity-100 transition-opacity" />
+            <span className="relative text-white font-black text-[10px] md:text-sm">Action</span>
           </button>
         )}
       </div>

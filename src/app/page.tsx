@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { GamePlayShell } from './_components/GamePlayShell';
+import { AtlasSprite } from '@/shared/ui/AtlasSprite';
 
 export const dynamic = 'force-static';
 
@@ -9,63 +10,69 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-[#080504] text-[#f1dfc4] selection:bg-cyan-500 selection:text-white">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-4 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-4 overflow-hidden pixel-font">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-700/30 rounded-full blur-[100px] animate-pulse"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-700/30 rounded-full blur-[100px] animate-pulse"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent"></div>
+          <div className="pixel-hero-grid absolute inset-0 opacity-70" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,#1a120d_0_24px,#2c2119_24px_26px,#0a0605_26px_28px,transparent_28px)] bg-[length:48px_48px] opacity-80" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(8,5,4,0.25)_52%,#080504_100%)]" />
         </div>
 
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-8">
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 via-blue-500 to-indigo-600">
+        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-7">
+          <div className="flex items-end justify-center gap-4">
+            <AtlasSprite name="Player" size={72} className="hidden sm:inline-flex" />
+            <h1 className="text-5xl md:text-7xl font-black text-[#38d5e8] drop-shadow-[4px_4px_0_#050302]">
               Drilling RPG
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-zinc-300 font-light max-w-2xl leading-relaxed">
-            A web-based top-down mining action RPG where you explore the endless abyss. Mine
-            minerals, grow your character, and defeat boss monsters lurking in the dark.
+            </h1>
+            <AtlasSprite name="GoldStoneIcon" size={64} className="hidden sm:inline-flex" />
+          </div>
+          <p className="max-w-2xl text-lg md:text-xl text-[#d8c2a6] leading-relaxed">
+            A top-down pixel mining RPG where every meter below the base camp brings harder ore,
+            stranger monsters, and better gear.
           </p>
 
-          <div className="pt-8 flex flex-col items-center gap-4">
+          <div className="flex items-center justify-center gap-3 py-2">
+            {(['StoneTile', 'GoldStoneTile', 'LustStoneTile', 'MidasiteTile'] as const).map(
+              (name) => (
+                <div key={name} className="pixel-slot flex h-14 w-14 items-center justify-center">
+                  <AtlasSprite name={name} size={42} />
+                </div>
+              ),
+            )}
+          </div>
+
+          <div className="pt-4 flex flex-col items-center gap-4">
             <Link
               href="/play"
-              className="group relative inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white transition-all duration-200 bg-cyan-500 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600 hover:bg-cyan-400 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(6,182,212,0.5)]"
+              className="pixel-button group relative inline-flex items-center justify-center px-9 py-4 text-lg font-black text-[#f8e3a5] transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-[#d4a35f]/70"
             >
-              <div className="absolute -inset-2 transition-all duration-200 rounded-xl opacity-20 blur-xl group-hover:opacity-40 group-hover:duration-200 bg-linear-to-r from-cyan-400 to-blue-500"></div>
               Play for Free Now
               <svg
-                className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform"
+                className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  strokeLinecap="square"
+                  strokeLinejoin="miter"
                   strokeWidth="2"
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 ></path>
               </svg>
             </Link>
-            <p className="text-zinc-500 text-sm mt-2">
+            <p className="text-zinc-500 text-sm mt-1">
               Plays right in your browser. No installation required.
             </p>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 animate-bounce text-zinc-500">
-          <p className="text-sm mb-2 opacity-60 tracking-widest font-semibold text-center">
-            Scroll Down
-          </p>
+        <div className="absolute bottom-10 text-zinc-500">
+          <p className="text-sm mb-2 opacity-60 font-semibold text-center">Scroll Down</p>
           <svg
             className="w-6 h-6 mx-auto"
             fill="none"
@@ -99,10 +106,10 @@ export default function LandingPage() {
               cannot reach, ancient monsters and terrifying bosses are hunting for miners.
             </p>
             <p>
-              Discover dungeons and caves that have been asleep for ages, and travel through
-              ever more dangerous strata to uncover lost technologies and magic. The deeper you dig
-              into the underground world, the greater the danger, but immense rewards await you.
-              Become the ultimate miner and warrior in this mesmerizing RPG universe.
+              Discover dungeons and caves that have been asleep for ages, and travel through ever
+              more dangerous strata to uncover lost technologies and magic. The deeper you dig into
+              the underground world, the greater the danger, but immense rewards await you. Become
+              the ultimate miner and warrior in this mesmerizing RPG universe.
             </p>
           </div>
         </section>

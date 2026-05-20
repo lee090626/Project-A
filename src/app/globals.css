@@ -6,6 +6,15 @@
   --foreground: #171717;
   --font-russo: var(--font-geist-sans), sans-serif;
   --color-emerald-400: #34d399;
+  --pixel-bg: #17100d;
+  --pixel-bg-deep: #0b0706;
+  --pixel-bg-raised: #241a15;
+  --pixel-border: #66513f;
+  --pixel-border-dark: #0a0605;
+  --pixel-highlight: #d4a35f;
+  --pixel-cyan: #38d5e8;
+  --pixel-green: #2dc782;
+  --pixel-red: #d94b4b;
 }
 
 @theme inline {
@@ -120,6 +129,149 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  .pixel-font {
+    font-family:
+      var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      'Liberation Mono', 'Courier New', monospace;
+    letter-spacing: 0;
+  }
+
+  .pixel-frame,
+  .pixel-panel,
+  .pixel-slot,
+  .pixel-button,
+  .pixel-bar {
+    image-rendering: pixelated;
+    backdrop-filter: none !important;
+    border-radius: 3px !important;
+  }
+
+  .pixel-frame {
+    position: relative;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px), var(--pixel-bg);
+    background-size:
+      16px 16px,
+      16px 16px,
+      auto;
+    border: 2px solid var(--pixel-border) !important;
+    box-shadow:
+      0 0 0 2px var(--pixel-border-dark),
+      5px 5px 0 #050302,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .pixel-frame::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(212, 163, 95, 0.18);
+    pointer-events: none;
+  }
+
+  .pixel-panel {
+    position: relative;
+    background: var(--pixel-bg-raised) !important;
+    border: 2px solid var(--pixel-border) !important;
+    box-shadow:
+      0 0 0 2px var(--pixel-border-dark),
+      4px 4px 0 rgba(0, 0, 0, 0.8),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .pixel-panel-muted {
+    background: rgba(23, 16, 13, 0.9) !important;
+    border-color: #49372b !important;
+  }
+
+  .pixel-panel-active {
+    background: #2b2118 !important;
+    border-color: var(--pixel-highlight) !important;
+  }
+
+  .pixel-slot,
+  .pixel-button {
+    background: #15100d !important;
+    border: 2px solid #4e3d31 !important;
+    box-shadow:
+      0 0 0 2px #080504,
+      3px 3px 0 rgba(0, 0, 0, 0.72),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.055) !important;
+  }
+
+  .pixel-button:hover,
+  .group:hover .pixel-slot {
+    border-color: var(--pixel-highlight) !important;
+    background: #211812 !important;
+  }
+
+  .pixel-button-active {
+    background: #2b2118 !important;
+    border-color: var(--pixel-highlight) !important;
+    border-radius: 3px !important;
+    color: #f6d38f !important;
+    box-shadow:
+      0 0 0 2px #080504,
+      inset 0 -3px 0 rgba(0, 0, 0, 0.45) !important;
+  }
+
+  .pixel-button-success {
+    background: #1f7a52 !important;
+    border-color: #35d38a !important;
+    color: #06120c !important;
+  }
+
+  .pixel-button-danger {
+    background: #8f2f2f !important;
+    border-color: #e15c5c !important;
+    color: #fff2e8 !important;
+  }
+
+  .pixel-button-action {
+    background: #7d2e38 !important;
+    border-color: #e15c5c !important;
+    color: #fff2e8 !important;
+  }
+
+  .pixel-bar {
+    background: #090706 !important;
+    border: 2px solid #4e3d31 !important;
+    box-shadow:
+      0 0 0 2px #070403,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    overflow: hidden;
+  }
+
+  .pixel-bar-fill {
+    border-radius: 0 !important;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.22) !important;
+  }
+
+  .pixel-bar-active {
+    background: #d4a35f !important;
+    border-color: #f0c978 !important;
+  }
+
+  .pixel-badge {
+    background: #0d0907 !important;
+    border: 2px solid #4e3d31 !important;
+    border-radius: 3px !important;
+    box-shadow:
+      0 0 0 2px #080504,
+      3px 3px 0 rgba(0, 0, 0, 0.7) !important;
+  }
+
+  .pixel-hero-grid {
+    background-image:
+      linear-gradient(rgba(102, 81, 63, 0.26) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(102, 81, 63, 0.26) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(circle at center, black 0%, black 48%, transparent 78%);
+  }
 }
 
 /* 게임 루트 표시 안정화 */

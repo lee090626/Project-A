@@ -23,7 +23,7 @@ export function WindowFrame({
   return (
     <div
       className={[
-        'flex flex-col w-full h-full text-[#d1d5db] font-sans p-4 md:p-8 bg-[#1a1a1b] border border-zinc-800 rounded-xl md:rounded-3xl shadow-2xl relative overflow-hidden',
+        'pixel-frame pixel-font flex flex-col w-full h-full text-[#d8c2a6] p-4 md:p-8 relative overflow-hidden',
         className,
       ]
         .filter(Boolean)
@@ -42,7 +42,7 @@ export function WindowFrame({
       {topGlowClassName && (
         <div
           className={[
-            'absolute top-0 left-0 w-full h-64 bg-linear-to-b to-transparent pointer-events-none',
+            'absolute top-0 left-0 w-full h-32 bg-linear-to-b to-transparent opacity-35 pointer-events-none',
             topGlowClassName,
           ].join(' ')}
         />

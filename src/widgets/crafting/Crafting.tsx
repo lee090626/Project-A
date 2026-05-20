@@ -40,7 +40,7 @@ function Crafting({ stats, onCraft, onSynthesizeEffect, onClose }: CraftingProps
     canCraft,
     selectTab,
     selectCircle,
-    selectPart
+    selectPart,
   } = useCrafting(stats);
 
   return (
@@ -51,8 +51,8 @@ function Crafting({ stats, onCraft, onSynthesizeEffect, onClose }: CraftingProps
       <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-6 overflow-hidden">
         {/* LEFT COLUMN: Filters & Blueprint List */}
         <div className="flex-1 flex flex-col h-auto lg:h-full overflow-hidden min-h-0 relative z-10">
-          <div className="bg-zinc-900/60 backdrop-blur-xl p-6 rounded-3xl md:rounded-[3rem] flex flex-col h-full overflow-hidden shadow-2xl border border-white/5">
-            <RecipeFilters 
+          <div className="pixel-panel p-6 flex flex-col h-full overflow-hidden">
+            <RecipeFilters
               craftType={craftType}
               onSelectTab={selectTab}
               selectedCircle={selectedCircle}
@@ -61,7 +61,7 @@ function Crafting({ stats, onCraft, onSynthesizeEffect, onClose }: CraftingProps
               onSelectPart={selectPart}
             />
 
-            <RecipeList 
+            <RecipeList
               visibleRecipes={visibleRecipes}
               selectedRecipeId={selectedRecipe?.id}
               onSelectRecipe={setSelectedRecipe}

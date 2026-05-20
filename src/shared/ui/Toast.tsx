@@ -52,8 +52,9 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
     <div
       className={`
         pointer-events-auto
-        flex items-center gap-3 px-6 py-4 rounded-2xl border backdrop-blur-xl shadow-2xl
-        transition-all duration-300 ease-out
+        pixel-panel pixel-font
+        flex items-center gap-3 px-6 py-4
+        transition-all duration-200 ease-out
         ${getStyleByType(toast.type)}
         ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-12 opacity-0'}
       `}
@@ -65,24 +66,24 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
     >
       {hasItemChips ? (
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
+          <span className="text-sm font-black leading-tight opacity-50 mb-0.5">
             {toast.message}
           </span>
           <div className="flex flex-wrap gap-2">
             {toast.items?.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center gap-2 rounded-xl border border-white/10 bg-zinc-950/45 px-2.5 py-2"
+                className="pixel-badge flex items-center gap-2 px-2.5 py-2"
                 aria-label={`${item.label} x${item.amount}`}
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-black/30">
+                <div className="pixel-slot flex h-9 w-9 items-center justify-center bg-black/30">
                   {isAtlasIconName(item.image) ? (
                     <AtlasSprite name={item.image} alt={item.label} size={30} />
                   ) : (
                     <span className="text-sm font-black text-white/70">?</span>
                   )}
                 </div>
-                <span className="font-mono text-sm font-black text-white">
+                <span className="text-sm font-black text-white">
                   x{item.amount.toLocaleString()}
                 </span>
               </div>
@@ -91,12 +92,8 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
         </div>
       ) : (
         <div className="flex flex-col">
-          <span className="text-sm font-black tracking-tight leading-tight opacity-50 mb-0.5">
-            {toast.type}
-          </span>
-          <p className="text-base md:text-lg font-bold tracking-tighter text-white">
-            {toast.message}
-          </p>
+          <span className="text-sm font-black leading-tight opacity-50 mb-0.5">{toast.type}</span>
+          <p className="text-base md:text-lg font-bold text-white">{toast.message}</p>
         </div>
       )}
     </div>

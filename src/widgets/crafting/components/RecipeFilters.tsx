@@ -22,14 +22,14 @@ const RecipeFilters = ({
 }: RecipeFiltersProps) => {
   return (
     <>
-      <div className="flex bg-black/40 p-1 rounded-2xl mb-6 shadow-inner border border-white/5 mx-auto max-w-sm">
+      <div className="pixel-badge pixel-font flex p-1 mb-6 mx-auto max-w-sm">
         {(['Equipment', 'Effects'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => onSelectTab(tab)}
-            className={`flex-1 py-3 px-6 rounded-xl text-sm font-black tracking-widest transition-all focus:outline-none ${
+            className={`flex-1 py-3 px-6 text-sm font-black transition-colors focus:outline-none ${
               craftType === tab
-                ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/25'
+                ? 'pixel-button-active text-rose-200'
                 : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
             }`}
           >
@@ -43,15 +43,15 @@ const RecipeFilters = ({
         <>
           <div className="flex flex-col gap-6 mb-8">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Circle:</span>
+              <span className="text-[10px] text-zinc-500 font-black mr-2">Circle:</span>
               {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
                 <button
                   key={c}
                   onClick={() => onSelectCircle(c)}
-                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all border focus:outline-none ${
+                  className={`px-4 py-2 text-xs font-black transition-colors border focus:outline-none ${
                     selectedCircle === c
-                      ? 'bg-rose-500 text-white border-rose-400 shadow-[0_4px_12px_rgba(244,63,94,0.3)]'
-                      : 'bg-black/20 text-zinc-500 border-zinc-800 hover:border-zinc-700'
+                      ? 'pixel-button-active text-rose-200'
+                      : 'pixel-button text-zinc-500 hover:border-zinc-700'
                   }`}
                 >
                   C{c}
@@ -59,15 +59,15 @@ const RecipeFilters = ({
               ))}
             </div>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] text-zinc-500 font-black tracking-[0.2em] mr-2">Part:</span>
+              <span className="text-[10px] text-zinc-500 font-black mr-2">Part:</span>
               {EQUIPMENT_PARTS.map((part) => (
                 <button
                   key={part}
                   onClick={() => onSelectPart(part)}
-                  className={`px-5 py-2.5 rounded-xl text-[10px] md:text-xs font-black tracking-widest border transition-all focus:outline-none ${
+                  className={`px-5 py-2.5 text-[10px] md:text-xs font-black border transition-colors focus:outline-none ${
                     selectedPart === part
-                      ? 'bg-white text-black border-white shadow-xl'
-                      : 'bg-zinc-800/40 text-zinc-500 border-zinc-800 hover:text-zinc-300'
+                      ? 'pixel-button-active text-[#f8e3a5]'
+                      : 'pixel-button text-zinc-500 hover:text-zinc-300'
                   }`}
                 >
                   {part}

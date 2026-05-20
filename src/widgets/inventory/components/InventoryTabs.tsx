@@ -9,12 +9,12 @@ interface InventoryTabsProps {
 
 const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
   return (
-    <div className="flex bg-zinc-950 p-1 rounded-xl md:rounded-2xl border border-zinc-800 w-full sm:w-auto scrollbar-none overflow-x-auto">
+    <div className="pixel-badge pixel-font flex p-1 w-full sm:w-auto scrollbar-none overflow-x-auto">
       <button
         onClick={() => onTabChange('ingredients')}
-        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none ${
+        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'ingredients'
-            ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700'
+            ? 'pixel-button-active text-cyan-300'
             : 'text-zinc-500 hover:text-zinc-300'
         }`}
       >
@@ -22,9 +22,9 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
       </button>
       <button
         onClick={() => onTabChange('effects')}
-        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none ${
+        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'effects'
-            ? 'bg-zinc-800 text-orange-400 shadow-lg border border-zinc-700'
+            ? 'pixel-button-active text-orange-300'
             : 'text-zinc-500 hover:text-zinc-300'
         }`}
       >
@@ -32,9 +32,9 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
       </button>
       <button
         onClick={() => onTabChange('equipment')}
-        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-black tracking-widest transition-all focus:outline-none ${
+        className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'equipment'
-            ? 'bg-zinc-800 text-cyan-400 shadow-lg border border-zinc-700'
+            ? 'pixel-button-active text-cyan-300'
             : 'text-zinc-500 hover:text-zinc-300'
         }`}
       >
