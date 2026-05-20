@@ -40,7 +40,7 @@ class GameDB {
 
       this.isAvailable = true;
     } catch (e) {
-      console.warn('[GameDB] IndexedDB 초기화 실패. LocalStorage로 폴백합니다.', e);
+      console.warn('[GameDB] IndexedDB initialization failed. Falling back to LocalStorage.', e);
       this.isAvailable = false;
     }
   }

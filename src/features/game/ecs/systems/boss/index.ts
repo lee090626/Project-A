@@ -84,7 +84,7 @@ export const bossBehaviorSystem = (world: GameWorld, _deltaTime: number, now: nu
   world.bossCombatStatus[instanceId] = {
     active: true,
     id: bossDef.id,
-    name: bossDef.nameKo ?? bossDef.name,
+    name: bossDef.name,
     hp: soa.hp[bossIdx],
     maxHp: soa.maxHp[bossIdx],
   };

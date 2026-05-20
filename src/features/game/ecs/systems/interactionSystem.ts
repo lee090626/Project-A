@@ -73,7 +73,7 @@ const handleEntityInteraction = (entity: Entity) => {
   if (entity.interactionType === 'shop') {
     self.postMessage({ type: 'OPEN_MODAL', payload: { target: 'isShopOpen' } });
   } else if (entity.interactionType === 'dialog') {
-    console.log(`[Dialog] ${entity.name}: "반갑습니다! 무엇을 도와드릴까요?"`);
+    console.log(`[Dialog] ${entity.name}: "Welcome! How can I help you?"`);
   } else if (entity.interactionType === 'crafting') {
     self.postMessage({ type: 'OPEN_MODAL', payload: { target: 'isCraftingOpen' } });
   } else if (entity.interactionType === 'refinery') {

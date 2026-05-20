@@ -12,7 +12,7 @@ export async function fetchBaseLayout(): Promise<number[][] | null> {
     const data = await res.json();
     return data.tiles;
   } catch (err) {
-    console.error('베이스 레이아웃 로드 실패:', err);
+    console.error('Failed to load base layout:', err);
     return null;
   }
 }
@@ -27,7 +27,7 @@ export async function fetchEntities(): Promise<Entity[]> {
     const data = await res.json();
     return data.entities || [];
   } catch (err) {
-    console.error('엔티티 데이터 로드 실패:', err);
+    console.error('Failed to load entity data:', err);
     return [];
   }
 }

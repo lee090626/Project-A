@@ -572,7 +572,7 @@ export const saveManager = {
       // 스탯/위치는 LocalStorage에 JSON으로 저장 (기존 방식 유지하되 타일맵 제외하다 훨씬 가볈)
       writeStatsOnly(data);
     } catch (e) {
-      console.error('게임 저장 실패:', e);
+      console.error('Failed to save game:', e);
     }
   },
 
@@ -586,7 +586,7 @@ export const saveManager = {
       if (!saved) return null;
       return normalizeSaveData(parseObfuscatedJson(saved));
     } catch (e) {
-      console.error('게임 로드 실패:', e);
+      console.error('Failed to load game:', e);
       return null;
     }
   },
@@ -623,7 +623,7 @@ export const saveManager = {
       // 3. 검증: IndexedDB에서 다시 불러와 크기 확인
       const loaded = await gameDB.loadTileMap();
       if (!loaded || loaded.byteLength !== buffer.byteLength) {
-        throw new Error(`검증 실패: 예상 ${buffer.byteLength}bytes, 실제 ${loaded?.byteLength ?? 0}bytes`);
+        throw new Error(`Validation failed: expected ${buffer.byteLength}bytes, got ${loaded?.byteLength ?? 0}bytes`);
       }
 
       // 4. 검증 성공 시에만 LocalStorage의 tileMapData 제거
@@ -635,10 +635,10 @@ export const saveManager = {
         localStorage.setItem(SAVE_KEY, obfuscate(JSON.stringify(data)));
       }
 
-      console.log('[SaveManager] 타일맵 IndexedDB 마이그레이션 완료.');
+      console.log('[SaveManager] Tile map IndexedDB migration completed.');
     } catch (e) {
       // 5. 실패 시 롤백: IndexedDB 데이터 삭제, LocalStorage 원본 유지
-      console.warn('[SaveManager] 마이그레이션 실패. LocalStorage 원본 유지.', e);
+      console.warn('[SaveManager] Migration failed. Keeping the original LocalStorage data.', e);
       await gameDB.clearTileMap();
     }
   },
@@ -675,7 +675,7 @@ export const saveManager = {
 
       return normalizeSaveData(parseObfuscatedJson(obfuscatedStr));
     } catch (e) {
-      console.error('세이브 데이터 임포트 실패:', e);
+      console.error('Failed to import save data:', e);
       return null;
     }
   },
@@ -710,7 +710,7 @@ export const saveManager = {
       saveManager.save(normalized);
       return true;
     } catch (e) {
-      console.error('세이브 데이터 임포트 저장 실패:', e);
+      console.error('Failed to save imported data:', e);
       return false;
     }
   },

@@ -4,6 +4,7 @@ import { getNextLevelExp, getMasteryMultiplier } from '@/shared/lib/masteryUtils
 import { MASTERY_PERKS } from '@/shared/config/masteryPerks';
 import AtlasIcon from '@/shared/ui/AtlasIcon';
 import { AtlasIconName } from '@/shared/config/atlasMap';
+import type { MasteryPerkEffect } from '@/shared/config/mastery/types';
 
 interface TileMasteryCardProps {
   tileKey: string;
@@ -11,6 +12,33 @@ interface TileMasteryCardProps {
   hoveredTooltipId?: string;
   onHoverPerk: (e: React.MouseEvent, perkId: string, name: string, desc: string) => void;
   onLeavePerk: () => void;
+}
+
+const MASTERY_EFFECT_LABELS: Record<MasteryPerkEffect['type'], string> = {
+  moveSpeed: 'move speed',
+  miningPower: 'mining power',
+  miningSpeed: 'mining speed',
+  hpRegen: 'HP regeneration',
+  maxHp: 'max HP',
+  luck: 'luck',
+  masteryExp: 'mastery EXP gain',
+  critRate: 'critical rate',
+  critDmg: 'critical damage',
+};
+
+function formatMasteryPerkDescription(effects: MasteryPerkEffect[]) {
+  return effects.map(formatMasteryPerkEffect).join(', ');
+}
+
+function formatMasteryPerkEffect(effect: MasteryPerkEffect) {
+  const label = MASTERY_EFFECT_LABELS[effect.type];
+  const isPercentValue = effect.isMultiplier || effect.type === 'critRate' || effect.type === 'critDmg';
+
+  if (isPercentValue) {
+    return `${label} +${Math.round(effect.value * 100)}%`;
+  }
+
+  return `${label} +${effect.value}`;
 }
 
 export function TileMasteryCard({
@@ -80,7 +108,12 @@ export function TileMasteryCard({
                 `}
                 onMouseEnter={(e) => {
                   if (perk) {
-                    onHoverPerk(e, perkId, perk.name, perk.description);
+                    onHoverPerk(
+                      e,
+                      perkId,
+                      `Level ${level} Mastery Breakthrough`,
+                      formatMasteryPerkDescription(perk.effects),
+                    );
                   }
                 }}
                 onMouseLeave={onLeavePerk}
