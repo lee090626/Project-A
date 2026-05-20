@@ -22,7 +22,7 @@ export const ATLAS_FILE_MAPPING = {
   CrownTreads: 'CrownTreads.png',
   CrownVestment: 'CrownVestment.png',
   Fafnir: 'Fafnir.png',
-  FafnirHoardRelic: 'FafnirHoardRelic.png',
+  FafnirScaleRelic: 'FafnirScaleRelic.png',
   FervorStoneIcon: 'FervorStoneIcon.png',
   FervorStoneTile: 'FervorStoneTile.png',
   FilthStoneIcon: 'FilthStoneIcon.png',

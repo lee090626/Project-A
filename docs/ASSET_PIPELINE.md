@@ -58,7 +58,7 @@ RAG 관점에서 정본은 원본 에셋, 생성 스크립트, 그리고 이 문
 | `essences/` | Essence Effect 아이템 | `LustEssence`, `WrathEssence` |
 | `helmets/` | 투구 장비 | `CrimsonVeilHelmet`, `VoidMask`, `CrownHelm` |
 | `minerals/` | 인벤토리/UI용 광물 아이콘 | `CrimsonStoneIcon`, `MoldStoneIcon`, `GoldStoneIcon` |
-| `relics/` | Relic 또는 제작형 Effect 아이템 | `AsmodeusRingRelic`, `FafnirHoardRelic`, `MasterySealRelic` |
+| `relics/` | Relic 또는 제작형 Effect 아이템 | `AsmodeusRingRelic`, `FafnirScaleRelic`, `MasterySealRelic` |
 | `tiles/` | 월드 타일 이미지 | `StoneTile`, `CrimsonStoneTile`, `C4Tile` |
 | `ui/icons/` | DOM UI 아이콘 | `MoneyIcon.webp`, `InventoryIcon.webp` |
 | `vfx/` | 투사체/시각 효과 | `FireBall` |

@@ -192,44 +192,44 @@
         "y": 0.5
       }
     },
-    "FafnirHoardRelic.png": {
+    "GreedySlaughter.png": {
       "frame": {
         "x": 369,
         "y": 431,
-        "w": 356,
-        "h": 356
+        "w": 244,
+        "h": 228
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 78,
-        "y": 90,
-        "w": 356,
-        "h": 356
+        "x": 6,
+        "y": 14,
+        "w": 244,
+        "h": 228
       },
       "sourceSize": {
-        "w": 512,
-        "h": 512
+        "w": 256,
+        "h": 256
       },
       "pivot": {
         "x": 0.5,
         "y": 0.5
       }
     },
-    "FraudEssence.png": {
+    "ViolenceEssence.png": {
       "frame": {
         "x": 1101,
         "y": 3,
-        "w": 192,
-        "h": 199
+        "w": 202,
+        "h": 200
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 32,
-        "y": 30,
-        "w": 192,
-        "h": 199
+        "x": 25,
+        "y": 28,
+        "w": 202,
+        "h": 200
       },
       "sourceSize": {
         "w": 256,
@@ -243,7 +243,7 @@
     "WrathEssence.png": {
       "frame": {
         "x": 1101,
-        "y": 208,
+        "y": 209,
         "w": 192,
         "h": 199
       },
@@ -267,7 +267,7 @@
     "GluttoyEssence.png": {
       "frame": {
         "x": 1101,
-        "y": 413,
+        "y": 414,
         "w": 190,
         "h": 198
       },
@@ -291,7 +291,7 @@
     "GreedEssence.png": {
       "frame": {
         "x": 1101,
-        "y": 617,
+        "y": 618,
         "w": 190,
         "h": 198
       },
@@ -315,7 +315,7 @@
     "VoidMantle.png": {
       "frame": {
         "x": 1101,
-        "y": 821,
+        "y": 822,
         "w": 192,
         "h": 194
       },
@@ -338,8 +338,8 @@
     },
     "Mimic.png": {
       "frame": {
-        "x": 1036,
-        "y": 1021,
+        "x": 369,
+        "y": 665,
         "w": 164,
         "h": 156
       },
@@ -360,34 +360,10 @@
         "y": 0.5
       }
     },
-    "GoldStoneTile.png": {
-      "frame": {
-        "x": 3,
-        "y": 1271,
-        "w": 128,
-        "h": 128
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 128,
-        "h": 128
-      },
-      "sourceSize": {
-        "w": 128,
-        "h": 128
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "LustStoneTile.png": {
       "frame": {
-        "x": 137,
-        "y": 1271,
+        "x": 539,
+        "y": 665,
         "w": 128,
         "h": 128
       },
@@ -410,8 +386,8 @@
     },
     "MidasiteTile.png": {
       "frame": {
-        "x": 271,
-        "y": 1271,
+        "x": 1036,
+        "y": 1022,
         "w": 128,
         "h": 128
       },
@@ -434,8 +410,8 @@
     },
     "StoneTile.png": {
       "frame": {
-        "x": 405,
-        "y": 1261,
+        "x": 1170,
+        "y": 1022,
         "w": 128,
         "h": 127
       },
@@ -458,8 +434,8 @@
     },
     "C3Tile.png": {
       "frame": {
-        "x": 539,
-        "y": 1261,
+        "x": 3,
+        "y": 1271,
         "w": 126,
         "h": 126
       },
@@ -482,8 +458,8 @@
     },
     "MoldStoneTile.png": {
       "frame": {
-        "x": 671,
-        "y": 1261,
+        "x": 135,
+        "y": 1271,
         "w": 126,
         "h": 126
       },
@@ -506,8 +482,8 @@
     },
     "RotStoneTile.png": {
       "frame": {
-        "x": 803,
-        "y": 1253,
+        "x": 267,
+        "y": 1271,
         "w": 126,
         "h": 126
       },
@@ -530,8 +506,8 @@
     },
     "SludgeStoneTile.png": {
       "frame": {
-        "x": 935,
-        "y": 1253,
+        "x": 1170,
+        "y": 1155,
         "w": 126,
         "h": 126
       },
@@ -559,8 +535,8 @@
     "image": "game-atlas-2.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1296,
-      "h": 1402
+      "w": 1306,
+      "h": 1400
     },
     "scale": 1
   }

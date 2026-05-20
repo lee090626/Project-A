@@ -347,7 +347,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 640,
     "height": 640,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "Cerberus": {
     "atlasIndex": 1,
@@ -356,7 +356,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 638,
     "height": 446,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "Fafnir": {
     "atlasIndex": 1,
@@ -365,7 +365,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 630,
     "height": 620,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "Asmodeus": {
     "atlasIndex": 1,
@@ -374,7 +374,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 624,
     "height": 392,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "Mechanic": {
     "atlasIndex": 1,
@@ -383,7 +383,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 512,
     "height": 418,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "Merchant": {
     "atlasIndex": 1,
@@ -392,7 +392,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 354,
     "height": 512,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "AsmodeusRingRelic": {
     "atlasIndex": 1,
@@ -401,7 +401,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 422,
     "height": 484,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "InventoryIcon": {
     "atlasIndex": 1,
@@ -410,7 +410,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 481,
     "height": 399,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkDown02": {
     "atlasIndex": 1,
@@ -419,7 +419,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 366,
     "height": 424,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkUp01": {
     "atlasIndex": 1,
@@ -428,7 +428,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 314,
     "height": 418,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkUp04": {
     "atlasIndex": 1,
@@ -437,7 +437,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 308,
     "height": 418,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkUp02": {
     "atlasIndex": 1,
@@ -446,7 +446,7 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 312,
     "height": 412,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkUp05": {
     "atlasIndex": 1,
@@ -455,7 +455,16 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 306,
     "height": 408,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
+  },
+  "FafnirScaleRelic": {
+    "atlasIndex": 1,
+    "x": 1691,
+    "y": 1325,
+    "width": 284,
+    "height": 360,
+    "atlasWidth": 2032,
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft01": {
     "atlasIndex": 1,
@@ -464,124 +473,124 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "width": 310,
     "height": 334,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft02": {
     "atlasIndex": 1,
-    "x": 1691,
-    "y": 1325,
+    "x": 3,
+    "y": 1699,
     "width": 308,
     "height": 334,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft03": {
     "atlasIndex": 1,
-    "x": 3,
+    "x": 317,
     "y": 1699,
     "width": 304,
     "height": 332,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft04": {
     "atlasIndex": 1,
-    "x": 313,
-    "y": 1699,
+    "x": 1371,
+    "y": 1682,
     "width": 304,
     "height": 332,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft06": {
     "atlasIndex": 1,
-    "x": 623,
-    "y": 1688,
+    "x": 1681,
+    "y": 1691,
     "width": 304,
     "height": 332,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "PlayerWalkLeft05": {
     "atlasIndex": 1,
-    "x": 933,
+    "x": 627,
     "y": 1688,
     "width": 310,
     "height": 326,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "BloatedDevourer": {
     "atlasIndex": 1,
-    "x": 1691,
-    "y": 1665,
+    "x": 943,
+    "y": 1688,
     "width": 254,
     "height": 136,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "AvariceGolem": {
     "atlasIndex": 1,
-    "x": 1249,
-    "y": 1807,
+    "x": 521,
+    "y": 1371,
     "width": 250,
     "height": 212,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
-  },
-  "GreedySlaughter": {
-    "atlasIndex": 1,
-    "x": 521,
-    "y": 1371,
-    "width": 244,
-    "height": 228,
-    "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "VoidStep": {
     "atlasIndex": 1,
-    "x": 1505,
-    "y": 1807,
+    "x": 943,
+    "y": 1830,
     "width": 224,
     "height": 198,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "TreacheryEssence": {
     "atlasIndex": 1,
-    "x": 1735,
-    "y": 1807,
+    "x": 777,
+    "y": 1371,
     "width": 205,
     "height": 208,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
-  },
-  "ViolenceEssence": {
-    "atlasIndex": 1,
-    "x": 771,
-    "y": 1371,
-    "width": 202,
-    "height": 200,
-    "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "CrownVestment": {
     "atlasIndex": 1,
-    "x": 1486,
-    "y": 833,
+    "x": 1173,
+    "y": 1830,
     "width": 190,
     "height": 200,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
   },
   "LustEssence": {
     "atlasIndex": 1,
     "x": 1486,
-    "y": 1039,
+    "y": 833,
     "width": 192,
     "height": 200,
     "atlasWidth": 2032,
-    "atlasHeight": 2034
+    "atlasHeight": 2036
+  },
+  "FraudEssence": {
+    "atlasIndex": 1,
+    "x": 1486,
+    "y": 1039,
+    "width": 192,
+    "height": 199,
+    "atlasWidth": 2032,
+    "atlasHeight": 2036
+  },
+  "GoldStoneTile": {
+    "atlasIndex": 1,
+    "x": 1203,
+    "y": 1688,
+    "width": 128,
+    "height": 128,
+    "atlasWidth": 2032,
+    "atlasHeight": 2036
   },
   "PlayerWalkDown01": {
     "atlasIndex": 2,
@@ -589,8 +598,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 360,
     "height": 422,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkDown03": {
     "atlasIndex": 2,
@@ -598,8 +607,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 358,
     "height": 422,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkDown04": {
     "atlasIndex": 2,
@@ -607,8 +616,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 431,
     "width": 360,
     "height": 422,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkDown05": {
     "atlasIndex": 2,
@@ -616,8 +625,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 3,
     "width": 362,
     "height": 420,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkDown06": {
     "atlasIndex": 2,
@@ -625,8 +634,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 429,
     "width": 362,
     "height": 418,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "MasterySealRelic": {
     "atlasIndex": 2,
@@ -634,8 +643,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 859,
     "width": 387,
     "height": 406,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkUp03": {
     "atlasIndex": 2,
@@ -643,8 +652,8 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 853,
     "width": 314,
     "height": 402,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "PlayerWalkUp06": {
     "atlasIndex": 2,
@@ -652,142 +661,133 @@ export const atlasMap: Record<AtlasIconName, AtlasMetadata> = {
     "y": 853,
     "width": 314,
     "height": 394,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
-  "FafnirHoardRelic": {
+  "GreedySlaughter": {
     "atlasIndex": 2,
     "x": 369,
     "y": 431,
-    "width": 356,
-    "height": 356,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "width": 244,
+    "height": 228,
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
-  "FraudEssence": {
+  "ViolenceEssence": {
     "atlasIndex": 2,
     "x": 1101,
     "y": 3,
-    "width": 192,
-    "height": 199,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "width": 202,
+    "height": 200,
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "WrathEssence": {
     "atlasIndex": 2,
     "x": 1101,
-    "y": 208,
+    "y": 209,
     "width": 192,
     "height": 199,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "GluttoyEssence": {
     "atlasIndex": 2,
     "x": 1101,
-    "y": 413,
+    "y": 414,
     "width": 190,
     "height": 198,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "GreedEssence": {
     "atlasIndex": 2,
     "x": 1101,
-    "y": 617,
+    "y": 618,
     "width": 190,
     "height": 198,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "VoidMantle": {
     "atlasIndex": 2,
     "x": 1101,
-    "y": 821,
+    "y": 822,
     "width": 192,
     "height": 194,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "Mimic": {
     "atlasIndex": 2,
-    "x": 1036,
-    "y": 1021,
+    "x": 369,
+    "y": 665,
     "width": 164,
     "height": 156,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
-  },
-  "GoldStoneTile": {
-    "atlasIndex": 2,
-    "x": 3,
-    "y": 1271,
-    "width": 128,
-    "height": 128,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "LustStoneTile": {
     "atlasIndex": 2,
-    "x": 137,
-    "y": 1271,
+    "x": 539,
+    "y": 665,
     "width": 128,
     "height": 128,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "MidasiteTile": {
     "atlasIndex": 2,
-    "x": 271,
-    "y": 1271,
+    "x": 1036,
+    "y": 1022,
     "width": 128,
     "height": 128,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "StoneTile": {
     "atlasIndex": 2,
-    "x": 405,
-    "y": 1261,
+    "x": 1170,
+    "y": 1022,
     "width": 128,
     "height": 127,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "C3Tile": {
     "atlasIndex": 2,
-    "x": 539,
-    "y": 1261,
+    "x": 3,
+    "y": 1271,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "MoldStoneTile": {
     "atlasIndex": 2,
-    "x": 671,
-    "y": 1261,
+    "x": 135,
+    "y": 1271,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "RotStoneTile": {
     "atlasIndex": 2,
-    "x": 803,
-    "y": 1253,
+    "x": 267,
+    "y": 1271,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   },
   "SludgeStoneTile": {
     "atlasIndex": 2,
-    "x": 935,
-    "y": 1253,
+    "x": 1170,
+    "y": 1155,
     "width": 126,
     "height": 126,
-    "atlasWidth": 1296,
-    "atlasHeight": 1402
+    "atlasWidth": 1306,
+    "atlasHeight": 1400
   }
 };

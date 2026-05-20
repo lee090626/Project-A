@@ -312,6 +312,30 @@
         "y": 0.5
       }
     },
+    "FafnirScaleRelic.png": {
+      "frame": {
+        "x": 1691,
+        "y": 1325,
+        "w": 284,
+        "h": 360
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 114,
+        "y": 76,
+        "w": 284,
+        "h": 360
+      },
+      "sourceSize": {
+        "w": 512,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "PlayerWalkLeft01.png": {
       "frame": {
         "x": 1279,
@@ -338,8 +362,8 @@
     },
     "PlayerWalkLeft02.png": {
       "frame": {
-        "x": 1691,
-        "y": 1325,
+        "x": 3,
+        "y": 1699,
         "w": 308,
         "h": 334
       },
@@ -362,7 +386,7 @@
     },
     "PlayerWalkLeft03.png": {
       "frame": {
-        "x": 3,
+        "x": 317,
         "y": 1699,
         "w": 304,
         "h": 332
@@ -386,8 +410,8 @@
     },
     "PlayerWalkLeft04.png": {
       "frame": {
-        "x": 313,
-        "y": 1699,
+        "x": 1371,
+        "y": 1682,
         "w": 304,
         "h": 332
       },
@@ -410,8 +434,8 @@
     },
     "PlayerWalkLeft06.png": {
       "frame": {
-        "x": 623,
-        "y": 1688,
+        "x": 1681,
+        "y": 1691,
         "w": 304,
         "h": 332
       },
@@ -434,7 +458,7 @@
     },
     "PlayerWalkLeft05.png": {
       "frame": {
-        "x": 933,
+        "x": 627,
         "y": 1688,
         "w": 310,
         "h": 326
@@ -458,8 +482,8 @@
     },
     "BloatedDevourer.png": {
       "frame": {
-        "x": 1691,
-        "y": 1665,
+        "x": 943,
+        "y": 1688,
         "w": 254,
         "h": 136
       },
@@ -482,8 +506,8 @@
     },
     "AvariceGolem.png": {
       "frame": {
-        "x": 1249,
-        "y": 1807,
+        "x": 521,
+        "y": 1371,
         "w": 250,
         "h": 212
       },
@@ -504,34 +528,10 @@
         "y": 0.5
       }
     },
-    "GreedySlaughter.png": {
-      "frame": {
-        "x": 521,
-        "y": 1371,
-        "w": 244,
-        "h": 228
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 6,
-        "y": 14,
-        "w": 244,
-        "h": 228
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "VoidStep.png": {
       "frame": {
-        "x": 1505,
-        "y": 1807,
+        "x": 943,
+        "y": 1830,
         "w": 224,
         "h": 198
       },
@@ -554,8 +554,8 @@
     },
     "TreacheryEssence.png": {
       "frame": {
-        "x": 1735,
-        "y": 1807,
+        "x": 777,
+        "y": 1371,
         "w": 205,
         "h": 208
       },
@@ -576,34 +576,10 @@
         "y": 0.5
       }
     },
-    "ViolenceEssence.png": {
-      "frame": {
-        "x": 771,
-        "y": 1371,
-        "w": 202,
-        "h": 200
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 25,
-        "y": 28,
-        "w": 202,
-        "h": 200
-      },
-      "sourceSize": {
-        "w": 256,
-        "h": 256
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "CrownVestment.png": {
       "frame": {
-        "x": 1486,
-        "y": 833,
+        "x": 1173,
+        "y": 1830,
         "w": 190,
         "h": 200
       },
@@ -627,7 +603,7 @@
     "LustEssence.png": {
       "frame": {
         "x": 1486,
-        "y": 1039,
+        "y": 833,
         "w": 192,
         "h": 200
       },
@@ -647,6 +623,54 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    "FraudEssence.png": {
+      "frame": {
+        "x": 1486,
+        "y": 1039,
+        "w": 192,
+        "h": 199
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 30,
+        "w": 192,
+        "h": 199
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 256
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "GoldStoneTile.png": {
+      "frame": {
+        "x": 1203,
+        "y": 1688,
+        "w": 128,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 128,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 128,
+        "h": 128
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   },
   "meta": {
@@ -656,7 +680,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 2032,
-      "h": 2034
+      "h": 2036
     },
     "scale": 1
   }
