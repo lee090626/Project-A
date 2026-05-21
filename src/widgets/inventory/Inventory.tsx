@@ -76,7 +76,7 @@ function Inventory({ stats, onClose, onEquip, onRerollEquipmentOption }: Invento
         titleClassName="text-cyan-400"
         gold={stats.goldCoins}
         onClose={onClose}
-        closeButtonClassName="hover:bg-cyan-400 hover:text-black hover:border-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+        closeButtonClassName="hover:bg-[#2c8f87] hover:text-[#fff1bf] hover:border-[#d8a84f] focus-visible:ring-2 focus-visible:ring-[#2c8f87]/50"
       >
         <InventoryTabs activeTab={activeTab} onTabChange={handleTabChange} />
       </WindowHeader>

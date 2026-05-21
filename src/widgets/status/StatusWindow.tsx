@@ -84,7 +84,7 @@ function StatusWindow({ stats, onClose }: StatusWindowProps) {
         titleClassName="text-emerald-400"
         gold={stats.goldCoins}
         onClose={onClose}
-        closeButtonClassName="hover:bg-emerald-400 hover:text-black hover:border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+        closeButtonClassName="hover:bg-[#4f9b5f] hover:text-[#fff1bf] hover:border-[#d8a84f] focus-visible:ring-2 focus-visible:ring-[#4f9b5f]/50"
       />
 
       <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-6 space-y-8">

@@ -21,19 +21,19 @@ const BossHealthBar: React.FC = () => {
         const circleNumber = circleMatch ? circleMatch[1] : '?';
 
         return (
-          <div key={instanceId} className="pixel-font animate-in slide-in-from-top-10 duration-300">
+          <div key={instanceId} className="pixel-panel pixel-font p-3 animate-in slide-in-from-top-10 duration-300">
             {/* 보스 이름 및 정보 */}
             <div className="flex justify-between items-end mb-1.5 px-2">
               <div className="flex flex-col">
-                <span className="text-[10px] md:text-xs font-black text-rose-400 opacity-90">
+                <span className="text-[10px] md:text-xs font-black text-[#b84a3c] opacity-90">
                   Abyssal Lord - Circle {circleNumber}
                 </span>
-                <h2 className="text-xl md:text-3xl font-black text-white drop-shadow-[2px_2px_0_rgba(0,0,0,0.85)]">
+                <h2 className="text-xl md:text-3xl font-black text-[#f4dfb8] drop-shadow-[2px_2px_0_rgba(19,13,9,0.85)]">
                   {boss.name}
                 </h2>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-lg md:text-2xl font-black text-white">
+                <span className="text-lg md:text-2xl font-black text-[#f4dfb8]">
                   {Math.ceil(hpPercent)}%
                 </span>
               </div>
@@ -50,14 +50,14 @@ const BossHealthBar: React.FC = () => {
                 style={{ width: `${hpPercent}%` }}
               >
                 {/* 하이라이트 효과 */}
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-white/20" />
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-[#f4dfb8]/20" />
               </div>
             </div>
 
             {/* 하단 장식 (데코레이션 브라켓) */}
             <div className="mt-1 flex justify-between px-1 opacity-40">
-              <div className="w-10 h-1 border-l border-b border-white" />
-              <div className="w-10 h-1 border-r border-b border-white" />
+              <div className="w-10 h-1 border-l border-b border-[#5f4a2f]" />
+              <div className="w-10 h-1 border-r border-b border-[#5f4a2f]" />
             </div>
           </div>
         );

@@ -13,17 +13,17 @@ const STATUS_EFFECT_META: Record<StatusType, { icon: string; label: string; tone
   BURN: { icon: '🔥', label: 'Burn', toneClassName: 'text-orange-200 bg-orange-500/20 border-orange-400/40' },
   FREEZE: { icon: '❄', label: 'Freeze', toneClassName: 'text-cyan-200 bg-cyan-500/20 border-cyan-400/40' },
   POISON: { icon: '☠', label: 'Poison', toneClassName: 'text-lime-200 bg-lime-500/20 border-lime-400/40' },
-  BUFF_POWER: { icon: '⚔', label: 'Power Up', toneClassName: 'text-rose-200 bg-rose-500/20 border-rose-400/40' },
+  BUFF_POWER: { icon: '⚔', label: 'Power Up', toneClassName: 'text-[#ffd1bf] bg-[#b84a3c]/20 border-[#b84a3c]/45' },
   BUFF_SPEED: { icon: '➤', label: 'Speed Up', toneClassName: 'text-emerald-200 bg-emerald-500/20 border-emerald-400/40' },
-  WEAKEN: { icon: '⬇', label: 'Weaken', toneClassName: 'text-zinc-200 bg-zinc-500/20 border-zinc-400/40' },
+  WEAKEN: { icon: '⬇', label: 'Weaken', toneClassName: 'text-[#fff1bf] bg-[#2b3029]/70 border-[#d0b886]/40' },
   SHIELD: { icon: '🛡', label: 'Shield', toneClassName: 'text-indigo-200 bg-indigo-500/20 border-indigo-400/40' },
   LUCKY: { icon: '🍀', label: 'Lucky', toneClassName: 'text-green-200 bg-green-500/20 border-green-400/40' },
   INVINCIBLE: { icon: '✶', label: 'Invincible', toneClassName: 'text-yellow-100 bg-yellow-500/20 border-yellow-300/40' },
   FATIGUE: { icon: '⌛', label: 'Fatigue', toneClassName: 'text-stone-200 bg-stone-500/20 border-stone-400/40' },
   BLEED: { icon: '🩸', label: 'Bleed', toneClassName: 'text-red-200 bg-red-500/20 border-red-400/40' },
-  CONFUSION: { icon: '🌀', label: 'Confusion', toneClassName: 'text-fuchsia-200 bg-fuchsia-500/20 border-fuchsia-400/40' },
-  CURSE: { icon: '☾', label: 'Curse', toneClassName: 'text-violet-200 bg-violet-500/20 border-violet-400/40' },
-  ENRAGE: { icon: '‼', label: 'Enrage', toneClassName: 'text-rose-200 bg-rose-600/20 border-rose-500/40' },
+  CONFUSION: { icon: '🌀', label: 'Confusion', toneClassName: 'text-[#aee8df] bg-[#2c8f87]/20 border-[#2c8f87]/45' },
+  CURSE: { icon: '☾', label: 'Curse', toneClassName: 'text-[#d0b886] bg-[#2b3029]/70 border-[#3c453c]/60' },
+  ENRAGE: { icon: '‼', label: 'Enrage', toneClassName: 'text-[#ffd1bf] bg-[#b84a3c]/25 border-[#b84a3c]/50' },
 };
 
 /**

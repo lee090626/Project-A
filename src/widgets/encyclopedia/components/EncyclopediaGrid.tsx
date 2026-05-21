@@ -31,17 +31,17 @@ const EncyclopediaGrid = ({
             <button
               key={m.key}
               onClick={() => onSelectId(m.key)}
-              className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${
+              className={`pixel-card relative aspect-square transition-colors flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2c8f87]/50 ${
                 isSelected
-                  ? 'bg-[#252526] border-purple-400 shadow-2xl scale-[1.02]'
+                  ? 'pixel-card-active border-[#d8a84f]!'
                   : !isDiscovered
-                    ? 'bg-[#1a1a1b] border-zinc-900 opacity-40'
-                    : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'
+                    ? 'pixel-card-muted opacity-40'
+                    : 'pixel-card-muted hover:border-[#d8a84f]'
               }`}
             >
               <div
                 className={`w-20 h-20 flex items-center justify-center mb-4 transition-all ${
-                  !isDiscovered ? 'filter blur-md grayscale opacity-50' : ''
+                  !isDiscovered ? 'opacity-50' : ''
                 }`}
               >
                 {isDiscovered ? (
@@ -54,12 +54,12 @@ const EncyclopediaGrid = ({
                   '?'
                 )}
               </div>
-              <div className="text-[20px] text-zinc-500 font-bold tracking-widest">
+              <div className="text-[20px] text-[#a89065] font-bold">
                 {isDiscovered ? m.name : 'Unknown'}
               </div>
               {!isDiscovered && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <span className="text-zinc-800 text-6xl font-black opacity-20">?</span>
+                  <span className="text-[#0f120e] text-6xl font-black opacity-25">?</span>
                 </div>
               )}
             </button>
@@ -79,17 +79,17 @@ const EncyclopediaGrid = ({
           <button
             key={b.id}
             onClick={() => onSelectId(b.id)}
-            className={`relative aspect-square rounded-2xl border transition-all flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50 ${
+            className={`pixel-card relative aspect-square transition-colors flex flex-col items-center justify-center p-4 group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2c8f87]/50 ${
               isSelected
-                ? 'bg-[#252526] border-[#a855f7] shadow-2xl scale-[1.02]'
+                ? 'pixel-card-active border-[#d8a84f]!'
                 : !isEncountered
-                  ? 'bg-[#1a1a1b] border-zinc-900 opacity-40'
-                  : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'
+                  ? 'pixel-card-muted opacity-40'
+                  : 'pixel-card-muted hover:border-[#d8a84f]'
             }`}
           >
             <div
               className={`w-20 h-20 flex items-center justify-center mb-4 transition-all ${
-                !isEncountered ? 'filter blur-md grayscale opacity-50' : ''
+                !isEncountered ? 'opacity-50' : ''
               }`}
             >
               {isEncountered ? (
@@ -98,7 +98,7 @@ const EncyclopediaGrid = ({
                 <span className="text-6xl">💀</span>
               )}
             </div>
-            <div className="text-[10px] text-zinc-500 font-bold tracking-widest">
+            <div className="text-[10px] text-[#a89065] font-bold">
               {isEncountered ? b.name : 'Classified'}
             </div>
           </button>

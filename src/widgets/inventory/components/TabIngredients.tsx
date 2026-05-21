@@ -17,9 +17,9 @@ const TabIngredients = ({ ownedMinerals, inventory }: TabIngredientsProps) => {
           return (
             <div
               key={m.key}
-              className={`relative aspect-square rounded-xl md:rounded-2xl border transition-all flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden bg-[#252526] border-zinc-800 hover:border-zinc-700`}
+              className="pixel-card pixel-card-muted relative aspect-square transition-colors flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden hover:border-[#d8a84f]"
             >
-              <div className="w-14 h-14 md:w-18 md:h-18 mb-2 md:mb-4 group-hover:scale-105 transition-transform flex items-center justify-center">
+              <div className="w-14 h-14 md:w-18 md:h-18 mb-2 md:mb-4 flex items-center justify-center">
                 {m.image ? (
                   <AtlasIcon name={m.image} size={64} />
                 ) : (
@@ -27,10 +27,10 @@ const TabIngredients = ({ ownedMinerals, inventory }: TabIngredientsProps) => {
                 )}
               </div>
               <div className="flex flex-col items-center gap-1">
-                <div className="text-[10px] md:text-sm font-bold tabular-nums text-zinc-400">
+                <div className="text-[10px] md:text-sm font-bold tabular-nums text-[#d0b886]">
                   x{count.toLocaleString()}
                 </div>
-                <div className="text-[10px] md:text-xs text-zinc-600 font-bold tracking-widest text-center truncate w-full px-1">
+                <div className="text-[10px] md:text-xs text-[#7d6648] font-bold text-center truncate w-full px-1">
                   {m.name}
                 </div>
               </div>

@@ -5,25 +5,25 @@ export function GameSeoLayer() {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 space-y-12 z-0 opacity-0 pointer-events-none">
       <div className="space-y-6">
-        <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter">
+        <h1 className="text-5xl md:text-8xl font-black text-[#f4dfb8] tracking-tighter">
           Drilling RPG
         </h1>
-        <h2 className="text-xl md:text-3xl font-bold text-cyan-500 max-w-3xl mx-auto tracking-widest">
+        <h2 className="pixel-font text-xl md:text-3xl font-bold text-cyan-500 max-w-3xl mx-auto">
           Deep Abyss Exploration
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl text-white font-medium tracking-widest text-[10px]">
+      <div className="pixel-font grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl text-[#f4dfb8] font-medium text-[10px]">
         <div className="space-y-2">
-          <h3 className="font-black text-zinc-500">Resource Extraction</h3>
+          <h3 className="font-black text-[#d0b886]">Resource Extraction</h3>
           <p className="leading-relaxed">Diamonds, Rubies, Uranium</p>
         </div>
         <div className="space-y-2">
-          <h3 className="font-black text-zinc-500">Combat Systems</h3>
+          <h3 className="font-black text-[#d0b886]">Combat Systems</h3>
           <p className="leading-relaxed">Abyssal Lord Encounters</p>
         </div>
         <div className="space-y-2">
-          <h3 className="font-black text-zinc-500">Tech Upgrades</h3>
+          <h3 className="font-black text-[#d0b886]">Tech Upgrades</h3>
           <p className="leading-relaxed">Passive Effect Items</p>
         </div>
       </div>

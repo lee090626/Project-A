@@ -54,9 +54,9 @@ export function TileMasteryCard({
   const masteryMult = getMasteryMultiplier(mastery.level);
 
   return (
-    <div className="bg-zinc-950/50 p-6 rounded-3xl border border-zinc-800 hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all group">
+    <div className="pixel-card pixel-card-muted p-6 hover:border-emerald-500/40 transition-colors group">
       <div className="flex items-center gap-5 mb-5">
-        <div className="w-16 h-16 rounded-2xl bg-zinc-900 flex items-center justify-center border border-zinc-800 shadow-inner group-hover:scale-110 transition-transform">
+        <div className="pixel-icon-box w-16 h-16 flex items-center justify-center">
           {mineral?.image ? (
             <AtlasIcon name={mineral.image as AtlasIconName} size={48} />
           ) : (
@@ -65,25 +65,25 @@ export function TileMasteryCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-end gap-2 mb-2">
-            <span className="text-[12px] font-black text-zinc-300 tracking-tighter leading-none">
+            <span className="text-[12px] font-black text-[#f4dfb8] tracking-tighter leading-none">
               {mineral?.name || tileKey}
             </span>
             <span className="text-[10px] font-black text-emerald-500 shrink-0 ml-auto">
               LV.{mastery.level}
             </span>
           </div>
-          <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/50">
+          <div className="pixel-bar h-2">
             <div
-              className="h-full bg-linear-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-1000"
+              className="pixel-bar-fill h-full bg-emerald-500 transition-all duration-1000"
               style={{ width: `${expPercent}%` }}
             />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 pt-4 border-t border-zinc-800/50">
-        <div className="flex justify-between items-center text-[9px] font-black tracking-widest">
-          <span className="text-zinc-500">Damage Buff</span>
+      <div className="flex flex-col gap-3 pt-4 border-t-2 pixel-divider">
+        <div className="flex justify-between items-center text-[9px] font-black">
+          <span className="text-[#a89065]">Damage Buff</span>
           <span className="text-emerald-400 text-xs">+{((masteryMult - 1) * 100).toFixed(0)}%</span>
         </div>
 
@@ -98,13 +98,13 @@ export function TileMasteryCard({
               <div
                 key={level}
                 className={`
-                  flex-1 flex items-center justify-center h-8 rounded-lg border text-[10px] font-black transition-all cursor-help
+                  pixel-button flex-1 flex items-center justify-center h-8 text-[10px] font-black transition-colors cursor-help
                   ${
                     isUnlocked
-                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-                      : 'bg-zinc-900 border-zinc-800 text-zinc-600'
+                      ? 'text-emerald-400 border-emerald-500/50!'
+                      : 'text-[#7d6648]'
                   }
-                  ${hoveredTooltipId === perkId ? 'scale-110 border-emerald-400! bg-emerald-500/20!' : ''}
+                  ${hoveredTooltipId === perkId ? 'border-emerald-400! bg-emerald-500/20!' : ''}
                 `}
                 onMouseEnter={(e) => {
                   if (perk) {
@@ -125,9 +125,9 @@ export function TileMasteryCard({
         </div>
 
         <div className="flex justify-between items-center text-[8px] font-bold tabular-nums">
-          <span className="text-zinc-600">Experience</span>
-          <span className="text-zinc-400">
-            {mastery.exp} <span className="text-zinc-700">/</span> {nextExp}
+          <span className="text-[#7d6648]">Experience</span>
+          <span className="text-[#d0b886]">
+            {mastery.exp} <span className="text-[#5c4933]">/</span> {nextExp}
           </span>
         </div>
       </div>

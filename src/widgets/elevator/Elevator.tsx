@@ -21,20 +21,20 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
         subtitle="Fast Travel Network"
         titleClassName="text-amber-500"
         onClose={onClose}
-        closeButtonClassName="hover:bg-amber-400 hover:text-black hover:border-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400/50"
+        closeButtonClassName="hover:bg-[#d8a84f] hover:text-[#090a08] hover:border-[#fff1bf] focus-visible:ring-2 focus-visible:ring-[#d8a84f]/50"
       />
       <div className="space-y-3 md:space-y-4 overflow-y-auto pr-2 pb-2 custom-scrollbar">
         <button
           onClick={() => onSelectCheckpoint(0)}
-          className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+          className="pixel-card pixel-card-active w-full p-4 md:p-6 text-white hover:border-[#eab308] transition-colors font-black flex justify-between items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
         >
           <div className="flex flex-col items-start">
-            <span className="text-[#eab308] text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1 group-hover:brightness-125">
+            <span className="text-[#eab308] text-[8px] md:text-[9px] mb-0.5 md:mb-1 group-hover:brightness-125">
               Surface
             </span>
             <span className="text-lg md:text-xl">Base Camp</span>
           </div>
-          <span className="bg-zinc-900 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-mono text-[#eab308]">
+          <span className="pixel-badge px-3 py-1 md:px-4 md:py-1.5 text-[10px] md:text-xs font-mono text-[#eab308]">
             0m
           </span>
         </button>
@@ -43,22 +43,22 @@ const Elevator: React.FC<ElevatorProps> = ({ stats, onSelectCheckpoint, onClose 
           <button
             key={depth}
             onClick={() => onSelectCheckpoint(depth)}
-            className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-400 hover:text-white hover:border-[#eab308] transition-all font-black flex justify-between items-center group shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
+            className="pixel-card pixel-card-muted w-full p-4 md:p-6 text-[#d0b886] hover:text-[#fff1bf] hover:border-[#eab308] transition-colors font-black flex justify-between items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
           >
             <div className="flex flex-col items-start">
-              <span className="text-zinc-600 text-[8px] md:text-[9px] tracking-widest mb-0.5 md:mb-1">
+              <span className="text-[#7d6648] text-[8px] md:text-[9px] mb-0.5 md:mb-1">
                 Waypoint
               </span>
               <span className="text-lg md:text-xl">Transit_{depth}</span>
             </div>
-            <span className="bg-zinc-900 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-mono">
+            <span className="pixel-badge px-3 py-1 md:px-4 md:py-1.5 text-[10px] md:text-xs font-mono">
               {depth}m
             </span>
           </button>
         ))}
 
         {waypointDepths.length === 0 && (
-          <div className="w-full p-4 md:p-6 rounded-xl md:rounded-2xl bg-[#252526] border border-zinc-800 text-zinc-500 text-sm md:text-base">
+          <div className="pixel-empty w-full p-4 md:p-6 text-[#a89065] text-sm md:text-base">
             Reach 100m depth to unlock your first waypoint.
           </div>
         )}

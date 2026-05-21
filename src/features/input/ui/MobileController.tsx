@@ -31,17 +31,10 @@ export default function MobileController({ onJoystickMove, onActionPress }: Mobi
             }}
             className="pixel-button pixel-button-action pixel-font relative w-16 h-16 md:w-24 md:h-24 flex items-center justify-center active:translate-y-px transition-colors group"
           >
-            <div className="absolute inset-0 bg-white/10 opacity-0 group-active:opacity-100 transition-opacity" />
-            <span className="relative text-white font-black text-[10px] md:text-sm">Action</span>
+            <div className="absolute inset-0 bg-[#f4dfb8]/10 opacity-0 group-active:opacity-100 transition-opacity" />
+            <span className="relative text-[#fff1bf] font-black text-[10px] md:text-sm">Action</span>
           </button>
         )}
-      </div>
-
-      {/* 상단 중앙 설명 (터치 힌트) */}
-      <div className="absolute top-24 left-1/2 -translate-x-1/2 opacity-20 hidden md:block">
-        <span className="text-white text-[8px] font-bold tracking-[0.3em]">
-          Joystick to move and mine • Action to interact
-        </span>
       </div>
     </div>
   );

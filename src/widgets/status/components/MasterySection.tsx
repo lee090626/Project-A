@@ -20,17 +20,17 @@ const MasterySection = ({ stats, hoveredTooltipId, onHoverPerk, onLeavePerk }: M
     .sort((a, b) => (MINERAL_ORDER.get(a) ?? 0) - (MINERAL_ORDER.get(b) ?? 0));
 
   return (
-    <div className="bg-[#1e1e1f] p-4 md:p-8 rounded-2xl md:rounded-4xl border border-zinc-800 shadow-2xl relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0" />
+    <div className="pixel-card p-4 md:p-8 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/60" />
 
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           <span className="text-xl">⛏️</span>
-          <h3 className="text-lg md:text-[22px] font-black text-white tracking-tighter">
+          <h3 className="text-lg md:text-[22px] font-black text-white">
             Tile Mastery <span className="text-emerald-500 ml-2">Progress</span>
           </h3>
         </div>
-        <div className="px-4 py-1.5 bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] font-black text-emerald-400 tracking-widest">
+        <div className="pixel-badge px-4 py-1.5 text-[10px] font-black text-emerald-400">
           DISCOVERED: {discoveredMineralKeys.length}
         </div>
       </div>
@@ -52,9 +52,9 @@ const MasterySection = ({ stats, hoveredTooltipId, onHoverPerk, onLeavePerk }: M
           ))}
         </div>
       ) : (
-        <div className="py-20 flex flex-col items-center justify-center bg-zinc-950/50 rounded-3xl border border-dashed border-zinc-800 opacity-30">
+        <div className="pixel-empty py-20 flex flex-col items-center justify-center opacity-50">
           <span className="text-4xl mb-4">🔦</span>
-          <span className="text-xs font-black tracking-widest">
+          <span className="text-xs font-black">
             Start mining to unlock Tile Mastery!
           </span>
         </div>

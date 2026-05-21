@@ -33,10 +33,10 @@ const TabEquipment = ({
           <button
             key={part}
             onClick={() => onSetSelectedPart(part)}
-            className={`px-4 py-2 rounded-xl text-[10px] md:text-sm font-black tracking-widest border transition-all ${
+            className={`pixel-button px-4 py-2 text-[10px] md:text-sm font-black transition-colors ${
               selectedPart === part
-                ? 'bg-cyan-400 text-black border-cyan-400 shadow-lg scale-105'
-                : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-zinc-300'
+                ? 'pixel-button-active text-cyan-300'
+                : 'text-[#a89065] hover:text-[#f4dfb8]'
             }`}
           >
             {part}
@@ -59,9 +59,9 @@ const TabEquipment = ({
             ))}
           </div>
         ) : (
-          <div className="h-64 flex flex-col items-center justify-center text-center opacity-20">
+          <div className="pixel-empty h-64 flex flex-col items-center justify-center text-center opacity-50">
             <div className="text-5xl mb-6">🛡️</div>
-            <p className="text-sm font-bold text-zinc-500 tracking-widest">
+            <p className="text-sm font-bold text-[#a89065]">
               No {selectedPart} Owned
             </p>
           </div>

@@ -69,6 +69,7 @@ npm run dev
 
 프로젝트 문서는 [docs/README.md](docs/README.md)를 기준으로 단계적으로 정리합니다. 아직 작성되지 않은 문서는 링크하지 않습니다.
 
+- [디자인 시스템](DESIGN.md)
 - [용어 사전](docs/GLOSSARY.md)
 - [게임 데이터 모델](docs/GAME_DATA_MODEL.md)
 - [게임 상수](docs/GAME_CONSTANTS.md)

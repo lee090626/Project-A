@@ -15,7 +15,7 @@ interface EquipmentSectionProps {
 const EquipmentSection = ({ equipped }: EquipmentSectionProps) => {
   return (
     <div className="space-y-6">
-      <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
+      <h3 className="text-lg md:text-[20px] font-black text-[#a89065] mb-4 border-b-2 pixel-divider pb-2">
         Gear Loadout
       </h3>
 
@@ -23,15 +23,15 @@ const EquipmentSection = ({ equipped }: EquipmentSectionProps) => {
         {(['drill', 'helmet', 'armor', 'boots'] as const).map((part) => {
           const item = equipped[part];
           return (
-            <div key={part} className="bg-[#252526] p-4 rounded-2xl border border-zinc-800 flex flex-col items-center text-center shadow-xl group">
-              <div className="w-14 h-14 bg-zinc-950 rounded-xl flex items-center justify-center border border-zinc-800 mb-2 shadow-inner group-hover:border-emerald-500/30 transition-colors overflow-hidden">
+            <div key={part} className="pixel-card pixel-card-muted p-4 flex flex-col items-center text-center group">
+              <div className="pixel-icon-box w-14 h-14 flex items-center justify-center mb-2 group-hover:border-emerald-500/40 transition-colors overflow-hidden">
                 {item?.image ? (
                   <AtlasIcon name={item.image as AtlasIconName} size={48} />
                 ) : (
                   <span className="text-3xl">{item?.icon || '🚫'}</span>
                 )}
               </div>
-              <div className="text-[8px] font-bold text-zinc-500 tracking-widest mb-1">{part}</div>
+              <div className="text-[8px] font-bold text-[#a89065] mb-1">{part}</div>
               <div className="text-[10px] font-black text-white truncate w-full">{item?.name || 'Barehanded'}</div>
             </div>
           );

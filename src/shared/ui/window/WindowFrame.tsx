@@ -31,10 +31,10 @@ export function WindowFrame({
     >
       {showPattern && (
         <div
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          className="absolute inset-0 opacity-[0.055] pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, #ffffff 1px, transparent 0)',
-            backgroundSize: '24px 24px',
+            backgroundImage: 'radial-gradient(circle at 2px 2px, #f4dfb8 1px, transparent 0)',
+            backgroundSize: '28px 28px',
           }}
         />
       )}

@@ -59,10 +59,10 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
         icon={<span className="text-2xl md:text-3xl">📖</span>}
         title="Books"
         subtitle="Discovery Archive"
-        titleClassName="text-purple-400"
+        titleClassName="text-[#2c8f87]"
         gold={stats.goldCoins}
         onClose={onClose}
-        closeButtonClassName="hover:bg-purple-400 hover:text-black hover:border-purple-400 focus-visible:ring-2 focus-visible:ring-purple-400/50"
+        closeButtonClassName="hover:bg-[#2c8f87] hover:text-[#fff1bf] hover:border-[#d8a84f] focus-visible:ring-2 focus-visible:ring-[#2c8f87]/50"
       >
         <EncyclopediaTabs activeTab={activeTab} onTabChange={handleTabChange} />
       </WindowHeader>
@@ -81,16 +81,16 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
         </div>
 
         {/* DETAIL SECTION */}
-        <div className="w-full lg:w-[350px] xl:w-[400px] shrink-0 h-auto lg:h-full flex flex-col bg-[#252526] rounded-2xl md:rounded-4xl p-5 md:p-8 border border-zinc-800 relative shadow-2xl overflow-y-auto custom-scrollbar min-h-0">
+        <div className="pixel-card w-full lg:w-[350px] xl:w-[400px] shrink-0 h-auto lg:h-full flex flex-col p-5 md:p-8 relative overflow-y-auto custom-scrollbar min-h-0">
           {selectedId ? (
             <EncyclopediaDetail id={selectedId} tab={activeTab} stats={stats} bossesData={bossesData} />
           ) : (
             <div className="h-full py-8 md:py-0 flex flex-col items-center justify-center text-center">
               <div className="text-4xl md:text-6xl mb-4 md:mb-6 opacity-20 animate-pulse">📡</div>
-              <h3 className="text-base md:text-lg font-black text-zinc-700 tracking-widest">
+              <h3 className="text-base md:text-lg font-black text-[#7d6648]">
                 Scanning Database...
               </h3>
-              <p className="text-[9px] md:text-[10px] text-zinc-800 mt-2 font-bold tracking-widest">
+              <p className="text-[9px] md:text-[10px] text-[#a89065] mt-2 font-bold">
                 Select an entry for analysis
               </p>
 
@@ -99,7 +99,7 @@ function Encyclopedia({ stats, onClose }: EncyclopediaProps) {
                   label="Minerals Discovery"
                   current={discoveredCount}
                   total={totalMinerals}
-                  color="#a855f7"
+                  color="#2c8f87"
                 />
                 <ProgressBox
                   label="Boss Encounters"

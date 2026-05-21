@@ -40,13 +40,13 @@ function Shop({ stats, onSell, onClose }: ShopProps) {
         title="Shop"
         subtitle="Global Market"
         titleClassName="text-amber-400"
-        subtitleClassName="text-zinc-500 opacity-60"
+        subtitleClassName="text-[#a89065] opacity-60"
         titleClusterClassName="flex items-center gap-4"
         gold={stats.goldCoins}
         goldVariant="labeled"
         goldLabelClassName="text-amber-500"
         onClose={onClose}
-        closeButtonClassName="hover:bg-emerald-400 hover:text-black hover:border-emerald-400 focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+        closeButtonClassName="hover:bg-[#4f9b5f] hover:text-[#fff1bf] hover:border-[#d8a84f] focus-visible:ring-2 focus-visible:ring-[#4f9b5f]/50"
       />
 
       <div className="flex-1 flex flex-col lg:flex-row gap-4 lg:gap-8 overflow-hidden min-h-0 pr-2 relative z-0">

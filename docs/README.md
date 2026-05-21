@@ -24,6 +24,7 @@ source_paths:
 
 | 문서 | 범위 | 상태 |
 |---|---|---|
+| `../DESIGN.md` | UI/HUD 시각 디자인 시스템 | 완료 |
 | `GLOSSARY.md` | 게임/코드 공통 용어 | 완료 |
 | `GAME_DATA_MODEL.md` | 설정 데이터, ID, 참조 관계 | 완료 |
 | `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 완료 |
@@ -67,6 +68,7 @@ source_paths:
 
 | 경로 | 포함 여부 | 이유 |
 |---|---:|---|
+| `DESIGN.md` | 포함 | UI/HUD 시각 디자인 정본 |
 | `docs/**/*.md` | 포함 | 정본 프로젝트 지식 |
 | `.agents/rules/*.md` | 조건부 포함 | 개발 에이전트와 작업 규칙 답변에 유용함 |
 | `.github/ISSUE_TEMPLATE/*.md` | 조건부 포함 | GitHub 이슈 workflow 질문에만 유용함 |

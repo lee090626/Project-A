@@ -20,23 +20,23 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
       <div className="animate-in fade-in slide-in-from-right-4 duration-300">
         <div className="flex justify-between items-start mb-8">
           <span
-            className="text-[10px] font-black px-3 py-1.5 rounded-lg border tracking-widest"
+            className="pixel-badge text-[10px] font-black px-3 py-1.5"
             style={{
-              backgroundColor: isDiscovered ? `${mineral.color}20` : '#18181b',
-              borderColor: isDiscovered ? mineral.color : '#27272a',
-              color: isDiscovered ? mineral.color : '#52525b',
+              backgroundColor: isDiscovered ? `${mineral.color}20` : '#242a24',
+              borderColor: isDiscovered ? mineral.color : '#6f6646',
+              color: isDiscovered ? mineral.color : '#d0b886',
             }}
           >
             {isDiscovered ? 'Mineral' : 'Unknown'}
           </span>
-          <span className="text-[9px] font-black text-zinc-600 tracking-widest">
+          <span className="text-[9px] font-black text-[#7d6648]">
             ID: {id}
           </span>
         </div>
 
-        <div className="w-40 h-40 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center text-8xl mx-auto mb-10 relative">
+        <div className="pixel-icon-box w-40 h-40 flex items-center justify-center text-8xl mx-auto mb-10 relative">
           <div
-            className={`w-36 h-36 flex items-center justify-center ${!isDiscovered ? 'filter blur-xl opacity-20' : ''}`}
+            className={`w-36 h-36 flex items-center justify-center ${!isDiscovered ? 'opacity-25' : ''}`}
           >
             {isDiscovered ? (
               mineral.image ? (
@@ -49,19 +49,19 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
             )}
           </div>
           {!isDiscovered && (
-            <div className="absolute inset-0 flex items-center justify-center text-zinc-800 font-black text-5xl opacity-40">
+            <div className="absolute inset-0 flex items-center justify-center text-[#d0b886] font-black text-5xl opacity-45">
               Locked
             </div>
           )}
           {isDiscovered && (
             <div
-              className="absolute inset-0 rounded-3xl opacity-20"
+              className="absolute inset-0 opacity-20"
               style={{ boxShadow: `inset 0 0 40px ${mineral.color}` }}
             />
           )}
         </div>
 
-        <h3 className="text-3xl font-black text-white text-center mb-6 tracking-tighter">
+        <h3 className="text-3xl font-black text-[#f4dfb8] text-center mb-6">
           {isDiscovered ? mineral.name : 'Unknown Mineral'}
         </h3>
 
@@ -69,10 +69,10 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           <StatBox
             label="Min Depth"
             value={isDiscovered ? `${mineral.minDepth}m` : '???'}
-            color="#94a3b8"
+            color="#2c8f87"
           />
-          <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 text-center flex flex-col items-center justify-center">
-            <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">
+          <div className="pixel-card pixel-card-muted p-4 text-center flex flex-col items-center justify-center">
+            <div className="text-[8px] text-[#7d6648] font-bold mb-1">
               Base Value
             </div>
             <div className="flex items-center gap-1.5">
@@ -84,7 +84,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           </div>
         </div>
 
-        <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800 leading-relaxed text-xs text-zinc-400 text-center">
+        <div className="pixel-card pixel-card-muted p-6 leading-relaxed text-xs text-[#d0b886] text-center">
           {isDiscovered
             ? mineral.description
             : 'Data is Locked. Please mine this mineral to unlock the data.'}
@@ -99,16 +99,16 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
     return (
       <div className="animate-in fade-in slide-in-from-right-4 duration-300">
         <div className="flex justify-between items-start mb-8">
-          <span className="bg-rose-950/30 border border-rose-900 text-rose-500 text-[9px] font-black px-3 py-1.5 rounded-lg tracking-widest">
+          <span className="pixel-badge text-[#b84a3c] text-[9px] font-black px-3 py-1.5 border-[#8f2f2f]!">
             Boss Class
           </span>
-          <span className="text-[9px] font-black text-zinc-600 tracking-widest">
+          <span className="text-[9px] font-black text-[#7d6648]">
             Depth: {boss.depth}m
           </span>
         </div>
 
-        <div className="w-40 h-40 bg-zinc-950 rounded-3xl shadow-inner border border-zinc-800 flex items-center justify-center mx-auto mb-10 relative">
-          <div className={!isEncountered ? 'filter blur-xl opacity-20' : ''}>
+        <div className="pixel-icon-box w-40 h-40 flex items-center justify-center mx-auto mb-10 relative">
+          <div className={!isEncountered ? 'opacity-25' : ''}>
             {isEncountered ? (
               <AtlasIcon name={boss.imagePath as any} size={128} />
             ) : (
@@ -116,13 +116,13 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
             )}
           </div>
           {!isEncountered && (
-            <div className="absolute inset-0 flex items-center justify-center text-rose-900 font-black text-5xl opacity-40">
+            <div className="absolute inset-0 flex items-center justify-center text-[#8f2f2f] font-black text-5xl opacity-40">
               Missing
             </div>
           )}
         </div>
 
-        <h3 className="text-3xl font-black text-white text-center mb-6 tracking-tighter">
+        <h3 className="text-3xl font-black text-[#f4dfb8] text-center mb-6">
           {isEncountered ? boss.name : 'Unknown Entity'}
         </h3>
 
@@ -139,7 +139,7 @@ export function EncyclopediaDetail({ id, tab, stats, bossesData }: EncyclopediaD
           />
         </div>
 
-        <div className="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800 leading-relaxed text-xs text-zinc-400 text-center">
+        <div className="pixel-card pixel-card-muted p-6 leading-relaxed text-xs text-[#d0b886] text-center">
           {isEncountered
             ? boss.description
             : 'Strong biological signals detected in the depths. Data will be recorded upon encounter.'}
@@ -162,16 +162,16 @@ export function ProgressBox({
 }) {
   const percent = (current / total) * 100;
   return (
-    <div className="bg-zinc-950/40 p-4 rounded-xl border border-zinc-900">
+    <div className="pixel-card pixel-card-muted p-4">
       <div className="flex justify-between items-end mb-2">
-        <span className="text-[9px] font-black text-zinc-600 tracking-widest">{label}</span>
-        <span className="text-xs font-black text-white tabular-nums">
+        <span className="text-[9px] font-black text-[#7d6648]">{label}</span>
+        <span className="text-xs font-black text-[#f4dfb8] tabular-nums">
           {current} / {total}
         </span>
       </div>
-      <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden">
+      <div className="pixel-bar h-2">
         <div
-          className="h-full transition-all duration-1000"
+          className="pixel-bar-fill h-full transition-all duration-1000"
           style={{ width: `${percent}%`, backgroundColor: color }}
         />
       </div>
@@ -181,8 +181,8 @@ export function ProgressBox({
 
 export function StatBox({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-900 text-center">
-      <div className="text-[8px] text-zinc-600 font-bold mb-1 tracking-widest">{label}</div>
+    <div className="pixel-card pixel-card-muted p-4 text-center">
+      <div className="text-[8px] text-[#7d6648] font-bold mb-1">{label}</div>
       <div className="text-sm font-black" style={{ color }}>
         {value}
       </div>

@@ -34,13 +34,13 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
   const getStyleByType = (type: ToastType) => {
     switch (type) {
       case 'success':
-        return 'border-emerald-500/50 bg-emerald-950/40 text-emerald-400';
+        return 'border-[#4f9b5f]/55 text-[#4f9b5f]';
       case 'error':
-        return 'border-rose-500/50 bg-rose-950/40 text-rose-400';
+        return 'border-[#b84a3c]/55 text-[#b84a3c]';
       case 'warning':
-        return 'border-amber-500/50 bg-amber-950/40 text-amber-400';
+        return 'border-[#d8a84f]/55 text-[#d8a84f]';
       default:
-        return 'border-blue-500/50 bg-blue-950/40 text-blue-400';
+        return 'border-[#2c8f87]/55 text-[#2c8f87]';
     }
   };
 
@@ -76,14 +76,14 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
                 className="pixel-badge flex items-center gap-2 px-2.5 py-2"
                 aria-label={`${item.label} x${item.amount}`}
               >
-                <div className="pixel-slot flex h-9 w-9 items-center justify-center bg-black/30">
+                <div className="pixel-slot flex h-9 w-9 items-center justify-center">
                   {isAtlasIconName(item.image) ? (
                     <AtlasSprite name={item.image} alt={item.label} size={30} />
                   ) : (
-                    <span className="text-sm font-black text-white/70">?</span>
+                    <span className="text-sm font-black">?</span>
                   )}
                 </div>
-                <span className="text-sm font-black text-white">
+                <span className="text-sm font-black">
                   x{item.amount.toLocaleString()}
                 </span>
               </div>
@@ -93,7 +93,7 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
       ) : (
         <div className="flex flex-col">
           <span className="text-sm font-black leading-tight opacity-50 mb-0.5">{toast.type}</span>
-          <p className="text-base md:text-lg font-bold text-white">{toast.message}</p>
+          <p className="text-base md:text-lg font-bold">{toast.message}</p>
         </div>
       )}
     </div>

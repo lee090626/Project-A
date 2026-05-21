@@ -60,30 +60,30 @@ const Hud: React.FC<HudProps> = React.memo(
           key: 'C',
           iconKey: 'StatusIcon' as const,
           onClick: onOpenStatus,
-          color: '#eab308',
+          color: '#d8a84f',
         },
         {
           label: 'Inventory',
           key: 'I',
           iconKey: 'InventoryIcon' as const,
           onClick: onOpenInventory,
-          color: '#f59e0b',
+          color: '#2c8f87',
         },
         {
-          label: 'Book',
+          label: 'Archive',
           key: 'B',
           iconKey: 'BookIcon' as const,
           onClick: onOpenEncyclopedia,
-          color: '#a855f7',
+          color: '#4f9b5f',
         },
         {
-          label: 'Setting',
+          label: 'Settings',
           key: 'Esc',
           iconKey: 'SettingsIcon' as const,
           onClick: onOpenSettings,
-          color: '#94a3b8',
+          color: '#a89065',
         },
-        { label: 'Guide', key: 'H', icon: '❓', onClick: onOpenGuide, color: '#22d3ee' },
+        { label: 'Guide', key: 'H', icon: '❓', onClick: onOpenGuide, color: '#2c8f87' },
       ],
       [onOpenStatus, onOpenInventory, onOpenEncyclopedia, onOpenSettings, onOpenGuide],
     );
@@ -97,7 +97,7 @@ const Hud: React.FC<HudProps> = React.memo(
             key: 'V',
             iconNode: <ElevatorIcon size={30} />,
             onClick: onOpenElevator,
-            color: '#34d399',
+            color: '#4f9b5f',
           }]
           : []),
       ],
@@ -116,6 +116,7 @@ const Hud: React.FC<HudProps> = React.memo(
         </div>
 
         {isMobile && <QuickNav items={mobileNavItems} variant="mobile" />}
+        {!isMobile && <QuickNav items={navItems} variant="desktop" />}
 
         {/* 하단 섹션: 장비, 네비게이션, 월드 정보 */}
         <div className="flex justify-between items-end w-full relative">
@@ -123,7 +124,6 @@ const Hud: React.FC<HudProps> = React.memo(
             <EquipmentInfo pos={pos} />
           </div>
 
-          {!isMobile && <QuickNav items={navItems} variant="desktop" />}
           <WorldInfo depth={stats.depth as any} layerName={layerName} onOpenElevator={onOpenElevator} />
         </div>
       </div>

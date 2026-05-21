@@ -15,7 +15,7 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
         className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'ingredients'
             ? 'pixel-button-active text-cyan-300'
-            : 'text-zinc-500 hover:text-zinc-300'
+            : 'text-[#a89065] hover:text-[#f4dfb8]'
         }`}
       >
         Items
@@ -25,7 +25,7 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
         className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'effects'
             ? 'pixel-button-active text-orange-300'
-            : 'text-zinc-500 hover:text-zinc-300'
+            : 'text-[#a89065] hover:text-[#f4dfb8]'
         }`}
       >
         Effects
@@ -35,7 +35,7 @@ const InventoryTabs = ({ activeTab, onTabChange }: InventoryTabsProps) => {
         className={`flex-1 sm:flex-none px-4 md:px-6 py-1.5 md:py-2 text-xs md:text-sm font-black transition-colors focus:outline-none ${
           activeTab === 'equipment'
             ? 'pixel-button-active text-cyan-300'
-            : 'text-zinc-500 hover:text-zinc-300'
+            : 'text-[#a89065] hover:text-[#f4dfb8]'
         }`}
       >
         Equipment

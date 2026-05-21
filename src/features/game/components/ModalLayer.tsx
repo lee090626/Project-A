@@ -115,9 +115,9 @@ const ModalLayer = ({ ui, currentStats, handleClose, gameActions }: ModalLayerPr
 
 function Overlay({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center p-2 sm:p-6 lg:p-12 bg-zinc-950/70 animate-in fade-in duration-150 pointer-events-auto">
+    <div className="absolute inset-0 z-50 flex items-center justify-center p-3 sm:p-8 lg:p-14 bg-[#090a08]/64 animate-in fade-in duration-150 pointer-events-auto">
       <div
-        className="w-full max-w-[1280px] h-full lg:h-auto lg:aspect-video max-h-[95vh] lg:max-h-[85vh] relative pointer-events-auto flex items-center justify-center"
+        className="w-full max-w-[1160px] h-full lg:h-auto lg:aspect-video max-h-[92vh] lg:max-h-[80vh] relative pointer-events-auto flex items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         {children}

@@ -26,10 +26,10 @@ const TabEffects = ({ stats, ownedEffects, selectedKey, onSelectKey, selectedEff
                 <button
                   key={item.id}
                   onClick={() => onSelectKey(item.id)}
-                  className={`relative aspect-square rounded-xl md:rounded-2xl border transition-all flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden focus:outline-none ${
+                  className={`pixel-card relative aspect-square transition-colors flex flex-col items-center justify-center p-2 md:p-4 group overflow-hidden focus:outline-none ${
                     isSelected
-                      ? 'bg-[#252526] border-orange-400 shadow-2xl scale-[1.02]'
-                      : 'bg-[#252526] border-zinc-800 hover:border-zinc-700'
+                      ? 'pixel-card-active border-orange-400!'
+                      : 'pixel-card-muted hover:border-[#d8a84f]'
                   }`}
                 >
                   <div className="w-14 h-14 md:w-18 md:h-18 mb-2 md:mb-4 flex items-center justify-center">
@@ -39,7 +39,7 @@ const TabEffects = ({ stats, ownedEffects, selectedKey, onSelectKey, selectedEff
                     <div className={`text-[10px] md:text-sm font-bold tabular-nums ${isSelected ? 'text-white' : 'text-orange-400'}`}>
                       x{count.toLocaleString()}
                     </div>
-                    <div className="text-[10px] md:text-xs text-zinc-600 font-bold tracking-widest text-center truncate w-full px-1">
+                    <div className="text-[10px] md:text-xs text-[#7d6648] font-bold text-center truncate w-full px-1">
                       {item.name}
                     </div>
                   </div>
@@ -47,9 +47,9 @@ const TabEffects = ({ stats, ownedEffects, selectedKey, onSelectKey, selectedEff
               )
             })
           ) : (
-            <div className="col-span-full h-64 flex flex-col items-center justify-center text-center opacity-20">
+            <div className="pixel-empty col-span-full h-64 flex flex-col items-center justify-center text-center opacity-50">
               <div className="text-5xl mb-6">📦</div>
-              <p className="text-xs font-bold text-zinc-500 tracking-widest">
+              <p className="text-xs font-bold text-[#a89065]">
                 No Items Found
               </p>
             </div>
@@ -57,27 +57,27 @@ const TabEffects = ({ stats, ownedEffects, selectedKey, onSelectKey, selectedEff
         </div>
       </div>
 
-      <div className="w-full lg:w-[320px] xl:w-[380px] shrink-0 h-auto lg:h-full flex flex-col bg-[#252526] rounded-2xl md:rounded-4xl p-4 md:p-6 lg:p-8 border border-zinc-800 relative shadow-2xl overflow-y-auto custom-scrollbar min-h-0">
+      <div className="pixel-card w-full lg:w-[320px] xl:w-[380px] shrink-0 h-auto lg:h-full flex flex-col p-4 md:p-6 lg:p-8 relative overflow-y-auto custom-scrollbar min-h-0">
         {selectedEffect ? (
           <div className="flex flex-col h-full animate-in fade-in slide-in-from-right-4 duration-300">
             {/* 이미지 영역 */}
-            <div className="w-40 h-40 md:w-56 md:h-56 bg-zinc-950 rounded-3xl md:rounded-4xl shadow-inner border border-zinc-800 flex items-center justify-center mx-auto mb-8 md:mb-12 overflow-hidden relative">
+            <div className="pixel-icon-box w-40 h-40 md:w-56 md:h-56 flex items-center justify-center mx-auto mb-8 md:mb-12 overflow-hidden relative">
               <AtlasIcon name={(selectedEffect.image && (selectedEffect.image in atlasMap)) ? selectedEffect.image as any : 'GoldIcon'} size={160} />
-              <div className="absolute inset-0 shadow-[inset_0_0_60px_#f9731633] rounded-3xl md:rounded-4xl pointer-events-none" />
+              <div className="absolute inset-0 bg-orange-500/10 pointer-events-none" />
             </div>
 
             {/* 이름 */}
-            <h3 className="text-2xl md:text-4xl font-black text-white text-center mb-8 tracking-tighter">
+            <h3 className="text-2xl md:text-4xl font-black text-white text-center mb-8">
               {selectedEffect.name}
             </h3>
             
             {/* 핵심 효과 설명 */}
-            <div className="mt-4 bg-orange-500/10 border border-orange-500/20 p-6 rounded-3xl relative overflow-hidden group">
+            <div className="pixel-card pixel-card-muted mt-4 p-6 relative overflow-hidden group border-orange-500/40!">
               <div className="absolute top-0 left-0 w-1 h-full bg-orange-500/50" />
               
               {/* 동적 능력치 보너스 표시 */}
               {selectedEffect.bonus && (
-                <div className="text-[16px] text-orange-500 font-black tracking-[0.2em] mb-2">
+                <div className="text-[16px] text-orange-500 font-black mb-2">
                   {(() => {
                     const statMap: Record<string, string> = {
                       power: 'Attack Power',
@@ -110,7 +110,7 @@ const TabEffects = ({ stats, ownedEffects, selectedKey, onSelectKey, selectedEff
         ) : (
           <div className="h-full flex flex-col items-center justify-center text-center opacity-10">
             <div className="text-5xl mb-6">📦</div>
-            <p className="text-xs font-bold text-zinc-500 tracking-widest">Select an Item</p>
+            <p className="text-xs font-bold text-[#a89065]">Select an Item</p>
           </div>
         )}
       </div>

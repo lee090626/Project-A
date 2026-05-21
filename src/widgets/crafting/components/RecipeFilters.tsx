@@ -29,8 +29,8 @@ const RecipeFilters = ({
             onClick={() => onSelectTab(tab)}
             className={`flex-1 py-3 px-6 text-sm font-black transition-colors focus:outline-none ${
               craftType === tab
-                ? 'pixel-button-active text-rose-200'
-                : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                ? 'pixel-button-active text-[#fff1bf]'
+                : 'pixel-button text-[#a89065] hover:text-[#f4dfb8]'
             }`}
           >
             {tab}
@@ -43,15 +43,15 @@ const RecipeFilters = ({
         <>
           <div className="flex flex-col gap-6 mb-8">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] text-zinc-500 font-black mr-2">Circle:</span>
+              <span className="text-[10px] text-[#a89065] font-black mr-2">Circle:</span>
               {[2, 3, 4, 5, 6, 7, 8, 9].map((c) => (
                 <button
                   key={c}
                   onClick={() => onSelectCircle(c)}
                   className={`px-4 py-2 text-xs font-black transition-colors border focus:outline-none ${
                     selectedCircle === c
-                      ? 'pixel-button-active text-rose-200'
-                      : 'pixel-button text-zinc-500 hover:border-zinc-700'
+                      ? 'pixel-button-active text-[#fff1bf]'
+                      : 'pixel-button text-[#a89065] hover:border-[#3c453c]'
                   }`}
                 >
                   C{c}
@@ -59,7 +59,7 @@ const RecipeFilters = ({
               ))}
             </div>
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-[10px] text-zinc-500 font-black mr-2">Part:</span>
+              <span className="text-[10px] text-[#a89065] font-black mr-2">Part:</span>
               {EQUIPMENT_PARTS.map((part) => (
                 <button
                   key={part}
@@ -67,7 +67,7 @@ const RecipeFilters = ({
                   className={`px-5 py-2.5 text-[10px] md:text-xs font-black border transition-colors focus:outline-none ${
                     selectedPart === part
                       ? 'pixel-button-active text-[#f8e3a5]'
-                      : 'pixel-button text-zinc-500 hover:text-zinc-300'
+                      : 'pixel-button text-[#a89065] hover:text-[#f4dfb8]'
                   }`}
                 >
                   {part}
@@ -75,7 +75,7 @@ const RecipeFilters = ({
               ))}
             </div>
           </div>
-          <div className="w-full h-px bg-white/5 mb-6" />
+          <div className="w-full border-t-2 pixel-divider mb-6" />
         </>
       )}
     </>

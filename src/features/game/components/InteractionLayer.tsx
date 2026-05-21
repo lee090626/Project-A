@@ -126,11 +126,11 @@ const InteractionLayer = ({
               <h2 className="text-5xl font-black text-red-500 drop-shadow-[2px_2px_0_rgba(0,0,0,0.85)]">
                 Driller Down
               </h2>
-              <p className="text-zinc-400 font-medium text-xs">Structural integrity compromised</p>
+              <p className="text-[#d0b886] font-medium text-xs">Structural integrity compromised</p>
             </div>
 
             <div className="py-4">
-              <div className="text-4xl text-zinc-500">
+              <div className="text-4xl text-[#a89065]">
                 Depth: <span className="text-white">{currentStats.depth}m</span>
               </div>
             </div>
@@ -139,7 +139,7 @@ const InteractionLayer = ({
               <button
                 onClick={handleRewardedReviveClick}
                 disabled={reviveAdState !== 'ready'}
-                className="pixel-button pixel-button-success w-full py-4 disabled:bg-zinc-700 disabled:text-zinc-400 font-black transition-colors text-sm"
+                className="pixel-button pixel-button-success w-full py-4 disabled:bg-[#1d241f] disabled:text-[#d0b886] font-black transition-colors text-sm"
               >
                 {rewardedReviveLabel}
               </button>

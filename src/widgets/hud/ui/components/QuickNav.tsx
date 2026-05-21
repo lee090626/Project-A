@@ -24,13 +24,13 @@ export const QuickNav: React.FC<QuickNavProps> = React.memo(({ items, variant = 
   const isMobile = variant === 'mobile';
   const containerClassName = isMobile
     ? 'absolute right-[calc(env(safe-area-inset-right)+0.75rem)] top-[calc(env(safe-area-inset-top)+5.25rem)] flex flex-col gap-2 pointer-events-auto z-30'
-    : 'absolute left-1/2 bottom-3 md:bottom-5 lg:bottom-6 -translate-x-1/2 flex gap-1.5 md:gap-2.5 lg:gap-3 pointer-events-auto z-20';
+    : 'absolute right-4 md:right-6 top-24 lg:top-28 flex flex-col gap-2 pointer-events-auto z-20';
   const panelClassName = isMobile
     ? 'pixel-slot w-11 h-11 flex items-center justify-center transition-colors active:translate-y-px relative overflow-hidden'
-    : 'pixel-slot w-14 h-14 md:w-16 md:h-16 flex items-center justify-center transition-colors active:translate-y-px relative overflow-hidden';
+    : 'pixel-slot w-12 h-12 lg:w-14 lg:h-14 flex items-center justify-center transition-colors active:translate-y-px relative overflow-hidden';
   const iconClassName = isMobile
     ? 'relative w-9 h-9 z-10 flex items-center justify-center'
-    : 'relative w-12 h-12 md:w-14 md:h-14 z-10 flex items-center justify-center';
+    : 'relative w-10 h-10 lg:w-12 lg:h-12 z-10 flex items-center justify-center';
 
   return (
     <div className={containerClassName}>
@@ -42,7 +42,7 @@ export const QuickNav: React.FC<QuickNavProps> = React.memo(({ items, variant = 
           className="group relative flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-[#d4a35f]/70 p-0.5"
         >
           <div
-            className={`${isMobile ? 'hidden' : 'absolute'} pixel-badge pixel-font -top-8 md:-top-9 left-1/2 -translate-x-1/2 px-2 py-1 text-[#f8e3a5] text-[10px] font-bold opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap`}
+            className={`${isMobile ? 'hidden' : 'absolute'} pixel-badge pixel-font right-full top-1/2 mr-2 -translate-y-1/2 px-2 py-1 text-[#f8e3a5] text-[10px] font-bold opacity-0 md:group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap`}
           >
             {item.label}
           </div>

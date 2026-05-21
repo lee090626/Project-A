@@ -49,14 +49,14 @@ function EquipmentCard({
 
   return (
     <div
-      className={`p-4 md:p-6 rounded-2xl md:rounded-3xl border-2 transition-all flex flex-col group relative overflow-hidden ${
+      className={`pixel-card p-4 md:p-6 transition-colors flex flex-col group relative overflow-hidden ${
         isEquipped
-          ? 'bg-[#252526] border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.2)]'
-          : 'bg-[#252526] border-zinc-800 opacity-70 hover:opacity-100 hover:border-zinc-700'
+          ? 'pixel-card-active border-cyan-400!'
+          : 'pixel-card-muted opacity-80 hover:opacity-100 hover:border-[#d8a84f]'
       }`}
     >
       <div className="flex items-center gap-4 md:gap-6 mb-6 text-left">
-        <div className="w-20 h-20 md:w-28 md:h-28 bg-zinc-950 rounded-2xl flex items-center justify-center border border-zinc-900 shadow-inner overflow-hidden">
+        <div className="pixel-icon-box w-20 h-20 md:w-28 md:h-28 flex items-center justify-center overflow-hidden">
           {equipment.image ? (
             <AtlasIcon name={equipment.image as AtlasIconName} size={80} />
           ) : (
@@ -65,11 +65,11 @@ function EquipmentCard({
         </div>
         <div>
           <div
-            className={`text-[10px] font-bold mb-1 tracking-widest ${isEquipped ? 'text-cyan-400' : 'text-zinc-500'}`}
+            className={`text-[10px] font-bold mb-1 ${isEquipped ? 'text-cyan-400' : 'text-[#a89065]'}`}
           >
             {isEquipped ? 'Currently Equipped' : 'Inventory'} • {EQUIPMENT_PART_LABELS[equipment.part]}
           </div>
-          <h4 className="text-xl md:text-2xl font-black text-white tracking-tighter">
+          <h4 className="text-xl md:text-2xl font-black text-white">
             {equipment.name}
           </h4>
         </div>
@@ -88,22 +88,22 @@ function EquipmentCard({
         ))}
       </div>
 
-      <div className="mb-4 rounded-2xl border border-amber-500/15 bg-amber-500/5 p-3 md:p-4">
+      <div className="pixel-card pixel-card-muted mb-4 p-3 md:p-4 border-amber-500/35!">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-[9px] md:text-[10px] font-black tracking-widest text-amber-500/70">
+            <div className="text-[9px] md:text-[10px] font-black text-amber-500/70">
               Main Option
             </div>
             <div className="mt-1 flex flex-wrap items-center gap-2">
               <span className="text-sm md:text-base font-black text-white">{qualityLabel}</span>
-              <span className={mainStatBonusPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
+              <span className={mainStatBonusPct >= 0 ? 'text-emerald-400' : 'text-[#b84a3c]'}>
                 {mainStatBonusPct >= 0 ? '+' : ''}
                 {mainStatBonusPct}%
               </span>
             </div>
           </div>
           <div className="text-right shrink-0">
-            <div className="text-[9px] md:text-[10px] font-black tracking-widest text-zinc-500">
+            <div className="text-[9px] md:text-[10px] font-black text-[#a89065]">
               Cost
             </div>
             <div className="text-sm md:text-base font-black text-amber-400 tabular-nums">
@@ -114,26 +114,26 @@ function EquipmentCard({
         <button
           onClick={() => onRerollEquipmentOption?.(equipmentId)}
           disabled={!canReroll}
-          className={`mt-3 w-full rounded-xl border py-2.5 text-xs md:text-sm font-black tracking-widest transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 ${
+          className={`pixel-button mt-3 w-full py-2.5 text-xs md:text-sm font-black transition-colors active:translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50 ${
             canReroll
-              ? 'border-amber-400 bg-amber-400 text-black hover:brightness-110'
-              : 'border-white/5 bg-zinc-900/60 text-zinc-600 cursor-not-allowed'
+              ? 'pixel-button-success'
+              : 'text-[#7d6648] cursor-not-allowed'
           }`}
         >
           {mainStatBonusPct >= EQUIPMENT_MAIN_STAT_BONUS_MAX ? 'Perfect Option' : 'Reroll Option'}
         </button>
       </div>
 
-      <div className="mt-auto pt-4 border-t border-white/5">
+      <div className="mt-auto pt-4 border-t-2 pixel-divider">
         {!isEquipped ? (
           <button
             onClick={() => onEquip?.(equipmentId, equipment.part)}
-            className="w-full py-3 md:py-4 bg-zinc-100 text-zinc-950 hover:bg-white text-center font-black text-sm md:text-base tracking-widest rounded-xl shadow-xl active:scale-95 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
+            className="pixel-button pixel-button-success w-full py-3 md:py-4 text-center font-black text-sm md:text-base active:translate-y-px transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50"
           >
             EQUIP ITEM
           </button>
         ) : (
-          <div className="w-full py-3 md:py-4 border border-cyan-400/30 text-cyan-400/60 text-center font-black text-xs md:text-sm tracking-widest rounded-xl">
+          <div className="pixel-badge w-full py-3 md:py-4 text-cyan-400/70 text-center font-black text-xs md:text-sm">
             EQUIPPED
           </div>
         )}
@@ -149,7 +149,7 @@ const getEquipmentStatItems = (stats: {
   defense?: number;
 }, mainStat: keyof Equipment['stats']) => {
   return [
-    { key: 'power', label: 'Power', value: stats.power, color: 'text-rose-400' },
+    { key: 'power', label: 'Power', value: stats.power, color: 'text-[#b84a3c]' },
     { key: 'defense', label: 'Defense', value: stats.defense, color: 'text-blue-400' },
     { key: 'maxHp', label: 'Max HP', value: stats.maxHp, color: 'text-emerald-400' },
     { key: 'moveSpeed', label: 'Speed', value: stats.moveSpeed, color: 'text-amber-400', suffix: '%' },
@@ -181,11 +181,11 @@ const StatBox = ({
   isMainStat?: boolean;
 }) => (
   <div
-    className={`p-2 md:p-3 rounded-xl border shadow-inner flex flex-col items-center justify-center min-h-16 ${
-      isMainStat ? 'bg-amber-500/10 border-amber-500/20' : 'bg-zinc-950/50 border-zinc-900'
+    className={`pixel-card p-2 md:p-3 flex flex-col items-center justify-center min-h-16 ${
+      isMainStat ? 'border-amber-500/50!' : 'pixel-card-muted'
     }`}
   >
-    <div className="text-zinc-500 font-bold mb-0.5 tracking-tighter truncate w-full text-center text-[10px]">
+    <div className="text-[#a89065] font-bold mb-0.5 tracking-tighter truncate w-full text-center text-[10px]">
       {label}
     </div>
     <div className={`font-black tabular-nums transition-colors text-base md:text-lg ${color}`}>

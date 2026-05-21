@@ -44,7 +44,7 @@ function Crafting({ stats, onCraft, onSynthesizeEffect, onClose }: CraftingProps
   } = useCrafting(stats);
 
   return (
-    <WindowFrame showPattern topGlowClassName="from-rose-500/5">
+    <WindowFrame showPattern topGlowClassName="from-[#d8a84f]/10">
       {/* HEADER SECTION */}
       <ForgeHeader goldCoins={stats.goldCoins} onClose={onClose} />
 

@@ -101,14 +101,14 @@ export default function Joystick({ size = 150, stickSize = 60, onMove }: Joystic
     >
       {/* 가이드 라인 (옵션) */}
       <div className="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-        <div className="w-px h-full bg-white/30" />
-        <div className="h-px w-full bg-white/30 absolute" />
+        <div className="w-px h-full bg-[#f4dfb8]/30" />
+        <div className="h-px w-full bg-[#f4dfb8]/30 absolute" />
       </div>
 
       {/* 조이스틱 핸들 */}
       <div
         className={`absolute transition-transform duration-75 flex items-center justify-center
-          ${isActive ? 'bg-amber-400 scale-110' : 'bg-[#d8c2a6] scale-100'}`}
+          ${isActive ? 'bg-[#d8a84f]' : 'bg-[#d8c2a6]'}`}
         style={{
           width: stickSize,
           height: stickSize,
@@ -117,7 +117,7 @@ export default function Joystick({ size = 150, stickSize = 60, onMove }: Joystic
           transform: `translate(${stickPos.x}px, ${stickPos.y}px)`,
         }}
       >
-        <div className="w-1/3 h-1/3 bg-black/30" />
+        <div className="w-1/3 h-1/3 bg-[#050604]/45" />
       </div>
     </div>
   );

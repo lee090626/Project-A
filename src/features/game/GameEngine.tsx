@@ -304,10 +304,10 @@ export default function GameEngine() {
     }
   }, [isClient, globalWorker]);
 
-  if (!isClient) return <div className="fixed inset-0 bg-zinc-950" />;
+  if (!isClient) return <div className="fixed inset-0 bg-[#090a08]" />;
 
   return (
-    <div ref={containerRef} className="fixed inset-0 overflow-hidden bg-zinc-950">
+    <div ref={containerRef} className="fixed inset-0 overflow-hidden bg-[#090a08]">
       <canvas
         ref={canvasRef}
         width={windowSize.width}

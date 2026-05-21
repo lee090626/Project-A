@@ -34,44 +34,44 @@ const RecipeList = ({
             <button
               key={rcp.id}
               onClick={() => onSelectRecipe(rcp)}
-              className={`relative p-5 rounded-4xl border transition-all flex items-center gap-6 text-left group overflow-hidden focus:outline-none ${
+              className={`pixel-card relative p-5 transition-colors flex items-center gap-6 text-left group overflow-hidden focus:outline-none ${
                 active
-                  ? 'bg-zinc-800 border-rose-500/50 shadow-lg ring-1 ring-rose-500/20'
-                  : 'bg-zinc-950/40 border-white/5 hover:border-white/10'
+                  ? 'pixel-card-active border-[#d8a84f]!'
+                  : 'pixel-card-muted hover:border-[#d8a84f]/60'
               }`}
             >
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-center text-4xl shadow-inner group-hover:border-rose-500/30 transition-colors shrink-0 overflow-hidden">
+              <div className="pixel-icon-box w-16 h-16 md:w-20 md:h-20 flex items-center justify-center text-4xl group-hover:border-[#d8a84f]/60 transition-colors shrink-0 overflow-hidden">
                 {rcp.image ? (
-                  <AtlasIcon name={rcp.image} size={64} className={owned ? 'opacity-40 grayscale' : ''} />
+                  <AtlasIcon name={rcp.image} size={64} className={owned ? 'opacity-45' : ''} />
                 ) : (
-                  <span className={owned ? 'opacity-40 grayscale' : ''}>{rcp.icon}</span>
+                  <span className={owned ? 'opacity-45' : ''}>{rcp.icon}</span>
                 )}
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-lg md:text-xl font-black tracking-tighter truncate ${active ? 'text-white' : 'text-zinc-300'}`}>
+                  <span className={`text-lg md:text-xl font-black truncate ${active ? 'text-[#fff1bf]' : 'text-[#f4dfb8]'}`}>
                     {rcp.name}
                   </span>
                   {owned && (
-                    <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded text-[8px] font-black tracking-widest">Owned</span>
+                    <span className="pixel-badge px-2 py-0.5 text-emerald-400 text-[8px] font-black">Owned</span>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
-                   <div className="h-1 w-20 bg-black/40 rounded-full overflow-hidden border border-white/5">
-                      <div className={`h-full bg-rose-500 ${craftable ? 'opacity-100' : 'opacity-20'}`} style={{ width: craftable ? '100%' : '30%' }} />
+                   <div className="pixel-bar h-2 w-20">
+                      <div className={`pixel-bar-fill h-full bg-[#d8a84f] ${craftable ? 'opacity-100' : 'opacity-20'}`} style={{ width: craftable ? '100%' : '30%' }} />
                    </div>
                 </div>
               </div>
 
-              {active && <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 blur-3xl rounded-full" />}
+              {active && <div className="absolute right-0 top-0 h-full w-2 bg-[#d8a84f]/80" />}
             </button>
           );
         })}
 
         {visibleRecipes.length === 0 && (
-          <div className="col-span-full py-20 text-center opacity-20">
-            <p className="text-sm font-black tracking-widest">No Items Available</p>
+          <div className="pixel-empty col-span-full py-20 text-center opacity-50">
+            <p className="text-sm font-black">No Items Available</p>
           </div>
         )}
       </div>

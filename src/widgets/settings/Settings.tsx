@@ -78,24 +78,24 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
       onKeyDown={(e) => e.key === 'Enter' && onToggle()}
       tabIndex={0}
       className={`pixel-panel flex justify-between items-center p-6 transition-colors cursor-pointer group/toggle relative focus:outline-none focus:ring-2 focus:ring-amber-400/50
-        ${active ? 'pixel-panel-active' : 'bg-zinc-900/50 border-zinc-800 hover:border-[#d4a35f]'}`}
+        ${active ? 'pixel-panel-active' : 'pixel-panel-muted hover:border-[#ffd05f]'}`}
     >
       <div className="flex flex-col gap-1 relative z-10">
         <span
-          className={`text-base font-bold transition-colors duration-200 ${active ? 'text-white' : 'text-zinc-400 group-hover/toggle:text-zinc-200'}`}
+          className={`text-base font-bold transition-colors duration-200 ${active ? 'text-[#f4dfb8]' : 'text-[#d0b886] group-hover/toggle:text-[#f4dfb8]'}`}
         >
           {label}
         </span>
-        <span className="text-[10px] text-zinc-600 font-bold">{subLabel}</span>
+        <span className="text-[10px] text-[#d0b886] font-bold">{subLabel}</span>
       </div>
 
       <div
         className={`pixel-bar w-14 h-7 relative transition-colors duration-300 p-1 flex items-center
-        ${active ? 'pixel-bar-active' : 'bg-zinc-800 border border-zinc-700'}`}
+        ${active ? 'pixel-bar-active' : 'border-[#4a2d1c]'}`}
       >
         <div
           className={`w-5 h-5 transition-transform duration-300
-            ${active ? 'translate-x-7 bg-zinc-950' : 'translate-x-0 bg-zinc-500'}`}
+            ${active ? 'translate-x-7 bg-[#090a08]' : 'translate-x-0 bg-[#242a24]'}`}
         />
       </div>
     </div>
@@ -107,10 +107,10 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
         icon={<span className="text-2xl md:text-3xl">⚙️</span>}
         title="Settings"
         subtitle="System Configuration"
-        titleClassName="text-zinc-300"
-        subtitleClassName="text-zinc-600"
+        titleClassName="text-[#f4dfb8]"
+        subtitleClassName="text-[#d0b886]"
         onClose={onClose}
-        closeButtonClassName="hover:bg-zinc-100 hover:text-black hover:border-zinc-100 focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+        closeButtonClassName="hover:border-[#ffd05f] focus-visible:ring-2 focus-visible:ring-[#ffd05f]/50"
       />
 
       <div className="flex-1 overflow-y-auto custom-scrollbar px-10 py-10 flex items-center justify-center">
@@ -118,8 +118,8 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
           {/* 게임플레이 설정 섹션 */}
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-zinc-400">🎮</span>
-              <h3 className="text-[10px] font-bold text-zinc-500">Gameplay Settings</h3>
+              <span className="text-[#d0b886]">🎮</span>
+              <h3 className="text-[10px] font-bold text-[#d0b886]">Gameplay Settings</h3>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -153,24 +153,24 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
           {/* 시스템 및 데이터 섹션 */}
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-zinc-400">⚙️</span>
-              <h3 className="text-[10px] font-bold text-zinc-500">System & Data</h3>
+              <span className="text-[#d0b886]">⚙️</span>
+              <h3 className="text-[10px] font-bold text-[#d0b886]">System & Data</h3>
             </div>
 
             <div className="flex flex-col gap-4">
               {/* 백업 그룹 */}
               <div className="pixel-panel p-6">
-                <h4 className="text-[10px] font-bold text-zinc-400 mb-4">Data Backup</h4>
+                <h4 className="text-[10px] font-bold text-[#d0b886] mb-4">Data Backup</h4>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={onExport}
-                    className="pixel-button h-12 text-zinc-300 text-[10px] font-bold hover:text-white transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="pixel-button h-12 text-[10px] font-bold transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd05f]/50"
                   >
                     <span>📤</span> Export Save
                   </button>
                   <button
                     onClick={onImport}
-                    className="pixel-button h-12 text-zinc-300 text-[10px] font-bold hover:text-white transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400/50"
+                    className="pixel-button h-12 text-[10px] font-bold transition-colors active:translate-y-px flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd05f]/50"
                   >
                     <span>📥</span> Import Save
                   </button>
@@ -178,17 +178,17 @@ export default function Settings({ onReset, onClose, onExport, onImport }: Setti
               </div>
 
               {/* 초기화 그룹 */}
-              <div className="pixel-panel bg-rose-950/10 border-rose-900/50 p-6 group/reset relative overflow-hidden">
+              <div className="pixel-card pixel-card-danger p-6 group/reset relative overflow-hidden">
                 <div className="flex flex-col relative z-10">
-                  <h4 className="text-sm font-bold text-rose-500">Data Reset</h4>
-                  <p className="text-[9px] text-zinc-600 font-bold mt-1 mb-4 leading-relaxed">
+                  <h4 className="text-sm font-bold text-[#5b1717]">Data Reset</h4>
+                  <p className="text-[9px] text-[#d0b886] font-bold mt-1 mb-4 leading-relaxed">
                     Permanently deletes all game progress. This action cannot be undone.
                   </p>
                   <button
                     onClick={() => {
                       if (confirm('Delete all progress? This action cannot be undone.')) onReset();
                     }}
-                    className="pixel-button w-full h-12 text-rose-500 text-[10px] font-bold hover:bg-rose-600 hover:text-white transition-colors active:translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400/50"
+                    className="pixel-button pixel-button-danger w-full h-12 text-[10px] font-bold transition-colors active:translate-y-px focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b84a3c]/50"
                   >
                     Reset Data
                   </button>

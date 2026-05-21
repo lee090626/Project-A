@@ -15,12 +15,12 @@ export const WorldInfo: React.FC<WorldInfoProps> = React.memo(
       <div className="pixel-badge pixel-font hidden md:flex items-center gap-2 opacity-80 hover:opacity-100 transition-opacity pointer-events-auto px-3 py-2">
         <div className="flex flex-col items-end leading-none">
           <span className="text-emerald-300 text-xs lg:text-sm font-black">{layerName}</span>
-          <span className="mt-1 text-[10px] font-bold text-zinc-500">D {Math.floor(depth)}m</span>
+          <span className="mt-1 text-[10px] font-bold text-[#a89065]">D {Math.floor(depth)}m</span>
         </div>
         {onOpenElevator && (
           <button
             onClick={onOpenElevator}
-            className="pixel-button px-2 py-1 text-[10px] font-bold text-zinc-400 transition-colors hover:text-[#f8e3a5]"
+            className="pixel-button px-2 py-1 text-[10px] font-bold text-[#d0b886] transition-colors hover:text-[#f8e3a5]"
           >
             Waypoints
           </button>

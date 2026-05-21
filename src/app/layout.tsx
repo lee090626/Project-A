@@ -195,7 +195,7 @@ export default function RootLayout({
         )}
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100 min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#090a08] text-[#f4dfb8] min-h-screen`}
       >
         <div id="drilling-game-root">{children}</div>
         {shouldRegisterServiceWorker ? (

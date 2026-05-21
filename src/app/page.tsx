@@ -1,8 +1,95 @@
 import Link from 'next/link';
 import { GamePlayShell } from './_components/GamePlayShell';
 import { AtlasSprite } from '@/shared/ui/AtlasSprite';
+import type { AtlasIconName } from '@/shared/config/atlasMap';
 
 export const dynamic = 'force-static';
+
+const HERO_TILES = ['StoneTile', 'GoldStoneTile', 'LustStoneTile', 'MidasiteTile'] as const;
+
+const FEATURE_CARDS = [
+  {
+    title: 'Progression & Crafting System',
+    icon: 'CrimsonFangDrill',
+    body: 'Slay powerful bosses in the nine circles of Hell to earn unique, stackable effects. These effect items provide permanent bonuses to mining speed, power, and critical hit rates as you descend further into the depths.',
+  },
+  {
+    title: 'Equipment Upgrades',
+    icon: 'CrimsonVeilHelmet',
+    body: 'Refine gathered materials into ingots and visit the Forgemaster to craft drills, helmets, armors, and boots. Each equipment piece shapes your build for efficient mining or tough boss battles.',
+  },
+  {
+    title: 'Giant Dimensional Bosses',
+    icon: 'Asmodeus',
+    body: 'Ancient bosses govern dimensions deep underground with destructive patterns that demand precise movement. Defeating them marks the path deeper and unlocks the next stage of progression.',
+  },
+] as const satisfies readonly {
+  title: string;
+  icon: AtlasIconName;
+  body: string;
+}[];
+
+const MINERAL_GLOSSARY = [
+  {
+    name: 'Stone',
+    icon: 'StoneTile',
+    desc: 'A basic resource near the surface and the first material for early upgrades.',
+    depth: '0m ~ 100m',
+  },
+  {
+    name: 'Crimson Stone',
+    icon: 'CrimsonStoneIcon',
+    desc: 'A dense red mineral used in early circle equipment and refinery routes.',
+    depth: '150m ~ 400m',
+  },
+  {
+    name: 'Gold Stone',
+    icon: 'GoldStoneIcon',
+    desc: 'A valuable mineral needed for advanced crafting and steady equipment growth.',
+    depth: '400m ~ 800m',
+  },
+  {
+    name: 'Lust Stone',
+    icon: 'LustStoneIcon',
+    desc: 'A circle resource tied to boss progression and permanent effect stacks.',
+    depth: '800m ~ 1200m',
+  },
+  {
+    name: 'Fervor Stone',
+    icon: 'FervorStoneIcon',
+    desc: 'A hot mineral that supports high-tier weapons and deeper expedition builds.',
+    depth: '1000m+',
+  },
+  {
+    name: 'Midasite',
+    icon: 'MidasiteIcon',
+    desc: 'A rare late-game resource for specialized upgrades and high-value crafting.',
+    depth: '650m+',
+  },
+] as const satisfies readonly {
+  name: string;
+  icon: AtlasIconName;
+  desc: string;
+  depth: string;
+}[];
+
+const FAQ_ITEMS = [
+  {
+    question: 'Do I lose my collected items when I die?',
+    answer:
+      'No. Drilling RPG preserves your minerals and gold when you respawn at the surface base camp, so progress is tied to exploration and upgrades instead of item loss.',
+  },
+  {
+    question: 'How do I save the game?',
+    answer:
+      "The game automatically saves your state every 10 seconds with browser local storage. You can also transfer data later with the settings screen's Export/Import Save Code feature.",
+  },
+  {
+    question: 'How do I attack enemy monsters?',
+    answer:
+      'Use the target action or push movement toward a monster to enter auto-attack behavior. Damage depends on the monster armor and your current attack power.',
+  },
+] as const;
 
 export default function LandingPage() {
   if (process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames') {
@@ -10,14 +97,14 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080504] text-[#f1dfc4] selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-[#090a08] text-[#f4dfb8] selection:bg-[#2c8f87] selection:text-white">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-4 overflow-hidden pixel-font">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0">
           <div className="pixel-hero-grid absolute inset-0 opacity-70" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,#1a120d_0_24px,#2c2119_24px_26px,#0a0605_26px_28px,transparent_28px)] bg-[length:48px_48px] opacity-80" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_0%,rgba(8,5,4,0.25)_52%,#080504_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,#191c18_0_24px,#3c453c_24px_26px,#050604_26px_28px,transparent_28px)] bg-[length:48px_48px] opacity-80" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(17,19,15,0.1)_0%,rgba(5,6,4,0.28)_52%,#090a08_100%)]" />
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-7">
@@ -28,25 +115,23 @@ export default function LandingPage() {
             </h1>
             <AtlasSprite name="GoldStoneIcon" size={64} className="hidden sm:inline-flex" />
           </div>
-          <p className="max-w-2xl text-lg md:text-xl text-[#d8c2a6] leading-relaxed">
+          <p className="max-w-2xl text-lg md:text-xl text-[#d0b886] leading-relaxed font-bold">
             A top-down pixel mining RPG where every meter below the base camp brings harder ore,
             stranger monsters, and better gear.
           </p>
 
           <div className="flex items-center justify-center gap-3 py-2">
-            {(['StoneTile', 'GoldStoneTile', 'LustStoneTile', 'MidasiteTile'] as const).map(
-              (name) => (
-                <div key={name} className="pixel-slot flex h-14 w-14 items-center justify-center">
-                  <AtlasSprite name={name} size={42} />
-                </div>
-              ),
-            )}
+            {HERO_TILES.map((name) => (
+              <div key={name} className="pixel-slot flex h-14 w-14 items-center justify-center">
+                <AtlasSprite name={name} size={42} />
+              </div>
+            ))}
           </div>
 
           <div className="pt-4 flex flex-col items-center gap-4">
             <Link
               href="/play"
-              className="pixel-button group relative inline-flex items-center justify-center px-9 py-4 text-lg font-black text-[#f8e3a5] transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-[#d4a35f]/70"
+              className="pixel-button group relative inline-flex items-center justify-center px-9 py-4 text-lg font-black text-[#f8e3a5] transition-colors hover:text-[#fff1bf] focus:outline-none focus:ring-2 focus:ring-[#d4a35f]/70"
             >
               Play for Free Now
               <svg
@@ -64,15 +149,15 @@ export default function LandingPage() {
                 ></path>
               </svg>
             </Link>
-            <p className="text-zinc-500 text-sm mt-1">
+            <p className="text-[#d0b886] text-sm mt-1 font-bold">
               Plays right in your browser. No installation required.
             </p>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-10 text-zinc-500">
-          <p className="text-sm mb-2 opacity-60 font-semibold text-center">Scroll Down</p>
+        <div className="absolute bottom-10 text-[#d0b886]">
+          <p className="text-sm mb-2 opacity-70 font-semibold text-center">Scroll Down</p>
           <svg
             className="w-6 h-6 mx-auto"
             fill="none"
@@ -93,11 +178,11 @@ export default function LandingPage() {
       {/* Content Section */}
       <article className="relative z-10 max-w-5xl mx-auto px-6 py-24 space-y-28">
         {/* Section 1: Story */}
-        <section className="bg-white/5 border border-white/10 p-10 md:p-16 rounded-3xl backdrop-blur-sm shadow-2xl">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white bg-clip-text">
+        <section className="pixel-panel p-7 md:p-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#f4dfb8] bg-clip-text">
             Exploration of the Deep Dark Underground
           </h2>
-          <div className="space-y-4 text-zinc-300 text-lg leading-relaxed">
+          <div className="space-y-4 text-[#d0b886] text-lg leading-relaxed font-bold">
             <p>
               Drilling RPG is a survival mining action game set in an underground world of unknown
               depths. Starting with just a small pickaxe and a rusty drill, you will dig up valuable
@@ -117,179 +202,86 @@ export default function LandingPage() {
         {/* Section 2: Features */}
         <section>
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Core Game Systems</h2>
-            <p className="text-zinc-400 text-lg">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#f4dfb8] mb-4">Core Game Systems</h2>
+            <p className="text-[#d0b886] text-lg font-bold">
               Discover the systems that will help you survive and grow stronger underground.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-cyan-500/30 transition-colors group">
-              <div className="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 border border-cyan-500/40 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">⛏️</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {FEATURE_CARDS.map((feature) => (
+              <div key={feature.title} className="pixel-card p-7 transition-colors">
+                <div className="pixel-icon-box w-16 h-16 flex items-center justify-center mb-6">
+                  <AtlasSprite name={feature.icon} size={52} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4 text-[#f4dfb8]">{feature.title}</h3>
+                <p className="text-[#d0b886] leading-relaxed font-bold">{feature.body}</p>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-zinc-100">
-                Progression &amp; Crafting System
-              </h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Slay powerful bosses in the nine circles of Hell to earn unique, stackable effects.
-                These effect items provide permanent, stacking bonuses to all your core stats, from
-                mining speed and power to critical hit rates, ensuring steady progression as you
-                descend further into the depths.
-              </p>
-            </div>
-
-            <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-indigo-500/30 transition-colors group">
-              <div className="w-14 h-14 bg-indigo-500/20 rounded-2xl flex items-center justify-center mb-6 border border-indigo-500/40 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">⚒️</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-zinc-100">Equipment Upgrades</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Refine the raw materials you gather into ingots and visit the Forgemaster to forge
-                powerful new drills, helmets, armors, and boots. Each equipment piece provides
-                unique stat boosts, allowing you to customize your build for efficient mining or
-                tough boss battles.
-              </p>
-            </div>
-
-            <div className="bg-linear-to-br from-zinc-900 to-black border border-white/5 p-8 rounded-3xl hover:border-purple-500/30 transition-colors group">
-              <div className="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 border border-purple-500/40 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🐉</span>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-zinc-100">Giant Dimensional Bosses</h3>
-              <p className="text-zinc-400 leading-relaxed">
-                Terrifying ancient bosses govern dimensions deep within the underground world. They
-                possess overwhelming size and destructive special patterns unmatched by regular
-                monsters, requiring evasive maneuvers and precise strikes. Defeating them marks the
-                path deeper into the underground world and unlocks the next stage of progression.
-              </p>
-            </div>
+            ))}
           </div>
         </section>
 
-        {/* Section 3: 광물 도감 (SEO Content Booster) */}
-        <section className="bg-zinc-900/50 border border-white/5 rounded-3xl p-10 md:p-16">
+        {/* Section 3: Mineral Glossary */}
+        <section className="pixel-panel pixel-panel-muted p-7 md:p-12">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Mineral Glossary</h2>
-            <p className="text-zinc-400 text-lg">Key resources found deep underground.</p>
+            <h2 className="text-3xl font-bold text-[#f4dfb8] mb-4">Mineral Glossary</h2>
+            <p className="text-[#d0b886] text-lg font-bold">Key resources found deep underground.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                name: 'Coal',
-                icon: '🌑',
-                desc: 'A common fuel found near the surface. Used as basic fuel for the refinery.',
-                depth: '0m ~ 100m',
-              },
-              {
-                name: 'Iron Ore',
-                icon: '⛓️',
-                desc: 'An essential metal for early equipment upgrades. Hidden inside heavy rock crevices.',
-                depth: '150m ~ 400m',
-              },
-              {
-                name: 'Gold',
-                icon: '💰',
-                desc: 'A highly valuable material needed for strong drills and late-game crafting. Easily recognizable by its shining glow.',
-                depth: '400m ~ 800m',
-              },
-              {
-                name: 'Diamond',
-                icon: '💎',
-                desc: 'The hardest mineral in the world. Found in unbreakable bedrock layers.',
-                depth: '800m ~ 1200m',
-              },
-              {
-                name: 'Ruby',
-                icon: '🏮',
-                desc: 'A red gem containing the heat of magma. Increases the thermal efficiency of high-level weapons.',
-                depth: '1000m+',
-              },
-              {
-                name: 'Emerald',
-                icon: '🌲',
-                desc: 'A transparent green gem used in precision optical equipment.',
-                depth: '650m+',
-              },
-            ].map((min, idx) => (
+            {MINERAL_GLOSSARY.map((min) => (
               <div
-                key={idx}
-                className="bg-black/50 border border-white/5 p-6 rounded-2xl flex flex-col items-center text-center group hover:bg-zinc-900 transition-colors"
+                key={min.name}
+                className="pixel-card pixel-card-muted p-6 flex flex-col items-center text-center transition-colors"
               >
-                <div className="w-16 h-16 mb-4 flex items-center justify-center text-4xl drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] group-hover:scale-110 transition-transform">
-                  {min.icon}
+                <div className="pixel-icon-box w-16 h-16 mb-4 flex items-center justify-center">
+                  <AtlasSprite name={min.icon} size={48} />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">{min.name}</h4>
-                <div className="text-xs font-mono text-cyan-400 mb-3 bg-cyan-950/50 px-2 py-1 rounded">
+                <h4 className="text-xl font-bold text-[#f4dfb8] mb-2">{min.name}</h4>
+                <div className="pixel-badge text-xs font-mono text-cyan-400 mb-3 px-2 py-1">
                   Depth: {min.depth}
                 </div>
-                <p className="text-sm text-zinc-400 leading-relaxed">{min.desc}</p>
+                <p className="text-sm text-[#d0b886] leading-relaxed font-bold">{min.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Section 4: FAQ */}
-        <section className="border border-white/10 p-10 md:p-16 rounded-3xl bg-zinc-950">
-          <h2 className="text-3xl font-bold mb-10 text-center text-white">
+        <section className="pixel-panel p-7 md:p-12">
+          <h2 className="text-3xl font-bold mb-10 text-center text-[#f4dfb8]">
             Frequently Asked Questions (FAQ)
           </h2>
           <div className="space-y-6 max-w-3xl mx-auto">
-            <div className="bg-white/5 p-6 rounded-2xl">
-              <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                <span className="text-cyan-500">Q.</span> Do I lose my collected items when I die?
-              </h4>
-              <p className="text-zinc-400 leading-relaxed">
-                No! Drilling RPG respects the player's effort and achievements. We completely
-                removed the death penalty of losing minerals because it's harmful to mental health!
-                Even if you are killed by a monster, you will respawn at the surface base camp with
-                all your precious minerals and gold safely preserved in your inventory.
-              </p>
-            </div>
-
-            <div className="bg-white/5 p-6 rounded-2xl">
-              <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                <span className="text-cyan-500">Q.</span> How do I save the game?
-              </h4>
-              <p className="text-zinc-400 leading-relaxed">
-                The game automatically saves your state every 10 seconds using your browser's local
-                storage. You can play safely, and if you want to play on another device later, you
-                can transfer data by using the 'Export/Import Save Code' feature in the settings.
-              </p>
-            </div>
-
-            <div className="bg-white/5 p-6 rounded-2xl">
-              <h4 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                <span className="text-cyan-500">Q.</span> How do I attack enemy monsters?
-              </h4>
-              <p className="text-zinc-400 leading-relaxed">
-                Click the target icon at the bottom right of the screen or continuously push the
-                arrow keys (WASD) towards the monster to enter auto-attack mode. It works similarly
-                to breaking normal rocks, but the damage varies depending on the monster's armor and
-                your attack power.
-              </p>
-            </div>
+            {FAQ_ITEMS.map((item) => (
+              <div key={item.question} className="pixel-card pixel-card-muted p-6">
+                <h4 className="text-lg font-bold text-[#f4dfb8] mb-3 flex items-center gap-2">
+                  <span className="pixel-badge text-cyan-400 px-2 py-0.5">Q</span>
+                  {item.question}
+                </h4>
+                <p className="text-[#d0b886] leading-relaxed font-bold">{item.answer}</p>
+              </div>
+            ))}
           </div>
         </section>
       </article>
 
       {/* Footer / Final CTA */}
-      <footer className="border-t border-white/10 mt-20 bg-black pt-20 pb-10">
+      <footer className="border-t-2 pixel-divider mt-20 bg-[#11130f] pt-20 pb-10">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">Are you ready?</h2>
-          <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-5xl font-bold text-[#fff1bf] mb-8">Are you ready?</h2>
+          <p className="text-xl text-[#d0b886] mb-10 max-w-2xl mx-auto font-bold">
             Your first pickaxe strike awakens the secrets of the giant abyss. Dive into the
             underground world right now.
           </p>
           <Link
             href="/play"
-            className="inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-black bg-white rounded-xl hover:bg-zinc-200 transition-colors shadow-2xl shadow-white/10"
+            className="pixel-button pixel-button-active inline-flex items-center justify-center px-10 py-5 text-xl font-bold transition-colors"
           >
             Start Adventure
           </Link>
 
-          <div className="mt-20 text-zinc-600 text-sm">
+          <div className="mt-20 text-[#d0b886] text-sm">
             <p>© {new Date().getFullYear()} Drilling RPG. All rights reserved.</p>
             <p className="mt-2">
               This website and game were designed as a cozy, free-to-play top-down RPG for players

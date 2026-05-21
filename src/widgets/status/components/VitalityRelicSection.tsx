@@ -9,36 +9,36 @@ interface VitalityRelicSectionProps {
 const VitalityRelicSection = ({ stats, finalMaxHp }: VitalityRelicSectionProps) => {
   return (
     <div className="space-y-6 flex flex-col">
-      <h3 className="text-lg md:text-[20px] font-black text-zinc-500 tracking-widest mb-4 border-b border-zinc-800 pb-2">
+      <h3 className="text-lg md:text-[20px] font-black text-[#a89065] mb-4 border-b-2 pixel-divider pb-2">
         Player Vitality
       </h3>
 
-      <div className="bg-[#252526] p-4 md:p-5 rounded-xl md:rounded-2xl border border-zinc-800 space-y-4">
+      <div className="pixel-card pixel-card-muted p-4 md:p-5 space-y-4">
         {/* HP BAR */}
         <div className="space-y-2">
           <div className="flex justify-between items-end">
-            <span className="text-[10px] font-bold text-zinc-400">Survival Gauge</span>
-            <span className="text-sm font-black text-white tabular-nums">
-              {Math.floor(stats.hp)} <span className="text-zinc-500">/ {finalMaxHp}</span>
+            <span className="text-[10px] font-bold text-[#d0b886]">Survival Gauge</span>
+            <span className="text-sm font-black text-[#f4dfb8] tabular-nums">
+              {Math.floor(stats.hp)} <span className="text-[#a89065]">/ {finalMaxHp}</span>
             </span>
           </div>
-          <div className="h-4 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800 p-[2px] shadow-inner">
+          <div className="pixel-bar h-4 p-[2px]">
             <div
-              className="h-full bg-emerald-500 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+              className="pixel-bar-fill h-full bg-emerald-500 transition-all duration-500"
               style={{ width: `${(stats.hp / finalMaxHp) * 100}%` }}
             />
           </div>
         </div>
 
         {/* RECORDS */}
-        <div className="flex flex-col gap-2 pt-4 border-t border-zinc-700/50">
+        <div className="flex flex-col gap-2 pt-4 border-t-2 pixel-divider">
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold text-zinc-400">Max Depth</span>
-            <span className="text-xs font-black text-blue-400">{stats.maxDepthReached || 0}m</span>
+            <span className="text-[10px] font-bold text-[#d0b886]">Max Depth</span>
+            <span className="text-xs font-black text-[#2c8f87]">{stats.maxDepthReached || 0}m</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[10px] font-bold text-zinc-400">Current Orbit</span>
-            <span className="text-xs font-black text-purple-400">
+            <span className="text-[10px] font-bold text-[#d0b886]">Current Orbit</span>
+            <span className="text-xs font-black text-[#d8a84f]">
               Circle {stats.dimension || 0}
             </span>
           </div>
