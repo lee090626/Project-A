@@ -121,10 +121,10 @@ const Hud: React.FC<HudProps> = React.memo(
         {/* 하단 섹션: 장비, 네비게이션, 월드 정보 */}
         <div className="flex justify-between items-end w-full relative">
           <div className="flex gap-4 items-end">
-            <EquipmentInfo pos={pos} />
+            <EquipmentInfo pos={pos} depth={stats.depth} />
           </div>
 
-          <WorldInfo depth={stats.depth as any} layerName={layerName} onOpenElevator={onOpenElevator} />
+          <WorldInfo layerName={layerName} onOpenElevator={onOpenElevator} />
         </div>
       </div>
     );
