@@ -1,27 +1,70 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { GamePlayShell } from './_components/GamePlayShell';
+import {
+  InfoCard,
+  PublisherHero,
+  PublisherLayout,
+  PublisherSection,
+} from './_components/PublisherLayout';
 import { AtlasSprite } from '@/shared/ui/AtlasSprite';
 import type { AtlasIconName } from '@/shared/config/atlasMap';
 
 export const dynamic = 'force-static';
 
-const HERO_TILES = ['StoneTile', 'GoldStoneTile', 'LustStoneTile', 'MidasiteTile'] as const;
+export const metadata: Metadata = {
+  title: 'Drilling RPG | Free Browser Mining RPG',
+  description:
+    'Play Drilling RPG, a free browser-based pixel mining RPG. Mine ores, craft circle gear, defeat bosses, and explore the current C2 to C4 progression.',
+  alternates: { canonical: '/' },
+};
+
+const HERO_TILES = ['StoneTile', 'CrimsonStoneIcon', 'MoldStoneIcon', 'GoldStoneIcon'] as const;
+
+const CURRENT_CIRCLES = [
+  {
+    name: 'Circle 2: Lust',
+    minerals: 'Crimsonstone, Galestone, Fervorstone',
+    enemies: 'Lustful Whisperer, Gale Bat, Wind-torn Soul',
+    boss: 'Asmodeus, the Lord of Desire',
+    reward: 'Essence of Lust and Asmodeus relic progression',
+  },
+  {
+    name: 'Circle 3: Gluttony',
+    minerals: 'Moldstone, Sludgestone, Rotstone',
+    enemies: 'Bloated Devourer, Starving Wraith, Greedy Slaughter',
+    boss: 'Cerberus, the Hound of Gluttony',
+    reward: 'Essence of Gluttony and Cerberus relic progression',
+  },
+  {
+    name: 'Circle 4: Greed',
+    minerals: 'Goldstone, Luststone, Midasite',
+    enemies: 'Hoarding Specter, Mimic, Avarice Golem',
+    boss: 'Fafnir, the Guardian of Gold',
+    reward: 'Essence of Greed and Fafnir relic progression',
+  },
+] as const;
 
 const FEATURE_CARDS = [
   {
-    title: 'Progression & Crafting System',
+    title: 'Mine by depth and circle',
     icon: 'CrimsonFangDrill',
-    body: 'Slay powerful bosses in the nine circles of Hell to earn unique, stackable effects. These effect items provide permanent bonuses to mining speed, power, and critical hit rates as you descend further into the depths.',
+    body: 'Every circle has its own background stratum, mineral set, monster table, and boss gate. The current public build focuses on C2 through C4 so players can follow a readable progression path.',
   },
   {
-    title: 'Equipment Upgrades',
-    icon: 'CrimsonVeilHelmet',
-    body: 'Refine gathered materials into ingots and visit the Forgemaster to craft drills, helmets, armors, and boots. Each equipment piece shapes your build for efficient mining or tough boss battles.',
+    title: 'Craft gear from local resources',
+    icon: 'CrownPiercer',
+    body: 'Drills raise mining power, helmets and armor improve survival, and boots add movement and defense. Each equipment tier is made from the ores found in its circle.',
   },
   {
-    title: 'Giant Dimensional Bosses',
-    icon: 'Asmodeus',
-    body: 'Ancient bosses govern dimensions deep underground with destructive patterns that demand precise movement. Defeating them marks the path deeper and unlocks the next stage of progression.',
+    title: 'Collect permanent effects',
+    icon: 'LustEssence',
+    body: 'Bosses and monsters drop essence and relic items that stack over time. These effects support power, health, luck, and the next circle defense breakpoints.',
+  },
+  {
+    title: 'Play in the browser',
+    icon: 'Player',
+    body: 'The game runs in a web browser with a React HUD and PixiJS rendering pipeline. Saves are stored locally in the browser so short sessions can still build progress.',
   },
 ] as const satisfies readonly {
   title: string;
@@ -29,65 +72,26 @@ const FEATURE_CARDS = [
   body: string;
 }[];
 
-const MINERAL_GLOSSARY = [
-  {
-    name: 'Stone',
-    icon: 'StoneTile',
-    desc: 'A basic resource near the surface and the first material for early upgrades.',
-    depth: '0m ~ 100m',
-  },
-  {
-    name: 'Crimson Stone',
-    icon: 'CrimsonStoneIcon',
-    desc: 'A dense red mineral used in early circle equipment and refinery routes.',
-    depth: '150m ~ 400m',
-  },
-  {
-    name: 'Gold Stone',
-    icon: 'GoldStoneIcon',
-    desc: 'A valuable mineral needed for advanced crafting and steady equipment growth.',
-    depth: '400m ~ 800m',
-  },
-  {
-    name: 'Lust Stone',
-    icon: 'LustStoneIcon',
-    desc: 'A circle resource tied to boss progression and permanent effect stacks.',
-    depth: '800m ~ 1200m',
-  },
-  {
-    name: 'Fervor Stone',
-    icon: 'FervorStoneIcon',
-    desc: 'A hot mineral that supports high-tier weapons and deeper expedition builds.',
-    depth: '1000m+',
-  },
-  {
-    name: 'Midasite',
-    icon: 'MidasiteIcon',
-    desc: 'A rare late-game resource for specialized upgrades and high-value crafting.',
-    depth: '650m+',
-  },
-] as const satisfies readonly {
-  name: string;
-  icon: AtlasIconName;
-  desc: string;
-  depth: string;
-}[];
-
 const FAQ_ITEMS = [
   {
-    question: 'Do I lose my collected items when I die?',
+    question: 'Is Drilling RPG playable now?',
     answer:
-      'No. Drilling RPG preserves your minerals and gold when you respawn at the surface base camp, so progress is tied to exploration and upgrades instead of item loss.',
+      'Yes. The current public progression covers Circle 2 through Circle 4, including minerals, monsters, bosses, craftable equipment, essences, relics, inventory, waypoints, and local saving.',
   },
   {
-    question: 'How do I save the game?',
+    question: 'What is the main goal?',
     answer:
-      "The game automatically saves your state every 10 seconds with browser local storage. You can also transfer data later with the settings screen's Export/Import Save Code feature.",
+      'Mine enough resources to craft the next equipment tier, survive the local monsters, defeat the circle boss, and push deeper into the next set of strata.',
   },
   {
-    question: 'How do I attack enemy monsters?',
+    question: 'Does the game require installation?',
     answer:
-      'Use the target action or push movement toward a monster to enter auto-attack behavior. Damage depends on the monster armor and your current attack power.',
+      'No. Drilling RPG is a browser game. It uses local browser storage for save data and does not require a user account.',
+  },
+  {
+    question: 'Are advertisements required to play?',
+    answer:
+      'No. Ad code is kept behind an explicit build flag while the publisher site is being prepared. Future game ads should use natural H5 game transition points only after product approval.',
   },
 ] as const;
 
@@ -96,200 +100,161 @@ export default function LandingPage() {
     return <GamePlayShell />;
   }
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'VideoGame',
+    name: 'Drilling RPG',
+    applicationCategory: 'Game',
+    operatingSystem: 'Web browser',
+    genre: ['Mining RPG', 'Action RPG', 'Browser Game'],
+    playMode: 'SinglePlayer',
+    description:
+      'A free browser-based pixel mining RPG with craftable equipment, circle bosses, local saves, and C2 to C4 progression.',
+    url: '/',
+    inLanguage: 'en',
+  };
+
   return (
-    <div className="min-h-screen bg-[#090a08] text-[#f4dfb8] selection:bg-[#2c8f87] selection:text-white">
-      {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-[90vh] px-4 overflow-hidden pixel-font">
-        {/* Background Effects */}
-        <div className="absolute inset-0 z-0">
-          <div className="pixel-hero-grid absolute inset-0 opacity-70" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,#191c18_0_24px,#3c453c_24px_26px,#050604_26px_28px,transparent_28px)] bg-[length:48px_48px] opacity-80" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(17,19,15,0.1)_0%,rgba(5,6,4,0.28)_52%,#090a08_100%)]" />
-        </div>
-
-        <div className="relative z-10 flex flex-col items-center text-center max-w-4xl mx-auto space-y-7">
-          <div className="flex items-end justify-center gap-4">
-            <AtlasSprite name="Player" size={72} className="hidden sm:inline-flex" />
-            <h1 className="text-5xl md:text-7xl font-black text-[#38d5e8] drop-shadow-[4px_4px_0_#050302]">
-              Drilling RPG
-            </h1>
-            <AtlasSprite name="GoldStoneIcon" size={64} className="hidden sm:inline-flex" />
-          </div>
-          <p className="max-w-2xl text-lg md:text-xl text-[#d0b886] leading-relaxed font-bold">
-            A top-down pixel mining RPG where every meter below the base camp brings harder ore,
-            stranger monsters, and better gear.
-          </p>
-
-          <div className="flex items-center justify-center gap-3 py-2">
-            {HERO_TILES.map((name) => (
-              <div key={name} className="pixel-slot flex h-14 w-14 items-center justify-center">
-                <AtlasSprite name={name} size={42} />
-              </div>
-            ))}
-          </div>
-
-          <div className="pt-4 flex flex-col items-center gap-4">
-            <Link
-              href="/play"
-              className="pixel-button group relative inline-flex items-center justify-center px-9 py-4 text-lg font-black text-[#f8e3a5] transition-colors hover:text-[#fff1bf] focus:outline-none focus:ring-2 focus:ring-[#d4a35f]/70"
-            >
-              Play for Free Now
-              <svg
-                className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="square"
-                  strokeLinejoin="miter"
-                  strokeWidth="2"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                ></path>
-              </svg>
+    <PublisherLayout currentPath="/">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <PublisherHero
+        eyebrow="Free browser game"
+        title="A pixel mining RPG with real progression, bosses, and craftable gear."
+        actions={
+          <>
+            <Link href="/play" className="pixel-button pixel-button-active px-5 py-3 font-black">
+              Play Drilling RPG
             </Link>
-            <p className="text-[#d0b886] text-sm mt-1 font-bold">
-              Plays right in your browser. No installation required.
-            </p>
-          </div>
+            <Link href="/guide" className="pixel-button px-5 py-3 font-black">
+              Read the Guide
+            </Link>
+          </>
+        }
+      >
+        <p>
+          Drilling RPG is a top-down browser mining RPG where the player digs through hostile
+          underground circles, gathers ore, crafts specialized gear, and fights bosses that guard
+          the path to deeper content.
+        </p>
+        <p>
+          This publisher site documents the playable game, its systems, current update state, and
+          player support information so the project is understandable even before the game canvas is
+          loaded.
+        </p>
+        <div className="flex flex-wrap gap-3 pt-2">
+          {HERO_TILES.map((name) => (
+            <span key={name} className="pixel-slot flex h-14 w-14 items-center justify-center">
+              <AtlasSprite name={name} size={42} />
+            </span>
+          ))}
         </div>
+      </PublisherHero>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 text-[#d0b886]">
-          <p className="text-sm mb-2 opacity-70 font-semibold text-center">Scroll Down</p>
-          <svg
-            className="w-6 h-6 mx-auto"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            ></path>
-          </svg>
+      <PublisherSection
+        title="What You Do In The Game"
+        intro="The playable loop is built around resource collection, equipment milestones, monster pressure, and boss gates."
+      >
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {FEATURE_CARDS.map((feature) => (
+            <InfoCard key={feature.title} title={feature.title}>
+              <div className="mb-4 flex h-16 w-16 items-center justify-center pixel-icon-box">
+                <AtlasSprite name={feature.icon} size={48} />
+              </div>
+              <p>{feature.body}</p>
+            </InfoCard>
+          ))}
+        </div>
+      </PublisherSection>
+
+      <PublisherSection
+        title="Current Playable Content"
+        intro="The current live content ceiling is Circle 4. Circle 5 and later are intentionally locked until their balance and content are ready."
+      >
+        <div className="grid gap-5 lg:grid-cols-3">
+          {CURRENT_CIRCLES.map((circle) => (
+            <InfoCard key={circle.name} title={circle.name}>
+              <p>
+                <strong className="text-[#fff1bf]">Minerals:</strong> {circle.minerals}
+              </p>
+              <p>
+                <strong className="text-[#fff1bf]">Enemies:</strong> {circle.enemies}
+              </p>
+              <p>
+                <strong className="text-[#fff1bf]">Boss:</strong> {circle.boss}
+              </p>
+              <p>
+                <strong className="text-[#fff1bf]">Reward path:</strong> {circle.reward}
+              </p>
+            </InfoCard>
+          ))}
+        </div>
+      </PublisherSection>
+
+      <PublisherSection
+        title="Player Guide Summary"
+        intro="These are the core systems players should understand before entering the game."
+      >
+        <div className="grid gap-5 md:grid-cols-2">
+          <InfoCard title="Mining and depth">
+            <p>
+              The HUD tracks Survey X and Depth. X marks the horizontal survey coordinate while
+              Depth marks how far the player has descended. Deeper strata introduce stronger ores
+              and more dangerous encounters.
+            </p>
+          </InfoCard>
+          <InfoCard title="Crafting route">
+            <p>
+              Early Lust ores build Crimson gear. Gluttony ores build Void gear. Greed ores build
+              Crown gear. The best route is to craft the local drill first, then add defensive
+              pieces when monsters begin to threaten the run.
+            </p>
+          </InfoCard>
+          <InfoCard title="Boss progression">
+            <p>
+              Bosses appear near the lower section of their circle. Defeating a boss records circle
+              progress, grants essence and relic rewards, and prepares the player for the next
+              defense breakpoint.
+            </p>
+          </InfoCard>
+          <InfoCard title="Saving">
+            <p>
+              The game autosaves browser-local progress. Inventory, equipment ownership, boss
+              encounters, waypoints, and effect stacks are restored on the same browser profile.
+            </p>
+          </InfoCard>
+        </div>
+      </PublisherSection>
+
+      <PublisherSection title="Frequently Asked Questions">
+        <div className="grid gap-5 md:grid-cols-2">
+          {FAQ_ITEMS.map((item) => (
+            <InfoCard key={item.question} title={item.question}>
+              <p>{item.answer}</p>
+            </InfoCard>
+          ))}
+        </div>
+      </PublisherSection>
+
+      <section className="mx-auto max-w-6xl px-5 pb-16">
+        <div className="pixel-panel p-8 text-center">
+          <h2 className="text-3xl font-black text-[#fff1bf]">Start digging now</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[#d0b886]">
+            The first playable arc is already available in the browser. Read the guide if you want
+            the systems first, or jump straight into the mine.
+          </p>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            <Link href="/play" className="pixel-button pixel-button-active px-5 py-3 font-black">
+              Play Now
+            </Link>
+            <Link href="/changelog" className="pixel-button px-5 py-3 font-black">
+              View Updates
+            </Link>
+          </div>
         </div>
       </section>
-
-      {/* Content Section */}
-      <article className="relative z-10 max-w-5xl mx-auto px-6 py-24 space-y-28">
-        {/* Section 1: Story */}
-        <section className="pixel-panel p-7 md:p-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#f4dfb8] bg-clip-text">
-            Exploration of the Deep Dark Underground
-          </h2>
-          <div className="space-y-4 text-[#d0b886] text-lg leading-relaxed font-bold">
-            <p>
-              Drilling RPG is a survival mining action game set in an underground world of unknown
-              depths. Starting with just a small pickaxe and a rusty drill, you will dig up valuable
-              minerals such as diamonds, emeralds, and uranium to accumulate wealth and honor. But
-              the underground world is not just full of beautiful minerals. In the abyss where light
-              cannot reach, ancient monsters and terrifying bosses are hunting for miners.
-            </p>
-            <p>
-              Discover dungeons and caves that have been asleep for ages, and travel through ever
-              more dangerous strata to uncover lost technologies and magic. The deeper you dig into
-              the underground world, the greater the danger, but immense rewards await you. Become
-              the ultimate miner and warrior in this mesmerizing RPG universe.
-            </p>
-          </div>
-        </section>
-
-        {/* Section 2: Features */}
-        <section>
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#f4dfb8] mb-4">Core Game Systems</h2>
-            <p className="text-[#d0b886] text-lg font-bold">
-              Discover the systems that will help you survive and grow stronger underground.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {FEATURE_CARDS.map((feature) => (
-              <div key={feature.title} className="pixel-card p-7 transition-colors">
-                <div className="pixel-icon-box w-16 h-16 flex items-center justify-center mb-6">
-                  <AtlasSprite name={feature.icon} size={52} />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 text-[#f4dfb8]">{feature.title}</h3>
-                <p className="text-[#d0b886] leading-relaxed font-bold">{feature.body}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 3: Mineral Glossary */}
-        <section className="pixel-panel pixel-panel-muted p-7 md:p-12">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#f4dfb8] mb-4">Mineral Glossary</h2>
-            <p className="text-[#d0b886] text-lg font-bold">Key resources found deep underground.</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {MINERAL_GLOSSARY.map((min) => (
-              <div
-                key={min.name}
-                className="pixel-card pixel-card-muted p-6 flex flex-col items-center text-center transition-colors"
-              >
-                <div className="pixel-icon-box w-16 h-16 mb-4 flex items-center justify-center">
-                  <AtlasSprite name={min.icon} size={48} />
-                </div>
-                <h4 className="text-xl font-bold text-[#f4dfb8] mb-2">{min.name}</h4>
-                <div className="pixel-badge text-xs font-mono text-cyan-400 mb-3 px-2 py-1">
-                  Depth: {min.depth}
-                </div>
-                <p className="text-sm text-[#d0b886] leading-relaxed font-bold">{min.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section 4: FAQ */}
-        <section className="pixel-panel p-7 md:p-12">
-          <h2 className="text-3xl font-bold mb-10 text-center text-[#f4dfb8]">
-            Frequently Asked Questions (FAQ)
-          </h2>
-          <div className="space-y-6 max-w-3xl mx-auto">
-            {FAQ_ITEMS.map((item) => (
-              <div key={item.question} className="pixel-card pixel-card-muted p-6">
-                <h4 className="text-lg font-bold text-[#f4dfb8] mb-3 flex items-center gap-2">
-                  <span className="pixel-badge text-cyan-400 px-2 py-0.5">Q</span>
-                  {item.question}
-                </h4>
-                <p className="text-[#d0b886] leading-relaxed font-bold">{item.answer}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </article>
-
-      {/* Footer / Final CTA */}
-      <footer className="border-t-2 pixel-divider mt-20 bg-[#11130f] pt-20 pb-10">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#fff1bf] mb-8">Are you ready?</h2>
-          <p className="text-xl text-[#d0b886] mb-10 max-w-2xl mx-auto font-bold">
-            Your first pickaxe strike awakens the secrets of the giant abyss. Dive into the
-            underground world right now.
-          </p>
-          <Link
-            href="/play"
-            className="pixel-button pixel-button-active inline-flex items-center justify-center px-10 py-5 text-xl font-bold transition-colors"
-          >
-            Start Adventure
-          </Link>
-
-          <div className="mt-20 text-[#d0b886] text-sm">
-            <p>© {new Date().getFullYear()} Drilling RPG. All rights reserved.</p>
-            <p className="mt-2">
-              This website and game were designed as a cozy, free-to-play top-down RPG for players
-              everywhere.
-            </p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </PublisherLayout>
   );
 }

@@ -1,9 +1,9 @@
 /**
- * 크롤러가 자바스크립트 실행 전에도 게임 핵심 콘텐츠를 인식하도록 숨김 텍스트를 제공합니다.
+ * 게임 canvas가 시작되기 전 보조 기술에 노출되는 짧은 실행 화면 설명입니다.
  */
 export function GameSeoLayer() {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-10 space-y-12 z-0 opacity-0 pointer-events-none">
+    <div className="sr-only">
       <div className="space-y-6">
         <h1 className="text-5xl md:text-8xl font-black text-[#f4dfb8] tracking-tighter">
           Drilling RPG
@@ -16,7 +16,7 @@ export function GameSeoLayer() {
       <div className="pixel-font grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl text-[#f4dfb8] font-medium text-[10px]">
         <div className="space-y-2">
           <h3 className="font-black text-[#d0b886]">Resource Extraction</h3>
-          <p className="leading-relaxed">Diamonds, Rubies, Uranium</p>
+          <p className="leading-relaxed">Circle ores, crafting materials, and local save progress</p>
         </div>
         <div className="space-y-2">
           <h3 className="font-black text-[#d0b886]">Combat Systems</h3>
@@ -24,7 +24,7 @@ export function GameSeoLayer() {
         </div>
         <div className="space-y-2">
           <h3 className="font-black text-[#d0b886]">Tech Upgrades</h3>
-          <p className="leading-relaxed">Passive Effect Items</p>
+          <p className="leading-relaxed">Essence, relic, and equipment growth</p>
         </div>
       </div>
     </div>

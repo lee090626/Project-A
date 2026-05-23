@@ -12,7 +12,8 @@ const isCrazyGamesBuild = process.env.NEXT_PUBLIC_BUILD_TARGET === 'crazygames';
 const shouldRegisterServiceWorker = process.env.NODE_ENV === 'production' && !isCrazyGamesBuild;
 const googleH5AdsClientId =
   process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || 'ca-pub-8319588891960553';
-const shouldEnableGoogleH5Ads = !isCrazyGamesBuild;
+const shouldEnableGoogleH5Ads =
+  process.env.NEXT_PUBLIC_ENABLE_GOOGLE_H5_ADS === 'on' && !isCrazyGamesBuild;
 const shouldEnableGoogleH5AdTestMode =
   process.env.NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE === 'on' || process.env.NODE_ENV !== 'production';
 
@@ -43,11 +44,10 @@ export const metadata: Metadata = {
     'survival rpg',
     'incremental mining',
     'free web game',
-    '드릴게임',
-    '광부 게임',
-    '웹 게임',
   ],
   authors: [{ name: 'Drilling RPG Dev' }],
+  category: 'game',
+  applicationName: 'Drilling RPG',
   ...(isCrazyGamesBuild
     ? {}
     : {
@@ -205,7 +205,7 @@ export default function RootLayout({
               const swPath = '${swPath}';
               window.addEventListener('load', function() {
                 navigator.serviceWorker.register(swPath).catch(function(err) {
-                  // 등록 실패 시 게임은 정상 동작 (HTTP 캐시로 폴백)
+                  // The game still works if registration fails; HTTP cache remains the fallback.
                   console.warn('[SW] Registration failed, falling back to HTTP cache:', err);
                 });
               });
