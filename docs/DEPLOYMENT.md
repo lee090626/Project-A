@@ -70,6 +70,7 @@ source_paths:
 | `NEXT_PUBLIC_BUILD_TARGET` | `src/app/layout.tsx`, `src/shared/lib/crazyGamesSdk.ts`, `src/shared/lib/googleH5Ads.ts` | 클라이언트에서 CrazyGames 전용 분기 판단 |
 | `NEXT_PUBLIC_SITE_URL` | `src/app/layout.tsx`, `src/app/sitemap.ts` | metadata base와 sitemap URL 기준 |
 | `NEXT_PUBLIC_ADSENSE_CLIENT_ID` | `src/app/layout.tsx` | Google H5 Ads client id. 기본값은 `ca-pub-8319588891960553` |
+| `NEXT_PUBLIC_ENABLE_GOOGLE_H5_ADS` | `src/app/layout.tsx` | `on`일 때만 Google H5 Ads 스크립트를 주입. AdSense/H5 Games 승인 전 기본값은 비활성 |
 | `NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE` | `src/app/layout.tsx` | `on`이면 광고 test mode attribute를 추가 |
 | `NEXT_PUBLIC_GOOGLE_H5_AD_DEBUG` | `src/shared/lib/googleH5Ads.ts` | `on`이면 Google H5 Ads debug 로그 출력 |
 | `SW_VERSION` | `scripts/generate-sw.js` | 서비스워커 캐시 버전 강제 지정 |
@@ -211,7 +212,7 @@ CrazyGames 빌드의 차이:
 |---|---|
 | SDK | `layout.tsx`가 `https://sdk.crazygames.com/crazygames-sdk-v3.js` script를 삽입 |
 | Gameplay event | `crazyGamesSdk.ts`가 `loadingStart`, `loadingStop`, `gameplayStart`를 SDK에 전달 |
-| Google H5 Ads | `layout.tsx`와 `googleH5Ads.ts`에서 CrazyGames 빌드일 때 비활성화 |
+| Google H5 Ads | `layout.tsx`와 `googleH5Ads.ts`에서 CrazyGames 빌드일 때 비활성화. 일반 웹 빌드도 `NEXT_PUBLIC_ENABLE_GOOGLE_H5_ADS=on`이 없으면 script를 주입하지 않음 |
 | Service worker | CrazyGames 빌드에서는 등록하지 않고 기존 registration/cache를 제거 |
 | 정적 경로 | `prepare-crazygames-build.js`가 root-absolute 경로를 상대 경로로 재작성 |
 | zip | `zip-crazygames-build.js`가 `out` 내용을 `drilling-rpg-crazygames.zip`으로 압축 |
@@ -232,13 +233,13 @@ CrazyGames 빌드의 차이:
 
 ## 광고와 검색 메타데이터
 
-일반 웹 배포에서는 `src/app/layout.tsx`가 Google H5 Ads script를 삽입합니다. CrazyGames 빌드에서는 광고 script를 넣지 않습니다.
+일반 웹 배포에서 Google H5 Ads script는 `NEXT_PUBLIC_ENABLE_GOOGLE_H5_ADS=on`일 때만 삽입됩니다. 승인 전 퍼블리셔 사이트 준비 단계에서는 기본 비활성 상태로 두고, H5 Games Ads 접근 권한과 광고 배치 정책을 확인한 뒤 켭니다. CrazyGames 빌드에서는 이 값과 무관하게 광고 script를 넣지 않습니다.
 
 | 파일 | 역할 |
 |---|---|
 | `public/ads.txt` | Google publisher metadata |
 | `public/robots.txt` | crawler 허용과 sitemap 경로 |
-| `src/app/sitemap.ts` | `/`와 `/play` sitemap entry 생성 |
+| `src/app/sitemap.ts` | `/`, `/guide`, `/changelog`, `/privacy`, `/terms`, `/contact`, `/play` sitemap entry 생성 |
 
 `sitemap.ts`는 `NEXT_PUBLIC_SITE_URL`이 없으면 `https://drilling-rpg.pages.dev`를 사용합니다. 실제 canonical domain이 바뀌면 `NEXT_PUBLIC_SITE_URL`, `public/robots.txt`, 배포 문서를 같이 갱신합니다.
 
