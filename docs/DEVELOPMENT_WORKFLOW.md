@@ -168,6 +168,7 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | `npm run dev` | 로컬 개발 서버 |
 | `npm run lint` | ESLint |
 | `npx tsc --noEmit` | TypeScript 타입 검사. package script는 아니지만 `08-agents.md`의 기준 검증입니다. |
+| `npm run validate:mineral-depths` | C2~C4 광물 도감 `minDepth`가 Circle `depthStart`/`minLayer` 규칙과 일치하는지 확인 |
 | `npm run build` | 기본 Next.js build |
 | `npm run gen:headers` | `config/security-headers.json`에서 `public/_headers` 재생성 |
 | `npm run optimize:atlas` | 원본 에셋을 아틀라스로 패킹 |
@@ -180,6 +181,7 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 |---|---|
 | 문서만 수정 | `test -f docs/문서명.md`, 관련 README 링크 `rg` |
 | TypeScript 코드 수정 | `npx tsc --noEmit`, `npm run lint` |
+| 광물 깊이/도감 수정 | `npm run validate:mineral-depths`, TypeScript/lint |
 | React UI 수정 | TypeScript/lint와 브라우저 화면 확인 |
 | Worker/ECS 수정 | TypeScript/lint, 게임 루프 smoke test, 관련 문서 확인 |
 | 에셋 추가 | `npm run optimize:atlas`, `npm run update:atlas-map`, atlas key `rg` |
