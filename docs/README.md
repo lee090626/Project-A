@@ -30,6 +30,7 @@ source_paths:
 | `GAME_CONSTANTS.md` | 런타임 상수, 밸런스 상수, 기본 플레이어 수치 | 완료 |
 | `ARCHITECTURE.md` | FSD 레이어, 워커 경계, 런타임 구조 | 완료 |
 | `CORE_GAME_LOOP.md` | 채굴, 이동, 전투, 보상, 저장 흐름 | 완료 |
+| `SURVEY_SYSTEM.md` | Survey 좌표, 히든 콘텐츠, Infinite Tower 설계 | 완료 |
 | `ASSET_PIPELINE.md` | 에셋 명명, 아틀라스 생성, 매핑 규칙 | 완료 |
 | `RENDERING_PIPELINE.md` | PixiJS 렌더링, 아틀라스 로딩, 렌더 시스템 | 완료 |
 | `SAVE_AND_MIGRATION.md` | 저장 데이터 구조와 마이그레이션 정책 | 완료 |

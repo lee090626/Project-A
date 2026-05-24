@@ -75,6 +75,7 @@ npm run dev
 - [게임 상수](docs/GAME_CONSTANTS.md)
 - [아키텍처](docs/ARCHITECTURE.md)
 - [코어 게임 루프](docs/CORE_GAME_LOOP.md)
+- [Survey 시스템과 히든 콘텐츠](docs/SURVEY_SYSTEM.md)
 - [에셋 파이프라인](docs/ASSET_PIPELINE.md)
 - [렌더링 파이프라인](docs/RENDERING_PIPELINE.md)
 - [저장과 마이그레이션](docs/SAVE_AND_MIGRATION.md)

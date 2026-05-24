@@ -42,6 +42,9 @@ source_paths:
 | `PlayerStats` | 장비, 인벤토리, 체력, 깊이, 보스 진행, 숙련도, 상태 효과, 가이드 퀘스트 등 플레이어 진행 상태입니다. | `src/shared/types/game/player.ts` |
 | `Position` | 게임 내 좌표를 나타내는 `{ x, y }` 구조입니다. | `src/shared/types/game/core.ts` |
 | Depth | 전체 게임 기준 깊이 값입니다. `CircleConfig.depthStart`, `depthEnd`, `PlayerStats.maxDepthReached`에서 사용합니다. | `src/shared/config/circleData.ts`, `src/shared/types/game/player.ts` |
+| Survey | 플레이어에게 노출하는 탐사 위치와 히든 콘텐츠 발견 기록을 묶는 진행 축입니다. 기본 좌표 언어는 `X + Depth`입니다. | `docs/SURVEY_SYSTEM.md`, `src/widgets/hud/ui/components/EquipmentInfo.tsx` |
+| Hidden Content | 일반 채굴 맵 안에 숨겨진 별도 성장 콘텐츠의 입구입니다. 발견 후 Survey Log나 관련 UI에서 재방문 대상으로 취급합니다. | `docs/SURVEY_SYSTEM.md` |
+| Infinite Tower | 첫 히든 콘텐츠 후보입니다. 숨겨진 탑 입구를 발견하면 층별 반복 전투/채굴 루프와 `Tower Rank` 성장을 제공합니다. | `docs/SURVEY_SYSTEM.md` |
 | Layer | 하나의 Circle 내부를 1~4단계로 나눈 상대 구간입니다. `getLayerFromDepth`가 깊이를 layer로 변환합니다. | `src/shared/config/circleData.ts` |
 | Circle | 지옥의 원을 뜻하는 지역 단위입니다. 각 Circle은 깊이 범위, 테마, 배경 타일, 광물, 몬스터, 보스를 정의합니다. | `src/shared/config/circleData.ts` |
 | `CircleConfig` | Circle의 ID, 이름, 깊이 범위, 광물 규칙, 몬스터 규칙, 보스 정보를 담는 설정 구조입니다. | `src/shared/config/circleData.ts` |
