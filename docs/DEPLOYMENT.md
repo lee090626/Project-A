@@ -19,6 +19,7 @@ source_paths:
   - src/shared/config/coreDataFiles.json
   - src/app/layout.tsx
   - src/app/sitemap.ts
+  - src/shared/config/siteMetadata.ts
   - public/robots.txt
   - public/ads.txt
   - public/_headers
@@ -68,7 +69,7 @@ source_paths:
 | `NEXT_PUBLIC_BASE_PATH` | `src/shared/lib/basePath.ts`, `scripts/generate-sw.js`, `src/app/layout.tsx` | 클라이언트 런타임과 서비스워커 pre-cache URL 기준 |
 | `BUILD_TARGET` | `package.json` script | 빌드 타깃 표식. 현재 CrazyGames script에서 설정 |
 | `NEXT_PUBLIC_BUILD_TARGET` | `src/app/layout.tsx`, `src/shared/lib/crazyGamesSdk.ts`, `src/shared/lib/googleH5Ads.ts` | 클라이언트에서 CrazyGames 전용 분기 판단 |
-| `NEXT_PUBLIC_SITE_URL` | `src/app/layout.tsx`, `src/app/sitemap.ts` | metadata base와 sitemap URL 기준 |
+| `NEXT_PUBLIC_SITE_URL` | `src/shared/config/siteMetadata.ts`, `src/app/layout.tsx`, `src/app/sitemap.ts` | metadata base와 sitemap URL 기준. 기본값은 `https://drilling-rpg.pages.dev` |
 | `NEXT_PUBLIC_ADSENSE_CLIENT_ID` | `src/app/layout.tsx` | Google H5 Ads client id. 기본값은 `ca-pub-8319588891960553` |
 | `NEXT_PUBLIC_ENABLE_GOOGLE_H5_ADS` | `src/app/layout.tsx` | `on`일 때만 Google H5 Ads 스크립트를 주입. AdSense/H5 Games 승인 전 기본값은 비활성 |
 | `NEXT_PUBLIC_GOOGLE_H5_AD_TEST_MODE` | `src/app/layout.tsx` | `on`이면 광고 test mode attribute를 추가 |
@@ -241,7 +242,7 @@ CrazyGames 빌드의 차이:
 | `public/robots.txt` | crawler 허용과 sitemap 경로 |
 | `src/app/sitemap.ts` | `/`, `/guide`, `/changelog`, `/privacy`, `/terms`, `/contact`, `/play` sitemap entry 생성 |
 
-`sitemap.ts`는 `NEXT_PUBLIC_SITE_URL`이 없으면 `https://drilling-rpg.pages.dev`를 사용합니다. 실제 canonical domain이 바뀌면 `NEXT_PUBLIC_SITE_URL`, `public/robots.txt`, 배포 문서를 같이 갱신합니다.
+`src/shared/config/siteMetadata.ts`는 `NEXT_PUBLIC_SITE_URL`이 없으면 `https://drilling-rpg.pages.dev`를 사용합니다. `layout.tsx`의 canonical metadata와 `sitemap.ts`의 URL은 이 값을 함께 사용합니다. 실제 canonical domain이 바뀌면 `NEXT_PUBLIC_SITE_URL`, `public/robots.txt`, 배포 문서를 같이 갱신합니다.
 
 ## 산출물 관리
 
@@ -269,7 +270,7 @@ CrazyGames 빌드의 차이:
 | CrazyGames 요구사항 변경 | `src/app/layout.tsx`, `src/shared/lib/crazyGamesSdk.ts`, `scripts/prepare-crazygames-build.js`, `scripts/zip-crazygames-build.js` |
 | 광고 정책 변경 | `src/app/layout.tsx`, `src/shared/lib/googleH5Ads.ts`, `public/ads.txt`, CrazyGames 검증 패턴 |
 | Cloudflare 배포 방식 변경 | `package.json`, `wrangler.toml`, `open-next.config.ts`, `.gitignore` |
-| canonical domain 변경 | `NEXT_PUBLIC_SITE_URL`, `src/app/sitemap.ts`, `public/robots.txt`, README/배포 문서 |
+| canonical domain 변경 | `NEXT_PUBLIC_SITE_URL`, `src/shared/config/siteMetadata.ts`, `src/app/sitemap.ts`, `public/robots.txt`, README/배포 문서 |
 
 문서만 수정한 경우 최소 검증:
 

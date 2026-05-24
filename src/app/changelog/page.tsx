@@ -18,6 +18,16 @@ export const metadata: Metadata = {
 
 const UPDATES = [
   {
+    date: 'May 24, 2026',
+    title: 'Publisher metadata hardening',
+    points: [
+      'Unified canonical metadata and sitemap URLs around the same public site URL source.',
+      'Split sitemap last-modified dates by public page instead of using one shared date.',
+      'Corrected C3 and C4 encyclopedia mineral depth metadata to match their actual circle ranges.',
+      'Added validation coverage for C2 to C4 mineral depth metadata against circle layer rules.',
+    ],
+  },
+  {
     date: 'May 23, 2026',
     title: 'Publisher site structure',
     points: [
@@ -31,7 +41,6 @@ const UPDATES = [
     title: 'C2 to C4 progression audit',
     points: [
       'Verified C2, C3, and C4 data links for minerals, monsters, bosses, gear, essences, and relics.',
-      'Corrected C3 and C4 mineral depth metadata to match their actual circle ranges.',
       'Confirmed the game boots at the play route with atlas assets and canvas rendering available.',
     ],
   },

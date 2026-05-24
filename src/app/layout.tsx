@@ -4,6 +4,7 @@ import Script from 'next/script';
 import atlasManifest from '../../public/assets/manifest.json';
 import { CORE_DATA_FILES } from '@/shared/config/coreDataFiles';
 import { validateAtlasManifest } from '@/shared/config/assetConfigValidation.mjs';
+import { SITE_URL } from '@/shared/config/siteMetadata';
 import { getBasePath, withBasePath } from '@/shared/lib/basePath';
 import { GOOGLE_H5_ADS_READY_EVENT } from '@/shared/lib/googleH5Ads';
 import './globals.css';
@@ -32,7 +33,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   ...(isCrazyGamesBuild
     ? {}
-    : { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000') }),
+    : { metadataBase: new URL(SITE_URL) }),
   title: 'Drilling RPG | Web-based Deep Mining Action & Exploration',
   description:
     'Explore the endless abyss in Drilling RPG. A free-to-play web-based top-down mining action survival game. Gather minerals, craft items, upgrade your drill, and defeat giant bosses.',
