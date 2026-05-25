@@ -167,8 +167,9 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 |---|---|
 | `npm run dev` | 로컬 개발 서버 |
 | `npm run lint` | ESLint |
-| `npx tsc --noEmit` | TypeScript 타입 검사. package script는 아니지만 `08-agents.md`의 기준 검증입니다. |
+| `npm run typecheck` | TypeScript 타입 검사 |
 | `npm run validate:mineral-depths` | C2~C4 광물 도감 `minDepth`가 Circle `depthStart`/`minLayer` 규칙과 일치하는지 확인 |
+| `npm run verify` | 광물 깊이 검증, TypeScript 타입 검사, ESLint를 한 번에 실행 |
 | `npm run build` | 기본 Next.js build |
 | `npm run gen:headers` | `config/security-headers.json`에서 `public/_headers` 재생성 |
 | `npm run optimize:atlas` | 원본 에셋을 아틀라스로 패킹 |
@@ -180,10 +181,10 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | 작업 | 최소 검증 |
 |---|---|
 | 문서만 수정 | `test -f docs/문서명.md`, 관련 README 링크 `rg` |
-| TypeScript 코드 수정 | `npx tsc --noEmit`, `npm run lint` |
-| 광물 깊이/도감 수정 | `npm run validate:mineral-depths`, TypeScript/lint |
-| React UI 수정 | TypeScript/lint와 브라우저 화면 확인 |
-| Worker/ECS 수정 | TypeScript/lint, 게임 루프 smoke test, 관련 문서 확인 |
+| TypeScript 코드 수정 | `npm run verify` |
+| 광물 깊이/도감 수정 | `npm run verify` |
+| React UI 수정 | `npm run verify`와 브라우저 화면 확인 |
+| Worker/ECS 수정 | `npm run verify`, 게임 루프 smoke test, 관련 문서 확인 |
 | 에셋 추가 | `npm run optimize:atlas`, `npm run update:atlas-map`, atlas key `rg` |
 | 저장/마이그레이션 수정 | 자동 저장, reload, export/import, IndexedDB 가능/불가 경로 확인 |
 | 배포 설정 수정 | 대상별 build 명령과 산출물 확인 |
@@ -249,6 +250,6 @@ rg -n "DEVELOPMENT_WORKFLOW.md" README.md docs/README.md
 workflow 규칙이나 template을 함께 바꾼 경우:
 
 ```bash
-rg -n "표준 트랙|패스트 트랙|PULL_REQUEST_TEMPLATE|ISSUE_TEMPLATE|npx tsc --noEmit" .agents .github docs package.json
-npm run lint
+rg -n "표준 트랙|패스트 트랙|PULL_REQUEST_TEMPLATE|ISSUE_TEMPLATE|npm run verify" .agents .github docs package.json
+npm run verify
 ```
