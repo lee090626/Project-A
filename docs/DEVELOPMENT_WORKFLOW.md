@@ -168,7 +168,7 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | `npm run dev` | 로컬 개발 서버 |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript 타입 검사 |
-| `npm run validate:publisher-metadata` | canonical 기준 URL, robots sitemap, sitemap entry, public page 파일 존재 여부 확인 |
+| `npm run validate:publisher-metadata` | canonical 기준 URL, page canonical, robots sitemap, sitemap entry, public page 파일 존재 여부 확인 |
 | `npm run validate:mineral-depths` | C2~C4 광물 도감 `minDepth`가 Circle `depthStart`/`minLayer` 규칙과 일치하는지 확인 |
 | `npm run verify` | 퍼블리셔 메타데이터 검증, 광물 깊이 검증, TypeScript 타입 검사, ESLint를 한 번에 실행 |
 | `npm run build` | 기본 Next.js build |

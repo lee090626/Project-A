@@ -191,6 +191,19 @@ for (const routePath of requiredSitemapPaths) {
 
   if (!(await pathExists(pagePath))) {
     errors.push(`Sitemap path '${routePath}' has no matching page file at ${pagePath}.`);
+    continue;
+  }
+
+  const pageFile = await parseSourceFile(pagePath);
+  const metadata = findVariableValue(pageFile, 'metadata');
+  const canonicalPath = metadata?.alternates?.canonical;
+
+  if (!metadata || typeof metadata !== 'object') {
+    errors.push(`Page '${pagePath}' must export static metadata.`);
+  } else if (canonicalPath !== routePath) {
+    errors.push(
+      `Page '${pagePath}' canonical is '${canonicalPath ?? 'missing'}', expected '${routePath}'.`,
+    );
   }
 }
 
