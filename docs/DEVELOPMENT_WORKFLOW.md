@@ -168,8 +168,9 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | `npm run dev` | 로컬 개발 서버 |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript 타입 검사 |
+| `npm run validate:publisher-metadata` | canonical 기준 URL, robots sitemap, sitemap entry, public page 파일 존재 여부 확인 |
 | `npm run validate:mineral-depths` | C2~C4 광물 도감 `minDepth`가 Circle `depthStart`/`minLayer` 규칙과 일치하는지 확인 |
-| `npm run verify` | 광물 깊이 검증, TypeScript 타입 검사, ESLint를 한 번에 실행 |
+| `npm run verify` | 퍼블리셔 메타데이터 검증, 광물 깊이 검증, TypeScript 타입 검사, ESLint를 한 번에 실행 |
 | `npm run build` | 기본 Next.js build |
 | `npm run gen:headers` | `config/security-headers.json`에서 `public/_headers` 재생성 |
 | `npm run optimize:atlas` | 원본 에셋을 아틀라스로 패킹 |
@@ -187,7 +188,7 @@ PR은 `.github/PULL_REQUEST_TEMPLATE.md`를 따릅니다.
 | Worker/ECS 수정 | `npm run verify`, 게임 루프 smoke test, 관련 문서 확인 |
 | 에셋 추가 | `npm run optimize:atlas`, `npm run update:atlas-map`, atlas key `rg` |
 | 저장/마이그레이션 수정 | 자동 저장, reload, export/import, IndexedDB 가능/불가 경로 확인 |
-| 배포 설정 수정 | 대상별 build 명령과 산출물 확인 |
+| 배포 설정 수정 | `npm run verify`, 대상별 build 명령과 산출물 확인 |
 
 `node_modules`가 없는 작업공간에서는 npm script가 실행되지 않습니다. 이 경우 검증 미실행 사유를 PR이나 최종 보고에 명시합니다.
 

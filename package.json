@@ -13,8 +13,9 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "validate:publisher-metadata": "node scripts/validate-publisher-metadata.mjs",
     "validate:mineral-depths": "node scripts/validate-mineral-depths.mjs",
-    "verify": "npm run validate:mineral-depths && npm run typecheck && npm run lint",
+    "verify": "npm run validate:publisher-metadata && npm run validate:mineral-depths && npm run typecheck && npm run lint",
     "deploy": "npm run build:gh && touch out/.nojekyll && gh-pages -t -d out",
     "deploy:cf": "npm run build:cf && wrangler pages deploy out",
     "optimize:images": "node scripts/optimize-assets.mjs",
@@ -24,11 +25,11 @@
     "gen:headers": "node scripts/generate-headers.js",
     "gen:sw": "node scripts/generate-sw.js",
     "predev": "npm run gen:headers && npm run gen:sw",
-    "prebuild": "npm run validate:mineral-depths && npm run gen:headers && npm run gen:sw",
-    "prebuild:gh": "npm run validate:mineral-depths",
-    "prebuild:itch": "npm run validate:mineral-depths",
-    "prebuild:cf": "npm run validate:mineral-depths",
-    "prebuild:crazygames": "npm run validate:mineral-depths"
+    "prebuild": "npm run validate:publisher-metadata && npm run validate:mineral-depths && npm run gen:headers && npm run gen:sw",
+    "prebuild:gh": "npm run validate:publisher-metadata && npm run validate:mineral-depths",
+    "prebuild:itch": "npm run validate:publisher-metadata && npm run validate:mineral-depths",
+    "prebuild:cf": "npm run validate:publisher-metadata && npm run validate:mineral-depths",
+    "prebuild:crazygames": "npm run validate:publisher-metadata && npm run validate:mineral-depths"
   },
   "dependencies": {
     "next": "^16.2.6",
